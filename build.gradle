@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.1.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+// apply plugin: 'war'
+
+jar {
+    baseName = 'gs-spring-boot'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    // thymeleaf instead of jsp
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    //thymeleaf spring security tags
+    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
+    // tag::jetty[]
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    // end::jetty[]
+    // tag::actuator[]
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    // end::actuator[]
+    //spring security
+    compile("org.springframework.boot:spring-boot-starter-security")
+    //spring security taglib
+    compile("org.springframework.security:spring-security-taglibs")
+    //spring data
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    //spring dev tools
+    //compile("org.springframework.boot:spring-boot-devtools")
+    //bootstrap 
+    compile("org.webjars:bootstrap:3.3.2")
+    //postgresql connector
+    //compile("org.postgresql:postgresql")
+    compile(group: 'org.postgresql', name: 'postgresql', version: '42.0.0')
+    //angularJS
+    //compile("org.webjars:angularjs:1.6.1")
+    //Jackson voor JSON
+    compile("com.fasterxml.jackson.core:jackson-databind")
+    //test
+    //testCompile("junit:junit")
+    //spring security test
+    //testCompile("org.springframework.security:spring-security-test")
+    //apache commons collections. Nagaan wat dit inhoud
+    compile(group: 'commons-collections', name: 'commons-collections', version: '3.2')
+    //Twitter4j
+    compile("org.twitter4j:twitter4j-core:4.0.4")
+    //junit voor unit tests TODO
+    testCompile(group: 'junit', name: 'junit', version: '4.+')
+}
