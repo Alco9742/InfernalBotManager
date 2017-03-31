@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">>
+<body th:fragment="mainNav">
+	<!-- Navigation -->
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#main-nav-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<!-- navbar-brand is hidden on larger screens, but visible when the menu is collapsed -->
+				<a class="navbar-brand" th:href="@{/}">LeagueInformer</a>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="main-nav-collapse">
+				<ul class="nav navbar-nav">
+					<li><a th:href="@{/}">Home</a></li>
+					<li><a sec:authorize="isAuthenticated()" th:href="@{/accounts}">Accounts</a></li>
+					<li><a sec:authorize="hasAuthority('appadmin')" th:href="@{/admin}">Admin</a></li>
+					<li><a sec:authorize="hasAuthority('appadmin')" th:href="@{/test}">Test</a></li>
+					<li><a sec:authorize="isAuthenticated()" th:href="@{/user}">User</a></li>
+					<li><a sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a></li>
+					<li><a sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>
+
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container -->
+	</nav>
+</body>
+</html>

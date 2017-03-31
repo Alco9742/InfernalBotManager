@@ -1,0 +1,49 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+			</div>
+			<div th:if="${errors}" class="row">
+				<div class="col-xs-6 col-xs-offset-3">
+					<div th:each="error : ${errors}" th:inline="text" class='alert alert-danger'>
+						[[${error}]].
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6 col-xs-offset-3">
+					<form id="accountform" class="ng-submitform" th:action="@{/admin/users/create.html}" th:object="${appUser}" method="post">
+						<div class="form-group row">
+							<label for="username" class="form-label">Username</label>
+							<input id="username" type="text" th:field="*{username}" class="form-control" /> 
+						</div>
+						<div class="form-group row">
+							<label for="password" class="form-label"  >Password</label>
+							<input id="password" type="text" th:field="*{password}" class="form-control"/> 
+						</div>
+						<div class="form-group row">
+						<label for="roles" class="form-label">Roles</label>
+							<select id="roles" th:field="*{roles}" class="form-control" size="2" multiple="multiple">
+								<option th:each="role : ${allRoles}"
+								th:value="${role.id}"
+								th:text="${role.name}">-</option>
+							</select>
+						</div>
+						<div class="form-group row">
+							<input id="enabled" name="enabled"  type="checkbox" th:field="*{enabled}" class="pull-right"/>
+							<label for="enabled" class="form-label">Enabled</label>
+						</div>
+						<div class="form-group row">
+							<button type="submit" id="ng-submitbut" class="form-control btn btn-default ng-submitbut">Add user</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

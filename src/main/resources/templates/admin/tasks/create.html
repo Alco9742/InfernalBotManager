@@ -1,0 +1,65 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+			</div>
+			<div th:if="${errors}" class="row">
+				<div class="col-xs-6 col-xs-offset-3">
+					<div th:each="error : ${errors}" th:inline="text" class='alert alert-danger'>
+						[[${error}]].
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6 col-xs-offset-3">
+					<form id="ng-submitform" th:action="@{/admin/tasks/create.html}" method="post">
+						<div class="form-group row">
+							<label for="selectTaskType" class="form-label">Task type</label>
+							<select id="selectTaskType" name="selectTaskType" class="form-control">
+								<option th:each="type : ${taskTypes}"
+								th:text="${type}"
+								th:value="${type}">-</option>
+							</select>
+						</div>
+						<div class="form-group row">
+							<label for="selectUser" class="form-label">User</label>
+							<select id="selectUser" name="selectUser" class="form-control">
+								<option th:each="user : ${users}"
+								th:text="${user.username}"
+								th:value="${user.id}">-</option>
+							</select>
+						</div>
+						<div class="form-group row">
+							<label for="selectAccount" class="form-label">Account</label>
+							<select id="selectAccount" name="selectAccount" class="form-control">
+								<option th:each="account : ${accounts}"
+								th:value="${account.id}"
+								th:text="${account.handle}">-</option>
+							</select>
+						</div>
+						<div class="form-group row">
+							<label for="cronResult" class="form-label">Frequency</label>
+							<input id="cronResult" name="cronResult" type="text" class="form-control"/>
+						</div>
+						<div class="form-group row">
+							<div class="cronSelector"></div>
+							<p class="pull-right"><a href="https://www.freeformatter.com/cron-expression-generator-quartz.html">More complex CRON's</a></p>
+						</div>
+						<div class="form-group row">
+							<input id="test" name="test"  type="checkbox" class="pull-right"/>
+							<label for="test" class="form-label">Test</label>
+						</div>
+						<div class="form-group row">
+							<button type="submit" id="ng-submitbut" class="form-control btn btn-default">Add task</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,28 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+			</div>
+			<div class="row">
+				<div class="col-xs-offset-4 col-xs-4">
+					<h1>Login</h1>
+					<div th:if="${error}" class='alert alert-danger'>
+						Wrong user or password.
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					</div>
+					<form th:action="@{/login.html}" method="post">
+						<label for="username">Username</label>:
+						<input type="text" id="username" name="username" autofocus="autofocus" /> <br />
+						<label for="password">Password</label>:
+						<input type="password" id="password" name="password" /> <br />
+						<input type="submit" value="Log in" />
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
