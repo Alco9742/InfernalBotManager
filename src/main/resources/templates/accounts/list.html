@@ -1,6 +1,73 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready(function() {
+			var editor; // use a global for the submit and return data rendering in the examples
+			$(document).ready(function() {
+				editor = new $.fn.dataTable.Editor( {
+						ajax: {
+							create: {
+								type: 'POST',
+								url:  '/api/TODO'
+							},
+							edit: {
+								type: 'PUT',
+								url:  '/api/TODO'
+							},
+							remove: {
+								type: 'DELETE',
+								url:  '/api/TODO'
+							}
+						},
+						table: "#leagueinformer-datatable-accounts",
+						fields: [ {
+							label: "ID:",
+							name: "id"
+						}, {
+							label: "Username",
+							name: "username"
+						}, {
+							label: "Password:",
+							name: "password"
+						}, {
+							label: "Region:",
+							name: "region"
+						}, {
+							label: "Enabled:",
+							name: "enabled"
+						}
+						],
+						idSrc:'id',
+				} );
+			
+				$('#leagueinformer-datatable-accounts').DataTable( {
+					dom: "Bfrtip",
+					ajax:{
+						"url": "/api/accounts/user/" + /*[[${currentUser.id}]]*/ ,
+						"dataSrc": "",
+						"dataType": "json",
+						"cache": false,
+						"contentType": "application/json; charset=utf-8"
+					},
+					columns: [
+					{ data: "id" },
+					{ data: "username" },
+					{ data: "password" },
+					{ data: "region" },
+					{ data: "enabled"}
+					],
+					select: true,
+					buttons: [
+					{ extend: "create", editor: editor },
+					{ extend: "edit",   editor: editor },
+					{ extend: "remove", editor: editor }
+					]
+				} );
+			} );
+		} );/*]]>*/
+		</script>
 	</head>
 	<body>
 		<div class="container">
@@ -12,22 +79,13 @@
 					<table id="leagueinformer-datatable-accounts" class="table table-striped table-bordered" width="100%" >
 						<thead>
 							<tr>
-								<th>id</th>
-								<th>username</th>
-								<th>password</th>
-								<th>region</th>
-								<th>enabled</th>
+								<th>ID</th>
+								<th>Username</th>
+								<th>Password</th>
+								<th>Region</th>
+								<th>Enabled</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr th:each="account : ${accounts}">
-								<td th:text="${account.id}">FieldNotFound</td>
-								<td th:text="${account.username}">FieldNotFound</td>
-								<td th:text="${account.password}">FieldNotFound</td>
-								<td th:text="${account.region}">FieldNotFound</td>
-								<td th:text="${account.enabled}">FieldNotFound</td>
-							</tr>
-						</tbody>
 					</table>
 				</div>
 			</div>

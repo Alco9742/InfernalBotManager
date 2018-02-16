@@ -18,8 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.merakianalytics.orianna.types.common.Region;
-
 @Controller
 @RequestMapping("/init")
 public class InitializationController {
@@ -62,8 +60,8 @@ public class InitializationController {
 	
 	@RequestMapping(path="extended",method = RequestMethod.GET)
 	public String extendedInit() {
-		AppUser user = userService.findByUsername("NilsGhes");
-		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt",Region.EUROPE_WEST,true);
+		AppUser user = userService.findByUsername("NilsGhes").get();
+		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt","EUW",true);
 		lolAccount.setUser(user);
 		lolAccountService.create(lolAccount);
 		return VIEW;

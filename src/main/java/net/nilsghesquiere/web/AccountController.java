@@ -2,6 +2,7 @@ package net.nilsghesquiere.web;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import net.nilsghesquiere.entities.AppUser;
 import net.nilsghesquiere.entities.LolAccount;
@@ -25,9 +26,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AccountController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 	private static final String LIST_VIEW = "accounts/list";
-	private static final String REDIRECT_ON_DELETE = "redirect:/accounts/";
-	private static final String REDIRECT_ON_ERROR = "redirect:/accounts/";
-	private static final String REDIRECT_NOT_FOUND = "redirect:/accounts/";
 	
 	private final LolAccountService lolAccountService;
 	private final AuthenticationFacade authenticationFacade;
@@ -42,24 +40,6 @@ public class AccountController {
 	ModelAndView list() {
 		Optional<AppUser> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
 		LOGGER.info("Loading Accounts list for user [" + currentUser.get().getUsername() + "].");
-		List<LolAccount> accounts = currentUser.get().getLolAccounts();
-		return new ModelAndView(LIST_VIEW).addObject("currentUser", currentUser.get()).addObject("accounts",accounts);
-	}
-	
-	@RequestMapping(path = "{account}/delete", method = RequestMethod.GET)
-	ModelAndView delete(@PathVariable LolAccount account, RedirectAttributes redirectAttributes) {
-		if (account == null) {
-			return new ModelAndView(REDIRECT_NOT_FOUND);
+		return new ModelAndView(LIST_VIEW).addObject("currentUser", currentUser.get());
 		}
-		Optional<AppUser> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
-		if (account.getUser() == currentUser.get()){
-			LOGGER.info("Deleting account.");
-			lolAccountService.delete(account);
-			redirectAttributes.addAttribute("id", account.getId()).addAttribute("naam", account.getUsername());
-			return new ModelAndView(REDIRECT_ON_DELETE);
-		} else {
-			LOGGER.info("Deleting failed: current user is not the owner of this account.");
-			return new ModelAndView(REDIRECT_ON_ERROR);
-		}
-	}
 }

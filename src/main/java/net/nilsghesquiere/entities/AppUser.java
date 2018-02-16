@@ -22,16 +22,16 @@ import lombok.Data;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 @Data
 @Entity
 @Table(name ="users")
-@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "id")
 public class AppUser implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue Long id;
@@ -39,6 +39,7 @@ public class AppUser implements Serializable{
 	@Column(unique=true)
 	private String username;
 	@NotBlank
+	@JsonIgnore
 	private String password;
 	private boolean enabled;
 	@ManyToMany
@@ -49,7 +50,7 @@ public class AppUser implements Serializable{
 	private Set<Role> roles;
 	@OneToMany(mappedBy="user",cascade=CascadeType.REMOVE,fetch = FetchType.LAZY)
 	@OrderBy("id")
-	@JsonBackReference
+	@JsonIgnore
 	private List<LolAccount>lolAccounts;	
 	
 	public AppUser() {}

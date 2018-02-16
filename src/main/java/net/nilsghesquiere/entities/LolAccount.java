@@ -13,31 +13,31 @@ import javax.persistence.Table;
 import lombok.Data;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.merakianalytics.orianna.types.common.Region;
 
 @Data
 @Entity
 @Table(name ="lolaccounts")
-@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "id")
 public class LolAccount implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue Long id;
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "userid")
-	@JsonManagedReference
+	@JsonIgnore
 	private AppUser user;
-	private boolean enabled;
 	private String username;
 	private String password;
-	private Region region;
+	private String region;
+	private boolean enabled;
 	
 	public LolAccount() {}
 
-	public LolAccount(String username, String password, Region region, boolean enabled) {
+	public LolAccount(String username, String password, String region, boolean enabled) {
 		super();
 		this.username = username;
 		this.password = password;

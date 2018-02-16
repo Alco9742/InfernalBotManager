@@ -15,10 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.merakianalytics.orianna.Orianna;
-import com.merakianalytics.orianna.types.common.Region;
-import com.merakianalytics.orianna.types.core.summoner.Summoner;
-
 @Controller
 @RequestMapping("/test")
 @PreAuthorize("hasAuthority('appadmin')")
@@ -52,9 +48,7 @@ public class TestController {
 
 	@RequestMapping(path="summoner", method = RequestMethod.GET)
 	ModelAndView summoner() {
-		Orianna.setRiotAPIKey("RGAPI-9d5e09b0-bbc2-42e4-be6b-6d04f40e091c");
-		final Summoner summoner = Summoner.named("Pismerito").withRegion(Region.EUROPE_WEST).get();
-		return new ModelAndView(SUMMONER_VIEW).addObject(summoner);
+		return new ModelAndView(SUMMONER_VIEW);
 	}
 	
 }

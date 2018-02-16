@@ -1,6 +1,7 @@
 package net.nilsghesquiere.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import net.nilsghesquiere.entities.AppUser;
 import net.nilsghesquiere.repositories.UserRepository;
@@ -44,10 +45,15 @@ public class UserServiceImpl implements UserService{
 	public void delete(AppUser user) {
 		userRepository.delete(user);
 	}
-	
+
 	@Override
-	public AppUser findByUsername(String username) {
+	public Optional<AppUser> findByUsername(String username) {
 		return userRepository.findByUsername(username);
+	}
+
+	@Override
+	public Optional<AppUser> findByUserId(Long userId) {
+		return userRepository.findById(userId);
 	}
 
 }

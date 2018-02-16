@@ -29,10 +29,7 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
 	public Optional<AppUser> getOptionalAuthenticatedUser() {
 		String username = getAuthentication().getName();
 		if (username != "anonymousUser"){
-			AppUser user = userService.findByUsername(username);
-			if (user != null){
-				return Optional.of(user);
-			}
+			return userService.findByUsername(username);
 		} 
 		return Optional.empty();
 	}
