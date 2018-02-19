@@ -5,20 +5,53 @@
 		/*<![CDATA[*/
 		$(document).ready(function() {
 			var editor; // use a global for the submit and return data rendering in the examples
+			//var ajaxBase = {
+			//		dataSrc: "",
+			//		dataType: "json",
+			//		contentType: "application/json; charset=utf-8",
+			//		processData: "false",
+			//		url: "/api/accounts/user/" + /*[[${currentUser.id}]]*/ 
+			//};
+			
 			$(document).ready(function() {
+				var restlnk = "/api/accounts/user/" + /*[[${currentUser.id}]]*/
 				editor = new $.fn.dataTable.Editor( {
 						ajax: {
 							create: {
 								type: 'POST',
-								url:  '/api/TODO'
+								dataType: "json",
+								contentType: "application/json; charset=utf-8",
+								url: restlnk ,
+								data: function ( d ) {
+									var tmp = d['data'];
+									tmp = tmp[Object.keys(tmp)[0]];
+									d = tmp;
+									return JSON.stringify( d );
+								}
 							},
 							edit: {
 								type: 'PUT',
-								url:  '/api/TODO'
+								dataType: "json",
+								contentType: "application/json; charset=utf-8",
+								url: restlnk,
+								data: function ( d ) {
+									var tmp = d['data'];
+									tmp = $.map(tmp, function(el) { return el; })
+									d = tmp;
+									return JSON.stringify( d );
+								}
 							},
 							remove: {
-								type: 'DELETE',
-								url:  '/api/TODO'
+								type: 'POST',
+								contentType: "application/json; charset=utf-8",
+								dataType: "json",
+								url: restlnk + "/delete",
+								data: function ( d ) {
+									var tmp = d['data'];
+									tmp = $.map(tmp, function(el) { return el; })
+									d = tmp;
+									return JSON.stringify( d );
+								}
 							}
 						},
 						table: "#leagueinformer-datatable-accounts",
@@ -36,17 +69,22 @@
 							name: "region"
 						}, {
 							label: "Enabled:",
-							name: "enabled"
-						}
-						],
-						idSrc:'id',
+							name: "enabled",
+							type: "checkbox",
+							options: [
+								{ label: "", value: true }
+							],
+							separator: '',
+							unselectedValue: false,
+						}],
+						idSrc:'id'
 				} );
 			
 				$('#leagueinformer-datatable-accounts').DataTable( {
 					dom: "Bfrtip",
 					ajax:{
 						"url": "/api/accounts/user/" + /*[[${currentUser.id}]]*/ ,
-						"dataSrc": "",
+						"dataSrc": "data",
 						"dataType": "json",
 						"cache": false,
 						"contentType": "application/json; charset=utf-8"
