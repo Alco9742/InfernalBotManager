@@ -6,6 +6,7 @@ import java.util.Set;
 import net.nilsghesquiere.entities.AppUser;
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.Role;
+import net.nilsghesquiere.enums.Server;
 import net.nilsghesquiere.facades.AuthenticationFacade;
 import net.nilsghesquiere.services.LolAccountService;
 import net.nilsghesquiere.services.RoleService;
@@ -61,7 +62,7 @@ public class InitializationController {
 	@RequestMapping(path="extended",method = RequestMethod.GET)
 	public String extendedInit() {
 		AppUser user = userService.findByUsername("NilsGhes").get();
-		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt","EUW",true);
+		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt",Server.EUROPE_WEST,30L, true);
 		lolAccount.setUser(user);
 		lolAccountService.create(lolAccount);
 		return VIEW;

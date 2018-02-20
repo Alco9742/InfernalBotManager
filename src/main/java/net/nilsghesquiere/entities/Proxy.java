@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import net.nilsghesquiere.enums.ProxyTypeEnum;
+import net.nilsghesquiere.enums.ProxyType;
 
 import org.hibernate.validator.constraints.NotBlank;
 //TODO when everything else works
@@ -31,12 +31,12 @@ public class Proxy implements Serializable {
 	@NotBlank
 	private String proxyPassword;	
 	@NotBlank
-	private ProxyTypeEnum proxyType;
+	private ProxyType proxyType;
 	
 	public Proxy() {}
 	
 	public Proxy(String handle, String proxyHost, String proxyPort,
-			String proxyUser, String proxyPassword, ProxyTypeEnum proxyType) {
+			String proxyUser, String proxyPassword, ProxyType proxyType) {
 		super();
 		this.handle = handle;
 		this.proxyHost = proxyHost;

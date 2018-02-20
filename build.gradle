@@ -63,6 +63,7 @@ dependencies {
 	compile(group: 'org.postgresql', name: 'postgresql', version: '42.0.0')
 	compile("com.fasterxml.jackson.core:jackson-databind")
 	compile("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.9.3")
+	compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.4.0")
 	compile(group: 'commons-collections', name: 'commons-collections', version: '3.2')
 	compile("org.webjars:bootstrap:3.3.2")
 	compile("org.webjars:jquery:3.2.0")

@@ -1,10 +1,13 @@
 package net.nilsghesquiere.rest;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.nilsghesquiere.entities.AppUser;
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.exceptions.AccountAlreadyExistsException;
 import net.nilsghesquiere.exceptions.AccountNotFoundException;
@@ -24,7 +27,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.Preconditions;
 
@@ -83,10 +88,10 @@ public class AccountsRestController {
 		for(LolAccount lolAccount: lolAccountMap.getMap().values()){
 			Preconditions.checkNotNull(lolAccount);
 			validateUserByUserId(userid);
-			lolAccount.setUser(userService.read(userid));
-			lolAccount.setId(0L);
-			LolAccount newAccount = lolAccountService.create(lolAccount);
-			returnAccounts.add(newAccount);
+			AppUser user = userService.read(userid);
+			LolAccount newAccount = new LolAccount(user,lolAccount.getUsername(),lolAccount.getPassword(),lolAccount.getMaxlevel(), lolAccount.isEnabled());	
+			LolAccount createdAccount = lolAccountService.create(newAccount);
+			returnAccounts.add(createdAccount);
 		}
 		wrapper.add("data",returnAccounts);
 		return new ResponseEntity<LolAccountListWrapper>(wrapper,HttpStatus.CREATED);
@@ -123,6 +128,10 @@ public class AccountsRestController {
 		return new ResponseEntity<LolAccountListWrapper>(wrapper,HttpStatus.OK);
 	}
 	
+	@RequestMapping(value="/user/{userid}/import", method=RequestMethod.POST)
+	public void processUpload(@RequestParam MultipartFile file) throws IOException {
+		LOGGER.info("test");
+	}
 	private void validateUserByUserId(Long userId) {
 		userService.findByUserId(userId).orElseThrow(
 			() -> new UserNotFoundException(userId));

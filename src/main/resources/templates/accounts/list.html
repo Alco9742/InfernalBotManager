@@ -13,88 +13,162 @@
 			//		url: "/api/accounts/user/" + /*[[${currentUser.id}]]*/ 
 			//};
 			
-			$(document).ready(function() {
-				var restlnk = "/api/accounts/user/" + /*[[${currentUser.id}]]*/
-				editor = new $.fn.dataTable.Editor( {
-						ajax: {
-							create: {
-								type: 'POST',
-								dataType: "json",
-								contentType: "application/json; charset=utf-8",
-								url: restlnk ,
-								data: function ( d ) {
-								return JSON.stringify( d['data'] );
-								}
-							},
-							edit: {
-								type: 'PUT',
-								dataType: "json",
-								contentType: "application/json; charset=utf-8",
-								url: restlnk,
-								data: function ( d ) {
-									return JSON.stringify( d['data'] );
-								}
-							},
-							remove: {
-								type: 'POST',
-								contentType: "application/json; charset=utf-8",
-								dataType: "json",
-								url: restlnk + "/delete",
-								data: function ( d ) {
-									return JSON.stringify( d['data'] );
-								}
+			var restlnk = "/api/accounts/user/" + /*[[${currentUser.id}]]*/
+			
+			editor = new $.fn.dataTable.Editor( {
+					ajax: {
+						create: {
+							type: 'POST',
+							dataType: "json",
+							contentType: "application/json; charset=utf-8",
+							url: restlnk ,
+							data: function ( d ) {
+							return JSON.stringify( d['data'] );
 							}
 						},
-						table: "#leagueinformer-datatable-accounts",
-						fields: [ {
-							label: "ID:",
-							name: "id"
-						}, {
-							label: "Username",
-							name: "username"
-						}, {
-							label: "Password:",
-							name: "password"
-						}, {
-							label: "Region:",
-							name: "region"
-						}, {
-							label: "Enabled:",
-							name: "enabled",
-							type: "checkbox",
-							options: [
-								{ label: "", value: true }
-							],
-							separator: '',
-							unselectedValue: false,
-						}],
-						idSrc:'id'
-				} );
-			
-				$('#leagueinformer-datatable-accounts').DataTable( {
-					dom: "Bfrtip",
-					ajax:{
-						"url": "/api/accounts/user/" + /*[[${currentUser.id}]]*/ ,
-						"dataSrc": "data",
-						"dataType": "json",
-						"cache": false,
-						"contentType": "application/json; charset=utf-8"
+						edit: {
+							type: 'PUT',
+							dataType: "json",
+							contentType: "application/json; charset=utf-8",
+							url: restlnk,
+							data: function ( d ) {
+								return JSON.stringify( d['data'] );
+							}
+						},
+						remove: {
+							type: 'POST',
+							contentType: "application/json; charset=utf-8",
+							dataType: "json",
+							url: restlnk + "/delete",
+							data: function ( d ) {
+								return JSON.stringify( d['data'] );
+							}
+						}
 					},
-					columns: [
-					{ data: "id" },
-					{ data: "username" },
-					{ data: "password" },
-					{ data: "region" },
-					{ data: "enabled"}
-					],
-					select: true,
-					buttons: [
-					{ extend: "create", editor: editor },
-					{ extend: "edit",   editor: editor },
-					{ extend: "remove", editor: editor }
-					]
-				} );
+					table: "#leagueinformer-datatable-accounts",
+					fields: [{
+						label: "ID",
+						name: "id",
+						type: "readonly",
+						def: "0"
+					}, {
+						label: "Username",
+						name: "username"
+					},{
+						label: "Password",
+						name: "password"
+					},{
+						label: "Server",
+						name: "server",
+						type: "select",
+						options: [
+							{ label: "NORTH_AMERICA", value: "NORTH_AMERICA" },
+							{ label: "EUROPE_WEST", value: "EUROPE_WEST" },
+							{ label: "EUROPE_NORTH_EAST", value: "EUROPE_NORTH_EAST"}
+						],
+						def: "NORTH_AMERICA"
+					},{
+						label: "Level",
+						name: "level",
+						type: "readonly",
+						def: "0"
+					},{
+						label: "Max Level",
+						name: "maxlevel"
+					},{
+						label: "Status",
+						name: "accountStatus",
+						type: "readonly",
+						def: "NEW"
+					},{
+						label: "Assigned To",
+						name: "assignedTo",
+						type: "readonly",
+						def: "None"
+					},{
+						label: "Info",
+						name: "info",
+						type: "readonly",
+						def: "No extra info"
+					},{
+						label: "Enabled:",
+						name: "enabled",
+						type: "checkbox",
+						options: [
+							{ label: "", value: true }
+						],
+						separator: '',
+						unselectedValue: false
+					}],
+					idSrc:'id'
 			} );
+		
+			$('#leagueinformer-datatable-accounts').DataTable( {
+				dom: "Bfrtip",
+				ajax:{
+					"url": "/api/accounts/user/" + /*[[${currentUser.id}]]*/ ,
+					"dataSrc": "data",
+					"dataType": "json",
+					"cache": false,
+					"contentType": "application/json; charset=utf-8"
+				},
+				columns: [
+				{ data: "id" },
+				{ data: "username" },
+				{ data: "password" },
+				{ data: "server" },
+				{ data: "level" },
+				{ data: "maxlevel" },
+				{ data: "accountStatus" },
+				{ data: "assignedTo" },
+				{ data: "info" },
+				{ data: "enabled"}
+				],
+				columnDefs: [
+				{ targets: [0,7,8], visible: false}
+				],
+				select: true,
+				buttons: [
+				{ extend: "create", editor: editor },
+				{ extend: "edit",   editor: editor },
+				{ extend: "remove", editor: editor },
+				{
+					extend: 'collection',
+					text: 'Export',
+					buttons: [
+						'copy',
+						'excel',
+						'csv',
+						'pdf',
+						'print'
+					]
+				},
+				{ 	extend: 'collection',
+					text: 'Import',
+					buttons: [
+						{ text: 'Select File',   action: function () {$("#filedialog").click();} },
+						{ text: 'Upload',   action: function () {
+							var file_data = $("#filedialog").prop("files")[0];
+							var form_data = new FormData();
+							form_data.append("file", file_data);
+							$.ajax({
+								url: restlnk + "/import",
+								dataType: 'script',
+								cache: false,
+								contentType: false,
+								processData: false,
+								data: form_data,
+								type: 'post',
+								success: function(){
+								//	alert("works"); 
+								}
+							});
+						} },
+					]
+				}
+				]
+			} );
+			
 		} );/*]]>*/
 		</script>
 	</head>
@@ -111,11 +185,17 @@
 								<th>ID</th>
 								<th>Username</th>
 								<th>Password</th>
-								<th>Region</th>
+								<th>Server</th>
+								<th>Level</th>
+								<th>Max Level</th>
+								<th>Account Status</th>
+								<th>Assigned To</th>
+								<th>Info</th>
 								<th>Enabled</th>
 							</tr>
 						</thead>
 					</table>
+					<input id="filedialog" type="file" name ="filedialog" style="display:none"/>
 				</div>
 			</div>
 		</div>
