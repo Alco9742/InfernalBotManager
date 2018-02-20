@@ -23,10 +23,7 @@
 								contentType: "application/json; charset=utf-8",
 								url: restlnk ,
 								data: function ( d ) {
-									var tmp = d['data'];
-									tmp = tmp[Object.keys(tmp)[0]];
-									d = tmp;
-									return JSON.stringify( d );
+								return JSON.stringify( d['data'] );
 								}
 							},
 							edit: {
@@ -35,10 +32,7 @@
 								contentType: "application/json; charset=utf-8",
 								url: restlnk,
 								data: function ( d ) {
-									var tmp = d['data'];
-									tmp = $.map(tmp, function(el) { return el; })
-									d = tmp;
-									return JSON.stringify( d );
+									return JSON.stringify( d['data'] );
 								}
 							},
 							remove: {
@@ -47,10 +41,7 @@
 								dataType: "json",
 								url: restlnk + "/delete",
 								data: function ( d ) {
-									var tmp = d['data'];
-									tmp = $.map(tmp, function(el) { return el; })
-									d = tmp;
-									return JSON.stringify( d );
+									return JSON.stringify( d['data'] );
 								}
 							}
 						},

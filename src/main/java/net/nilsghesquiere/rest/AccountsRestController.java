@@ -1,7 +1,9 @@
-package net.nilsghesquiere.restservices;
+package net.nilsghesquiere.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.exceptions.AccountAlreadyExistsException;
@@ -10,6 +12,8 @@ import net.nilsghesquiere.exceptions.UserNotFoundException;
 import net.nilsghesquiere.services.LolAccountService;
 import net.nilsghesquiere.services.UserService;
 import net.nilsghesquiere.valueobjects.JSONWrapper;
+import net.nilsghesquiere.valueobjects.LolAccountListWrapper;
+import net.nilsghesquiere.valueobjects.LolAccountMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,55 +42,61 @@ public class AccountsRestController {
 	}
 	
 	@RequestMapping(path = "/{accountid}", method = RequestMethod.GET)
-	public ResponseEntity<LolAccount> findAccountById(@PathVariable Long accountid) {
+	public ResponseEntity<LolAccountListWrapper> findAccountById(@PathVariable Long accountid) {
+		LolAccountListWrapper wrapper = new LolAccountListWrapper();
+		List<LolAccount> lolAccounts = new ArrayList<>();
 		validateAccountById(accountid);
 		LolAccount lolAccount = lolAccountService.read(accountid);
-		return new ResponseEntity<LolAccount>(lolAccount, HttpStatus.OK);
+		lolAccounts.add(lolAccount);
+		wrapper.add("data", lolAccounts);
+		return new ResponseEntity<LolAccountListWrapper>(wrapper, HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/{accountid}",method = RequestMethod.PUT)
-	public ResponseEntity<LolAccount> update(@PathVariable Long accountid,@RequestBody LolAccount lolAccount) {
-		LOGGER.info("Edit: " + lolAccount);
+	public ResponseEntity<LolAccountListWrapper> update(@PathVariable Long accountid,@RequestBody LolAccount lolAccount) {
+		LolAccountListWrapper wrapper = new LolAccountListWrapper();
+		List<LolAccount> updatedLolAccounts = new ArrayList<>();
 		Preconditions.checkNotNull(lolAccount);
 		validateAccountById(accountid);
 		if (accountid == lolAccount.getId()){
 			lolAccount.setUser(userService.read(lolAccountService.read(accountid).getUser().getId()));
 			LolAccount updatedLolAccount = lolAccountService.update(lolAccount);
-			return new ResponseEntity<LolAccount>(updatedLolAccount,HttpStatus.OK);
-		} else {
-			return new ResponseEntity<LolAccount>(lolAccount, HttpStatus.BAD_REQUEST);
+			updatedLolAccounts.add(updatedLolAccount);
 		}
+		wrapper.add("data", updatedLolAccounts);
+		return new ResponseEntity<LolAccountListWrapper>(wrapper, HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/user/{userid}", method = RequestMethod.GET)
-	public ResponseEntity<JSONWrapper> findAccountsByUserId(@PathVariable Long userid) {
-		JSONWrapper wrapper = new JSONWrapper();
+	public ResponseEntity<LolAccountListWrapper> findAccountsByUserId(@PathVariable Long userid) {
+		LolAccountListWrapper wrapper = new LolAccountListWrapper();
 		validateUserByUserId(userid);
-		List<LolAccount> lolAccount = lolAccountService.findByUserId(userid);
-		wrapper.add("data",lolAccount);
-		return new ResponseEntity<JSONWrapper>(wrapper, HttpStatus.OK);
+		List<LolAccount> lolAccounts = lolAccountService.findByUserId(userid);
+		wrapper.add("data",lolAccounts);
+		return new ResponseEntity<LolAccountListWrapper>(wrapper, HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/user/{userid}", method = RequestMethod.POST)
-	public ResponseEntity<JSONWrapper> create(@PathVariable Long userid, @RequestBody LolAccount lolAccount) {
-		JSONWrapper wrapper = new JSONWrapper();
-		Preconditions.checkNotNull(lolAccount);
-		validateUserByUserId(userid);
-		//TODO werkende manier vinden om update tegen te houden
-		//validateNewAccountById(lolAccount.getId());
-		lolAccount.setUser(userService.read(userid));
-		//has to be in an array for datatables refresh
-		LolAccount[] newLolAccountArray = {lolAccountService.create(lolAccount)};
-		wrapper.add("data",newLolAccountArray);
-		return new ResponseEntity<JSONWrapper>(wrapper,HttpStatus.CREATED);
+	public ResponseEntity<LolAccountListWrapper> create(@PathVariable Long userid, @RequestBody LolAccountMap lolAccountMap) {
+		LolAccountListWrapper wrapper = new LolAccountListWrapper();
+		List<LolAccount> returnAccounts = new ArrayList<>();
+		for(LolAccount lolAccount: lolAccountMap.getMap().values()){
+			Preconditions.checkNotNull(lolAccount);
+			validateUserByUserId(userid);
+			lolAccount.setUser(userService.read(userid));
+			lolAccount.setId(0L);
+			LolAccount newAccount = lolAccountService.create(lolAccount);
+			returnAccounts.add(newAccount);
+		}
+		wrapper.add("data",returnAccounts);
+		return new ResponseEntity<LolAccountListWrapper>(wrapper,HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(path = "/user/{userid}",method = RequestMethod.PUT)
-	public ResponseEntity<JSONWrapper> update(@PathVariable Long userid,@RequestBody LolAccount[] lolAccounts) {
-		JSONWrapper wrapper = new JSONWrapper();
+	public ResponseEntity<LolAccountListWrapper> update(@PathVariable Long userid,@RequestBody LolAccountMap lolAccountMap) {
+		LolAccountListWrapper wrapper = new LolAccountListWrapper();
 		List<LolAccount> returnAccounts = new ArrayList<>();
-		for (LolAccount lolAccount : lolAccounts){
-			LOGGER.info("Edit: " + lolAccount);
+		for (LolAccount lolAccount : lolAccountMap.getMap().values()){
 			Preconditions.checkNotNull(lolAccount);
 			validateAccountById(lolAccount.getId());
 			validateUserByUserId(userid);
@@ -94,25 +104,23 @@ public class AccountsRestController {
 			LolAccount updatedLolAccount = lolAccountService.update(lolAccount);
 			returnAccounts.add(updatedLolAccount);
 		}
-		LolAccount[] responseAccounts = returnAccounts.toArray(new LolAccount[returnAccounts.size()]);
-		wrapper.add("data",responseAccounts);
-		return new ResponseEntity<JSONWrapper>(wrapper,HttpStatus.OK);
+		wrapper.add("data",returnAccounts);
+		return new ResponseEntity<LolAccountListWrapper>(wrapper,HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/user/{userid}/delete",method = RequestMethod.POST)
-	public ResponseEntity<JSONWrapper> delete(@PathVariable Long userid, @RequestBody LolAccount[] lolAccounts) {
-		JSONWrapper wrapper = new JSONWrapper();
+	public ResponseEntity<LolAccountListWrapper> delete(@PathVariable Long userid, @RequestBody LolAccountMap lolAccountMap) {
+		LolAccountListWrapper wrapper = new LolAccountListWrapper();
 		List<LolAccount> deletedAccounts = new ArrayList<>();
-		for (LolAccount lolAccount : lolAccounts){
+		for (LolAccount lolAccount : lolAccountMap.getMap().values()){
 			LOGGER.info("Delete: " + lolAccount);
 			validateAccountById(lolAccount.getId());
 			validateUserByUserId(userid);
 			lolAccountService.delete(lolAccount);
 			deletedAccounts.add(lolAccount);
 		}
-		LolAccount[] responseAccounts = deletedAccounts.toArray(new LolAccount[deletedAccounts.size()]);
-		wrapper.add("data",responseAccounts);
-		return new ResponseEntity<JSONWrapper>(wrapper,HttpStatus.OK);
+		wrapper.add("data",deletedAccounts);
+		return new ResponseEntity<LolAccountListWrapper>(wrapper,HttpStatus.OK);
 	}
 	
 	private void validateUserByUserId(Long userId) {

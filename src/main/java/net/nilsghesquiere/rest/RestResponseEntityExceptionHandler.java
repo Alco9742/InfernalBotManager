@@ -1,4 +1,4 @@
-package net.nilsghesquiere.restservices;
+package net.nilsghesquiere.rest;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
