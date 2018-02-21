@@ -109,4 +109,15 @@ public class LolAccount implements Serializable{
 			user.addLolAccount(this);
 		}
 	}
+	
+	public static LolAccount buildFromString(AppUser user, String line){
+		String input[] = line.split(":");
+		String username = input[0];
+		String password = input[1];
+		String serverString = input[2];
+		String maxLevelString = input[3];
+		Server server = Server.valueOf(serverString);
+		Long maxLevel = Long.valueOf(maxLevelString);
+		return new LolAccount(user,username,password, server, maxLevel, true);
+	}
 }

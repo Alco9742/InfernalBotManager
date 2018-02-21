@@ -20,6 +20,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import lombok.Data;
+import net.nilsghesquiere.enums.Server;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -88,4 +89,5 @@ public class AppUser implements Serializable{
 			lolAccount.setUser(null);
 		}
 	}
+
 }

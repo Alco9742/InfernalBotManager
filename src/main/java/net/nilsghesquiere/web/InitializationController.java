@@ -67,5 +67,18 @@ public class InitializationController {
 		lolAccountService.create(lolAccount);
 		return VIEW;
 	}
-	
+
+	@RequestMapping(path="testuser",method = RequestMethod.GET)
+	public String testUserInit() {
+		Role role1 = roleService.read(8L);
+		Set<Role> roles = new  HashSet<>();
+		roles.add(role1);
+		AppUser user = new AppUser("TestUser","Test123",roles, true);
+		userService.create(user);
+		AppUser createdUser = userService.findByUsername("TestUser").get();
+		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt",Server.EUROPE_WEST,30L, true);
+		lolAccount.setUser(createdUser);
+		lolAccountService.create(lolAccount);
+		return VIEW;
+	}
 }
