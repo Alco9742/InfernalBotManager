@@ -1,7 +1,6 @@
 package net.nilsghesquiere.entities;
 
 import java.io.Serializable;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -20,54 +19,49 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import lombok.Data;
-import net.nilsghesquiere.enums.Server;
-
-import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
 
 @Data
 @Entity
 @Table(name ="users")
-public class AppUser implements Serializable{
+public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue Long id;
-	@NotBlank
+	@Column(unique=true)
+	private String email;
 	@Column(unique=true)
 	private String username;
-	@NotBlank
 	@JsonIgnore
 	private String password;
 	private boolean enabled;
-	private ZoneId timezone;
 	private Long standardLevel;
 	@ManyToMany
 	@JoinTable(
 			name="userroles",
 			joinColumns=@JoinColumn(name="userid", referencedColumnName="id"),
 			inverseJoinColumns=@JoinColumn(name="roleid", referencedColumnName="id"))
-	private Set<Role> roles;
+	private List<Role> roles;
 	@OneToMany(mappedBy="user",cascade=CascadeType.REMOVE,fetch = FetchType.LAZY)
 	@OrderBy("id")
 	@JsonIgnore
 	private List<LolAccount>lolAccounts;	
 	
-	public AppUser() {}
+	public User() {}
 	
-	public AppUser(String username, String password, Set<Role> roles, boolean enabled) {
+	public User(String email, String username, String password, List<Role> roles, boolean enabled) {
 		super();
+		this.email = email;
 		this.username = username;
 		this.password = password;
 		this.roles = roles;
 		this.enabled = enabled;
 		this.lolAccounts = new ArrayList<>();
-		this.timezone = ZoneId.of("Europe/Brussels");
 		this.standardLevel = 30L;
 	}
 	
-	public AppUser(String username, String password, Set<Role> roles) {
+	public User(String username, String password, List<Role> roles) {
 		super();
 		this.username = username;
 		this.password = password;

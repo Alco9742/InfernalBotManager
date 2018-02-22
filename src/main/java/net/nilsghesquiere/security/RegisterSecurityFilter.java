@@ -1,4 +1,4 @@
-package net.nilsghesquiere.configuration;
+package net.nilsghesquiere.security;
 
 import javax.servlet.ServletContext;
 

@@ -27,7 +27,7 @@ public class LolAccount implements Serializable{
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "userid")
 	@JsonIgnore
-	private AppUser user;
+	private User user;
 	private String username;
 	private String summonername;
 	private String password;
@@ -41,7 +41,7 @@ public class LolAccount implements Serializable{
 	
 	public LolAccount() {}
 	
-	public LolAccount(AppUser user, String username, String password, Server server, Long maxlevel, boolean enabled) {
+	public LolAccount(User user, String username, String password, Server server, Long maxlevel, boolean enabled) {
 		super();
 		this.user = user;
 		this.username = username;
@@ -69,7 +69,7 @@ public class LolAccount implements Serializable{
 		this.info = "";
 	}
 
-	public LolAccount(AppUser user, String username, String password, Server server, boolean enabled) {
+	public LolAccount(User user, String username, String password, Server server, boolean enabled) {
 		super();
 		this.user = user;
 		this.username = username;
@@ -85,7 +85,7 @@ public class LolAccount implements Serializable{
 	}
 
 	//temp class for testing until servers are added in datatables
-	public LolAccount(AppUser user, String username, String password, Long maxlevel, boolean enabled) {
+	public LolAccount(User user, String username, String password, Long maxlevel, boolean enabled) {
 		super();
 		this.user = user;
 		this.username = username;
@@ -100,7 +100,7 @@ public class LolAccount implements Serializable{
 		this.info = "";
 	}
 	
-	public void setUser(AppUser user) {
+	public void setUser(User user) {
 		if (this.user != null && this.user.getLolAccounts().contains(this)){
 			this.user.removeLolAccount(this);
 		}
@@ -110,7 +110,7 @@ public class LolAccount implements Serializable{
 		}
 	}
 	
-	public static LolAccount buildFromString(AppUser user, String line){
+	public static LolAccount buildFromString(User user, String line){
 		String input[] = line.split(":");
 		String username = input[0];
 		String password = input[1];

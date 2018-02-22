@@ -14,7 +14,7 @@
 						Wrong user or password.
 						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 					</div>
-					<form th:action="@{/login.html}" method="post">
+					<form name="login" th:action="@{/login.html}" method="post">
 						<label for="username">Username</label>:
 						<input type="text" id="username" name="username" autofocus="autofocus" /> <br />
 						<label for="password">Password</label>:

@@ -15,14 +15,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import net.nilsghesquiere.entities.AppUser;
+import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.LolAccount;
-import net.nilsghesquiere.exceptions.AccountAlreadyExistsException;
+import net.nilsghesquiere.exceptions.AccountExistsException;
 import net.nilsghesquiere.exceptions.AccountNotFoundException;
 import net.nilsghesquiere.exceptions.UserNotFoundException;
 import net.nilsghesquiere.facades.AuthenticationFacade;
-import net.nilsghesquiere.services.LolAccountService;
-import net.nilsghesquiere.services.UserService;
+import net.nilsghesquiere.services.ILolAccountService;
+import net.nilsghesquiere.services.IUserService;
 import net.nilsghesquiere.valueobjects.JSONResponse;
 import net.nilsghesquiere.valueobjects.JSONResponseWithoutError;
 import net.nilsghesquiere.valueobjects.JSONWrapper;
@@ -49,12 +49,12 @@ import com.google.common.base.Preconditions;
 @RequestMapping("/api/accounts")
 public class AccountsRestController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountsRestController.class);
-	private final LolAccountService lolAccountService;
-	private final UserService userService;
+	private final ILolAccountService lolAccountService;
+	private final IUserService userService;
 	private final AuthenticationFacade authenticationFacade;	
 	
 	@Autowired
-	AccountsRestController(LolAccountService lolAccountService,UserService userService, AuthenticationFacade authenticationFacade){
+	AccountsRestController(ILolAccountService lolAccountService,IUserService userService, AuthenticationFacade authenticationFacade){
 		this.lolAccountService = lolAccountService;
 		this.userService = userService;
 		this.authenticationFacade = authenticationFacade;
@@ -139,7 +139,7 @@ public class AccountsRestController {
 				hasError = true;
 			} else {
 				//PROCESSING
-				AppUser user = userService.read(userid);
+				User user = userService.read(userid);
 				LolAccount newAccount = new LolAccount(user,lolAccount.getUsername(),lolAccount.getPassword(),lolAccount.getMaxlevel(), lolAccount.isEnabled());	
 				LolAccount createdAccount = lolAccountService.create(newAccount);
 				returnAccounts.add(createdAccount);
@@ -201,7 +201,7 @@ public class AccountsRestController {
 		
 		//CHECKS
 		validateUserByUserId(userid);
-		AppUser user = userService.read(userid);
+		User user = userService.read(userid);
 		
 		//PROCESSING
 		if (file.getContentType().equals("text/plain")){
@@ -244,16 +244,16 @@ public class AccountsRestController {
 	private String checkUser(Long userid){
 		String error = "";
 		//CHECKS
-		Optional<AppUser> optionalUserFromId = userService.findByUserId(userid);
+		Optional<User> optionalUserFromId = userService.findByUserId(userid);
 		if(!optionalUserFromId.isPresent()){
 			error = "User with id " + userid + " does not exist";
 		} else {
-			AppUser userFromId = optionalUserFromId.get();
-			Optional<AppUser> optionalAuthenticatedUser = authenticationFacade.getOptionalAuthenticatedUser();
+			User userFromId = optionalUserFromId.get();
+			Optional<User> optionalAuthenticatedUser = authenticationFacade.getOptionalAuthenticatedUser();
 			if(!optionalAuthenticatedUser.isPresent()){
 				error = "You are currently not authenticated, log in to the site";	
 			} else{
-				AppUser authenticatedUser = optionalAuthenticatedUser.get();
+				User authenticatedUser = optionalAuthenticatedUser.get();
 				if(!userFromId.equals(authenticatedUser)){
 					error = "The requested accounts are not owned by the authenticated user";	
 				}

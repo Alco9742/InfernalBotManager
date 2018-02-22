@@ -1,16 +1,19 @@
 package net.nilsghesquiere.web;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import net.nilsghesquiere.entities.AppUser;
+import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.Role;
+import net.nilsghesquiere.enums.UserType;
 import net.nilsghesquiere.enums.Server;
 import net.nilsghesquiere.facades.AuthenticationFacade;
-import net.nilsghesquiere.services.LolAccountService;
-import net.nilsghesquiere.services.RoleService;
-import net.nilsghesquiere.services.UserService;
+import net.nilsghesquiere.services.ILolAccountService;
+import net.nilsghesquiere.services.IRoleService;
+import net.nilsghesquiere.services.IUserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +28,12 @@ public class InitializationController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InitializationController.class);
 	private static final String VIEW = "index";
 	
-	private final RoleService roleService;
-	private final UserService userService;
-	private final LolAccountService lolAccountService;
+	private final IRoleService roleService;
+	private final IUserService userService;
+	private final ILolAccountService lolAccountService;
 	
 	@Autowired
-	public InitializationController(RoleService roleService, UserService userService, LolAccountService lolAccountService) {
+	public InitializationController(IRoleService roleService, IUserService userService, ILolAccountService lolAccountService) {
 		this.roleService = roleService;
 		this.userService = userService;
 		this.lolAccountService = lolAccountService;
@@ -42,15 +45,15 @@ public class InitializationController {
 		//enkel uitvoeren indien er nog geen roles aangemaakt zijn
 		if (roleService.findAll().size() == 0 ){
 			//create the roles and commit to DB
-			Role role1 = new Role("appadmin");
-			Role role2 = new Role("basicuser");
+			Role role1 = new Role(UserType.ADMIN.getName());
+			Role role2 = new Role(UserType.USER.getName());
 			roleService.create(role1);
 			roleService.create(role2);
 			
 			//create the user and commit to DB
-			Set<Role> roles = new  HashSet<>();
+			List<Role> roles = new  ArrayList<>();
 			roles.add(role1);
-			AppUser user = new AppUser("NilsGhes","Syntra1234",roles, true);
+			User user = new User("Ghesquiere.nils@gmail.com", "NilsGhes","Syntra1234",roles, true);
 			userService.create(user);
 			LOGGER.info("Created initial roles and user");
 		} else {
@@ -61,7 +64,7 @@ public class InitializationController {
 	
 	@RequestMapping(path="extended",method = RequestMethod.GET)
 	public String extendedInit() {
-		AppUser user = userService.findByUsername("NilsGhes").get();
+		User user = userService.findByUsername("NilsGhes").get();
 		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt",Server.EUROPE_WEST,30L, true);
 		lolAccount.setUser(user);
 		lolAccountService.create(lolAccount);
@@ -71,11 +74,11 @@ public class InitializationController {
 	@RequestMapping(path="testuser",method = RequestMethod.GET)
 	public String testUserInit() {
 		Role role1 = roleService.read(8L);
-		Set<Role> roles = new  HashSet<>();
+		List<Role> roles = new  ArrayList<>();
 		roles.add(role1);
-		AppUser user = new AppUser("TestUser","Test123",roles, true);
+		User user = new User("test@test.com", "TestUser","Test123",roles, true);
 		userService.create(user);
-		AppUser createdUser = userService.findByUsername("TestUser").get();
+		User createdUser = userService.findByUsername("TestUser").get();
 		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt",Server.EUROPE_WEST,30L, true);
 		lolAccount.setUser(createdUser);
 		lolAccountService.create(lolAccount);

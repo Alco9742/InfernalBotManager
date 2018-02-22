@@ -2,9 +2,9 @@ package net.nilsghesquiere.web;
 
 import java.util.Optional;
 
-import net.nilsghesquiere.entities.AppUser;
+import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.facades.AuthenticationFacade;
-import net.nilsghesquiere.services.LolAccountService;
+import net.nilsghesquiere.services.ILolAccountService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +25,10 @@ public class TestController {
 	private static final String SUMMONER_VIEW = "test/summoner";
 	
 	private final AuthenticationFacade authenticationFacade;
-	private final LolAccountService lolAccountService;
+	private final ILolAccountService lolAccountService;
 
 	@Autowired
-	public TestController(AuthenticationFacade authenticationFacade, LolAccountService lolAccountService) {
+	public TestController(AuthenticationFacade authenticationFacade, ILolAccountService lolAccountService) {
 		this.lolAccountService = lolAccountService;
 		this.authenticationFacade = authenticationFacade;
 	}
@@ -36,7 +36,7 @@ public class TestController {
 	//PANEL
 	@RequestMapping(method = RequestMethod.GET)
 	ModelAndView panel() {
-		Optional<AppUser> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
+		Optional<User> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
 		LOGGER.info("Loading test panel for admin " + currentUser.get().getUsername());
 		return new ModelAndView(PANEL_VIEW).addObject("currentUser",currentUser.get());
 	}

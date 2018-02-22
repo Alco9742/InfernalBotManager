@@ -1,7 +1,7 @@
 package net.nilsghesquiere.repositories;
 
 import net.nilsghesquiere.configuration.HibernateAwareObjectMapper;
-import net.nilsghesquiere.entities.AppUser;
+import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.LolAccount;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -31,7 +31,7 @@ public class RepositoryConfiguration {
 		return new RepositoryRestConfigurerAdapter() {
 			@Override
 			public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-				config.exposeIdsFor(AppUser.class,LolAccount.class);
+				config.exposeIdsFor(User.class,LolAccount.class);
 			}
 			
 			@Override 

@@ -3,9 +3,9 @@ package net.nilsghesquiere.web;
 import java.io.IOException;
 import java.util.Optional;
 
-import net.nilsghesquiere.entities.AppUser;
+import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.facades.AuthenticationFacade;
-import net.nilsghesquiere.services.LolAccountService;
+import net.nilsghesquiere.services.ILolAccountService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,18 +25,18 @@ public class AccountController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 	private static final String LIST_VIEW = "accounts/list";
 	
-	private final LolAccountService lolAccountService;
+	private final ILolAccountService lolAccountService;
 	private final AuthenticationFacade authenticationFacade;
 
 	@Autowired
-	public AccountController(LolAccountService lolAccountService, AuthenticationFacade authenticationFacade) {
+	public AccountController(ILolAccountService lolAccountService, AuthenticationFacade authenticationFacade) {
 		this.lolAccountService = lolAccountService;
 		this.authenticationFacade = authenticationFacade;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	ModelAndView list() {
-		Optional<AppUser> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
+		Optional<User> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
 		LOGGER.info("Loading Accounts list for user [" + currentUser.get().getUsername() + "].");
 		return new ModelAndView(LIST_VIEW).addObject("currentUser", currentUser.get());
 		}
