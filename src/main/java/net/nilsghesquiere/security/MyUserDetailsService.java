@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 
 import net.nilsghesquiere.entities.Role;
 import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.repositories.UserRepository;
+import net.nilsghesquiere.persistence.dao.UserRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,19 +31,25 @@ public class MyUserDetailsService implements UserDetailsService {
 	}
 	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		LOGGER.info("loadUserByUsername");
-		//TODO troubleshoot here
-		User user = userRepository.findByUsername(username);
-		if (user == null) {
-			throw new UsernameNotFoundException("No user found with username: "+ username);
-		}
-		boolean accountNonExpired = true;
-		boolean credentialsNonExpired = true;
-		boolean accountNonLocked = true;
-		return new org.springframework.security.core.userdetails.User (user.getUsername(), 
-				user.getPassword().toLowerCase(), user.isEnabled(), accountNonExpired, 
-				credentialsNonExpired, accountNonLocked, 
+		User user = userRepository.findByUsernameIgnoreCase(username);
+		try{
+			if (user == null) {
+				throw new UsernameNotFoundException("No user found with username: "+ username);
+			}
+			boolean accountNonExpired = true;
+			boolean credentialsNonExpired = true;
+			boolean accountNonLocked = true;
+			return new org.springframework.security.core.userdetails.User (
+					user.getUsername(), 
+					user.getPassword(), 
+				user.isEnabled(),
+				accountNonExpired, 
+				credentialsNonExpired, 
+				accountNonLocked, 
 				getAuthorities(user.getRoles()));
+		} catch (Exception e){
+			throw new RuntimeException(e);
+		}
 	}
 
 	private static List<GrantedAuthority> getAuthorities (List<Role> roles) {

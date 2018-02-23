@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import net.nilsghesquiere.enums.ProxyType;
+import net.nilsghesquiere.util.enums.ProxyType;
 
 import org.hibernate.validator.constraints.NotBlank;
 //TODO when everything else works
@@ -19,7 +19,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name ="proxies")
 public class Proxy implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private @Id @GeneratedValue Long id;
+	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
 	@NotBlank
 	private String handle;
 	@NotBlank

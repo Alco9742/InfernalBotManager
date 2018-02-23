@@ -1,7 +1,7 @@
 package net.nilsghesquiere.configuration;
 
-import net.nilsghesquiere.enums.UserType;
 import net.nilsghesquiere.security.MyUserDetailsService;
+import net.nilsghesquiere.util.enums.UserType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -69,9 +69,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/admin/**").hasAuthority(UserType.ADMIN.getName())
 				.antMatchers("/account/**").hasAnyAuthority(UserType.ADMIN.getName(),UserType.USER.getName())
-				.antMatchers("/anonymous*").anonymous()
+				.antMatchers("/register").permitAll()
+				.antMatchers("/registered").permitAll()
 				.antMatchers("/login*").permitAll()
-				.antMatchers("/perform_login").permitAll()
+				.antMatchers("/logout*").permitAll()
 				.antMatchers("/test/**").permitAll()
 				.antMatchers("/init/**").permitAll()
 				.antMatchers("/api/**").permitAll()
@@ -79,14 +80,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated()
 				.and()
 			.formLogin()
-				.loginPage("/login.html")
-				.defaultSuccessUrl("/homepage.html", true)
-				.failureUrl("/login.html?error=true")
+				.loginPage("/login")
+				.defaultSuccessUrl("/index", true)
+				.failureUrl("/login?error=true")
 				.and()
 			.logout()
-				.logoutUrl("/perform_logout")
+				.logoutUrl("/logout")
 				.deleteCookies("JSESSIONID")
-				.logoutSuccessUrl("/login.html");
+				.logoutSuccessUrl("/index");
 	}
 
 }

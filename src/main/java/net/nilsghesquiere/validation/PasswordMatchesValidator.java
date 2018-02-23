@@ -6,9 +6,7 @@ import java.util.regex.Pattern;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import net.nilsghesquiere.annotations.PasswordMatches;
-import net.nilsghesquiere.annotations.ValidEmail;
-import net.nilsghesquiere.dto.UserDTO;
+import net.nilsghesquiere.web.dto.UserDTO;
 
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, Object> { 
 

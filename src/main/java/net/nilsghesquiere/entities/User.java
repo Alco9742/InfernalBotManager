@@ -3,13 +3,13 @@ package net.nilsghesquiere.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name ="users")
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private @Id @GeneratedValue Long id;
+	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
 	@Column(unique=true)
 	private String email;
 	@Column(unique=true)
@@ -48,7 +48,10 @@ public class User implements Serializable{
 	@JsonIgnore
 	private List<LolAccount>lolAccounts;	
 	
-	public User() {}
+	public User() {
+		super();
+		this.enabled = false;
+	}
 	
 	public User(String email, String username, String password, List<Role> roles, boolean enabled) {
 		super();
@@ -61,12 +64,12 @@ public class User implements Serializable{
 		this.standardLevel = 30L;
 	}
 	
-	public User(String username, String password, List<Role> roles) {
+	public User(String email,String username, String password, List<Role> roles) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.roles = roles;
-		this.enabled =true;
+		this.enabled =false;
 		this.lolAccounts = new ArrayList<>();
 	}
 	
@@ -84,4 +87,12 @@ public class User implements Serializable{
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", email=" + email + ", username=" + username
+				+ ", password=" + password + ", enabled=" + enabled
+				+ ", standardLevel=" + standardLevel + ", roles=" + roles + " + #LolAccounts=" + lolAccounts.size() + "]";
+	}
+
+	
 }

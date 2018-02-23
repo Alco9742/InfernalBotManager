@@ -1,0 +1,18 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+			</div>
+			<div class="row">
+				<div class="jumbotron">
+					<h1 class="alert alert-success">Succesfully registered, please verify your email adress.</h1>
+					<a th:href="@{/login}">Login</a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

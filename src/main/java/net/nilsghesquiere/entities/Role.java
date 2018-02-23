@@ -5,11 +5,11 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -18,7 +18,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name ="roles")
 public class Role implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private @Id @GeneratedValue Long id;
+	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
 	@Column(unique=true)
 	@NotBlank
 	private String name;

@@ -1,20 +1,19 @@
 package net.nilsghesquiere.entities;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
-import net.nilsghesquiere.enums.AccountStatus;
-import net.nilsghesquiere.enums.Server;
+import net.nilsghesquiere.util.enums.AccountStatus;
+import net.nilsghesquiere.util.enums.Server;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name ="lolaccounts")
 public class LolAccount implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private @Id @GeneratedValue Long id;
+	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "userid")
 	@JsonIgnore
