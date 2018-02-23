@@ -1,8 +1,14 @@
 package net.nilsghesquiere.service.rest;
 
+import net.nilsghesquiere.web.error.UserNotFoundException;
+import net.nilsghesquiere.web.util.GenericResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -10,10 +16,32 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
+	
 	@ExceptionHandler(value = { IllegalArgumentException.class, IllegalStateException.class })
 	protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
 		String bodyOfResponse = "This should be application specific";
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
+	}
+	
+	@ExceptionHandler({ UserNotFoundException.class })
+	public ResponseEntity<Object> handleUserNotFound(RuntimeException ex, WebRequest request) {
+		LOGGER.error("404 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("Could not find the requested user", "UserNotFound");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler({ MailAuthenticationException.class })
+	public ResponseEntity<Object> handleMail(RuntimeException ex, WebRequest request) {
+		LOGGER.error("500 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("Problem sending mail", "MailError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler({ Exception.class })
+	public ResponseEntity<Object> handleInternal(RuntimeException ex, WebRequest request) {
+		LOGGER.error("500 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("Internal Server Error", "InternalError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 }

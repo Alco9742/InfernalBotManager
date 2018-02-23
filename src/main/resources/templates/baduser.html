@@ -1,6 +1,24 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
 	<head>
 		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+	<script type="text/javascript">
+
+		var serverContext = [[@{/}]];
+
+		function resendToken(){
+			$.get(serverContext + "user/resendRegistrationToken?token=" + token, 
+				function(data){
+					window.location.href = serverContext +"login?message=" + data.message;
+				})
+			.fail(function(data) {
+				if(data.responseJSON.error.indexOf("MailError") > -1) {
+					window.location.href = serverContext + "emailError";
+				} else {
+					window.location.href = serverContext + "login?message=" + data.responseJSON.message;
+				}
+			});
+		}
+	</script>
 	</head>
 	<body>
 		<div class="container">
@@ -9,8 +27,12 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-offset-2 col-xs-8">
-				<h1 th:text="${param.message[0]}">Error Message</h1>
-				<a th:href="@{/registration.html}" th:text="#{label.form.loginSignUp}">Signup</a>
+					<h1 th:text="${param.message[0]}">Error</h1>
+					<a th:href="@{/register}">Signup</a>
+					<div th:if="${param.expired[0]}">
+						<h3>Authentication token expire</h3>
+						<button onclick="resendToken()">Resend</button>
+					</div>
 				</div>
 			</div>
 		</div>

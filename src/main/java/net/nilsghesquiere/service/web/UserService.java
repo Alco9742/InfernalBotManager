@@ -3,6 +3,7 @@ package net.nilsghesquiere.service.web;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -35,8 +36,6 @@ public class UserService implements IUserService{
 	
 	@Autowired
 	private VerificationTokenRepository tokenRepository;
-	
-	
 	
 	@Override
 	public User read(Long id){
@@ -133,5 +132,13 @@ public class UserService implements IUserService{
 	@Override
 	public void saveRegisteredUser(User user) {
 		userRepository.save(user);
+	}
+
+	@Override
+	public VerificationToken generateNewVerificationToken(String existingVerificationToken) {
+		VerificationToken vToken = tokenRepository.findByToken(existingVerificationToken);
+		vToken.updateToken(UUID.randomUUID().toString());
+		vToken = tokenRepository.save(vToken);
+		return vToken;
 	}
 }
