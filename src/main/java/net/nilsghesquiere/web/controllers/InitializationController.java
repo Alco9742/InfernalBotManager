@@ -53,7 +53,7 @@ public class InitializationController {
 			//create the user and commit to DB
 			List<Role> roles = new  ArrayList<>();
 			roles.add(role1);
-			User user = new User("Ghesquiere.nils@gmail.com", "NilsGhes","Syntra1234",roles, true);
+			User user = new User("Ghesquiere.nils@gmail.com", "Syntra1234",roles, true);
 			userService.create(user);
 			LOGGER.info("Created initial roles and user");
 		} else {
@@ -64,7 +64,7 @@ public class InitializationController {
 	
 	@RequestMapping(path="extended",method = RequestMethod.GET)
 	public String extendedInit() {
-		User user = userService.findByUsername("NilsGhes").get();
+		User user = userService.findByEmail("Ghesquiere.nils@gmail.com").get();
 		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt",Server.EUROPE_WEST,30L, true);
 		lolAccount.setUser(user);
 		lolAccountService.create(lolAccount);
@@ -76,9 +76,9 @@ public class InitializationController {
 		Role role1 = roleService.findByName(UserType.USER.getName());
 		List<Role> roles = new  ArrayList<>();
 		roles.add(role1);
-		User user = new User("testuser@gmail.com", "TestUser","Test123",roles, true);
+		User user = new User("testuser@gmail.com","Test123",roles, true);
 		userService.create(user);
-		User createdUser = userService.findByUsername("TestUser").get();
+		User createdUser = userService.findByEmail("testuser@gmail.com").get();
 		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt",Server.EUROPE_WEST,30L, true);
 		lolAccount.setUser(createdUser);
 		lolAccountService.create(lolAccount);

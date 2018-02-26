@@ -16,7 +16,6 @@ import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
 import net.nilsghesquiere.util.enums.UserType;
 import net.nilsghesquiere.web.dto.UserDTO;
 import net.nilsghesquiere.web.error.EmailExistsException;
-import net.nilsghesquiere.web.error.UsernameExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,8 +66,8 @@ public class UserService implements IUserService{
 
 	//TODO optional use bekijken
 	@Override
-	public Optional<User> findByUsername(String username) {
-		return Optional.of(userRepository.findByUsernameIgnoreCase(username));
+	public Optional<User> findByEmail(String username) {
+		return Optional.of(userRepository.findByEmailIgnoreCase(username));
 	}
 
 	@Override
@@ -84,7 +83,7 @@ public class UserService implements IUserService{
 		return false;
 	}
 	public boolean usernameExist(String email) {
-		User user = userRepository.findByUsernameIgnoreCase(email);
+		User user = userRepository.findByEmailIgnoreCase(email);
 		if (user != null) {
 			return true;
 		}
@@ -93,16 +92,12 @@ public class UserService implements IUserService{
 
 	@ModifyingTransactionalServiceMethod
 	@Override 
-	public User registerNewUserAccount(UserDTO userDTO)throws EmailExistsException,UsernameExistsException {
+	public User registerNewUserAccount(UserDTO userDTO)throws EmailExistsException {
 		
 		if (emailExist(userDTO.getEmail())) {
 			throw new EmailExistsException("There is already an account with that email adress: "+ userDTO.getEmail());
 		}
-		if (usernameExist(userDTO.getUsername())) {
-			throw new EmailExistsException("There is already an account with that username: "+ userDTO.getUsername());
-		}
 		User user = new User();
-		user.setUsername(userDTO.getUsername());
 		user.setPassword(userDTO.getPassword());
 		user.setEmail(userDTO.getEmail());
 		user.setRoles(Arrays.asList(roleRepository.findByName(UserType.USER.getName())));

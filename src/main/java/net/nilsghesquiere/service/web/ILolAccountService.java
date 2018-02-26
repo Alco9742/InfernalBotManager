@@ -15,6 +15,6 @@ public interface ILolAccountService {
 	LolAccount update(LolAccount lolAccount);
 	List<LolAccount> findByUser(User user);
 	List<LolAccount> findByUserId(Long userId);
-	List<LolAccount> findByUserUsername(String username);
+	List<LolAccount> findByUserEmail(String email);
 	void deleteById(Long id);
 }

@@ -31,8 +31,6 @@ public class User implements Serializable{
 	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
 	@Column(unique=true)
 	private String email;
-	@Column(unique=true)
-	private String username;
 	@JsonIgnore
 	private String password;
 	private boolean enabled;
@@ -53,10 +51,9 @@ public class User implements Serializable{
 		this.enabled = false;
 	}
 	
-	public User(String email, String username, String password, List<Role> roles, boolean enabled) {
+	public User(String email, String password, List<Role> roles, boolean enabled) {
 		super();
 		this.email = email;
-		this.username = username;
 		this.password = password;
 		this.roles = roles;
 		this.enabled = enabled;
@@ -66,7 +63,7 @@ public class User implements Serializable{
 	
 	public User(String email,String username, String password, List<Role> roles) {
 		super();
-		this.username = username;
+		this.email = email;
 		this.password = password;
 		this.roles = roles;
 		this.enabled =false;
@@ -89,7 +86,7 @@ public class User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", username=" + username
+		return "User [id=" + id + ", email=" + email 
 				+ ", password=" + password + ", enabled=" + enabled
 				+ ", standardLevel=" + standardLevel + ", roles=" + roles + " + #LolAccounts=" + lolAccounts.size() + "]";
 	}

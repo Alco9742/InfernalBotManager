@@ -37,7 +37,7 @@ public class TestController {
 	@RequestMapping(method = RequestMethod.GET)
 	ModelAndView panel() {
 		Optional<User> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
-		LOGGER.info("Loading test panel for admin " + currentUser.get().getUsername());
+		LOGGER.info("Loading test panel for admin " + currentUser.get().getEmail());
 		return new ModelAndView(PANEL_VIEW).addObject("currentUser",currentUser.get());
 	}
 	

@@ -11,18 +11,15 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Data
 @PasswordMatches
 public class UserDTO {
+
+	@ValidEmail
 	@NotNull
 	@NotEmpty
-	private String username;
+	private String email;
 	
 	@NotNull
 	@NotEmpty
 	private String password;
 	private String matchingPassword;
-	
-	@ValidEmail
-	@NotNull
-	@NotEmpty
-	private String email;
 	
 }

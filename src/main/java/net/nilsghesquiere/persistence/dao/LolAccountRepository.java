@@ -17,6 +17,6 @@ public interface LolAccountRepository extends JpaRepository<LolAccount, Long> {
 	Optional<LolAccount> findById(@Param("id") Long id);
 	List <LolAccount> findByUser(User user);
 	List <LolAccount> findByUserId(@Param("userid") Long userid);
-	List <LolAccount> findByUserUsername(@Param("userid") String username);
+	List <LolAccount> findByUserEmail(@Param("email") String email);
 	void deleteById(@Param("id") Long id);
 }

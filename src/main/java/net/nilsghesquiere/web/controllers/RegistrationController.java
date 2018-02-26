@@ -12,7 +12,6 @@ import net.nilsghesquiere.service.web.IUserService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.web.dto.UserDTO;
 import net.nilsghesquiere.web.error.EmailExistsException;
-import net.nilsghesquiere.web.error.UsernameExistsException;
 import net.nilsghesquiere.web.util.GenericResponse;
 
 import org.slf4j.Logger;
@@ -70,11 +69,7 @@ public class RegistrationController {
 		
 		User registered = createUserAccount(userDTO,result);
 		if (registered == null) {
-			if(userService.emailExist(userDTO.getEmail())){
-				result.rejectValue("email", "", "Email already in use");
-			} else {
-				result.rejectValue("username", "", "Username already in use");
-			}
+			result.rejectValue("email", "", "Email already in use");
 		}
 		if(!userDTO.getPassword().equals(userDTO.getMatchingPassword())){
 			result.rejectValue("password", "", "Passwords don't match");
@@ -133,7 +128,7 @@ public class RegistrationController {
 		User registered = null;
 		try {
 			registered = userService.registerNewUserAccount(userDTO);
-		}catch (EmailExistsException|UsernameExistsException e) {
+		}catch (EmailExistsException e){
 			return null;
 		}
 		return registered;

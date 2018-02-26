@@ -48,8 +48,8 @@ public class LolAccountService implements ILolAccountService{
 	}
 
 	@Override
-	public List<LolAccount> findByUserUsername(String username) {
-		return lolAccountRepository.findByUserUsername(username);
+	public List<LolAccount> findByUserEmail(String email) {
+		return lolAccountRepository.findByUserEmail(email);
 	}
 
 	@Override
