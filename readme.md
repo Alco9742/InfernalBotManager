@@ -2,9 +2,9 @@
 <h2>InfernalManager</h2>
 <h3>TODO:</h3>	
 <ul>
-<li>Test anything email related </li>
+<li>Test anything registration & email related</li>
 <li>Complete spring security with REST (http://www.baeldung.com/security-spring)</li>
-<li>Change Account entity to better match the entity in Infernalbot</li>
+<li>Change Account entity to better match the entity in Infernalbot (Inheritance?)</li>
 <lI>Make a Settings entity matching settings in Infernalbot</li>
 <li>Update entities on client</li>
 <li>Update methods on client</li>

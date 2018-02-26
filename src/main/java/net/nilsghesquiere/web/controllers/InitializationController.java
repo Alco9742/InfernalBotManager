@@ -1,19 +1,18 @@
 package net.nilsghesquiere.web.controllers;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.UUID;
 
-import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.Role;
+import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.ILolAccountService;
 import net.nilsghesquiere.service.web.IRoleService;
 import net.nilsghesquiere.service.web.IUserService;
 import net.nilsghesquiere.util.enums.Server;
 import net.nilsghesquiere.util.enums.UserType;
-import net.nilsghesquiere.util.facades.AuthenticationFacade;
+import net.nilsghesquiere.web.dto.UserDTO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +41,6 @@ public class InitializationController {
 	// Setup user for login
 	@RequestMapping(path="main",method = RequestMethod.GET)
 	public String init() {
-		//enkel uitvoeren indien er nog geen roles aangemaakt zijn
 		if (roleService.findAll().size() == 0 ){
 			//create the roles and commit to DB
 			Role role1 = new Role(UserType.ADMIN.getName());
@@ -51,10 +49,15 @@ public class InitializationController {
 			roleService.create(role2);
 			
 			//create the user and commit to DB
+			UserDTO userDTO = new UserDTO("ghesquiere.nils@gmail.com", "Syntra1234");
+			userService.registerNewUserAccount(userDTO);
 			List<Role> roles = new  ArrayList<>();
 			roles.add(role1);
-			User user = new User("Ghesquiere.nils@gmail.com", "Syntra1234",roles, true);
-			userService.create(user);
+			User createdUser = userService.findUserByEmail("ghesquiere.nils@gmail.com");
+			createdUser.setEnabled(true);
+			createdUser.setRoles(roles);
+			userService.update(createdUser);
+			userService.createVerificationTokenForUser(createdUser, UUID.randomUUID().toString());
 			LOGGER.info("Created initial roles and user");
 		} else {
 			LOGGER.warn("Initial roles and user already created");
@@ -64,7 +67,7 @@ public class InitializationController {
 	
 	@RequestMapping(path="extended",method = RequestMethod.GET)
 	public String extendedInit() {
-		User user = userService.findByEmail("Ghesquiere.nils@gmail.com").get();
+		User user = userService.findUserByEmail("ghesquiere.nils@gmail.com");
 		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt",Server.EUROPE_WEST,30L, true);
 		lolAccount.setUser(user);
 		lolAccountService.create(lolAccount);
@@ -73,12 +76,12 @@ public class InitializationController {
 
 	@RequestMapping(path="testuser",method = RequestMethod.GET)
 	public String testUserInit() {
-		Role role1 = roleService.findByName(UserType.USER.getName());
-		List<Role> roles = new  ArrayList<>();
-		roles.add(role1);
-		User user = new User("testuser@gmail.com","Test123",roles, true);
-		userService.create(user);
-		User createdUser = userService.findByEmail("testuser@gmail.com").get();
+		UserDTO userDTO = new UserDTO("testuser@gmail.com","Test123");
+		userService.registerNewUserAccount(userDTO);
+		User createdUser = userService.findUserByEmail("testuser@gmail.com");
+		createdUser.setEnabled(true);
+		userService.update(createdUser);
+		userService.createVerificationTokenForUser(createdUser, UUID.randomUUID().toString());
 		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt",Server.EUROPE_WEST,30L, true);
 		lolAccount.setUser(createdUser);
 		lolAccountService.create(lolAccount);

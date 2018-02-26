@@ -8,7 +8,7 @@ import net.nilsghesquiere.entities.LolAccount;
 
 public interface ILolAccountService {
 	LolAccount read(Long id);
-	Optional <LolAccount> findById(Long id);
+	Optional <LolAccount> findOptionalById(Long id);
 	List<LolAccount> findAll();
 	LolAccount create(LolAccount lolAccount);
 	void delete(LolAccount lolAccount);

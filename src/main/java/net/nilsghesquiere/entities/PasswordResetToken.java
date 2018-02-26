@@ -19,7 +19,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name ="verificationtokens")
-public class VerificationToken implements Serializable{
+public class PasswordResetToken implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private static final int EXPIRATION = 60 * 24;
 
@@ -32,7 +32,7 @@ public class VerificationToken implements Serializable{
 	private User user;
 	private Date expiryDate;
 	
-	public VerificationToken(String token, User user) {
+	public PasswordResetToken(String token, User user) {
 		this.token = token;
 		this.user= user;
 	}

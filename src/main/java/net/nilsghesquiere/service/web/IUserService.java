@@ -14,8 +14,10 @@ public interface IUserService {
 	void create(User user);
 	void update(User user);
 	void delete(User user);
-	Optional<User> findByEmail(String email);
-	Optional<User> findByUserId(Long userId);
+	Optional<User> findOptionalByEmail(String email);
+	Optional<User> findOptionalByUserId(Long userId);
+	User findUserByEmail(String email);
+	User findUserByUserId(Long userId);
 	//new methods using baeldung
 	boolean emailExist(String email);
 	boolean usernameExist(String email);
@@ -25,4 +27,6 @@ public interface IUserService {
 	void createVerificationTokenForUser(User user, String token);
 	VerificationToken getVerificationToken(String VerificationToken);
 	VerificationToken generateNewVerificationToken(String token);
+	void createPasswordResetTokenForUser(User user, String token);
+	void changeUserPassword(User user, String newPassword);
 }

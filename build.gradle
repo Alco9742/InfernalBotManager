@@ -58,6 +58,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.springframework.boot:spring-boot-starter-mail")
 	compile("org.springframework.security:spring-security-taglibs")
+	compile("org.passay:passay:1.0")
 	compile(group: 'org.springframework', name: 'spring-context-support', version: '4.2.4.RELEASE')
 	compile(group: 'org.postgresql', name: 'postgresql', version: '42.0.0')
 	compile("com.fasterxml.jackson.core:jackson-databind")

@@ -28,7 +28,7 @@ public class LolAccountService implements ILolAccountService{
 	}
 	
 	@Override
-	public Optional<LolAccount> findById(Long id) {
+	public Optional<LolAccount> findOptionalById(Long id) {
 		return lolAccountRepository.findById(id);
 	}
 

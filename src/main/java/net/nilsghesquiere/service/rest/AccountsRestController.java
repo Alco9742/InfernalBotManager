@@ -232,19 +232,19 @@ public class AccountsRestController {
 		return new ResponseEntity<JSONResponse>(wrapper,HttpStatus.OK);
 	}
 	private void validateUserByUserId(Long userId) {
-		userService.findByUserId(userId).orElseThrow(
+		userService.findOptionalByUserId(userId).orElseThrow(
 			() -> new UserNotFoundException(userId));
 	}
 
 	private void validateAccountById(Long accountId) {
-		lolAccountService.findById(accountId).orElseThrow(
+		lolAccountService.findOptionalById(accountId).orElseThrow(
 			() -> new AccountNotFoundException(accountId));
 	}
 	
 	private String checkUser(Long userid){
 		String error = "";
 		//CHECKS
-		Optional<User> optionalUserFromId = userService.findByUserId(userid);
+		Optional<User> optionalUserFromId = userService.findOptionalByUserId(userid);
 		if(!optionalUserFromId.isPresent()){
 			error = "User with id " + userid + " does not exist";
 		} else {

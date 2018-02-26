@@ -1,0 +1,88 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+			</div>
+			<div class="row">
+				<div class="col-xs-offset-4 col-xs-4">
+					<h1>Register</h1>
+						<form name="register" action="/" method="POST" enctype="utf8">
+							<label for="email">Email</label>
+							<input name="email" id="email" value=""/>
+							<label for="password">Password</label>
+							<input name="password" id="password" type="password"/>
+							<span id = "passwordError" style="display:none"></span>
+							<label for="matchingPassword">Confirm password</label>
+							<input name="matchingPassword" id="matchingPassword" type="password"/>
+							<span id = "globalError" style="display:none"></span>
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+						<a th:href="@{/login}">Login</a>
+				</div>
+			</div>
+		</div>
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+			//var serverContext = [[@{/}]];
+			var serverContext = "http://localhost:8080/"
+		
+			$(document).ready(function () {
+				$('form').submit(function(event) {
+					register(event);
+				});
+				
+				options = {
+						common: {minChar:8},
+						ui: {
+							showVerdictsInsideProgressBar:true,
+							showErrors:true,
+							errorMessages:{
+								wordLength: '<spring:message code="error.wordLength"/>',
+								wordNotEmail: '<spring:message code="error.wordNotEmail"/>',
+								wordSequences: '<spring:message code="error.wordSequences"/>',
+								wordLowercase: '<spring:message code="error.wordLowercase"/>',
+								wordUppercase: '<spring:message code="error.wordUppercase"/>',
+								wordOneNumber: '<spring:message code="error.wordOneNumber"/>',
+								wordOneSpecialChar: '<spring:message code="error.wordOneSpecialChar"/>'
+							}
+						}
+					};
+					$('#password').pwstrength(options);
+			});
+			
+			function register(event){
+				event.preventDefault();
+				$(".alert").html("").hide();
+				var formData= $('form').serialize();
+				$.post(serverContext + "registration",formData ,function(data){
+					 if(data.message == "success"){
+						window.location.href = serverContext +"registered";
+					}
+				})
+				.fail(function(data) {
+					if(data.responseJSON.error.indexOf("MailError") > -1){
+						window.location.href = serverContext + "emailError";
+					} else if(data.responseJSON.error.indexOf("InternalError") > -1){
+						window.location.href = serverContext + "login?message=" + data.responseJSON.message;
+					} else if(data.responseJSON.error == "UserAlreadyExist"){
+						$("#emailError").show().html(data.responseJSON.message);
+					} else {
+						var errors = $.parseJSON(data.responseJSON.message);
+						$.each( errors, function( index,item ){
+							$("#"+item.field+"Error").show().html(item.defaultMessage);
+						});
+						errors = $.parseJSON(data.responseJSON.error);
+						$.each( errors, function( index,item ){
+							$("#globalError").show().append(item.defaultMessage+"<br/>");
+						});
+					}
+				});
+			}
+		/*]]>*/
+		</script>
+	</body>
+</html>

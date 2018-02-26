@@ -27,9 +27,9 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
 
 	@Override
 	public Optional<User> getOptionalAuthenticatedUser() {
-		String username = getAuthentication().getName();
-		if (username != "anonymousUser"){
-			return userService.findByEmail(username);
+		String email = getAuthentication().getName();
+		if (email != "anonymousUser"){
+			return userService.findOptionalByEmail(email);
 		} 
 		return Optional.empty();
 	}

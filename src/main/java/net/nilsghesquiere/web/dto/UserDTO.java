@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Data
 @PasswordMatches
 public class UserDTO {
-
 	@ValidEmail
 	@NotNull
 	@NotEmpty
@@ -22,4 +21,12 @@ public class UserDTO {
 	private String password;
 	private String matchingPassword;
 	
+	public UserDTO(){super();}
+	
+	public UserDTO(String email, String password) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.matchingPassword= password;
+	}
 }

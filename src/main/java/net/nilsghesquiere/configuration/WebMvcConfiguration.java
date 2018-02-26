@@ -26,10 +26,15 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter{
 	public void addViewControllers(final ViewControllerRegistry registry) {
 		super.addViewControllers(registry);
 		registry.addViewController("/").setViewName("forward:/index");
+		registry.addViewController("/index");
 		registry.addViewController("/login");
 		registry.addViewController("/logout");
-		registry.addViewController("/index");
-		registry.addViewController("/badUser.html");
+		//registry.addViewController("/registration");
+		registry.addViewController("/registered");
+		registry.addViewController("/baduser");
+		registry.addViewController("/forgetpassword");
+		registry.addViewController("/updatepassword");
+		registry.addViewController("/changepassword");
 	}
 	
 	@Override

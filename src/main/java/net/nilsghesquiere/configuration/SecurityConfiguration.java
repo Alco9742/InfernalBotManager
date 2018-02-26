@@ -1,17 +1,20 @@
 package net.nilsghesquiere.configuration;
 
-import net.nilsghesquiere.security.MyUserDetailsService;
 import net.nilsghesquiere.util.enums.UserType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Configuration
@@ -19,37 +22,26 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(2)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-	//private static final String USERS_BY_USERNAME =
-	//		"select username as username, password as password, enabled as enabled" +
-	//		" from users where username = ?";
-	//private static final String AUTHORITIES_BY_USERNAME =
-	//		"select users.username as username, roles.name as authorities" +
-	//		" from users inner join userroles" +
-	//		" on users.id = userroles.userid" +
-	//		" inner join roles" +
-	//		" on roles.id = userroles.roleid" +
-	//		" where users.username= ?";
 	
-	//@Override
-	//@Autowired
-	//public void configure(AuthenticationManagerBuilder auth) throws Exception {
-	//	auth
-	//		.jdbcAuthentication().dataSource(dataSource)
-	//		.usersByUsernameQuery(USERS_BY_USERNAME)
-	//		.authoritiesByUsernameQuery(AUTHORITIES_BY_USERNAME);
-	//		//.passwordEncoder(new BCryptPasswordEncoder());
-	//}
 	@Autowired
-	private final UserDetailsService userDetailsService;
+	private UserDetailsService userDetailsService;
 	
-
-	public SecurityConfiguration(UserDetailsService userDetailsService){
-		this.userDetailsService = userDetailsService;
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	public DaoAuthenticationProvider authProvider() {
+		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+		authProvider.setUserDetailsService(userDetailsService);
+		authProvider.setPasswordEncoder(passwordEncoder());
+		return authProvider;
 	}
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService);
+		auth.authenticationProvider(authProvider());
 	}
 	
 	@Override
@@ -69,10 +61,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/admin/**").hasAuthority(UserType.ADMIN.getName())
 				.antMatchers("/account/**").hasAnyAuthority(UserType.ADMIN.getName(),UserType.USER.getName())
-				.antMatchers("/register").permitAll()
-				.antMatchers("/registered").permitAll()
+				.antMatchers("/user/updatePassword*", "/user/savePassword*","/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
 				.antMatchers("/login*").permitAll()
 				.antMatchers("/logout*").permitAll()
+				.antMatchers("/registration").permitAll()
+				.antMatchers("/registered").permitAll()
+				.antMatchers("/baduser").permitAll()
+				.antMatchers("/emailError").permitAll()
+				.antMatchers("/forgotpassword").permitAll()
+				.antMatchers("/changepassword").permitAll()
 				.antMatchers("/test/**").permitAll()
 				.antMatchers("/init/**").permitAll()
 				.antMatchers("/api/**").permitAll()

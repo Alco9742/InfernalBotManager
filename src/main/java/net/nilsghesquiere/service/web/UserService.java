@@ -7,8 +7,10 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import net.nilsghesquiere.entities.PasswordResetToken;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.VerificationToken;
+import net.nilsghesquiere.persistence.dao.PasswordResetTokenRepository;
 import net.nilsghesquiere.persistence.dao.RoleRepository;
 import net.nilsghesquiere.persistence.dao.UserRepository;
 import net.nilsghesquiere.persistence.dao.VerificationTokenRepository;
@@ -18,6 +20,7 @@ import net.nilsghesquiere.web.dto.UserDTO;
 import net.nilsghesquiere.web.error.EmailExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,6 +39,11 @@ public class UserService implements IUserService{
 	@Autowired
 	private VerificationTokenRepository tokenRepository;
 	
+	@Autowired
+	private PasswordResetTokenRepository passwordTokenRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	@Override
 	public User read(Long id){
 		return userRepository.findOne(id);
@@ -66,13 +74,13 @@ public class UserService implements IUserService{
 
 	//TODO optional use bekijken
 	@Override
-	public Optional<User> findByEmail(String username) {
-		return Optional.of(userRepository.findByEmailIgnoreCase(username));
+	public User findUserByEmail(String username) {
+		return userRepository.findByEmailIgnoreCase(username);
 	}
 
 	@Override
-	public Optional<User> findByUserId(Long userId) {
-		return Optional.of(userRepository.findById(userId));
+	public User findUserByUserId(Long userId) {
+		return userRepository.findById(userId);
 	}
 	
 	public boolean emailExist(String email) {
@@ -93,13 +101,12 @@ public class UserService implements IUserService{
 	@ModifyingTransactionalServiceMethod
 	@Override 
 	public User registerNewUserAccount(UserDTO userDTO)throws EmailExistsException {
-		
 		if (emailExist(userDTO.getEmail())) {
 			throw new EmailExistsException("There is already an account with that email adress: "+ userDTO.getEmail());
 		}
 		User user = new User();
-		user.setPassword(userDTO.getPassword());
 		user.setEmail(userDTO.getEmail());
+		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setRoles(Arrays.asList(roleRepository.findByName(UserType.USER.getName())));
 		return userRepository.save(user);
 	}
@@ -135,5 +142,28 @@ public class UserService implements IUserService{
 		vToken.updateToken(UUID.randomUUID().toString());
 		vToken = tokenRepository.save(vToken);
 		return vToken;
+	}
+
+	@Override
+	public Optional<User> findOptionalByEmail(String email) {
+		return Optional.of(userRepository.findByEmailIgnoreCase(email));
+	}
+
+	@Override
+	public Optional<User> findOptionalByUserId(Long userId) {
+		return Optional.of(userRepository.findById(userId));
+	}
+
+	@Override
+	public void createPasswordResetTokenForUser(User user, String token) {
+		PasswordResetToken myToken = new PasswordResetToken(token, user);
+		passwordTokenRepository.save(myToken);
+	}
+
+	@Override
+	public void changeUserPassword(User user, String newPassword) {
+		user.setPassword(passwordEncoder.encode(newPassword));
+		userRepository.save(user);
+
 	}
 }

@@ -1,6 +1,7 @@
 package net.nilsghesquiere.web.controllers;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -8,36 +9,34 @@ import javax.validation.Valid;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.VerificationToken;
 import net.nilsghesquiere.registration.OnRegistrationCompleteEvent;
+import net.nilsghesquiere.security.IUserSecurityService;
 import net.nilsghesquiere.service.web.IUserService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
+import net.nilsghesquiere.web.dto.PasswordDTO;
 import net.nilsghesquiere.web.dto.UserDTO;
 import net.nilsghesquiere.web.error.EmailExistsException;
+import net.nilsghesquiere.web.error.EmailNotFoundException;
 import net.nilsghesquiere.web.util.GenericResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/register")
 public class RegistrationController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
-	private static final String REGISTER_VIEW = "register";
-	private static final String REGISTERED_VIEW = "registered";
 	
 	@Autowired
 	private AuthenticationFacade authenticationFacade;
@@ -46,47 +45,35 @@ public class RegistrationController {
 	private IUserService userService;
 	
 	@Autowired
+	private IUserSecurityService userSecurityService;
+	
+	@Autowired
 	private ApplicationEventPublisher eventPublisher;
 	
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	// Registration form
-	@RequestMapping(method = RequestMethod.GET)
-	public String showRegistrationForm(WebRequest request, Model model) {
-		LOGGER.info("showRegistrationForm");
-		UserDTO userDTO = new UserDTO();
-		model.addAttribute("user", userDTO);
-		return REGISTER_VIEW;
+	@Autowired
+	private Environment env;
+	
+	@RequestMapping(value = "/registration", method = RequestMethod.GET)
+	public String registerForm(){
+		return "registration";
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView registerUserAccount(@ModelAttribute("user") @Valid UserDTO userDTO, BindingResult result, WebRequest request, Errors errors) {
-
-		if (result.hasErrors()) {
-			 return new ModelAndView(REGISTER_VIEW, "user", userDTO);
-		}
-		
-		User registered = createUserAccount(userDTO,result);
+	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	public GenericResponse registerUserAccount(@ModelAttribute("user") @Valid UserDTO userDTO, HttpServletRequest request) {
+		LOGGER.debug("Registering user account with information: {}", userDTO);
+		User registered = createUserAccount(userDTO);
 		if (registered == null) {
-			result.rejectValue("email", "", "Email already in use");
+			throw new EmailExistsException(userDTO.getEmail());
 		}
-		if(!userDTO.getPassword().equals(userDTO.getMatchingPassword())){
-			result.rejectValue("password", "", "Passwords don't match");
-		}
-		
-		try{
-			String appUrl = request.getContextPath();
-			eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, appUrl));
-		}catch (Exception me) {
-			//TODO thuis testen
-			LOGGER.info(me.getMessage());
-			return new ModelAndView("emailError", "user", userDTO);
-		}
-		return new ModelAndView(REGISTERED_VIEW, "user", userDTO);
+		String url = getAppUrl(request);
+		eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, url));
+		return new GenericResponse("Success");
 	}
 	
-	@RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
+	@RequestMapping(value = "/registered", method = RequestMethod.GET)
 	public String confirmRegistration(WebRequest request, Model model, @RequestParam("token") String token){
 		VerificationToken verificationToken = userService.getVerificationToken(token);
 		if (verificationToken == null) {
@@ -111,7 +98,7 @@ public class RegistrationController {
 		return "redirect:/login"; 
 	}
 
-	@RequestMapping(value = "/user/resendRegistrationToken", method = RequestMethod.GET)
+	@RequestMapping(value = "/resendRegistrationToken", method = RequestMethod.GET)
 	@ResponseBody
 	public GenericResponse resendRegistrationToken(HttpServletRequest request, @RequestParam("token") String existingToken) {
 		VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
@@ -123,8 +110,41 @@ public class RegistrationController {
 	 
 		return new GenericResponse("Resend verificationmail");
 	}
-
-	private User createUserAccount(UserDTO userDTO, BindingResult result) {
+	
+	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+	@ResponseBody
+	public GenericResponse resetPassword(HttpServletRequest request, @RequestParam("email") String email) {
+		User user = userService.findUserByEmail(email);
+		if (user == null) {
+			throw new EmailNotFoundException(email);
+		}
+		String token = UUID.randomUUID().toString();
+		userService.createPasswordResetTokenForUser(user, token);
+		mailSender.send(constructResetTokenEmail(getAppUrl(request), token, user));
+		return new GenericResponse("Password reset");
+	}
+		
+	@RequestMapping(value = "/user/changePassword", method = RequestMethod.GET)
+	public String showChangePasswordPage(Model model, @RequestParam("id") long id, @RequestParam("token") String token) {
+		String result = userSecurityService.validatePasswordResetToken(id, token);
+		if (result != null) {
+			model.addAttribute("message", "Authentication error");
+			return "redirect:/login";
+		}
+		return "redirect:/updatePassword";
+	}
+	
+	@RequestMapping(value = "/user/savePassword", method = RequestMethod.POST)
+	@ResponseBody
+	public GenericResponse savePassword( @Valid PasswordDTO passwordDTO) {
+		User user = authenticationFacade.getAuthenticatedUser();
+		userService.changeUserPassword(user, passwordDTO.getNewPassword());
+		return new GenericResponse("Succesfully changed password");
+	}
+	
+	//PRIVATE METHODS
+	
+	private User createUserAccount(UserDTO userDTO) {
 		User registered = null;
 		try {
 			registered = userService.registerNewUserAccount(userDTO);
@@ -133,16 +153,30 @@ public class RegistrationController {
 		}
 		return registered;
 	}
-
+	
 	private SimpleMailMessage constructResendVerificationTokenEmail(String contextPath, VerificationToken newToken, User user) {
-		String confirmationUrl = contextPath + "/regitrationConfirm.html?token=" + newToken.getToken();
+		String url = contextPath + "/registered?token=" + newToken.getToken();
 		String message = "New verification token: ";
+		return constructEmail("Reset Password", message + " \r\n" + url, user);
+	}
+	
+	private SimpleMailMessage constructResetTokenEmail(String contextPath, String token, User user) {
+		String url = contextPath + "/user/changePassword?id=" + user.getId() + "&token=" + token;
+		String message ="Reset Password: ";
+		return constructEmail("Reset Password", message + " \r\n" + url, user);
+	}
+	
+	private SimpleMailMessage constructEmail(String subject, String body, User user) {
 		SimpleMailMessage email = new SimpleMailMessage();
-		email.setSubject("Resend Registration Token");
-		email.setText(message + " rn" + confirmationUrl);
+		email.setSubject(subject);
+		email.setText(body);
+		email.setTo(user.getEmail());
 		//email.setFrom(env.getProperty("support.email"));
 		email.setFrom("ghesquiere.nils@gmail.com");
-		email.setTo(user.getEmail());
 		return email;
+	}
+	
+	private String getAppUrl(HttpServletRequest request) {
+			return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 	}
 }
