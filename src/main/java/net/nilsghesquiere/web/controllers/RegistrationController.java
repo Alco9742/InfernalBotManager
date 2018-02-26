@@ -25,6 +25,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -140,6 +141,19 @@ public class RegistrationController {
 		User user = authenticationFacade.getAuthenticatedUser();
 		userService.changeUserPassword(user, passwordDTO.getNewPassword());
 		return new GenericResponse("Succesfully changed password");
+	}
+	
+	@RequestMapping(value = "/user/updatePassword", method = RequestMethod.POST)
+	@PreAuthorize("hasRole('USER')")
+	@ResponseBody
+	public GenericResponse changeUserPassword(@RequestParam("password") String password,@RequestParam("oldpassword") String oldPassword) {
+		User user = authenticationFacade.getAuthenticatedUser();
+		//TODO
+		//if (!userService.checkIfValidOldPassword(user, oldPassword)) {
+		//	throw new InvalidOldPasswordException();
+		//}
+		userService.changeUserPassword(user, password);
+		return new GenericResponse("Succesfully upadted password");
 	}
 	
 	//PRIVATE METHODS
