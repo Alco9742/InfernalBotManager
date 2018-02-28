@@ -1,6 +1,5 @@
 package net.nilsghesquiere.persistence.dao;
 
-import net.nilsghesquiere.configuration.HibernateAwareObjectMapper;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.LolAccount;
 
@@ -19,6 +18,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@SuppressWarnings("unused")
 @Configuration
 @EnableAutoConfiguration
 @EntityScan(basePackages = {"net.nilsghesquiere.entities"})

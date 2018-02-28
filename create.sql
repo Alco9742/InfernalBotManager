@@ -1,0 +1,16 @@
+create sequence hibernate_sequence start 1 increment 1
+create table infernalsettings (id int8 not null, aktive boolean, api_client boolean, client_hide boolean, client_path varchar(255), client_update_sel boolean, console_hide boolean, cpu_boost boolean, current_version varchar(255), dis_chest boolean, gr_size int4, groups int4, leader_cpu_boost boolean, leader_hide boolean, leader_render_disable boolean, level int4, level_to_beginner_bot int4, lol_height int4, lol_width int4, max_be int4, max_level int4, mysqlaktiv_table varchar(255), mysqldatabase varchar(255), mysqlpassword varchar(255), mysqlqueue_table varchar(255), mysqlserver varchar(255), mysqluser varchar(255), open_chest boolean, open_hex_tech boolean, password varchar(255), play_time int4, prio int4, queue_close_value int4, queuer_auto_close boolean, ram_manager boolean, ram_max int4, ram_min int4, region int4, render_disable boolean, replace_config boolean, server_con boolean, server_port int4, sets varchar(255), sleep_time int4, soft_end_default boolean, soft_end_value int4, surrender boolean, time_span int4, time_until_check boolean, time_until_reboot varchar(255), timeout_champ int4, timeout_end_of_game int4, timeout_in_game int4, timeout_in_gameff int4, timeout_load_game int4, timeout_lobby int4, timeout_login int4, timeout_mastery int4, username varchar(255), wildcard varchar(255), win_reboot boolean, win_shutdown boolean, primary key (id))
+create table lolaccounts (id int8 not null, account varchar(255), account_status int4, active boolean not null, assigned_to varchar(255), be int4, info varchar(255), level int4, max_be int4, max_level int4, password varchar(255), play_time int4, priority int4, region int4, sleep_time int4, summoner varchar(255), xp int4, userid int8 not null, primary key (id))
+create table proxies (id int8 not null, handle varchar(255) not null, proxy_host varchar(255) not null, proxy_password varchar(255) not null, proxy_port varchar(255) not null, proxy_type int4 not null, proxy_user varchar(255) not null, primary key (id))
+create table roles (id int8 not null, name varchar(255) not null, primary key (id))
+create table userroles (userid int8 not null, roleid int8 not null)
+create table users (id int8 not null, email varchar(255), enabled boolean not null, password varchar(255), infernalsettingsid int8, primary key (id))
+create table verificationtokens (id int8 not null, expiry_date date, token varchar(255), user_id int8 not null, primary key (id))
+alter table lolaccounts add constraint UK_jrpkra8mgbm09v4w3kx9kj3wb unique (userid)
+alter table roles add constraint UK_ofx66keruapi6vyqpv6f2or37 unique (name)
+alter table users add constraint UK_6dotkott2kjsp8vw4d0m25fb7 unique (email)
+alter table lolaccounts add constraint FKsxn97cr9r4gjoeukt9g2b9crq foreign key (userid) references users
+alter table userroles add constraint FKa3r9sw47fs8gyju9wqy5nr2ip foreign key (roleid) references roles
+alter table userroles add constraint FK4n5hrit2bxugxfomumvnlq3fs foreign key (userid) references users
+alter table users add constraint FK18jpw5ke1f1hh910xiqdxoc2k foreign key (infernalsettingsid) references infernalsettings
+alter table verificationtokens add constraint FKg07mxtlf2s0y3b3ulro1y6hp7 foreign key (user_id) references users

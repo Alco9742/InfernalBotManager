@@ -8,14 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import net.nilsghesquiere.util.enums.AccountStatus;
-import net.nilsghesquiere.util.enums.Server;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.nilsghesquiere.util.enums.Region;
 
 @Data
 @Entity
@@ -23,77 +23,46 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class LolAccount implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@OneToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "userid")
 	@JsonIgnore
 	private User user;
-	private String username;
-	private String summonername;
+	private String account;
 	private String password;
-	private Server server;
-	private Long level;
-	private Long maxlevel;
+	private String summoner;
+	private Region region;
+	private Integer level;
+	private Integer maxLevel;
+	private Integer xp;
+	private Integer be;
+	private Integer maxBe;
+	private Integer priority;
+	private Integer playTime;
+	private Integer sleepTime;
+	private boolean active;
 	private AccountStatus accountStatus;
 	private String assignedTo;
 	private String info;
-	private boolean enabled;
+
 	
 	public LolAccount() {}
 	
-	public LolAccount(User user, String username, String password, Server server, Long maxlevel, boolean enabled) {
+	public LolAccount(User user, String account, String password, Region region) {
 		super();
 		this.user = user;
-		this.username = username;
-		this.summonername = "";
+		this.account = account;
 		this.password = password;
-		this.level = 0L;
-		this.maxlevel = maxlevel;
-		this.server = server;
-		this.enabled = enabled;
-		this.accountStatus = AccountStatus.NEW;
-		this.assignedTo = "";
-		this.info = "";
-	}
-	public LolAccount(String username, String password, Server server, Long maxlevel, boolean enabled) {
-		super();
-		this.username = username;
-		this.summonername = "";
-		this.password = password;
-		this.level = 0L;
-		this.maxlevel = maxlevel;
-		this.server = server;
-		this.enabled = enabled;
-		this.accountStatus = AccountStatus.NEW;
-		this.assignedTo = "";
-		this.info = "";
-	}
-
-	public LolAccount(User user, String username, String password, Server server, boolean enabled) {
-		super();
-		this.user = user;
-		this.username = username;
-		this.summonername = "";
-		this.password = password;
-		this.level = 0L;
-		this.maxlevel = this.user.getStandardLevel();
-		this.server = server;
-		this.enabled = enabled;
-		this.accountStatus = AccountStatus.NEW;
-		this.assignedTo = "";
-		this.info = "";
-	}
-
-	//temp class for testing until servers are added in datatables
-	public LolAccount(User user, String username, String password, Long maxlevel, boolean enabled) {
-		super();
-		this.user = user;
-		this.username = username;
-		this.summonername = "";
-		this.password = password;
-		this.level = 0L;
-		this.maxlevel = maxlevel;
-		this.server = Server.EUROPE_WEST;
-		this.enabled = enabled;
+		this.summoner = "";
+		this.region = region;
+		this.level = 0;
+		this.maxLevel = user.getInfernalSettings().getMaxLevel();
+		this.xp = 0;
+		this.be = 0;
+		this.maxBe = user.getInfernalSettings().getMaxBe();
+		this.priority = user.getInfernalSettings().getPrio();
+		this.playTime = user.getInfernalSettings().getPlayTime();
+		this.sleepTime = user.getInfernalSettings().getSleepTime();
+		this.active = user.getInfernalSettings().getAktive();
 		this.accountStatus = AccountStatus.NEW;
 		this.assignedTo = "";
 		this.info = "";
@@ -111,12 +80,10 @@ public class LolAccount implements Serializable{
 	
 	public static LolAccount buildFromString(User user, String line){
 		String input[] = line.split(":");
-		String username = input[0];
+		String account = input[0];
 		String password = input[1];
-		String serverString = input[2];
-		String maxLevelString = input[3];
-		Server server = Server.valueOf(serverString);
-		Long maxLevel = Long.valueOf(maxLevelString);
-		return new LolAccount(user,username,password, server, maxLevel, true);
+		String regionString = input[2];
+		Region region = Region.valueOf(regionString);
+		return new LolAccount(user,account,password, region);
 	}
 }

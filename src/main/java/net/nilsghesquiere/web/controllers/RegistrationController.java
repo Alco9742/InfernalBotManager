@@ -54,9 +54,6 @@ public class RegistrationController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	@Autowired
-	private Environment env;
-	
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)
 	public String registerForm(){
 		return "registration";

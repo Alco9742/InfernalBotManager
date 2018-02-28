@@ -4,8 +4,6 @@ import java.util.UUID;
 
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.IUserService;
-import net.nilsghesquiere.web.controllers.RegistrationController;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +36,13 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 		
 		String recipientAdress = user.getEmail();
 		String subject = "Registration Confirmation";
-		String confirmationUrl = event.getAppUrl() + "/registrationConfirm.html?token=" + token;
+		String confirmationUrl = event.getAppUrl() + "/registered.html?token=" + token;
 		String message = "Confirm your account: ";
 		
 		SimpleMailMessage email = new SimpleMailMessage();
 		email.setTo(recipientAdress);
 		email.setSubject(subject);
-		email.setText(message + " rn" + "http://localhost:8080" + confirmationUrl);
+		email.setText(message + " \r\n" + confirmationUrl);
 		mailSender.send(email);
 	}
 }

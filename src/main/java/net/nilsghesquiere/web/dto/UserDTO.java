@@ -1,5 +1,7 @@
 package net.nilsghesquiere.web.dto;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
@@ -10,7 +12,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Data
 @PasswordMatches
-public class UserDTO {
+public class UserDTO implements Serializable{
+	static final long serialVersionUID = 1L;
 	@ValidEmail
 	@NotNull
 	@NotEmpty
@@ -29,4 +32,5 @@ public class UserDTO {
 		this.password = password;
 		this.matchingPassword= password;
 	}
+	
 }

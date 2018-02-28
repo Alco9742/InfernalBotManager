@@ -32,9 +32,12 @@ public class VerificationToken implements Serializable{
 	private User user;
 	private Date expiryDate;
 	
+	public VerificationToken(){}
+	
 	public VerificationToken(String token, User user) {
 		this.token = token;
 		this.user= user;
+		this.expiryDate = calculateExpiryDate(EXPIRATION);
 	}
 	
 	private Date calculateExpiryDate(int expiryTimeInMinutes) {

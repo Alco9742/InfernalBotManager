@@ -75,32 +75,83 @@
 					fields: [{
 						label: "ID",
 						name: "id",
-						type: "readonly",
+						type: "hidden",
 						def: "0"
+					},{
+						label: "Active:",
+						name: "active",
+						type: "checkbox",
+						options: [
+							{ label: "", value: true }
+						],
+						separator: '',
+						unselectedValue: false
 					}, {
-						label: "Username",
-						name: "username"
+						label: "Account",
+						name: "account"
 					},{
 						label: "Password",
 						name: "password"
 					},{
-						label: "Server",
-						name: "server",
+						label: "Summoner",
+						name: "summoner",
+						type: "readonly"
+					},{
+						label: "Region",
+						name: "region",
 						type: "select",
 						options: [
-							{ label: "NORTH_AMERICA", value: "NORTH_AMERICA" },
-							{ label: "EUROPE_WEST", value: "EUROPE_WEST" },
-							{ label: "EUROPE_NORTH_EAST", value: "EUROPE_NORTH_EAST"}
+							{ label: "NA", value: "NA" },
+							{ label: "EUW", value: "EUW" },
+							{ label: "EUNE", value: "EUNE"},
+							{ label: "BR", value: "EUW" },
+							{ label: "LAN", value: "EUW" },
+							{ label: "LAS", value: "EUW" },
+							{ label: "OCE", value: "EUW" },
+							{ label: "RU", value: "EUW" },
+							{ label: "TR", value: "EUW" }
 						],
-						def: "NORTH_AMERICA"
+						def: "NA"
 					},{
 						label: "Level",
 						name: "level",
 						type: "readonly",
 						def: "0"
 					},{
-						label: "Max Level",
-						name: "maxlevel"
+						label: "M. Lvl,
+						name: "maxLevel"
+					},{
+						label: "XP",
+						name: "xp",
+						type: "readonly"
+					},{
+						label: "BE",
+						name: "be",
+						type: "readonly"
+					},{
+						label: "M. BE",
+						name: "maxBe"
+					},{
+						label: "Priority",
+						name: "priority",
+						type: "select",
+						options: [
+							{ label: "1", value: "1" },
+							{ label: "2", value: "2" },
+							{ label: "3", value: "3"},
+							{ label: "4", value: "4" },
+							{ label: "5", value: "5" },
+							{ label: "6", value: "6" },
+							{ label: "7", value: "7" },
+							{ label: "8", value: "8" },
+							{ label: "9", value: "9" }
+						]
+					},{
+						label: "Playtime",
+						name: "playTime"
+					},{
+						label: "Sleeptime",
+						name: "sleepTime"
 					},{
 						label: "Status",
 						name: "accountStatus",
@@ -114,22 +165,13 @@
 					},{
 						label: "Info",
 						name: "info",
-						type: "readonly",
 						def: "No extra info"
-					},{
-						label: "Enabled:",
-						name: "enabled",
-						type: "checkbox",
-						options: [
-							{ label: "", value: true }
-						],
-						separator: '',
-						unselectedValue: false
 					}],
 					idSrc:'id'
 			} );
 		
-			$('#leagueinformer-datatable-accounts').DataTable( {
+			var table = $('#leagueinformer-datatable-accounts').DataTable( {
+				responsive: true,
 				dom: "Bfrtip",
 				ajax:{
 					"url": "/api/accounts/user/" + /*[[${currentUser.id}]]*/ ,
@@ -140,18 +182,26 @@
 				},
 				columns: [
 				{ data: "id" },
-				{ data: "username" },
+				{ data: "active"},
+				{ data: "account" },
 				{ data: "password" },
-				{ data: "server" },
+				{ data: "summoner" },
+				{ data: "region" },
 				{ data: "level" },
-				{ data: "maxlevel" },
+				{ data: "maxLevel" },
+				{ data: "xp" },
+				{ data: "be" },
+				{ data: "maxBe" },
+				{ data: "priority" },
+				{ data: "playTime" },
+				{ data: "sleepTime" },
 				{ data: "accountStatus" },
 				{ data: "assignedTo" },
-				{ data: "info" },
-				{ data: "enabled"}
+				{ data: "info" }
+
 				],
 				columnDefs: [
-				{ targets: [0,7,8], visible: false}
+				{ targets: [0,4,7,8,9,10,11,12,13,15,16], visible: false}
 				],
 				select: true,
 				buttons: [
@@ -179,6 +229,12 @@
 				]
 			} );
 			
+			$('a.toggle-vis').on( 'click', function (e) {
+				e.preventDefault();
+				var column = table.column( $(this).attr('data-column') );
+				column.visible( ! column.visible() );
+			} );
+			
 		} );/*]]>*/
 		</script>
 	</head>
@@ -193,19 +249,31 @@
 						<thead>
 							<tr>
 								<th>ID</th>
-								<th>Username</th>
+								<th>Active</th>
+								<th>Account</th>
 								<th>Password</th>
-								<th>Server</th>
+								<th>Summoner</th>
+								<th>Region</th>
 								<th>Level</th>
-								<th>Max Level</th>
+								<th>M. Lvl</th>
+								<th>XP</th>
+								<th>BE</th>
+								<th>M. BE</th>
+								<th>Priority</th>
+								<th>Playtime</th>
+								<th>Sleeptime</th>
 								<th>Account Status</th>
 								<th>Assigned To</th>
 								<th>Info</th>
-								<th>Enabled</th>
 							</tr>
 						</thead>
 					</table>
 					<input id="filedialog" type="file" name ="filedialog" accept="text/plain" style="display:none"/>
+				</div>
+			</div>
+			<div class = "row">
+				<div class="col-xs-12">
+					<a class="toggle-vis" data-column="1">Active</a> - <a class="toggle-vis" data-column="2">Account</a> - <a class="toggle-vis" data-column="3">Password</a> - <a class="toggle-vis" data-column="4">Summoner</a> - <a class="toggle-vis" data-column="5">Region</a> - <a class="toggle-vis" data-column="6">Level</a> - <a class="toggle-vis" data-column="7">Max Level</a> - <a class="toggle-vis" data-column="8">XP</a> - <a class="toggle-vis" data-column="9">BE</a> - <a class="toggle-vis" data-column="10">Max BE</a> - <a class="toggle-vis" data-column="11">Priority</a> - <a class="toggle-vis" data-column="12">Playtime</a> - <a class="toggle-vis" data-column="13">Sleeptime</a> - <a class="toggle-vis" data-column="14">Account Status</a> - <a class="toggle-vis" data-column="11">Assigned To</a> - <a class="toggle-vis" data-column="11">Info</a>
 				</div>
 			</div>
 		</div>

@@ -15,12 +15,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import lombok.Data;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
 
 
 @Data
@@ -34,7 +35,6 @@ public class User implements Serializable{
 	@JsonIgnore
 	private String password;
 	private boolean enabled;
-	private Long standardLevel;
 	@ManyToMany
 	@JoinTable(
 			name="userroles",
@@ -44,7 +44,10 @@ public class User implements Serializable{
 	@OneToMany(mappedBy="user",cascade=CascadeType.REMOVE,fetch = FetchType.LAZY)
 	@OrderBy("id")
 	@JsonIgnore
-	private List<LolAccount>lolAccounts;	
+	private List<LolAccount>lolAccounts;
+	@OneToOne
+	@JoinColumn(name="infernalsettingsid")
+	InfernalSettings infernalSettings;
 	
 	public User() {
 		super();
@@ -58,7 +61,6 @@ public class User implements Serializable{
 		this.roles = roles;
 		this.enabled = enabled;
 		this.lolAccounts = new ArrayList<>();
-		this.standardLevel = 30L;
 	}
 	
 	public User(String email,String username, String password, List<Role> roles) {
@@ -88,7 +90,7 @@ public class User implements Serializable{
 	public String toString() {
 		return "User [id=" + id + ", email=" + email 
 				+ ", password=" + password + ", enabled=" + enabled
-				+ ", standardLevel=" + standardLevel + ", roles=" + roles + " + #LolAccounts=" + lolAccounts.size() + "]";
+				+ ", roles=" + roles + " + #LolAccounts=" + lolAccounts.size() + "]";
 	}
 
 	

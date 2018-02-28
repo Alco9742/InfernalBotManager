@@ -4,13 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,10 +18,8 @@ import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.JSONResponse;
 import net.nilsghesquiere.util.wrappers.JSONResponseWithError;
 import net.nilsghesquiere.util.wrappers.JSONResponseWithoutError;
-import net.nilsghesquiere.util.wrappers.JSONWrapper;
 import net.nilsghesquiere.util.wrappers.LolAccountListWrapper;
 import net.nilsghesquiere.util.wrappers.LolAccountMap;
-import net.nilsghesquiere.web.error.AccountExistsException;
 import net.nilsghesquiere.web.error.AccountNotFoundException;
 import net.nilsghesquiere.web.error.UserNotFoundException;
 
@@ -140,7 +133,7 @@ public class AccountsRestController {
 			} else {
 				//PROCESSING
 				User user = userService.read(userid);
-				LolAccount newAccount = new LolAccount(user,lolAccount.getUsername(),lolAccount.getPassword(),lolAccount.getMaxlevel(), lolAccount.isEnabled());	
+				LolAccount newAccount = new LolAccount(user,lolAccount.getAccount(),lolAccount.getPassword(),lolAccount.getRegion());	
 				LolAccount createdAccount = lolAccountService.create(newAccount);
 				returnAccounts.add(createdAccount);
 			}

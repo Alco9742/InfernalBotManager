@@ -10,7 +10,7 @@ import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.ILolAccountService;
 import net.nilsghesquiere.service.web.IRoleService;
 import net.nilsghesquiere.service.web.IUserService;
-import net.nilsghesquiere.util.enums.Server;
+import net.nilsghesquiere.util.enums.Region;
 import net.nilsghesquiere.util.enums.UserType;
 import net.nilsghesquiere.web.dto.UserDTO;
 
@@ -43,48 +43,26 @@ public class InitializationController {
 	public String init() {
 		if (roleService.findAll().size() == 0 ){
 			//create the roles and commit to DB
-			Role role1 = new Role(UserType.ADMIN.getName());
-			Role role2 = new Role(UserType.USER.getName());
-			roleService.create(role1);
-			roleService.create(role2);
+			Role userRole = new Role(UserType.USER.getName());
+			Role adminRole = new Role(UserType.ADMIN.getName());
+			roleService.create(userRole);
+			roleService.create(adminRole);
 			
-			//create the user and commit to DB
+			//creat userand account and commit to DB
 			UserDTO userDTO = new UserDTO("ghesquiere.nils@gmail.com", "Syntra1234");
-			userService.registerNewUserAccount(userDTO);
+			User user = userService.registerNewUserAccount(userDTO);
 			List<Role> roles = new  ArrayList<>();
-			roles.add(role1);
-			User createdUser = userService.findUserByEmail("ghesquiere.nils@gmail.com");
-			createdUser.setEnabled(true);
-			createdUser.setRoles(roles);
-			userService.update(createdUser);
-			userService.createVerificationTokenForUser(createdUser, UUID.randomUUID().toString());
-			LOGGER.info("Created initial roles and user");
+			roles.add(userRole);
+			roles.add(adminRole);
+			user.setEnabled(true);
+			user.setRoles(roles);
+			userService.createVerificationTokenForUser(user, UUID.randomUUID().toString());
+			LolAccount lolAccount = new LolAccount(user,"Pismerito","EdGOY4Xt",Region.EUW);
+			lolAccountService.create(lolAccount);
+			LOGGER.info("Created initial roles,users,accounts");
 		} else {
 			LOGGER.warn("Initial roles and user already created");
 		}
-		return VIEW;
-	}
-	
-	@RequestMapping(path="extended",method = RequestMethod.GET)
-	public String extendedInit() {
-		User user = userService.findUserByEmail("ghesquiere.nils@gmail.com");
-		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt",Server.EUROPE_WEST,30L, true);
-		lolAccount.setUser(user);
-		lolAccountService.create(lolAccount);
-		return VIEW;
-	}
-
-	@RequestMapping(path="testuser",method = RequestMethod.GET)
-	public String testUserInit() {
-		UserDTO userDTO = new UserDTO("testuser@gmail.com","Test123");
-		userService.registerNewUserAccount(userDTO);
-		User createdUser = userService.findUserByEmail("testuser@gmail.com");
-		createdUser.setEnabled(true);
-		userService.update(createdUser);
-		userService.createVerificationTokenForUser(createdUser, UUID.randomUUID().toString());
-		LolAccount lolAccount = new LolAccount("Pismerito","EdGOY4Xt",Server.EUROPE_WEST,30L, true);
-		lolAccount.setUser(createdUser);
-		lolAccountService.create(lolAccount);
 		return VIEW;
 	}
 }

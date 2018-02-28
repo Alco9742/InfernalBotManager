@@ -2,6 +2,11 @@ package net.nilsghesquiere.web.error;
 
 public class MyResourceNotFoundException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public MyResourceNotFoundException() {
 		super();
 	}

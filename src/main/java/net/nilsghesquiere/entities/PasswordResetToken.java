@@ -31,10 +31,13 @@ public class PasswordResetToken implements Serializable{
 	@JoinColumn(nullable = false, name = "user_id")
 	private User user;
 	private Date expiryDate;
+
+	public PasswordResetToken(){}
 	
 	public PasswordResetToken(String token, User user) {
 		this.token = token;
 		this.user= user;
+		this.expiryDate = calculateExpiryDate(EXPIRATION);
 	}
 	
 	private Date calculateExpiryDate(int expiryTimeInMinutes) {

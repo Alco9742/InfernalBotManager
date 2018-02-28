@@ -25,11 +25,8 @@ public class TestController {
 	private static final String SUMMONER_VIEW = "test/summoner";
 	
 	private final AuthenticationFacade authenticationFacade;
-	private final ILolAccountService lolAccountService;
-
 	@Autowired
 	public TestController(AuthenticationFacade authenticationFacade, ILolAccountService lolAccountService) {
-		this.lolAccountService = lolAccountService;
 		this.authenticationFacade = authenticationFacade;
 	}
 	
