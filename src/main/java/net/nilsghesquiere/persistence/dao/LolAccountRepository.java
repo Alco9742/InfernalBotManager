@@ -20,6 +20,6 @@ public interface LolAccountRepository extends JpaRepository<LolAccount, Long> {
 	List <LolAccount> findByUserId(@Param("userid") Long userid);
 	List <LolAccount> findByUserEmail(@Param("email") String email);
 	void deleteById(@Param("id") Long id);
-	@Query("SELECT TOP 5 l FROM lolaccounts l WHERE p.id = :userid AND p.region = :region AND p.accountstatus = READY_FOR_USE AND p.active = true ORDER BY p.priority ASC, p.level DESC")
-	List <LolAccount> findUsableAccounts(@Param("userid") Long userid, @Param("region") Region region);
+	@Query("SELECT TOP :amount l FROM lolaccounts l WHERE p.id = :userid AND p.region = :region AND p.accountstatus = READY_FOR_USE AND p.active = true ORDER BY p.priority ASC, p.level DESC")
+	List <LolAccount> findUsableAccounts(@Param("userid") Long userid, @Param("region") Region region, @Param("amount") Integer amount);
 }

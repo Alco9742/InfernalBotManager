@@ -68,14 +68,14 @@ public class AccountsRestController {
 		return new ResponseEntity<LolAccountWrapper>(wrapper, HttpStatus.OK);
 	}
 	
-	@RequestMapping(path = "/user/{userid}/usable/{region}/", method = RequestMethod.GET)
-	public ResponseEntity<LolAccountWrapper> findUsableAccounts(@PathVariable Long userid, @PathVariable Region region) {
+	@RequestMapping(path = "/user/{userid}/usable/{region}/limit/{amount}", method = RequestMethod.GET)
+	public ResponseEntity<LolAccountWrapper> findUsableAccounts(@PathVariable Long userid, @PathVariable Region region, @PathVariable Integer amount) {
 		//VARS
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		String error = "";
 		
 		//PROCESSING
-		List<LolAccount> lolAccounts = lolAccountService.findUsableAccounts(userid, region);
+		List<LolAccount> lolAccounts = lolAccountService.findUsableAccounts(userid, region,amount);
 		
 		//RESPONSE
 		wrapper.setError(error);

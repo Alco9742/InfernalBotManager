@@ -77,7 +77,7 @@ public class LolAccountServiceImpl implements LolAccountService{
 	}
 
 	@Override
-	public List<LolAccount> findUsableAccounts(Long userid, Region region) {
-		return lolAccountRepository.findUsableAccounts(userid, region);
+	public List<LolAccount> findUsableAccounts(Long userid, Region region, Integer amount) {
+		return lolAccountRepository.findUsableAccounts(userid, region, amount);
 	}
 }
