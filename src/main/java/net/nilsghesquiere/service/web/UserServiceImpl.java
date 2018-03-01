@@ -7,15 +7,10 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.PasswordResetToken;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.VerificationToken;
-import net.nilsghesquiere.persistence.dao.InfernalSettingsRepository;
 import net.nilsghesquiere.persistence.dao.PasswordResetTokenRepository;
 import net.nilsghesquiere.persistence.dao.RoleRepository;
 import net.nilsghesquiere.persistence.dao.UserRepository;
@@ -24,6 +19,10 @@ import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
 import net.nilsghesquiere.util.enums.UserType;
 import net.nilsghesquiere.web.dto.UserDTO;
 import net.nilsghesquiere.web.error.EmailExistsException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 @Transactional

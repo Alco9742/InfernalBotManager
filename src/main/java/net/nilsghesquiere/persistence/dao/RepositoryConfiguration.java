@@ -1,5 +1,6 @@
 package net.nilsghesquiere.persistence.dao;
 
+import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.LolAccount;
 
@@ -31,7 +32,7 @@ public class RepositoryConfiguration {
 		return new RepositoryRestConfigurerAdapter() {
 			@Override
 			public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-				config.exposeIdsFor(User.class,LolAccount.class);
+				config.exposeIdsFor(User.class,LolAccount.class,InfernalSettings.class);
 			}
 			
 			@Override 

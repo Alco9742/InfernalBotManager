@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class InfernalSettings implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@OneToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "userid")
 	@JsonIgnore
 	private User user;
@@ -87,7 +87,9 @@ public class InfernalSettings implements Serializable{
 	private String mySQLPassword;
 	private String mySQLQueueTable;
 	private String mySQLAktivTable;
+
 	
+	public InfernalSettings(){} 
 	public InfernalSettings(User user) {
 		super();
 		this.user= user;

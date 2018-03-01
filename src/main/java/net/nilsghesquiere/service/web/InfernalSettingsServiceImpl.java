@@ -2,13 +2,12 @@ package net.nilsghesquiere.service.web;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import net.nilsghesquiere.entities.InfernalSettings;
-import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.persistence.dao.InfernalSettingsRepository;
 import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
@@ -39,5 +38,10 @@ public class InfernalSettingsServiceImpl implements InfernalSettingsService{
 	@Override
 	public void deleteById(Long id) {
 		infernalSettingsRepository.deleteById(id);
+	}
+
+	@Override
+	public InfernalSettings getByUserId(Long userid) {
+		return infernalSettingsRepository.getByUserId(userid);
 	}
 }

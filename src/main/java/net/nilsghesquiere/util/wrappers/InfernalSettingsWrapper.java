@@ -2,33 +2,30 @@ package net.nilsghesquiere.util.wrappers;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import net.nilsghesquiere.entities.LolAccount;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class JSONResponse implements Serializable{
+import net.nilsghesquiere.entities.InfernalSettings;
+
+public class InfernalSettingsWrapper implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Map<String, List<LolAccount>> map;
-	@JsonIgnore
+	private Map<String, InfernalSettings> map;
 	private String error;
 
-	public JSONResponse() {
-		this.map = new HashMap<String, List<LolAccount>>();
+	public InfernalSettingsWrapper() {
+		this.map = new HashMap<String, InfernalSettings>();
 		this.setError("");
 	}	
 	
 	@JsonAnySetter 
-	public void add(String key, List<LolAccount> lolAccounts) {
-		map.put(key, lolAccounts);
+	public void add(String key, InfernalSettings infernalSettings) {
+		map.put(key, infernalSettings);
 	}
 
 	@JsonAnyGetter
-	public Map<String, List<LolAccount>> getMap() {
+	public Map<String, InfernalSettings> getMap() {
 		return map;
 	}
 
