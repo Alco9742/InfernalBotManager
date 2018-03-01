@@ -14,6 +14,7 @@ import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.LolAccountService;
 import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.util.enums.Region;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.LolAccountMap;
 import net.nilsghesquiere.util.wrappers.LolAccountWrapper;
@@ -63,6 +64,23 @@ public class AccountsRestController {
 		wrapper.add("data",lolAccounts);
 		
 		
+		//RETURN
+		return new ResponseEntity<LolAccountWrapper>(wrapper, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/user/{userid}/usable/{region}/", method = RequestMethod.GET)
+	public ResponseEntity<LolAccountWrapper> findUsableAccounts(@PathVariable Long userid, @PathVariable Region region) {
+		//VARS
+		LolAccountWrapper wrapper = new LolAccountWrapper();
+		String error = "";
+		
+		//PROCESSING
+		List<LolAccount> lolAccounts = lolAccountService.findUsableAccounts(userid, region);
+		
+		//RESPONSE
+		wrapper.setError(error);
+		wrapper.add("data",lolAccounts);
+	
 		//RETURN
 		return new ResponseEntity<LolAccountWrapper>(wrapper, HttpStatus.OK);
 	}

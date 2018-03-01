@@ -9,6 +9,7 @@ import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.persistence.dao.LolAccountRepository;
 import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
+import net.nilsghesquiere.util.enums.Region;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,5 +74,10 @@ public class LolAccountServiceImpl implements LolAccountService{
 	@Override
 	public void deleteById(Long id) {
 		lolAccountRepository.deleteById(id);
+	}
+
+	@Override
+	public List<LolAccount> findUsableAccounts(Long userid, Region region) {
+		return lolAccountRepository.findUsableAccounts(userid, region);
 	}
 }
