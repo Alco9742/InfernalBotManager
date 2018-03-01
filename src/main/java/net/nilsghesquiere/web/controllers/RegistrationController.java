@@ -10,7 +10,7 @@ import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.VerificationToken;
 import net.nilsghesquiere.registration.OnRegistrationCompleteEvent;
 import net.nilsghesquiere.security.IUserSecurityService;
-import net.nilsghesquiere.service.web.IUserService;
+import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.web.dto.PasswordDTO;
 import net.nilsghesquiere.web.dto.UserDTO;
@@ -43,7 +43,7 @@ public class RegistrationController {
 	private AuthenticationFacade authenticationFacade;
 	
 	@Autowired
-	private IUserService userService;
+	private UserService userService;
 	
 	@Autowired
 	private IUserSecurityService userSecurityService;

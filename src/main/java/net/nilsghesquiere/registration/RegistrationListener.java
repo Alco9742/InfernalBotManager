@@ -3,7 +3,7 @@ package net.nilsghesquiere.registration;
 import java.util.UUID;
 
 import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.service.web.IUserService;
+import net.nilsghesquiere.service.web.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 	
 	
 	@Autowired
-	private IUserService userService;
+	private UserService userService;
 		
 	@Autowired
 	private JavaMailSender mailSender;

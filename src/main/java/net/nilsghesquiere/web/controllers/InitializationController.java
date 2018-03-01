@@ -7,9 +7,10 @@ import java.util.UUID;
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.Role;
 import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.service.web.ILolAccountService;
-import net.nilsghesquiere.service.web.IRoleService;
-import net.nilsghesquiere.service.web.IUserService;
+import net.nilsghesquiere.service.web.InfernalSettingsService;
+import net.nilsghesquiere.service.web.LolAccountService;
+import net.nilsghesquiere.service.web.RoleService;
+import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.enums.Region;
 import net.nilsghesquiere.util.enums.UserType;
 import net.nilsghesquiere.web.dto.UserDTO;
@@ -27,16 +28,14 @@ public class InitializationController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InitializationController.class);
 	private static final String VIEW = "index";
 	
-	private final IRoleService roleService;
-	private final IUserService userService;
-	private final ILolAccountService lolAccountService;
+	@Autowired
+	private RoleService roleService;
 	
 	@Autowired
-	public InitializationController(IRoleService roleService, IUserService userService, ILolAccountService lolAccountService) {
-		this.roleService = roleService;
-		this.userService = userService;
-		this.lolAccountService = lolAccountService;
-	}
+	private UserService userService;
+	
+	@Autowired
+	private LolAccountService lolAccountService;
 	
 	// Setup user for login
 	@RequestMapping(path="main",method = RequestMethod.GET)

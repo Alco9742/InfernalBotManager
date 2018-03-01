@@ -3,7 +3,7 @@ package net.nilsghesquiere.util.facades;
 import java.util.Optional;
 
 import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.service.web.IUserService;
+import net.nilsghesquiere.service.web.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthenticationFacadeImpl implements AuthenticationFacade {
-	private final IUserService userService;
+	private final UserService userService;
 
 	@Autowired
-	public AuthenticationFacadeImpl(IUserService userService) {
+	public AuthenticationFacadeImpl(UserService userService) {
 		this.userService = userService;
 	}
 	

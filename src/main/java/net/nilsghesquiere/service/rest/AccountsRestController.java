@@ -12,8 +12,8 @@ import java.util.stream.Stream;
 
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.LolAccount;
-import net.nilsghesquiere.service.web.ILolAccountService;
-import net.nilsghesquiere.service.web.IUserService;
+import net.nilsghesquiere.service.web.LolAccountService;
+import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.JSONResponse;
 import net.nilsghesquiere.util.wrappers.JSONResponseWithError;
@@ -42,12 +42,12 @@ import com.google.common.base.Preconditions;
 @RequestMapping("/api/accounts")
 public class AccountsRestController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountsRestController.class);
-	private final ILolAccountService lolAccountService;
-	private final IUserService userService;
+	private final LolAccountService lolAccountService;
+	private final UserService userService;
 	private final AuthenticationFacade authenticationFacade;	
 	
 	@Autowired
-	AccountsRestController(ILolAccountService lolAccountService,IUserService userService, AuthenticationFacade authenticationFacade){
+	AccountsRestController(LolAccountService lolAccountService,UserService userService, AuthenticationFacade authenticationFacade){
 		this.lolAccountService = lolAccountService;
 		this.userService = userService;
 		this.authenticationFacade = authenticationFacade;

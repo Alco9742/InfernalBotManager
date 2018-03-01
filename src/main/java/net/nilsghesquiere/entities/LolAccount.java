@@ -8,14 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.enums.Region;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @Entity
@@ -23,7 +23,7 @@ import net.nilsghesquiere.util.enums.Region;
 public class LolAccount implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
-	@OneToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "userid")
 	@JsonIgnore
 	private User user;
