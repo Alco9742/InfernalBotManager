@@ -3,6 +3,8 @@ package net.nilsghesquiere.entities;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,6 +32,7 @@ public class LolAccount implements Serializable{
 	private String account;
 	private String password;
 	private String summoner;
+	@Enumerated(EnumType.STRING)
 	private Region region;
 	private Integer level;
 	private Integer maxLevel;
@@ -40,6 +43,7 @@ public class LolAccount implements Serializable{
 	private Integer playTime;
 	private Integer sleepTime;
 	private boolean active;
+	@Enumerated(EnumType.STRING)
 	private AccountStatus accountStatus;
 	private String assignedTo;
 	private String info;

@@ -8,6 +8,7 @@ import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.util.enums.Region;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +21,6 @@ public interface LolAccountRepository extends JpaRepository<LolAccount, Long> {
 	List <LolAccount> findByUserId(@Param("userid") Long userid);
 	List <LolAccount> findByUserEmail(@Param("email") String email);
 	void deleteById(@Param("id") Long id);
-	@Query("SELECT TOP :amount l FROM lolaccounts l WHERE p.id = :userid AND p.region = :region AND p.accountstatus = READY_FOR_USE AND p.active = true ORDER BY p.priority ASC, p.level DESC")
-	List <LolAccount> findUsableAccounts(@Param("userid") Long userid, @Param("region") Region region, @Param("amount") Integer amount);
+	@Query("SELECT l FROM LolAccount l WHERE l.user.id = :userid AND l.region = :region AND (l.accountStatus = 'READY_FOR_USE' OR l.accountStatus= 'NEW') AND l.active = true ORDER BY l.priority ASC, l.level DESC")
+	List <LolAccount> findUsableAccounts(@Param("userid") Long userid, @Param("region") Region region, Pageable pageable);
 }

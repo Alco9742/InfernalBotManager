@@ -12,6 +12,8 @@ import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
 import net.nilsghesquiere.util.enums.Region;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -78,6 +80,9 @@ public class LolAccountServiceImpl implements LolAccountService{
 
 	@Override
 	public List<LolAccount> findUsableAccounts(Long userid, Region region, Integer amount) {
-		return lolAccountRepository.findUsableAccounts(userid, region, amount);
+		// limit using a Pageable
+		
+		Pageable pageable = new PageRequest(0,amount);
+		return lolAccountRepository.findUsableAccounts(userid, region, pageable);
 	}
 }
