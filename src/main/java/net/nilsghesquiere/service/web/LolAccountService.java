@@ -19,4 +19,5 @@ public interface LolAccountService {
 	List<LolAccount> findByUserEmail(String email);
 	void deleteById(Long id);
 	List <LolAccount> findUsableAccounts(Long userid, Region region, Integer amount);
+	LolAccount findByAccountAndUserId(Long userid, String account);
 }

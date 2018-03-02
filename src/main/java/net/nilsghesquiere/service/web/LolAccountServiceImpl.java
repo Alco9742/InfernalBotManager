@@ -85,4 +85,9 @@ public class LolAccountServiceImpl implements LolAccountService{
 		Pageable pageable = new PageRequest(0,amount);
 		return lolAccountRepository.findUsableAccounts(userid, region, pageable);
 	}
+
+	@Override
+	public LolAccount findByAccountAndUserId(Long userid, String account) {
+		return lolAccountRepository.findByAccountIgnoreCaseAndUserId(account, userid);
+	}
 }

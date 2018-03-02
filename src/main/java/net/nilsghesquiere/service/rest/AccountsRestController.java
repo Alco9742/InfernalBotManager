@@ -18,8 +18,11 @@ import net.nilsghesquiere.util.enums.Region;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.LolAccountMap;
 import net.nilsghesquiere.util.wrappers.LolAccountWrapper;
+import net.nilsghesquiere.util.wrappers.LolMixedAccountMap;
+import net.nilsghesquiere.util.wrappers.StringResponseMap;
 import net.nilsghesquiere.web.error.AccountNotFoundException;
 import net.nilsghesquiere.web.error.UserNotFoundException;
+import net.nilsghesquiere.web.util.GenericResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +78,6 @@ public class AccountsRestController {
 		String error = "";
 		
 		//PROCESSING
-		LOGGER.info("userid=" + userid +", region=" + region + ", amount=" + amount);
 		List<LolAccount> lolAccounts = lolAccountService.findUsableAccounts(userid, region,amount);
 		
 		//RESPONSE
@@ -84,6 +86,17 @@ public class AccountsRestController {
 	
 		//RETURN
 		return new ResponseEntity<LolAccountWrapper>(wrapper, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/user/{userid}/account/{account}", method = RequestMethod.GET)
+	public ResponseEntity<LolAccount> findAccountId(@PathVariable Long userid, @PathVariable String account) {
+		//PROCESSING
+		LOGGER.info("userid=" + userid +", account=" + account);
+		LolAccount lolAccount = lolAccountService.findByAccountAndUserId(userid, account);
+		//RESPONSE
+		
+		//RETURN
+		return new ResponseEntity<LolAccount>(lolAccount, HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/user/{userid}", method = RequestMethod.POST)
@@ -194,6 +207,41 @@ public class AccountsRestController {
 	private void validateAccountById(Long accountId) {
 		lolAccountService.findOptionalById(accountId).orElseThrow(
 			() -> new AccountNotFoundException(accountId));
+	}
+	
+	@RequestMapping(path = "/user/{userid}/infernalImport",method = RequestMethod.PUT)
+	public ResponseEntity<StringResponseMap> infernalImport(@PathVariable Long userid,@RequestBody LolMixedAccountMap lolMixedAccountMap) {
+		//TODO put better error handling in this
+		//VARS
+		StringResponseMap responseMap = new StringResponseMap();
+		String response = "OK";
+		//update existing accounts
+		for (LolAccount lolAccount : lolMixedAccountMap.getMap().values()){
+			Preconditions.checkNotNull(lolAccount);
+			validateAccountById(lolAccount.getId());
+			validateUserByUserId(userid);
+			lolAccount.setUser(userService.read(userid));
+			lolAccountService.update(lolAccount);
+		}
+		//create new accounts
+		Integer i = 0;
+		for(LolAccount lolAccount: lolMixedAccountMap.getNewAccs()){
+			//CHECKS
+			String error = checkUser(userid);
+			if (lolAccount == null && !error.equals("")){
+				error = "Account is empty";
+			}
+			//PROCESSING
+			if(error.equals("")){
+				lolAccount.setUser(userService.read(userid));
+				lolAccountService.create(lolAccount);
+			} else{
+				response = error;
+			}
+			
+			responseMap.add(lolAccount.getAccount(), response);
+		}
+		return new ResponseEntity<StringResponseMap>(responseMap,HttpStatus.OK);
 	}
 	
 	//TODO authentication
