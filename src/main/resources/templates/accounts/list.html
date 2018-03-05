@@ -28,13 +28,7 @@
 							processData: false,
 							data:form_data,
 							type: 'POST',
-							error: function (xhr, error, thrown) {
-								console.log("error" + error.toString());
-								console.log("xhr:" + xhr.toString());
-								console.log("thrown:" + thrown.toString());
-					 		},
 							success: function(returnedData) {
-								console.log(returnedData);
 								location.reload();
 							}
 						 });
@@ -173,6 +167,7 @@
 			var table = $('#leagueinformer-datatable-accounts').DataTable( {
 				responsive: true,
 				dom: "Bfrtip",
+				pageLength: 50,
 				ajax:{
 					"url": "/api/accounts/user/" + /*[[${currentUser.id}]]*/ ,
 					"dataSrc": "data",
@@ -225,6 +220,29 @@
 						{ text: 'Select File',   action: function () {$("#filedialog").click();} },
 						{ extend: "uploadfile", editor: editor }
 					]
+				},
+				{	text: 'Reset Status',
+					action: function (e, dt, node, config) {
+						var selectedRows = table.rows( { selected: true }).data().toArray();
+						console.log(selectedRows);
+						var ids = $.map(selectedRows, function (item) {
+							return item.id
+						});
+						idsJson = JSON.stringify(ids);
+						$.ajax({
+							type: 'PUT',
+							dataType: "json",
+							contentType: "application/json; charset=utf-8",
+							url: restlnk + "/resetStatus",
+							dataSrc: "data",
+							cache: false,
+							processData: false,
+							data: idsJson,
+							success: function(returnedData) {
+								location.reload();
+							}
+						});
+					}
 				}
 				]
 			} );
@@ -273,7 +291,7 @@
 			</div>
 			<div class = "row">
 				<div class="col-xs-12">
-					<a class="toggle-vis" data-column="1">Active</a> - <a class="toggle-vis" data-column="2">Account</a> - <a class="toggle-vis" data-column="3">Password</a> - <a class="toggle-vis" data-column="4">Summoner</a> - <a class="toggle-vis" data-column="5">Region</a> - <a class="toggle-vis" data-column="6">Level</a> - <a class="toggle-vis" data-column="7">Max Level</a> - <a class="toggle-vis" data-column="8">XP</a> - <a class="toggle-vis" data-column="9">BE</a> - <a class="toggle-vis" data-column="10">Max BE</a> - <a class="toggle-vis" data-column="11">Priority</a> - <a class="toggle-vis" data-column="12">Playtime</a> - <a class="toggle-vis" data-column="13">Sleeptime</a> - <a class="toggle-vis" data-column="14">Account Status</a> - <a class="toggle-vis" data-column="11">Assigned To</a> - <a class="toggle-vis" data-column="11">Info</a>
+					<a class="toggle-vis" data-column="1">Active</a> - <a class="toggle-vis" data-column="2">Account</a> - <a class="toggle-vis" data-column="3">Password</a> - <a class="toggle-vis" data-column="4">Summoner</a> - <a class="toggle-vis" data-column="5">Region</a> - <a class="toggle-vis" data-column="6">Level</a> - <a class="toggle-vis" data-column="7">Max Level</a> - <a class="toggle-vis" data-column="8">XP</a> - <a class="toggle-vis" data-column="9">BE</a> - <a class="toggle-vis" data-column="10">Max BE</a> - <a class="toggle-vis" data-column="11">Priority</a> - <a class="toggle-vis" data-column="12">Playtime</a> - <a class="toggle-vis" data-column="13">Sleeptime</a> - <a class="toggle-vis" data-column="14">Account Status</a> - <a class="toggle-vis" data-column="15">Assigned To</a> - <a class="toggle-vis" data-column="16">Info</a>
 				</div>
 			</div>
 		</div>

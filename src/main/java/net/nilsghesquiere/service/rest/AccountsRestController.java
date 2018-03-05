@@ -14,6 +14,7 @@ import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.LolAccountService;
 import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.enums.Region;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.LolAccountMap;
@@ -22,7 +23,6 @@ import net.nilsghesquiere.util.wrappers.LolMixedAccountMap;
 import net.nilsghesquiere.util.wrappers.StringResponseMap;
 import net.nilsghesquiere.web.error.AccountNotFoundException;
 import net.nilsghesquiere.web.error.UserNotFoundException;
-import net.nilsghesquiere.web.util.GenericResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -224,7 +224,6 @@ public class AccountsRestController {
 			lolAccountService.update(lolAccount);
 		}
 		//create new accounts
-		Integer i = 0;
 		for(LolAccount lolAccount: lolMixedAccountMap.getNewAccs()){
 			//CHECKS
 			String error = checkUser(userid);
@@ -243,6 +242,25 @@ public class AccountsRestController {
 		}
 		return new ResponseEntity<StringResponseMap>(responseMap,HttpStatus.OK);
 	}
+	
+	@RequestMapping(path = "/user/{userid}/resetStatus",method = RequestMethod.PUT)
+	public ResponseEntity<LolAccountWrapper> resetStatus(@PathVariable Long userid,@RequestBody Long[] ids) {
+		LolAccountWrapper wrapper = new LolAccountWrapper();
+		List<LolAccount> returnAccounts = new ArrayList<>();
+		for (Long id : ids){
+			LolAccount lolAccount = lolAccountService.read(id);
+			Preconditions.checkNotNull(lolAccount);
+			validateAccountById(lolAccount.getId());
+			validateUserByUserId(userid);
+			lolAccount.setAccountStatus(AccountStatus.READY_FOR_USE);
+			lolAccount.setAssignedTo("");
+			LolAccount updatedLolAccount = lolAccountService.update(lolAccount);
+			returnAccounts.add(updatedLolAccount);
+		}
+		wrapper.add("data",returnAccounts);
+		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
+	}
+		
 	
 	//TODO authentication
 	private String checkUser(Long userid){

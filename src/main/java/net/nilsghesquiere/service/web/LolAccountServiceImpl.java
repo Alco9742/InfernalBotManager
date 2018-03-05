@@ -9,6 +9,7 @@ import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.persistence.dao.LolAccountRepository;
 import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
+import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.enums.Region;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +84,13 @@ public class LolAccountServiceImpl implements LolAccountService{
 		// limit using a Pageable
 		
 		Pageable pageable = new PageRequest(0,amount);
-		return lolAccountRepository.findUsableAccounts(userid, region, pageable);
+		List<LolAccount> lolAccounts = lolAccountRepository.findUsableAccounts(userid, region, pageable);
+		//set as IN_USE here so others don't grab the same accounts
+		for (LolAccount lolAccount : lolAccounts){
+			lolAccount.setAccountStatus(AccountStatus.IN_USE);
+			lolAccountRepository.save(lolAccount);
+		}
+		return lolAccounts;
 	}
 
 	@Override
