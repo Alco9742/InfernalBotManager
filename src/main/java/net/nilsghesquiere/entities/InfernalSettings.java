@@ -30,7 +30,7 @@ public class InfernalSettings implements Serializable{
 	private String username;
 	private String password;
 	private Integer groups;
-	private Integer level;
+	private String level;
 	private String clientPath;
 	private String currentVersion;
 	private String wildcard;
@@ -97,7 +97,7 @@ public class InfernalSettings implements Serializable{
 		this.username = "";
 		this.password = "";
 		this.groups = 1;
-		this.level = 30;
+		this.level = "";
 		this.clientPath = ""; //TODO
 		this.currentVersion = ""; //TODO
 		this.wildcard = ":";
@@ -141,7 +141,7 @@ public class InfernalSettings implements Serializable{
 		this.timeoutInGameFF = 17;
 		this.timeoutEndOfGame = 5;
 		this.timeUntilCheck = false;
-		this.timeUntilReboot = "1:00";
+		this.timeUntilReboot = "01:00";
 		this.serverCon = false;
 		this.serverPort = 100;
 		this.openChest = true;
