@@ -95,19 +95,19 @@ public class InfernalSettings implements Serializable{
 		//TODO make update for this
 		super();
 		this.user= user;
-		this.sets = "InfernalManager";
+		this.sets = "Default";
 		//this.username = "";
 		//this.password = "";
 		this.groups = 1;
 		//this.level = "";
-		this.clientPath = "C:/Riot Games/League Of Legends";
+		this.clientPath = "C:\\Riot Games\\League of Legends";
 		//this.currentVersion = "";
 		this.wildcard = ":";
 		this.maxLevel = 30;
 		this.sleepTime = 0;
 		this.playTime = 24;
 		//this.region = Region.NA;
-		this.prio = 1;
+		this.prio = 9;
 		//this.grSize = 5;
 		//this.clientUpdateSel = true;
 		this.replaceConfig = false;
