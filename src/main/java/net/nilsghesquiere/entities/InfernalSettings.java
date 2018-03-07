@@ -12,7 +12,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
-import net.nilsghesquiere.util.enums.Region;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,20 +27,20 @@ public class InfernalSettings implements Serializable{
 	@JsonIgnore
 	private User user;
 	private String sets;
-	private String username;
-	private String password;
+	//private String username;
+	//private String password;
 	private Integer groups;
 	private String level;
 	private String clientPath;
-	private String currentVersion;
+	//private String currentVersion;
 	private String wildcard;
 	private Integer maxLevel;
 	private Integer sleepTime;
 	private Integer playTime;
-	private Region region;
+	//private Region region;
 	private Integer prio;
-	private Integer grSize;
-	private Boolean clientUpdateSel;
+	//private Integer grSize;
+	//private Boolean clientUpdateSel;
 	private Boolean replaceConfig;
 	private Integer lolHeight;
 	private Integer lolWidth;
@@ -81,13 +80,13 @@ public class InfernalSettings implements Serializable{
 	private Boolean openChest;
 	private Boolean openHexTech;
 	private Boolean disChest;
-	private Boolean apiClient;
-	private String mySQLServer;
-	private String mySQLDatabase;
-	private String mySQLUser;
-	private String mySQLPassword;
-	private String mySQLQueueTable;
-	private String mySQLAktivTable;
+	//private Boolean apiClient;
+	//private String mySQLServer;
+	//private String mySQLDatabase;
+	//private String mySQLUser;
+	//private String mySQLPassword;
+	//private String mySQLQueueTable;
+	//private String mySQLAktivTable;
 
 	
 	public InfernalSettings(){} 
