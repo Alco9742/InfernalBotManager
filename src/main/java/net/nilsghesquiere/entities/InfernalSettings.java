@@ -12,10 +12,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
-import net.nilsghesquiere.util.enums.Region;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+//TODO overlopen en onnodige settings niet verzenden via rest
 @Data
 @Entity
 @Table(name ="infernalsettings")
@@ -27,20 +27,20 @@ public class InfernalSettings implements Serializable{
 	@JsonIgnore
 	private User user;
 	private String sets;
-	private String username;
-	private String password;
+	//private String username;
+	//private String password;
 	private Integer groups;
-	private Integer level;
+	private String level;
 	private String clientPath;
-	private String currentVersion;
+	//private String currentVersion;
 	private String wildcard;
 	private Integer maxLevel;
 	private Integer sleepTime;
 	private Integer playTime;
-	private Region region;
+	//private Region region;
 	private Integer prio;
-	private Integer grSize;
-	private Boolean clientUpdateSel;
+	//private Integer grSize;
+	//private Boolean clientUpdateSel;
 	private Boolean replaceConfig;
 	private Integer lolHeight;
 	private Integer lolWidth;
@@ -80,34 +80,36 @@ public class InfernalSettings implements Serializable{
 	private Boolean openChest;
 	private Boolean openHexTech;
 	private Boolean disChest;
-	private Boolean apiClient;
-	private String mySQLServer;
-	private String mySQLDatabase;
-	private String mySQLUser;
-	private String mySQLPassword;
-	private String mySQLQueueTable;
-	private String mySQLAktivTable;
+	//private Boolean apiClient;
+	//private String mySQLServer;
+	//private String mySQLDatabase;
+	//private String mySQLUser;
+	//private String mySQLPassword;
+	//private String mySQLQueueTable;
+	//private String mySQLAktivTable;
 
 	
 	public InfernalSettings(){} 
 	public InfernalSettings(User user) {
+		//TODO fill this with standard settings
+		//TODO make update for this
 		super();
 		this.user= user;
 		this.sets = "InfernalManager";
-		this.username = "";
-		this.password = "";
+		//this.username = "";
+		//this.password = "";
 		this.groups = 1;
-		this.level = 30;
-		this.clientPath = ""; //TODO
-		this.currentVersion = ""; //TODO
+		//this.level = "";
+		this.clientPath = "C:/Riot Games/League Of Legends";
+		//this.currentVersion = "";
 		this.wildcard = ":";
 		this.maxLevel = 30;
 		this.sleepTime = 0;
 		this.playTime = 24;
-		this.region = Region.NA;
+		//this.region = Region.NA;
 		this.prio = 1;
-		this.grSize = 5;
-		this.clientUpdateSel = true;
+		//this.grSize = 5;
+		//this.clientUpdateSel = true;
 		this.replaceConfig = false;
 		this.lolHeight = 240;
 		this.lolWidth = 320;
@@ -141,18 +143,18 @@ public class InfernalSettings implements Serializable{
 		this.timeoutInGameFF = 17;
 		this.timeoutEndOfGame = 5;
 		this.timeUntilCheck = false;
-		this.timeUntilReboot = "1:00";
+		this.timeUntilReboot = "01:00";
 		this.serverCon = false;
 		this.serverPort = 100;
 		this.openChest = true;
 		this.openHexTech = true;
 		this.disChest = true;
-		this.apiClient = false;
-		this.mySQLServer = "localhost";
-		this.mySQLDatabase = "InfernalBot";
-		this.mySQLUser = "admin";
-		this.mySQLPassword = "PuschelHase123";
-		this.mySQLQueueTable = "Infernal_Queue";
-		this.mySQLAktivTable = "Infernal_Aktiv";
+		//this.apiClient = false;
+		//this.mySQLServer = "localhost";
+		//this.mySQLDatabase = "InfernalBot";
+		//this.mySQLUser = "admin";
+		//this.mySQLPassword = "PuschelHase123";
+		//this.mySQLQueueTable = "Infernal_Queue";
+		//this.mySQLAktivTable = "Infernal_Aktiv";
 	}
 }
