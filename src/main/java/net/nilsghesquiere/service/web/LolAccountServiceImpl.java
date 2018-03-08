@@ -33,7 +33,7 @@ public class LolAccountServiceImpl implements LolAccountService{
 	
 	@Override
 	public Optional<LolAccount> findOptionalById(Long id) {
-		return lolAccountRepository.findById(id);
+		return Optional.of(lolAccountRepository.findById(id));
 	}
 
 	@Override
@@ -59,13 +59,39 @@ public class LolAccountServiceImpl implements LolAccountService{
 	@Override
 	@ModifyingTransactionalServiceMethod
 	public LolAccount create(LolAccount lolAccount) {
-		return lolAccountRepository.save(lolAccount);
+		LolAccount returnAccount = null;
+		//check if account with that name/server combo exists
+		LolAccount checkAccount = lolAccountRepository.findByAccountIgnoreCaseAndRegion(lolAccount.getAccount(), lolAccount.getRegion());
+		if (checkAccount == null){
+			returnAccount = lolAccountRepository.save(lolAccount);
+		} 
+		return returnAccount;
 	}
 	
 	@Override
 	@ModifyingTransactionalServiceMethod
 	public LolAccount update(LolAccount lolAccount) {
-		return lolAccountRepository.save(lolAccount);
+		//TODO works perfectly with NA, EUW and EUNE, but not with other servers for some reason
+		Boolean accountAlreadyExistsOnRegion = false;
+		// find the account with that ID in the database
+		LolAccount currentDBAccount = lolAccountRepository.findById(lolAccount.getId());
+		// if the account with that ID has a different region than the update one (region has been changed)
+		//System.out.println("N: " +lolAccount.getRegion() +", DB: " + currentDBAccount.getRegion());
+		if (lolAccount.getRegion() != currentDBAccount.getRegion()){
+			// search all accounts with that accountname
+			List <LolAccount> allAccountsFromDB = lolAccountRepository.findAllByAccountIgnoreCase(lolAccount.getAccount());
+			for (LolAccount dbAccount : allAccountsFromDB){
+				//System.out.println("N: " +lolAccount.getRegion() +", DB: " + dbAccount.getRegion());
+				// if one of those accounts has the same server as the updated account: combination already exists, return null
+				if (dbAccount.getRegion() == lolAccount.getRegion()){
+					accountAlreadyExistsOnRegion = true;
+				}
+			}
+		}
+		if (!accountAlreadyExistsOnRegion){
+			return lolAccountRepository.save(lolAccount);
+		}
+		return null;
 	}
 	
 	@Override
@@ -82,7 +108,6 @@ public class LolAccountServiceImpl implements LolAccountService{
 	@Override
 	public List<LolAccount> findUsableAccounts(Long userid, Region region, Integer amount) {
 		// limit using a Pageable
-		
 		Pageable pageable = new PageRequest(0,amount);
 		List<LolAccount> lolAccounts = lolAccountRepository.findUsableAccounts(userid, region, pageable);
 		//set as IN_USE here so others don't grab the same accounts
@@ -92,9 +117,22 @@ public class LolAccountServiceImpl implements LolAccountService{
 		}
 		return lolAccounts;
 	}
+	
+	@Override
+	public List<LolAccount> findBufferAccounts(Long userid, Region region, Integer amount) {
+		// limit using a Pageable
+		Pageable pageable = new PageRequest(0,amount);
+		List<LolAccount> lolAccounts = lolAccountRepository.findBufferAccounts(userid, region, pageable);
+		//set as IN_BUFFER here so others don't grab the same accounts
+		for (LolAccount lolAccount : lolAccounts){
+			lolAccount.setAccountStatus(AccountStatus.IN_BUFFER);
+			lolAccountRepository.save(lolAccount);
+		}
+		return lolAccounts;
+	}
 
 	@Override
-	public LolAccount findByAccountAndUserId(Long userid, String account) {
-		return lolAccountRepository.findByAccountIgnoreCaseAndUserId(account, userid);
+	public LolAccount findByUserIdAndRegionAndAccount(Long userid, Region region, String account) {
+		return lolAccountRepository.findByAccountIgnoreCaseAndRegionAndUserId(account, region, userid);
 	}
 }

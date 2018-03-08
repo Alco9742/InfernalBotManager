@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Data
 @Entity
 @Table(name ="infernalsettings")
+@EqualsAndHashCode(exclude={"user"})
 public class InfernalSettings implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;

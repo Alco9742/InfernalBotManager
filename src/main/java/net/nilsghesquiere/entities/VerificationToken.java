@@ -15,10 +15,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
 @Table(name ="verificationtokens")
+@EqualsAndHashCode(exclude={"user"})
 public class VerificationToken implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private static final int EXPIRATION = 60 * 24;

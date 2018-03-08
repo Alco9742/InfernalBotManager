@@ -20,6 +20,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Data
 @Entity
 @Table(name ="users")
+@EqualsAndHashCode(exclude={"infernalSettings", "lolAccounts"})
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
@@ -93,5 +95,6 @@ public class User implements Serializable{
 				+ ", roles=" + roles + " + #LolAccounts=" + lolAccounts.size() + "]";
 	}
 
+	
 	
 }

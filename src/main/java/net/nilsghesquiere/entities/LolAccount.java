@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.enums.Region;
 
@@ -22,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Data
 @Entity
 @Table(name ="lolaccounts")
+@EqualsAndHashCode(exclude={"user"})
 public class LolAccount implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;

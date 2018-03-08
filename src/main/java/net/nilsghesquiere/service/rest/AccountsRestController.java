@@ -88,11 +88,28 @@ public class AccountsRestController {
 		return new ResponseEntity<LolAccountWrapper>(wrapper, HttpStatus.OK);
 	}
 	
-	@RequestMapping(path = "/user/{userid}/account/{account}", method = RequestMethod.GET)
-	public ResponseEntity<LolAccount> findAccountId(@PathVariable Long userid, @PathVariable String account) {
+	@RequestMapping(path = "/user/{userid}/region/{region}/limit/{amount}/buffer/", method = RequestMethod.GET)
+	public ResponseEntity<LolAccountWrapper> findBufferAccounts(@PathVariable Long userid, @PathVariable Region region, @PathVariable Integer amount) {
+		//VARS
+		LolAccountWrapper wrapper = new LolAccountWrapper();
+		String error = "";
+		
+		//PROCESSING
+		List<LolAccount> lolAccounts = lolAccountService.findBufferAccounts(userid, region,amount);
+		
+		//RESPONSE
+		wrapper.setError(error);
+		wrapper.add("data",lolAccounts);
+	
+		//RETURN
+		return new ResponseEntity<LolAccountWrapper>(wrapper, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/user/{userid}/region/{region}/account/{account}", method = RequestMethod.GET)
+	public ResponseEntity<LolAccount> findAccountId(@PathVariable Long userid, @PathVariable Region region, @PathVariable String account) {
 		//PROCESSING
 		LOGGER.info("userid=" + userid +", account=" + account);
-		LolAccount lolAccount = lolAccountService.findByAccountAndUserId(userid, account);
+		LolAccount lolAccount = lolAccountService.findByUserIdAndRegionAndAccount(userid, region, account);
 		//RESPONSE
 		
 		//RETURN
@@ -117,7 +134,11 @@ public class AccountsRestController {
 			User user = userService.read(userid);
 			LolAccount newAccount = new LolAccount(user,lolAccount.getAccount(),lolAccount.getPassword(),lolAccount.getRegion());	
 			LolAccount createdAccount = lolAccountService.create(newAccount);
-			returnAccounts.add(createdAccount);
+			if(createdAccount != null){
+				returnAccounts.add(createdAccount);
+			} else {
+				error ="This account/region combination already exists on the server!";
+			}
 		}
 		
 		//RESPONSE
@@ -130,6 +151,7 @@ public class AccountsRestController {
 	
 	@RequestMapping(path = "/user/{userid}",method = RequestMethod.PUT)
 	public ResponseEntity<LolAccountWrapper> update(@PathVariable Long userid,@RequestBody LolAccountMap lolAccountMap) {
+		String error = "";
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		List<LolAccount> returnAccounts = new ArrayList<>();
 		for (LolAccount lolAccount : lolAccountMap.getMap().values()){
@@ -138,9 +160,19 @@ public class AccountsRestController {
 			validateUserByUserId(userid);
 			lolAccount.setUser(userService.read(userid));
 			LolAccount updatedLolAccount = lolAccountService.update(lolAccount);
-			returnAccounts.add(updatedLolAccount);
+			//returns null if the account changed server but there is already an account with that name on the new server
+			if (updatedLolAccount != null){
+				returnAccounts.add(updatedLolAccount);
+			} else {
+				if (error.equals("")){
+					error = "The following combinations are already present on the server: " + lolAccount.getAccount() + "/" + lolAccount.getRegion() ;
+				} else {
+					error = error + ", " + lolAccount.getAccount() + "/" + lolAccount.getRegion();
+				}
+			}
 		}
 		wrapper.add("data",returnAccounts);
+		wrapper.setError(error);
 		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
 	}
 	
@@ -180,20 +212,26 @@ public class AccountsRestController {
 			}
 		} else {
 			hasError = true;
-			error = "uploaded file is not a plain text file!";
+			error = "Uploaded file is not a plain text file!";
 		}
 		for (LolAccount importedAccount : importedAccounts){
 			LolAccount createdAccount = lolAccountService.create(importedAccount);
-			createdAccounts.add(createdAccount);
+			if (createdAccount != null){
+				createdAccounts.add(createdAccount);
+			} else {
+				if (!error.equals("Uploaded file is not a plain text file!")){
+					if (error.equals("")){
+						error= "The following account/region combinations already exist in the database: " + importedAccount.getAccount() + "/" + importedAccount.getRegion();
+					} else {
+						error = error + ", " +  importedAccount.getAccount() + "/" + importedAccount.getRegion();
+					}
+				}
+			}
 		}
 		
 		//RESPONSE
-		if (hasError){
-			wrapper = new LolAccountWrapper();
-			wrapper.setError(error);
-		} else {
-			wrapper = new LolAccountWrapper();
-		}
+		wrapper = new LolAccountWrapper();
+		wrapper.setError(error);
 		wrapper.add("data",createdAccounts);
 		
 		//RETURN
@@ -221,7 +259,11 @@ public class AccountsRestController {
 			validateAccountById(lolAccount.getId());
 			validateUserByUserId(userid);
 			lolAccount.setUser(userService.read(userid));
-			lolAccountService.update(lolAccount);
+			LolAccount updatedLolAccount = lolAccountService.update(lolAccount);
+			//returns null if the account changed server but there is already an account with that name on the new server
+			if (updatedLolAccount == null){
+				responseMap.add(lolAccount.getAccount(), "Combination (" + lolAccount.getAccount() + "/" +lolAccount.getRegion() + ") already exists");
+			}
 		}
 		//create new accounts
 		for(LolAccount lolAccount: lolMixedAccountMap.getNewAccs()){
@@ -233,8 +275,13 @@ public class AccountsRestController {
 			//PROCESSING
 			if(error.equals("")){
 				lolAccount.setUser(userService.read(userid));
-				lolAccountService.create(lolAccount);
-			} else{
+				LolAccount returnAccount = lolAccountService.create(lolAccount);
+				if (returnAccount == null){
+					error = "Combination (" + lolAccount.getAccount() + "/" +lolAccount.getRegion() + ") already exists";
+				}
+			} 
+			
+			if(!error.equals("")){
 				response = error;
 			}
 			
