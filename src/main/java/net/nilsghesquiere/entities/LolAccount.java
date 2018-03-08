@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @Entity
-@Table(name ="lolaccounts")
+@Table(name ="lolaccounts", uniqueConstraints={@UniqueConstraint(columnNames = {"account", "region"})}) //database constraint on account/region pairs
 @EqualsAndHashCode(exclude={"user"})
 public class LolAccount implements Serializable{
 	private static final long serialVersionUID = 1L;
