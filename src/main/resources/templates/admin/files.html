@@ -1,0 +1,30 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+			</div>
+			<div class="row" th:if="${message}">
+				<h2 th:text="${message}"/>
+			s</div>
+			<div class="row">
+			<form th:action="@{'/admin/files/'}" method="POST" enctype="multipart/form-data" action="/">
+				<table>
+					<tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
+					<tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+				</table>
+			</form>
+			</div>
+			<div class="row">
+			<ul>
+				<li th:each="file : ${files}">
+					<a th:href="${file}" th:text="${file}" />
+				</li>
+			</ul>
+			</div>
+		</div>
+	</body>
+</html>

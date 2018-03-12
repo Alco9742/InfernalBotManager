@@ -18,7 +18,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name ="roles")
 public class Role implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
+	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	@Column(unique=true)
 	@NotBlank
 	private String name;

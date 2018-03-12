@@ -1,39 +1,35 @@
 package net.nilsghesquiere.web.controllers;
 
-import java.util.Calendar;
+import java.io.IOException;
 import java.util.Optional;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import java.util.stream.Collectors;
 
 import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.entities.VerificationToken;
-import net.nilsghesquiere.registration.OnRegistrationCompleteEvent;
 import net.nilsghesquiere.security.IUserSecurityService;
 import net.nilsghesquiere.service.web.GlobalVariableService;
+import net.nilsghesquiere.service.web.StorageService;
 import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
-import net.nilsghesquiere.web.dto.PasswordDTO;
-import net.nilsghesquiere.web.dto.UserDTO;
-import net.nilsghesquiere.web.error.EmailExistsException;
-import net.nilsghesquiere.web.error.EmailNotFoundException;
-import net.nilsghesquiere.web.util.GenericResponse;
+import net.nilsghesquiere.web.error.StorageFileNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin")
@@ -41,6 +37,7 @@ public class AdminController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 	private static final String PANEL_VIEW = "admin/panel";
 	private static final String GLOBAL_VARS_VIEW = "admin/globalvars";
+	private static final String FILES_VIEW = "admin/files";
 	
 	@Autowired
 	private AuthenticationFacade authenticationFacade;
@@ -53,6 +50,9 @@ public class AdminController {
 	
 	@Autowired
 	private GlobalVariableService globalVariableService;
+	
+	@Autowired
+	private StorageService storageService;
 	
 	//PANEL
 	@RequestMapping(method = RequestMethod.GET)
@@ -68,4 +68,30 @@ public class AdminController {
 		LOGGER.info("Loading Accounts list for user [" + currentUser.get().getEmail() + "].");
 		return new ModelAndView(GLOBAL_VARS_VIEW).addObject("currentUser", currentUser.get());
 		}
+	
+	//Everything below is copied straight from a spring tutorial
+	@RequestMapping(value= "/files", method = RequestMethod.GET)
+	String files(Model model) throws IOException {
+		model.addAttribute("files", storageService.loadAll().map(path -> MvcUriComponentsBuilder.fromMethodName(AdminController.class,"serveFile", path.getFileName().toString()).build().toString()).collect(Collectors.toList()));
+		return FILES_VIEW;
+	}
+	
+	@RequestMapping(value="/files/{filename:.+}", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+		Resource file = storageService.loadAsResource(filename);
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"" + file.getFilename() + "\"").body(file);
+	}
+	
+	@RequestMapping(value="/files", method = RequestMethod.POST)
+	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+		storageService.store(file);
+		redirectAttributes.addFlashAttribute("message","You successfully uploaded " + file.getOriginalFilename() + "!");
+		return "redirect:/admin/files/";
+	}
+	
+	@ExceptionHandler(StorageFileNotFoundException.class)
+	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+		return ResponseEntity.notFound().build();
+	}
 }

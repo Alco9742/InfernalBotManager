@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @EqualsAndHashCode(exclude={"infernalSettings", "lolAccounts"})
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
+	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	@Column(unique=true)
 	private String email;
 	@JsonIgnore
@@ -49,7 +49,11 @@ public class User implements Serializable{
 	private List<LolAccount>lolAccounts;
 	@OneToOne
 	@JoinColumn(name="infernalsettingsid")
-	InfernalSettings infernalSettings;
+	private InfernalSettings infernalSettings;
+	@OneToMany(mappedBy="user",cascade=CascadeType.REMOVE,fetch = FetchType.LAZY)
+	@OrderBy("id")
+	@JsonIgnore
+	private List<ClientData>clients;
 	
 	public User() {
 		super();

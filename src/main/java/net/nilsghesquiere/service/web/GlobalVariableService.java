@@ -1,5 +1,7 @@
 package net.nilsghesquiere.service.web;
 
+import java.util.List;
+
 import net.nilsghesquiere.entities.GlobalVariable;
 
 public interface GlobalVariableService {
@@ -7,5 +9,7 @@ public interface GlobalVariableService {
 	GlobalVariable create(GlobalVariable globalVariable);
 	GlobalVariable update(GlobalVariable globalVariable);
 	void deleteById(Long id);
-	GlobalVariable getByName(String name);
+	GlobalVariable findByName(String name);
+	List<GlobalVariable> findAll();
+	void delete(GlobalVariable globalVariable);
 }

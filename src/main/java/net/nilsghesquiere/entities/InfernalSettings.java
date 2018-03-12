@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @EqualsAndHashCode(exclude={"user"})
 public class InfernalSettings implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
+	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	@OneToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "userid")
 	@JsonIgnore

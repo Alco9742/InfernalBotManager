@@ -1,8 +1,13 @@
 package net.nilsghesquiere.persistence.dao;
 
+import net.nilsghesquiere.entities.ClientData;
+import net.nilsghesquiere.entities.ClientStatus;
+import net.nilsghesquiere.entities.GlobalVariable;
 import net.nilsghesquiere.entities.InfernalSettings;
-import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.LolAccount;
+import net.nilsghesquiere.entities.Queuer;
+import net.nilsghesquiere.entities.QueuerLolAccount;
+import net.nilsghesquiere.entities.User;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -13,7 +18,6 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -32,7 +36,7 @@ public class RepositoryConfiguration {
 		return new RepositoryRestConfigurerAdapter() {
 			@Override
 			public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-				config.exposeIdsFor(User.class,LolAccount.class,InfernalSettings.class);
+				config.exposeIdsFor(User.class,LolAccount.class,InfernalSettings.class, GlobalVariable.class, ClientData.class, ClientStatus.class, Queuer.class, QueuerLolAccount.class);
 			}
 			
 			@Override 

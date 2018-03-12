@@ -2,10 +2,9 @@ package net.nilsghesquiere.persistence.dao;
 
 
 import java.util.List;
-import java.util.Optional;
 
-import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.entities.LolAccount;
+import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.util.enums.Region;
 
 import org.springframework.data.domain.Pageable;

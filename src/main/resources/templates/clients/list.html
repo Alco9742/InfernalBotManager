@@ -1,0 +1,89 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready(function() {
+			var editor; // use a global for the submit and return data rendering in the examples
+			//var ajaxBase = {
+			//		dataSrc: "",
+			//		dataType: "json",
+			//		contentType: "application/json; charset=utf-8",
+			//		processData: "false",
+			//		url: "/api/accounts/user/" + /*[[${currentUser.id}]]*/ 
+			//};
+			
+			var restlnk = "/api/clients/user/" + /*[[${currentUser.id}]]*/
+			
+			editor = new $.fn.dataTable.Editor( {
+					ajax: {
+						remove: {
+							type: 'POST',
+							contentType: "application/json; charset=utf-8",
+							dataType: "json",
+							url: restlnk + "/delete",
+							data: function ( d ) {
+								return JSON.stringify( d['data'] );
+							}
+						}
+					},
+					table: "#infernalbotmanager-datatable-clients",
+					fields: [{
+						label: "ID",
+						name: "id",
+						type: "hidden",
+						def: "0"
+					},{
+						label: "Tag",
+						name: "tag"
+					}],
+					idSrc:'id'
+			} );
+		
+			var table = $('#infernalbotmanager-datatable-clients').DataTable( {
+				responsive: true,
+				dom: "Bfrtip",
+				pageLength: 50,
+				ajax:{
+					"url": "/api/clients/user/" + /*[[${currentUser.id}]]*/ ,
+					"dataSrc": "data",
+					"dataType": "json",
+					"cache": false,
+					"contentType": "application/json; charset=utf-8"
+				},
+				columns: [
+				{ data: "id" },
+				{ data: "tag"}
+				],
+				columnDefs: [
+				{ targets: [0], visible: false}
+				],
+				select: true,
+				buttons: [
+				{ extend: "remove", editor: editor },
+				]
+			} );
+			
+		} );/*]]>*/
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<table id="infernalbotmanager-datatable-clients" class="table table-striped table-bordered" width="100%" >
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Tag</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

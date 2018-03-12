@@ -13,7 +13,7 @@
 			//		url: "/api/accounts/user/" + /*[[${currentUser.id}]]*/ 
 			//};
 			
-			var restlnk = "/api/admin/globalVars/"
+			var restlnk = "/api/admin/globalvars/"
 			
 			editor = new $.fn.dataTable.Editor( {
 					ajax: {
@@ -39,17 +39,18 @@
 							type: 'POST',
 							contentType: "application/json; charset=utf-8",
 							dataType: "json",
-							url: restlnk + "/delete",
+							url: restlnk + "delete",
 							data: function ( d ) {
 								return JSON.stringify( d['data'] );
 							}
 						}
 					},
-					table: "#leagueinformer-datatable-globalvars",
+					table: "#infernalbotmanager-datatable-globalvars",
 					fields: [{
 						label: "ID",
 						name: "id",
-						def: "0"
+						def: "0",
+						type: 'readonly'
 					},{
 						label: "Name",
 						name: "name"
@@ -60,7 +61,7 @@
 					idSrc:'id'
 			} );
 		
-			var table = $('#leagueinformer-datatable-globalvars').DataTable( {
+			var table = $('#infernalbotmanager-datatable-globalvars').DataTable( {
 				responsive: true,
 				dom: "Bfrtip",
 				pageLength: 50,
@@ -76,9 +77,6 @@
 				{ data: "name"},
 				{ data: "value" },
 
-				],
-				columnDefs: [
-				{ targets: [0], visible: false}
 				],
 				select: true,
 				buttons: [
@@ -110,7 +108,7 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<table id="leagueinformer-datatable-globalvars" class="table table-striped table-bordered" width="100%" >
+					<table id="infernalbotmanager-datatable-globalvars" class="table table-striped table-bordered" width="100%" >
 						<thead>
 							<tr>
 								<th>ID</th>

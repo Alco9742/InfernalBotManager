@@ -15,7 +15,7 @@ import lombok.Data;
 @Table(name ="globalvariables")
 public class GlobalVariable implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
+	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	@Column(unique=true)
 	private String name;
 	private String value;

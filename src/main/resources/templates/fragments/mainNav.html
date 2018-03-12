@@ -13,15 +13,16 @@
 						class="icon-bar"></span>
 				</button>
 				<!-- navbar-brand is hidden on larger screens, but visible when the menu is collapsed -->
-				<a class="navbar-brand" th:href="@{/}">LeagueInformer</a>
+				<a class="navbar-brand" th:href="@{/}">InfernalBotManager</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="main-nav-collapse">
 				<ul class="nav navbar-nav">
 					<li><a th:href="@{/}">Home</a></li>
 					<li><a sec:authorize="isAuthenticated()" th:href="@{/accounts}">Accounts</a></li>
-					<li><a sec:authorize="hasAuthority('appadmin')" th:href="@{/admin}">Admin</a></li>
-					<li><a sec:authorize="hasAuthority('appadmin')" th:href="@{/test}">Test</a></li>
+					<li><a sec:authorize="isAuthenticated()" th:href="@{/clients}">Clients</a></li>
+					<li><a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin}">Admin</a></li>
+					<li><a sec:authorize="hasAuthority('ADMIN')" th:href="@{/test}">Test</a></li>
 					<li><a sec:authorize="isAuthenticated()" th:href="@{/user}">User</a></li>
 					<li><a sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a></li>
 					<li><a sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>

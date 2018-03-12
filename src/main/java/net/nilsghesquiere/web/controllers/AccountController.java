@@ -3,7 +3,6 @@ package net.nilsghesquiere.web.controllers;
 import java.util.Optional;
 
 import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.service.web.LolAccountService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 
 import org.slf4j.Logger;
@@ -25,7 +24,7 @@ public class AccountController {
 	private final AuthenticationFacade authenticationFacade;
 
 	@Autowired
-	public AccountController(LolAccountService lolAccountService, AuthenticationFacade authenticationFacade) {
+	public AccountController(AuthenticationFacade authenticationFacade) {
 		this.authenticationFacade = authenticationFacade;
 	}
 

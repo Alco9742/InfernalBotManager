@@ -1,5 +1,7 @@
 package net.nilsghesquiere.service.web;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import net.nilsghesquiere.entities.GlobalVariable;
@@ -41,7 +43,17 @@ public class GlobalVariableServiceImpl implements GlobalVariableService{
 	}
 
 	@Override
-	public GlobalVariable getByName(String name) {
-		return globalVariableRepository.getByName(name);
+	public GlobalVariable findByName(String name) {
+		return globalVariableRepository.findByName(name);
+	}
+
+	@Override
+	public List<GlobalVariable> findAll() {
+		return globalVariableRepository.findAll();
+	}
+
+	@Override
+	public void delete(GlobalVariable globalVariable) {
+		globalVariableRepository.delete(globalVariable);
 	}
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GlobalVariableRepository extends JpaRepository<GlobalVariable, Long> {
-	GlobalVariable getById(@Param("id") Long id);
-	GlobalVariable getByName(@Param("name")String name);
+	GlobalVariable findById(@Param("id") Long id);
+	GlobalVariable findByName(@Param("name")String name);
 	void deleteById(Long id);
 }

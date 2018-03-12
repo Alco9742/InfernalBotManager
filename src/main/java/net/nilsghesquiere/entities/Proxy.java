@@ -19,7 +19,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name ="proxies")
 public class Proxy implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
+	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	@NotBlank
 	private String handle;
 	@NotBlank

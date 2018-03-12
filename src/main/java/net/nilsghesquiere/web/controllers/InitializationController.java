@@ -7,7 +7,6 @@ import java.util.UUID;
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.Role;
 import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.service.web.InfernalSettingsService;
 import net.nilsghesquiere.service.web.LolAccountService;
 import net.nilsghesquiere.service.web.RoleService;
 import net.nilsghesquiere.service.web.UserService;
