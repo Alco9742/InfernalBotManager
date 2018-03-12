@@ -5,8 +5,11 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import net.nilsghesquiere.entities.ClientData;
+import net.nilsghesquiere.entities.Queuer;
+import net.nilsghesquiere.entities.QueuerLolAccount;
 import net.nilsghesquiere.persistence.dao.ClientDataRepository;
 import net.nilsghesquiere.persistence.dao.ClientStatusRepository;
+import net.nilsghesquiere.persistence.dao.LolAccountRepository;
 import net.nilsghesquiere.persistence.dao.QueuerLolAccountRepository;
 import net.nilsghesquiere.persistence.dao.QueuerRepository;
 import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
@@ -37,7 +40,16 @@ public class ClientDataServiceImpl implements ClientDataService{
 	@Override
 	@ModifyingTransactionalServiceMethod
 	public ClientData create(ClientData clientData) {
-		return clientDataRepository.save(clientData);
+		ClientData newData = clientDataRepository.save(clientData);
+		for (Queuer queuer : newData.getQueuers()){
+			queuer.setClient(newData);
+			Queuer newQueuer = queuerRepository.save(queuer);
+			for(QueuerLolAccount lolAccount : newQueuer.getQueuerAccounts()){
+				lolAccount.setQueuer(newQueuer);
+				queuerLolAccountRepository.save(lolAccount);
+			}
+		}
+		return clientDataRepository.findOne(newData.getId());
 	}
 	
 	@Override
