@@ -1,5 +1,4 @@
-create table clients (id  bigserial not null, tag varchar(255), userid int8 not null, primary key (id))
-create table clientstatus (id  bigserial not null, date date, status varchar(255), clientid int8 not null, primary key (id))
+create table clients (id  bigserial not null, date timestamp, status varchar(255), tag varchar(255), userid int8 not null, primary key (id))
 create table globalvariables (id  bigserial not null, name varchar(255), value varchar(255), primary key (id))
 create table infernalsettings (id  bigserial not null, aktive boolean, client_hide boolean, client_path varchar(255), console_hide boolean, cpu_boost boolean, dis_chest boolean, groups int4, leader_cpu_boost boolean, leader_hide boolean, leader_render_disable boolean, level varchar(255), level_to_beginner_bot int4, lol_height int4, lol_width int4, max_be int4, max_level int4, open_chest boolean, open_hex_tech boolean, play_time int4, prio int4, queue_close_value int4, queuer_auto_close boolean, ram_manager boolean, ram_max int4, ram_min int4, render_disable boolean, replace_config boolean, server_con boolean, server_port int4, sets varchar(255), sleep_time int4, soft_end_default boolean, soft_end_value int4, surrender boolean, time_span int4, time_until_check boolean, time_until_reboot varchar(255), timeout_champ int4, timeout_end_of_game int4, timeout_in_game int4, timeout_in_gameff int4, timeout_load_game int4, timeout_lobby int4, timeout_login int4, timeout_mastery int4, wildcard varchar(255), win_reboot boolean, win_shutdown boolean, userid int8 not null, primary key (id))
 create table lolaccounts (id  bigserial not null, account varchar(255), account_status varchar(255), active boolean not null, assigned_to varchar(255), be int4, info varchar(255), level int4, max_be int4, max_level int4, password varchar(255), play_time int4, priority int4, region varchar(255), sleep_time int4, summoner varchar(255), xp int4, userid int8 not null, primary key (id))
@@ -16,7 +15,6 @@ alter table lolaccounts add constraint UKpag1bsitoqd1uwp5l8kfqwy5g unique (accou
 alter table roles add constraint UK_ofx66keruapi6vyqpv6f2or37 unique (name)
 alter table users add constraint UK_6dotkott2kjsp8vw4d0m25fb7 unique (email)
 alter table clients add constraint FKkyi3xo97w0s7v2gwtncni6jhs foreign key (userid) references users
-alter table clientstatus add constraint FKpei5ax4w300foxuhxx3umb6uv foreign key (clientid) references clients
 alter table infernalsettings add constraint FK2ukbnh8ut7x0l1uu6yscypg0h foreign key (userid) references users
 alter table lolaccounts add constraint FKsxn97cr9r4gjoeukt9g2b9crq foreign key (userid) references users
 alter table queuerlolaccounts add constraint FKkjaomljiwnbf6ureq8f3td099 foreign key (queuerid) references queuers

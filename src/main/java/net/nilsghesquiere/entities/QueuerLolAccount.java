@@ -1,5 +1,7 @@
 package net.nilsghesquiere.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,7 +19,7 @@ import net.nilsghesquiere.util.enums.Lane;
 @Data
 @Entity
 @Table(name ="queuerlolaccounts")
-public class QueuerLolAccount{
+public class QueuerLolAccount implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -36,4 +38,32 @@ public class QueuerLolAccount{
 	
 	public QueuerLolAccount(){};
 
+	
+	public void setQueuer(Queuer queuer) {
+		if (this.queuer != null && this.queuer.getQueuerLolAccounts().contains(this)){
+			this.queuer.removeQueuerLolAccount(this);
+		}
+		this.queuer = queuer;
+		if (queuer != null && !queuer.getQueuerLolAccounts().contains(this)){
+			queuer.addQueuerLolAccount(this);
+		}
+	}
+
+
+	public QueuerLolAccount(Long id, String account, Integer level,
+			Integer maxLevel, Integer xp, Integer xpCap, Integer be,
+			String champ, Lane lane, String lPQ) {
+		super();
+		this.id = id;
+		this.account = account;
+		this.level = level;
+		this.maxLevel = maxLevel;
+		this.xp = xp;
+		this.xpCap = xpCap;
+		this.be = be;
+		this.champ = champ;
+		this.lane = lane;
+		LPQ = lPQ;
+	}
+	
 }

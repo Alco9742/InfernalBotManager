@@ -4748,3 +4748,449 @@
 2018-03-12 18:12:58.747 DEBUG [qtp1002400446-16] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node0hrmkm1inh7gm6nimp5q035ji1]
 2018-03-12 18:12:58.801 DEBUG [qtp1002400446-21] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520874778408;client=0:0:0:0:0:0:0:1;session=node0hrmkm1inh7gm6nimp5q035ji1;user=ghesquiere.nils@gmail.com]
 2018-03-12 18:12:58.814 DEBUG [qtp1002400446-21] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520874778408;client=0:0:0:0:0:0:0:1;session=node0hrmkm1inh7gm6nimp5q035ji1;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:41:30.694 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 09:41:30.694 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 09:41:39.869 DEBUG [qtp2132736278-17] CommonsRequestLoggingFilter - Before request [uri=/;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.140 DEBUG [qtp2132736278-18] CommonsRequestLoggingFilter - Before request [uri=/;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.141 DEBUG [qtp2132736278-17] CommonsRequestLoggingFilter - After request [uri=/;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.156 DEBUG [qtp2132736278-18] CommonsRequestLoggingFilter - After request [uri=/;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.190 DEBUG [qtp2132736278-36] CommonsRequestLoggingFilter - Before request [uri=/css/vendor/dataTables/editor.bootstrap.min.css;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.190 DEBUG [qtp2132736278-34] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/dataTables/dataTables.editor.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.190 DEBUG [qtp2132736278-19] CommonsRequestLoggingFilter - Before request [uri=/css/main.css;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.202 DEBUG [qtp2132736278-19] CommonsRequestLoggingFilter - After request [uri=/css/main.css;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.202 DEBUG [qtp2132736278-34] CommonsRequestLoggingFilter - After request [uri=/js/vendor/dataTables/dataTables.editor.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.202 DEBUG [qtp2132736278-36] CommonsRequestLoggingFilter - After request [uri=/css/vendor/dataTables/editor.bootstrap.min.css;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.216 DEBUG [qtp2132736278-16] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/dataTables/editor.bootstrap.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.216 DEBUG [qtp2132736278-30] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.216 DEBUG [qtp2132736278-32] CommonsRequestLoggingFilter - Before request [uri=/js/main.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.222 DEBUG [qtp2132736278-32] CommonsRequestLoggingFilter - After request [uri=/js/main.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.222 DEBUG [qtp2132736278-16] CommonsRequestLoggingFilter - After request [uri=/js/vendor/dataTables/editor.bootstrap.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:40.222 DEBUG [qtp2132736278-30] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:42.785 DEBUG [qtp2132736278-36] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:42.799 DEBUG [qtp2132736278-36] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1]
+2018-03-13 09:41:44.223 DEBUG [qtp2132736278-36] CommonsRequestLoggingFilter - Before request [uri=/index;client=0:0:0:0:0:0:0:1;session=node01q4nl11pdhga91g4aq026rhiq00;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:41:44.229 DEBUG [qtp2132736278-36] CommonsRequestLoggingFilter - After request [uri=/index;client=0:0:0:0:0:0:0:1;session=node01q4nl11pdhga91g4aq026rhiq00;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:41:45.034 DEBUG [qtp2132736278-30] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01q4nl11pdhga91g4aq026rhiq00;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:41:45.062 DEBUG [qtp2132736278-30] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01q4nl11pdhga91g4aq026rhiq00;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:41:45.302 DEBUG [qtp2132736278-36] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520930505092;client=0:0:0:0:0:0:0:1;session=node01q4nl11pdhga91g4aq026rhiq00;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:41:45.355 DEBUG [qtp2132736278-36] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520930505092;client=0:0:0:0:0:0:0:1;session=node01q4nl11pdhga91g4aq026rhiq00;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:41:53.000 DEBUG [qtp2132736278-23] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 09:41:53.089 DEBUG [qtp2132736278-23] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 09:46:50.256 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 09:46:50.256 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 09:47:02.419 DEBUG [qtp157783888-16] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1;session=node06c13di86jilo12z1hzmxvqje20]
+2018-03-13 09:47:02.641 DEBUG [qtp157783888-16] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1;session=node06c13di86jilo12z1hzmxvqje20]
+2018-03-13 09:47:04.814 DEBUG [qtp157783888-36] CommonsRequestLoggingFilter - Before request [uri=/init/main;client=0:0:0:0:0:0:0:1;session=node06c13di86jilo12z1hzmxvqje20]
+2018-03-13 09:47:05.153 DEBUG [qtp157783888-36] CommonsRequestLoggingFilter - After request [uri=/init/main;client=0:0:0:0:0:0:0:1;session=node06c13di86jilo12z1hzmxvqje20]
+2018-03-13 09:47:06.408 DEBUG [qtp157783888-34] CommonsRequestLoggingFilter - Before request [uri=/init/main;client=0:0:0:0:0:0:0:1;session=node06c13di86jilo12z1hzmxvqje20]
+2018-03-13 09:47:06.432 DEBUG [qtp157783888-34] CommonsRequestLoggingFilter - After request [uri=/init/main;client=0:0:0:0:0:0:0:1;session=node06c13di86jilo12z1hzmxvqje20]
+2018-03-13 09:47:07.545 DEBUG [qtp157783888-36] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1;session=node06c13di86jilo12z1hzmxvqje20]
+2018-03-13 09:47:07.551 DEBUG [qtp157783888-36] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1;session=node06c13di86jilo12z1hzmxvqje20]
+2018-03-13 09:47:09.091 DEBUG [qtp157783888-36] CommonsRequestLoggingFilter - Before request [uri=/index;client=0:0:0:0:0:0:0:1;session=node0w1wx99qnqhia1uuvdgbqqcgbf1;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:47:09.099 DEBUG [qtp157783888-36] CommonsRequestLoggingFilter - After request [uri=/index;client=0:0:0:0:0:0:0:1;session=node0w1wx99qnqhia1uuvdgbqqcgbf1;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:47:10.473 DEBUG [qtp157783888-34] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0w1wx99qnqhia1uuvdgbqqcgbf1;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:47:10.496 DEBUG [qtp157783888-34] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0w1wx99qnqhia1uuvdgbqqcgbf1;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:47:10.717 DEBUG [qtp157783888-36] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520930830522;client=0:0:0:0:0:0:0:1;session=node0w1wx99qnqhia1uuvdgbqqcgbf1;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:47:10.773 DEBUG [qtp157783888-36] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520930830522;client=0:0:0:0:0:0:0:1;session=node0w1wx99qnqhia1uuvdgbqqcgbf1;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:47:17.297 DEBUG [qtp157783888-32] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 09:47:17.369 DEBUG [qtp157783888-32] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 09:48:49.750 DEBUG [qtp157783888-23] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0w1wx99qnqhia1uuvdgbqqcgbf1;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:48:49.770 DEBUG [qtp157783888-23] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0w1wx99qnqhia1uuvdgbqqcgbf1;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:48:50.275 DEBUG [qtp157783888-34] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520930929820;client=0:0:0:0:0:0:0:1;session=node0w1wx99qnqhia1uuvdgbqqcgbf1;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:48:50.283 DEBUG [qtp157783888-34] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520930929820;client=0:0:0:0:0:0:0:1;session=node0w1wx99qnqhia1uuvdgbqqcgbf1;user=ghesquiere.nils@gmail.com]
+2018-03-13 09:53:14.455 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 09:53:14.456 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 09:53:27.280 DEBUG [qtp2132736278-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 09:53:27.479 DEBUG [qtp2132736278-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 10:03:26.930 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 10:03:26.930 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 10:03:37.201 DEBUG [qtp1002400446-18] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 10:03:37.390 DEBUG [qtp1002400446-18] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 10:15:26.560 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 10:15:26.561 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 10:15:33.910 DEBUG [qtp2132736278-18] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 10:15:34.137 DEBUG [qtp2132736278-18] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 10:15:50.920 DEBUG [qtp2132736278-16] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1;session=node013vl8i53liwpc2608ihn2f0oy0]
+2018-03-13 10:15:51.152 DEBUG [qtp2132736278-16] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1;session=node013vl8i53liwpc2608ihn2f0oy0]
+2018-03-13 10:15:52.500 DEBUG [qtp2132736278-16] CommonsRequestLoggingFilter - Before request [uri=/index;client=0:0:0:0:0:0:0:1;session=node0xcmxk18x3l4v6cirsgnl2mgp1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:15:52.513 DEBUG [qtp2132736278-16] CommonsRequestLoggingFilter - After request [uri=/index;client=0:0:0:0:0:0:0:1;session=node0xcmxk18x3l4v6cirsgnl2mgp1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:15:56.233 DEBUG [qtp2132736278-18] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0xcmxk18x3l4v6cirsgnl2mgp1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:15:56.253 DEBUG [qtp2132736278-18] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0xcmxk18x3l4v6cirsgnl2mgp1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:15:56.708 DEBUG [qtp2132736278-16] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node0xcmxk18x3l4v6cirsgnl2mgp1]
+2018-03-13 10:15:56.709 DEBUG [qtp2132736278-23] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520932556282;client=0:0:0:0:0:0:0:1;session=node0xcmxk18x3l4v6cirsgnl2mgp1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:15:56.740 DEBUG [qtp2132736278-16] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node0xcmxk18x3l4v6cirsgnl2mgp1]
+2018-03-13 10:15:56.741 DEBUG [qtp2132736278-23] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520932556282;client=0:0:0:0:0:0:0:1;session=node0xcmxk18x3l4v6cirsgnl2mgp1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:16:05.461 DEBUG [qtp2132736278-16] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node0xcmxk18x3l4v6cirsgnl2mgp1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:16:05.493 DEBUG [qtp2132736278-16] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node0xcmxk18x3l4v6cirsgnl2mgp1;user=ghesquiere.nils@gmail.com;payload={"4":{"id":4,"tag":"TESTJE5","queuers":[],"clientS]
+2018-03-13 10:21:14.513 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 10:21:14.513 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 10:21:48.568 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 10:21:48.568 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 10:22:16.909 DEBUG [qtp157783888-17] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1;session=node013bhtjlrc1nt4u6bvt6fks9cq0]
+2018-03-13 10:22:17.170 DEBUG [qtp157783888-17] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1;session=node013bhtjlrc1nt4u6bvt6fks9cq0]
+2018-03-13 10:22:18.748 DEBUG [qtp157783888-34] CommonsRequestLoggingFilter - Before request [uri=/index;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:22:18.758 DEBUG [qtp157783888-34] CommonsRequestLoggingFilter - After request [uri=/index;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:22:22.447 DEBUG [qtp157783888-36] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:22:22.477 DEBUG [qtp157783888-36] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:22:22.693 DEBUG [qtp157783888-34] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520932942503;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:22:22.750 DEBUG [qtp157783888-34] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520932942503;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:22:26.910 DEBUG [qtp157783888-31] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 10:22:27.070 DEBUG [qtp157783888-31] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 10:22:40.634 DEBUG [qtp157783888-23] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:22:40.651 DEBUG [qtp157783888-23] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:22:41.002 DEBUG [qtp157783888-22] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1]
+2018-03-13 10:22:41.033 DEBUG [qtp157783888-22] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1]
+2018-03-13 10:22:41.058 DEBUG [qtp157783888-23] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520932960687;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:22:41.081 DEBUG [qtp157783888-23] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520932960687;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:22:48.025 DEBUG [qtp157783888-22] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1;user=ghesquiere.nils@gmail.com]
+2018-03-13 10:22:48.058 DEBUG [qtp157783888-22] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node01obonbu08r3x81stykf0t26lsl1;user=ghesquiere.nils@gmail.com;payload={"5":{"id":5,"tag":"TESTJE5","queuers":[],"clientS]
+2018-03-13 10:25:09.358 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 10:25:09.358 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 10:25:12.494 DEBUG [qtp1014555985-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 10:25:12.700 DEBUG [qtp1014555985-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 10:26:31.493 DEBUG [qtp1014555985-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 10:26:31.521 DEBUG [qtp1014555985-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 10:28:09.654 DEBUG [qtp1014555985-18] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 10:28:09.678 DEBUG [qtp1014555985-18] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 10:38:17.870 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 10:38:17.870 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 10:38:31.168 DEBUG [qtp1002400446-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 10:38:31.368 DEBUG [qtp1002400446-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 10:42:45.150 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 10:42:45.150 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 10:42:47.969 DEBUG [qtp520354720-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 10:42:48.197 DEBUG [qtp520354720-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 10:45:02.338 DEBUG [qtp520354720-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 10:45:02.356 DEBUG [qtp520354720-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 10:55:39.222 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 10:55:39.223 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 10:56:24.964 DEBUG [qtp1973471376-18] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 10:56:25.025 DEBUG [qtp1973471376-18] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 11:07:15.386 DEBUG [qtp1973471376-18] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 11:07:15.390 DEBUG [qtp1973471376-18] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"userId":1,"tag":"TESTJE5","queuer]
+2018-03-13 11:08:39.713 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 11:08:39.713 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 11:09:56.877 DEBUG [qtp840400805-18] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 11:09:56.976 DEBUG [qtp840400805-18] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 11:14:59.154 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 11:14:59.154 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 11:15:03.328 DEBUG [qtp1973471376-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 11:15:03.407 DEBUG [qtp1973471376-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 11:24:06.913 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 11:24:06.913 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 11:24:26.077 DEBUG [qtp840400805-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 11:24:26.133 DEBUG [qtp840400805-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 11:25:35.902 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 11:25:35.903 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 11:25:39.439 DEBUG [qtp1973471376-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 11:25:39.496 DEBUG [qtp1973471376-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 11:34:01.092 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 11:34:01.092 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 11:34:07.308 DEBUG [qtp553056396-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 11:34:07.363 DEBUG [qtp553056396-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:18:59.355 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:18:59.356 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:19:03.889 DEBUG [qtp898283008-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:19:03.969 DEBUG [qtp898283008-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:20:37.367 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:20:37.367 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:20:44.731 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:20:44.833 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:23:06.187 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:23:06.187 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:23:09.263 DEBUG [qtp1973471376-18] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:23:09.352 DEBUG [qtp1973471376-18] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:25:28.922 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:25:28.922 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:25:31.875 DEBUG [qtp840400805-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:25:31.991 DEBUG [qtp840400805-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:30:18.438 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:30:18.439 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:30:23.041 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:30:23.109 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:30:32.392 DEBUG [qtp1156385423-22] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:30:32.396 DEBUG [qtp1156385423-22] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:32:37.527 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:32:37.527 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:32:51.129 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:32:51.215 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:36:03.624 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:36:03.624 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:36:08.155 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - Before request [uri=/;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.368 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - After request [uri=/;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.386 DEBUG [qtp1156385423-21] CommonsRequestLoggingFilter - Before request [uri=/css/vendor/dataTables/editor.bootstrap.min.css;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.387 DEBUG [qtp1156385423-31] CommonsRequestLoggingFilter - Before request [uri=/css/main.css;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.432 DEBUG [qtp1156385423-21] CommonsRequestLoggingFilter - After request [uri=/css/vendor/dataTables/editor.bootstrap.min.css;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.432 DEBUG [qtp1156385423-31] CommonsRequestLoggingFilter - After request [uri=/css/main.css;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.513 DEBUG [qtp1156385423-22] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/dataTables/dataTables.editor.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.513 DEBUG [qtp1156385423-23] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/dataTables/editor.bootstrap.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.519 DEBUG [qtp1156385423-22] CommonsRequestLoggingFilter - After request [uri=/js/vendor/dataTables/dataTables.editor.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.519 DEBUG [qtp1156385423-23] CommonsRequestLoggingFilter - After request [uri=/js/vendor/dataTables/editor.bootstrap.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.573 DEBUG [qtp1156385423-22] CommonsRequestLoggingFilter - Before request [uri=/js/main.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.573 DEBUG [qtp1156385423-23] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.578 DEBUG [qtp1156385423-22] CommonsRequestLoggingFilter - After request [uri=/js/main.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:08.579 DEBUG [qtp1156385423-23] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:11.032 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:11.052 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1]
+2018-03-13 13:36:12.030 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - Before request [uri=/index;client=0:0:0:0:0:0:0:1;session=node01v8dhpij9jwso8yfz0j6wmm8z0;user=ghesquiere.nils@gmail.com]
+2018-03-13 13:36:12.037 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - After request [uri=/index;client=0:0:0:0:0:0:0:1;session=node01v8dhpij9jwso8yfz0j6wmm8z0;user=ghesquiere.nils@gmail.com]
+2018-03-13 13:36:12.882 DEBUG [qtp1156385423-23] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01v8dhpij9jwso8yfz0j6wmm8z0;user=ghesquiere.nils@gmail.com]
+2018-03-13 13:36:12.910 DEBUG [qtp1156385423-23] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01v8dhpij9jwso8yfz0j6wmm8z0;user=ghesquiere.nils@gmail.com]
+2018-03-13 13:36:13.129 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520944572934;client=0:0:0:0:0:0:0:1;session=node01v8dhpij9jwso8yfz0j6wmm8z0;user=ghesquiere.nils@gmail.com]
+2018-03-13 13:36:13.193 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520944572934;client=0:0:0:0:0:0:0:1;session=node01v8dhpij9jwso8yfz0j6wmm8z0;user=ghesquiere.nils@gmail.com]
+2018-03-13 13:36:16.553 DEBUG [qtp1156385423-21] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:36:16.613 DEBUG [qtp1156385423-21] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:40:20.467 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:40:20.468 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:40:24.249 DEBUG [qtp840400805-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:40:24.320 DEBUG [qtp840400805-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:43:10.250 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:43:10.251 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:43:14.265 DEBUG [qtp177657196-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:43:14.340 DEBUG [qtp177657196-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:44:41.594 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:44:41.594 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:44:48.794 DEBUG [qtp932312334-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:44:48.869 DEBUG [qtp932312334-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:46:20.775 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:46:20.775 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:46:23.853 DEBUG [qtp1156385423-18] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:46:23.924 DEBUG [qtp1156385423-18] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:48:40.873 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:48:40.873 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:48:43.526 DEBUG [qtp898283008-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:48:43.596 DEBUG [qtp898283008-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:52:38.410 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:52:38.411 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:52:49.561 DEBUG [qtp840400805-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:52:49.636 DEBUG [qtp840400805-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:54:21.813 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:54:21.814 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:54:27.780 DEBUG [qtp1973471376-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:54:27.874 DEBUG [qtp1973471376-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:55:17.405 DEBUG [qtp1973471376-22] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:55:17.413 DEBUG [qtp1973471376-22] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 13:56:00.642 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 13:56:00.642 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 13:56:07.134 DEBUG [qtp1973471376-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 13:56:07.353 DEBUG [qtp1973471376-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 14:20:24.256 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 14:20:24.257 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 14:20:51.342 DEBUG [qtp840400805-20] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 14:20:51.423 DEBUG [qtp840400805-20] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 14:24:17.538 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 14:24:17.538 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 14:24:22.920 DEBUG [qtp14838518-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 14:24:22.998 DEBUG [qtp14838518-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 14:30:31.075 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 14:30:31.076 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 14:30:43.048 DEBUG [qtp1002400446-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 14:30:43.140 DEBUG [qtp1002400446-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 14:37:37.197 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 14:37:37.197 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 14:37:41.737 DEBUG [qtp163160871-18] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 14:37:41.867 DEBUG [qtp163160871-18] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 14:40:59.068 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 14:40:59.069 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 14:41:08.032 DEBUG [qtp163160871-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 14:41:08.128 DEBUG [qtp163160871-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 14:42:45.917 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 14:42:45.918 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 14:42:58.667 DEBUG [qtp1002400446-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 14:42:58.758 DEBUG [qtp1002400446-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 14:45:52.304 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 14:45:52.304 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 14:46:16.771 DEBUG [qtp411474203-19] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 14:46:16.858 DEBUG [qtp411474203-19] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 14:47:51.202 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 14:47:51.202 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 14:47:57.520 DEBUG [qtp1002400446-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 14:47:57.620 DEBUG [qtp1002400446-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 14:49:24.333 DEBUG [qtp1002400446-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 14:49:24.339 DEBUG [qtp1002400446-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 14:49:49.924 DEBUG [qtp1002400446-19] CommonsRequestLoggingFilter - Before request [uri=/;client=0:0:0:0:0:0:0:1]
+2018-03-13 14:49:50.191 DEBUG [qtp1002400446-19] CommonsRequestLoggingFilter - After request [uri=/;client=0:0:0:0:0:0:0:1]
+2018-03-13 15:03:31.393 DEBUG [qtp1002400446-18] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 15:03:31.411 DEBUG [qtp1002400446-18] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 15:05:08.905 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 15:05:08.905 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 15:05:11.070 DEBUG [qtp898283008-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 15:05:11.161 DEBUG [qtp898283008-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 15:08:34.105 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 15:08:34.106 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 15:08:40.173 DEBUG [qtp2132736278-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 15:08:40.416 DEBUG [qtp2132736278-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 15:13:30.091 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 15:13:30.092 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 15:13:42.985 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 15:13:43.228 DEBUG [qtp1156385423-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 15:17:57.802 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 15:17:57.803 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 15:18:03.211 DEBUG [qtp14838518-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 15:18:04.068 DEBUG [qtp14838518-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 15:18:55.012 DEBUG [qtp14838518-19] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1;session=node01xe9s26ng97u5t9z047ew0zja0]
+2018-03-13 15:18:55.302 DEBUG [qtp14838518-19] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1;session=node01xe9s26ng97u5t9z047ew0zja0]
+2018-03-13 15:18:58.053 DEBUG [qtp14838518-19] CommonsRequestLoggingFilter - Before request [uri=/index;client=0:0:0:0:0:0:0:1;session=node0l3gxxvj3h9to1vatc3fj1dqt81;user=ghesquiere.nils@gmail.com]
+2018-03-13 15:18:58.063 DEBUG [qtp14838518-19] CommonsRequestLoggingFilter - After request [uri=/index;client=0:0:0:0:0:0:0:1;session=node0l3gxxvj3h9to1vatc3fj1dqt81;user=ghesquiere.nils@gmail.com]
+2018-03-13 15:19:10.263 DEBUG [qtp14838518-23] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0l3gxxvj3h9to1vatc3fj1dqt81;user=ghesquiere.nils@gmail.com]
+2018-03-13 15:19:10.285 DEBUG [qtp14838518-23] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0l3gxxvj3h9to1vatc3fj1dqt81;user=ghesquiere.nils@gmail.com]
+2018-03-13 15:19:10.719 DEBUG [qtp14838518-16] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node0l3gxxvj3h9to1vatc3fj1dqt81]
+2018-03-13 15:19:10.742 DEBUG [qtp14838518-16] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node0l3gxxvj3h9to1vatc3fj1dqt81]
+2018-03-13 15:19:10.743 DEBUG [qtp14838518-33] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520950750318;client=0:0:0:0:0:0:0:1;session=node0l3gxxvj3h9to1vatc3fj1dqt81;user=ghesquiere.nils@gmail.com]
+2018-03-13 15:19:10.769 DEBUG [qtp14838518-33] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520950750318;client=0:0:0:0:0:0:0:1;session=node0l3gxxvj3h9to1vatc3fj1dqt81;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:47:47.300 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 16:47:47.315 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 16:48:47.487 DEBUG [qtp14838518-21] CommonsRequestLoggingFilter - Before request [uri=/;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:48.189 DEBUG [qtp14838518-21] CommonsRequestLoggingFilter - After request [uri=/;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:48.934 DEBUG [qtp14838518-18] CommonsRequestLoggingFilter - Before request [uri=/css/main.css;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:48.934 DEBUG [qtp14838518-35] CommonsRequestLoggingFilter - Before request [uri=/css/vendor/dataTables/editor.bootstrap.min.css;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:48.999 DEBUG [qtp14838518-18] CommonsRequestLoggingFilter - After request [uri=/css/main.css;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:48.999 DEBUG [qtp14838518-35] CommonsRequestLoggingFilter - After request [uri=/css/vendor/dataTables/editor.bootstrap.min.css;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:49.040 DEBUG [qtp14838518-21] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/dataTables/dataTables.editor.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:49.040 DEBUG [qtp14838518-34] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/dataTables/editor.bootstrap.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:49.041 DEBUG [qtp14838518-16] CommonsRequestLoggingFilter - Before request [uri=/js/main.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:49.040 DEBUG [qtp14838518-19] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:49.045 DEBUG [qtp14838518-21] CommonsRequestLoggingFilter - After request [uri=/js/vendor/dataTables/dataTables.editor.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:49.045 DEBUG [qtp14838518-19] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:49.050 DEBUG [qtp14838518-34] CommonsRequestLoggingFilter - After request [uri=/js/vendor/dataTables/editor.bootstrap.min.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:48:49.056 DEBUG [qtp14838518-16] CommonsRequestLoggingFilter - After request [uri=/js/main.js;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:52:18.039 DEBUG [qtp14838518-21] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:52:18.055 DEBUG [qtp14838518-21] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1]
+2018-03-13 16:52:19.508 DEBUG [qtp14838518-21] CommonsRequestLoggingFilter - Before request [uri=/index;client=0:0:0:0:0:0:0:1;session=node0po2f41mip7c9nnc7bh18k2d20;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:52:19.514 DEBUG [qtp14838518-21] CommonsRequestLoggingFilter - After request [uri=/index;client=0:0:0:0:0:0:0:1;session=node0po2f41mip7c9nnc7bh18k2d20;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:52:20.694 DEBUG [qtp14838518-17] CommonsRequestLoggingFilter - Before request [uri=/admin;client=0:0:0:0:0:0:0:1;session=node0po2f41mip7c9nnc7bh18k2d20;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:52:20.737 DEBUG [qtp14838518-17] CommonsRequestLoggingFilter - After request [uri=/admin;client=0:0:0:0:0:0:0:1;session=node0po2f41mip7c9nnc7bh18k2d20;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:52:21.277 DEBUG [qtp14838518-21] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0po2f41mip7c9nnc7bh18k2d20;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:52:21.302 DEBUG [qtp14838518-21] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0po2f41mip7c9nnc7bh18k2d20;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:52:21.543 DEBUG [qtp14838518-17] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520956341331;client=0:0:0:0:0:0:0:1;session=node0po2f41mip7c9nnc7bh18k2d20;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:52:21.759 DEBUG [qtp14838518-17] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520956341331;client=0:0:0:0:0:0:0:1;session=node0po2f41mip7c9nnc7bh18k2d20;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:52:23.805 DEBUG [qtp14838518-21] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node0po2f41mip7c9nnc7bh18k2d20;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:52:23.841 DEBUG [qtp14838518-21] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node0po2f41mip7c9nnc7bh18k2d20;user=ghesquiere.nils@gmail.com;payload={"15":{"id":15,"tag":"TESTJE5","queuers":[{"id":5,]
+2018-03-13 16:56:28.611 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 16:56:28.612 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 16:56:42.949 DEBUG [qtp163160871-17] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1;session=node0vzrwc229zckc1ubuc6skl0lk70]
+2018-03-13 16:56:43.158 DEBUG [qtp163160871-17] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1;session=node0vzrwc229zckc1ubuc6skl0lk70]
+2018-03-13 16:56:45.566 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - Before request [uri=/init/main;client=0:0:0:0:0:0:0:1;session=node0vzrwc229zckc1ubuc6skl0lk70]
+2018-03-13 16:56:45.947 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - After request [uri=/init/main;client=0:0:0:0:0:0:0:1;session=node0vzrwc229zckc1ubuc6skl0lk70]
+2018-03-13 16:56:46.214 DEBUG [qtp163160871-34] CommonsRequestLoggingFilter - Before request [uri=/init/main;client=0:0:0:0:0:0:0:1;session=node0vzrwc229zckc1ubuc6skl0lk70]
+2018-03-13 16:56:46.233 DEBUG [qtp163160871-34] CommonsRequestLoggingFilter - After request [uri=/init/main;client=0:0:0:0:0:0:0:1;session=node0vzrwc229zckc1ubuc6skl0lk70]
+2018-03-13 16:56:47.180 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1;session=node0vzrwc229zckc1ubuc6skl0lk70]
+2018-03-13 16:56:47.186 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1;session=node0vzrwc229zckc1ubuc6skl0lk70]
+2018-03-13 16:56:48.050 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - Before request [uri=/index;client=0:0:0:0:0:0:0:1;session=node0sco0wga12zbfu4uuhmvkldwz1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:56:48.056 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - After request [uri=/index;client=0:0:0:0:0:0:0:1;session=node0sco0wga12zbfu4uuhmvkldwz1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:56:49.079 DEBUG [qtp163160871-34] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0sco0wga12zbfu4uuhmvkldwz1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:56:49.101 DEBUG [qtp163160871-34] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0sco0wga12zbfu4uuhmvkldwz1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:56:49.322 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520956609125;client=0:0:0:0:0:0:0:1;session=node0sco0wga12zbfu4uuhmvkldwz1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:56:49.384 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520956609125;client=0:0:0:0:0:0:0:1;session=node0sco0wga12zbfu4uuhmvkldwz1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:56:52.555 DEBUG [qtp163160871-32] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 16:56:52.687 DEBUG [qtp163160871-32] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 16:57:03.879 DEBUG [qtp163160871-22] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0sco0wga12zbfu4uuhmvkldwz1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:57:03.897 DEBUG [qtp163160871-22] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node0sco0wga12zbfu4uuhmvkldwz1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:57:04.189 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520956623926;client=0:0:0:0:0:0:0:1;session=node0sco0wga12zbfu4uuhmvkldwz1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:57:04.206 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520956623926;client=0:0:0:0:0:0:0:1;session=node0sco0wga12zbfu4uuhmvkldwz1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:58:41.889 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 16:58:41.890 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 16:58:43.950 DEBUG [qtp163160871-22] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1;session=node01btre8huepqop191l5g9xyx9lc0]
+2018-03-13 16:58:44.158 DEBUG [qtp163160871-22] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1;session=node01btre8huepqop191l5g9xyx9lc0]
+2018-03-13 16:58:45.345 DEBUG [qtp163160871-22] CommonsRequestLoggingFilter - Before request [uri=/index;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:58:45.355 DEBUG [qtp163160871-22] CommonsRequestLoggingFilter - After request [uri=/index;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:58:46.481 DEBUG [qtp163160871-33] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:58:46.515 DEBUG [qtp163160871-33] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:58:46.735 DEBUG [qtp163160871-22] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520956726535;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:58:46.850 DEBUG [qtp163160871-22] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520956726535;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:58:48.858 DEBUG [qtp163160871-33] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:58:48.896 DEBUG [qtp163160871-33] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com;payload={"1":{"id":1,"tag":"TESTJE5","queuers":[{"id":1,"q]
+2018-03-13 16:59:11.470 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:59:11.476 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com;payload={"1":{"id":1,"tag":"TESTJE5","queuers":[{"id":1,"q]
+2018-03-13 16:59:13.124 DEBUG [qtp163160871-32] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:59:13.137 DEBUG [qtp163160871-32] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:59:13.436 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520956753169;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:59:13.450 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520956753169;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:59:29.793 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1]
+2018-03-13 16:59:29.815 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1]
+2018-03-13 16:59:30.653 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:59:30.663 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:59:31.007 DEBUG [qtp163160871-30] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1]
+2018-03-13 16:59:31.034 DEBUG [qtp163160871-30] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1]
+2018-03-13 16:59:31.076 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520956770695;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 16:59:31.092 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520956770695;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:00:03.891 DEBUG [qtp163160871-30] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:00:03.896 DEBUG [qtp163160871-30] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node04ssc13u2l2cd1pu9nv67kv86t1;user=ghesquiere.nils@gmail.com;payload={"1":{"id":1,"tag":"TESTJE5","queuers":[{"id":1,"q]
+2018-03-13 17:01:51.027 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 17:01:51.027 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 17:01:54.143 DEBUG [qtp163160871-17] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1;session=node012lgy5o092e6s1anoll0wsk91x0]
+2018-03-13 17:01:54.342 DEBUG [qtp163160871-17] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1;session=node012lgy5o092e6s1anoll0wsk91x0]
+2018-03-13 17:01:54.694 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node012lgy5o092e6s1anoll0wsk91x0]
+2018-03-13 17:01:54.785 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node012lgy5o092e6s1anoll0wsk91x0]
+2018-03-13 17:01:56.077 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - Before request [uri=/index;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:01:56.085 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - After request [uri=/index;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:01:56.476 DEBUG [qtp163160871-32] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41]
+2018-03-13 17:01:56.488 DEBUG [qtp163160871-32] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41]
+2018-03-13 17:01:57.131 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:01:57.154 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:01:57.495 DEBUG [qtp163160871-32] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41]
+2018-03-13 17:01:57.509 DEBUG [qtp163160871-32] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41]
+2018-03-13 17:01:57.582 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520956917195;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:01:57.697 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520956917195;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:01:59.851 DEBUG [qtp163160871-32] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:01:59.990 DEBUG [qtp163160871-32] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com;payload={"1":{"id":1,"tag":"TESTJE5","queuers":[{"id":1,"q]
+2018-03-13 17:02:10.642 DEBUG [qtp163160871-30] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 17:02:10.755 DEBUG [qtp163160871-30] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 17:04:36.058 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:04:36.077 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:04:36.489 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41]
+2018-03-13 17:04:36.497 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41]
+2018-03-13 17:04:36.544 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520957076130;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:04:36.559 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520957076130;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:04:38.558 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:04:38.578 DEBUG [qtp163160871-36] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1/delete;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com;payload={"2":{"id":2,"tag":"TESTJE5","queuers":[{"id":2,"q]
+2018-03-13 17:04:42.593 DEBUG [qtp163160871-32] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 17:04:42.616 DEBUG [qtp163160871-32] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 17:04:50.030 DEBUG [qtp163160871-18] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:04:50.038 DEBUG [qtp163160871-18] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:04:50.402 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41]
+2018-03-13 17:04:50.413 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41]
+2018-03-13 17:04:50.468 DEBUG [qtp163160871-18] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520957090084;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:04:50.478 DEBUG [qtp163160871-18] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520957090084;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:05:42.857 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 17:05:42.905 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 17:05:47.345 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:05:47.363 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:05:47.744 DEBUG [qtp163160871-18] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41]
+2018-03-13 17:05:47.749 DEBUG [qtp163160871-18] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41]
+2018-03-13 17:05:47.801 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520957147411;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:05:47.817 DEBUG [qtp163160871-21] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520957147411;client=0:0:0:0:0:0:0:1;session=node01ukwfv1ovohudfehphlxilgp41;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:09:09.922 DEBUG [qtp163160871-35] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1;client=127.0.0.1]
+2018-03-13 17:09:09.973 DEBUG [qtp163160871-35] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1;client=127.0.0.1;payload={"0":{"id":null,"tag":"TESTJE5","queuers":[{"id":0]
+2018-03-13 17:09:43.974 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 17:09:43.975 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 17:10:00.854 DEBUG [qtp1141264726-17] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1;session=node01479qv5mcpftc143mkfeb02nh90]
+2018-03-13 17:10:01.093 DEBUG [qtp1141264726-17] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1;session=node01479qv5mcpftc143mkfeb02nh90]
+2018-03-13 17:10:01.472 DEBUG [qtp1141264726-36] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01479qv5mcpftc143mkfeb02nh90]
+2018-03-13 17:10:01.558 DEBUG [qtp1141264726-36] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01479qv5mcpftc143mkfeb02nh90]
+2018-03-13 17:10:02.718 DEBUG [qtp1141264726-36] CommonsRequestLoggingFilter - Before request [uri=/index;client=0:0:0:0:0:0:0:1;session=node01x6i7gxtw5iq61319jgpqvq5g91;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:10:02.734 DEBUG [qtp1141264726-36] CommonsRequestLoggingFilter - After request [uri=/index;client=0:0:0:0:0:0:0:1;session=node01x6i7gxtw5iq61319jgpqvq5g91;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:10:03.110 DEBUG [qtp1141264726-34] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01x6i7gxtw5iq61319jgpqvq5g91]
+2018-03-13 17:10:03.124 DEBUG [qtp1141264726-34] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01x6i7gxtw5iq61319jgpqvq5g91]
+2018-03-13 17:10:04.282 DEBUG [qtp1141264726-36] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01x6i7gxtw5iq61319jgpqvq5g91;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:10:04.307 DEBUG [qtp1141264726-36] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node01x6i7gxtw5iq61319jgpqvq5g91;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:10:04.656 DEBUG [qtp1141264726-34] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01x6i7gxtw5iq61319jgpqvq5g91]
+2018-03-13 17:10:04.672 DEBUG [qtp1141264726-34] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node01x6i7gxtw5iq61319jgpqvq5g91]
+2018-03-13 17:10:04.732 DEBUG [qtp1141264726-36] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520957404348;client=0:0:0:0:0:0:0:1;session=node01x6i7gxtw5iq61319jgpqvq5g91;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:10:04.877 DEBUG [qtp1141264726-36] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520957404348;client=0:0:0:0:0:0:0:1;session=node01x6i7gxtw5iq61319jgpqvq5g91;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:11:40.674 DEBUG [main] CommonsRequestLoggingFilter - Initializing filter 'requestLoggingFilter'
+2018-03-13 17:11:40.675 DEBUG [main] CommonsRequestLoggingFilter - Filter 'requestLoggingFilter' configured successfully
+2018-03-13 17:11:43.997 DEBUG [qtp1547965072-19] CommonsRequestLoggingFilter - Before request [uri=/login;client=0:0:0:0:0:0:0:1;session=node0c2mnfw34dyou8xligfr7wp2t0]
+2018-03-13 17:11:44.204 DEBUG [qtp1547965072-19] CommonsRequestLoggingFilter - After request [uri=/login;client=0:0:0:0:0:0:0:1;session=node0c2mnfw34dyou8xligfr7wp2t0]
+2018-03-13 17:11:44.568 DEBUG [qtp1547965072-36] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node0c2mnfw34dyou8xligfr7wp2t0]
+2018-03-13 17:11:44.637 DEBUG [qtp1547965072-36] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node0c2mnfw34dyou8xligfr7wp2t0]
+2018-03-13 17:11:45.540 DEBUG [qtp1547965072-36] CommonsRequestLoggingFilter - Before request [uri=/index;client=0:0:0:0:0:0:0:1;session=node011rpze5vhobw7hl2r8m4fkqqg1;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:11:45.551 DEBUG [qtp1547965072-36] CommonsRequestLoggingFilter - After request [uri=/index;client=0:0:0:0:0:0:0:1;session=node011rpze5vhobw7hl2r8m4fkqqg1;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:11:45.903 DEBUG [qtp1547965072-34] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node011rpze5vhobw7hl2r8m4fkqqg1]
+2018-03-13 17:11:45.911 DEBUG [qtp1547965072-34] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node011rpze5vhobw7hl2r8m4fkqqg1]
+2018-03-13 17:11:47.419 DEBUG [qtp1547965072-36] CommonsRequestLoggingFilter - Before request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node011rpze5vhobw7hl2r8m4fkqqg1;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:11:47.448 DEBUG [qtp1547965072-36] CommonsRequestLoggingFilter - After request [uri=/clients;client=0:0:0:0:0:0:0:1;session=node011rpze5vhobw7hl2r8m4fkqqg1;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:11:47.792 DEBUG [qtp1547965072-34] CommonsRequestLoggingFilter - Before request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node011rpze5vhobw7hl2r8m4fkqqg1]
+2018-03-13 17:11:47.801 DEBUG [qtp1547965072-34] CommonsRequestLoggingFilter - After request [uri=/js/vendor/pwStrength/pwstrength-bootstrap.min.map;client=0:0:0:0:0:0:0:1;session=node011rpze5vhobw7hl2r8m4fkqqg1]
+2018-03-13 17:11:47.851 DEBUG [qtp1547965072-36] CommonsRequestLoggingFilter - Before request [uri=/api/clients/user/1?_=1520957507490;client=0:0:0:0:0:0:0:1;session=node011rpze5vhobw7hl2r8m4fkqqg1;user=ghesquiere.nils@gmail.com]
+2018-03-13 17:11:48.000 DEBUG [qtp1547965072-36] CommonsRequestLoggingFilter - After request [uri=/api/clients/user/1?_=1520957507490;client=0:0:0:0:0:0:0:1;session=node011rpze5vhobw7hl2r8m4fkqqg1;user=ghesquiere.nils@gmail.com]

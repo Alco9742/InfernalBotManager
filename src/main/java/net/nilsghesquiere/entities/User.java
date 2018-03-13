@@ -92,6 +92,19 @@ public class User implements Serializable{
 		}
 	}
 
+	public void addClientData(ClientData clientData){
+		clients.add(clientData);
+		if(clientData.getUser() != this){
+			clientData.setUser(this);
+		}
+	}
+	
+	public void removeClientData(ClientData clientData){
+		clients.remove(clientData);
+		if(clientData.getUser() == this){
+			clientData.setUser(null);
+		}
+	}
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email 

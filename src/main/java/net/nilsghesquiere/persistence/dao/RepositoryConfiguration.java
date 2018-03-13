@@ -1,7 +1,6 @@
 package net.nilsghesquiere.persistence.dao;
 
 import net.nilsghesquiere.entities.ClientData;
-import net.nilsghesquiere.entities.ClientStatus;
 import net.nilsghesquiere.entities.GlobalVariable;
 import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.LolAccount;
@@ -23,7 +22,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SuppressWarnings("unused")
 @Configuration
 @EnableAutoConfiguration
 @EntityScan(basePackages = {"net.nilsghesquiere.entities"})
@@ -36,7 +34,7 @@ public class RepositoryConfiguration {
 		return new RepositoryRestConfigurerAdapter() {
 			@Override
 			public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-				config.exposeIdsFor(User.class,LolAccount.class,InfernalSettings.class, GlobalVariable.class, ClientData.class, ClientStatus.class, Queuer.class, QueuerLolAccount.class);
+				config.exposeIdsFor(User.class,LolAccount.class,InfernalSettings.class, GlobalVariable.class, ClientData.class, Queuer.class, QueuerLolAccount.class);
 			}
 			
 			@Override 

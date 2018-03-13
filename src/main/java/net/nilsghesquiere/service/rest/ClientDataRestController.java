@@ -66,6 +66,7 @@ public class ClientDataRestController {
 				error = "Client data is empty";
 			}
 			//PROCESSING
+			System.out.println(clientData);
 			User user = userService.read(userid);
 			clientData.setUser(user);
 			ClientData clientDataFromDB = clientDataService.findByTagAndUserId(clientData.getTag(), userid);

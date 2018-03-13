@@ -8,8 +8,6 @@ import net.nilsghesquiere.entities.ClientData;
 import net.nilsghesquiere.entities.Queuer;
 import net.nilsghesquiere.entities.QueuerLolAccount;
 import net.nilsghesquiere.persistence.dao.ClientDataRepository;
-import net.nilsghesquiere.persistence.dao.ClientStatusRepository;
-import net.nilsghesquiere.persistence.dao.LolAccountRepository;
 import net.nilsghesquiere.persistence.dao.QueuerLolAccountRepository;
 import net.nilsghesquiere.persistence.dao.QueuerRepository;
 import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
@@ -23,14 +21,12 @@ public class ClientDataServiceImpl implements ClientDataService{
 	private final ClientDataRepository clientDataRepository;
 	private final QueuerRepository queuerRepository;
 	private final QueuerLolAccountRepository queuerLolAccountRepository;
-	private final ClientStatusRepository clientStatusRepository;
 	
 	@Autowired
-	public ClientDataServiceImpl(ClientDataRepository clientDataRepository,QueuerRepository queuerRepository, QueuerLolAccountRepository queuerLolAccountRepository,ClientStatusRepository clientStatusRepository){
+	public ClientDataServiceImpl(ClientDataRepository clientDataRepository,QueuerRepository queuerRepository, QueuerLolAccountRepository queuerLolAccountRepository){
 		this.clientDataRepository = clientDataRepository;
 		this.queuerRepository = queuerRepository;
 		this.queuerLolAccountRepository = queuerLolAccountRepository;
-		this.clientStatusRepository = clientStatusRepository;
 	}
 	
 	public ClientData read(Long id){
@@ -40,21 +36,26 @@ public class ClientDataServiceImpl implements ClientDataService{
 	@Override
 	@ModifyingTransactionalServiceMethod
 	public ClientData create(ClientData clientData) {
-		ClientData newData = clientDataRepository.save(clientData);
-		for (Queuer queuer : newData.getQueuers()){
-			queuer.setClient(newData);
-			Queuer newQueuer = queuerRepository.save(queuer);
-			for(QueuerLolAccount lolAccount : newQueuer.getQueuerAccounts()){
-				lolAccount.setQueuer(newQueuer);
-				queuerLolAccountRepository.save(lolAccount);
+		// Seting the relationships
+		for(Queuer queuer: clientData.getQueuers()){
+			queuer.setClient(clientData);
+			for(QueuerLolAccount lolacc : queuer.getQueuerLolAccounts()){
+				lolacc.setQueuer(queuer);
 			}
 		}
-		return clientDataRepository.findOne(newData.getId());
+		return clientDataRepository.save(clientData);
 	}
 	
 	@Override
 	@ModifyingTransactionalServiceMethod
 	public ClientData update(ClientData clientData) {
+		// Seting the relationships
+		for(Queuer queuer: clientData.getQueuers()){
+			queuer.setClient(clientData);
+			for(QueuerLolAccount lolacc : queuer.getQueuerLolAccounts()){
+				lolacc.setQueuer(queuer);
+			}
+		}
 		return clientDataRepository.save(clientData);
 	}
 
