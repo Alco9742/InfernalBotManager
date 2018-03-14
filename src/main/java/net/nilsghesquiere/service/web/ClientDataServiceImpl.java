@@ -36,26 +36,32 @@ public class ClientDataServiceImpl implements ClientDataService{
 	@Override
 	@ModifyingTransactionalServiceMethod
 	public ClientData create(ClientData clientData) {
-		// Seting the relationships
+		// Setting the relationships
 		for(Queuer queuer: clientData.getQueuers()){
 			queuer.setClient(clientData);
 			for(QueuerLolAccount lolacc : queuer.getQueuerLolAccounts()){
 				lolacc.setQueuer(queuer);
 			}
 		}
+		// Saving the data
 		return clientDataRepository.save(clientData);
 	}
 	
 	@Override
 	@ModifyingTransactionalServiceMethod
 	public ClientData update(ClientData clientData) {
-		// Seting the relationships
+		// Deleting the current data
+		ClientData dataToDelete = clientDataRepository.findByTagAndUserId(clientData.getTag(), clientData.getUser().getId());
+		clientDataRepository.delete(dataToDelete);
+		// Setting the relationships
 		for(Queuer queuer: clientData.getQueuers()){
 			queuer.setClient(clientData);
 			for(QueuerLolAccount lolacc : queuer.getQueuerLolAccounts()){
 				lolacc.setQueuer(queuer);
 			}
 		}
+		
+		// Saving the data
 		return clientDataRepository.save(clientData);
 	}
 

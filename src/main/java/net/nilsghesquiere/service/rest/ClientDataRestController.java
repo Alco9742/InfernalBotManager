@@ -54,7 +54,6 @@ public class ClientDataRestController {
 	@RequestMapping(path = "/user/{userid}", method = RequestMethod.POST)
 	public ResponseEntity<ClientDataWrapper> createOrUpdate(@PathVariable Long userid, @RequestBody ClientDataMap clientDataMap) {
 		//VARS
-		LOGGER.info("Test");
 		ClientDataWrapper wrapper = new ClientDataWrapper();
 		List<ClientData> returnClientDatas = new ArrayList<>();
 		String error = "";

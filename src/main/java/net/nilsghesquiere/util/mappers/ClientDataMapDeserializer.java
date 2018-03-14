@@ -60,11 +60,9 @@ public class ClientDataMapDeserializer extends JsonDeserializer<ClientDataMap>{
 					final String queuerAccountLpq= queuerAccountNode.get("lpq").asText();
 					QueuerLolAccount lolAccount = new QueuerLolAccount(queuerAccountId,queuerAccountAccount, queuerAccountLevel,queuerAccountMaxLevel,queuerAccountXp,queuerAccountXpCap, queuerAccountBe, queuerAccountChamp, Lane.valueOf(queuerAccountLaneString), queuerAccountLpq);
 					lolAccounts.add(lolAccount);
-					System.out.println(lolAccount);
 				}
 				Queuer queuer = new Queuer(queuerId,queuerQueuer,queuerSoftEnd,queuerAfterGame,queuerPlayedGames,queuerWinGames,queuerDefeatGames,lolAccounts);
 				queuers.add(queuer);
-				System.out.println(queuer);
 			}
 			JsonNode statusNodes = clientNode.get("statusList");;
 			final String clientDateString = clientNode.get("date").asText();
@@ -72,12 +70,6 @@ public class ClientDataMapDeserializer extends JsonDeserializer<ClientDataMap>{
 			final String clientStatus = clientNode.get("status").asText();
 			ClientData clientData = new ClientData(clientId,clientTag,queuers,clientDate,clientStatus);
 			map.add(key, clientData);
-			System.out.println(clientData);
-		}
-		System.out.println(map.getMap().size());
-		for (Entry<String,ClientData> entry : map.getMap().entrySet()){
-			System.out.println(entry.getKey());
-			System.out.println(entry.getValue());
 		}
 		return map;
 	}
