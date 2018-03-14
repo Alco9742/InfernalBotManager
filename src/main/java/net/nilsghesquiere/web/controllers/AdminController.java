@@ -62,7 +62,7 @@ public class AdminController {
 		return new ModelAndView(PANEL_VIEW).addObject("currentUser",currentUser.get());
 	}
 	
-	@RequestMapping(value = "/globalVars", method = RequestMethod.GET)
+	@RequestMapping(value = "/globalvars", method = RequestMethod.GET)
 	ModelAndView globalVars() {
 		Optional<User> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
 		LOGGER.info("Loading Accounts list for user [" + currentUser.get().getEmail() + "].");
