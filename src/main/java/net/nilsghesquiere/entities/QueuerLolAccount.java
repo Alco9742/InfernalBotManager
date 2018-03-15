@@ -34,7 +34,7 @@ public class QueuerLolAccount implements Serializable{
 	private Integer be;
 	private String champ;
 	private Lane lane;
-	private String LPQ;
+	private Boolean lpq;
 	
 	public QueuerLolAccount(){};
 
@@ -52,7 +52,7 @@ public class QueuerLolAccount implements Serializable{
 
 	public QueuerLolAccount(Long id, String account, Integer level,
 			Integer maxLevel, Integer xp, Integer xpCap, Integer be,
-			String champ, Lane lane, String lPQ) {
+			String champ, Lane lane, Boolean lpq) {
 		super();
 		this.id = id;
 		this.account = account;
@@ -63,7 +63,7 @@ public class QueuerLolAccount implements Serializable{
 		this.be = be;
 		this.champ = champ;
 		this.lane = lane;
-		LPQ = lPQ;
+		this.lpq = lpq;
 	}
 	
 }

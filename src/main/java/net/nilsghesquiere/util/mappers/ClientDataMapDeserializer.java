@@ -57,7 +57,7 @@ public class ClientDataMapDeserializer extends JsonDeserializer<ClientDataMap>{
 					final Integer queuerAccountBe = queuerAccountNode.get("be").asInt();
 					final String queuerAccountChamp= queuerAccountNode.get("champ").asText();
 					final String queuerAccountLaneString= queuerAccountNode.get("lane").asText();
-					final String queuerAccountLpq= queuerAccountNode.get("lpq").asText();
+					final Boolean queuerAccountLpq= queuerAccountNode.get("lpq").asBoolean();
 					QueuerLolAccount lolAccount = new QueuerLolAccount(queuerAccountId,queuerAccountAccount, queuerAccountLevel,queuerAccountMaxLevel,queuerAccountXp,queuerAccountXpCap, queuerAccountBe, queuerAccountChamp, Lane.valueOf(queuerAccountLaneString), queuerAccountLpq);
 					lolAccounts.add(lolAccount);
 				}
