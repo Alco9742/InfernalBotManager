@@ -31,6 +31,7 @@ public class Queuer implements Serializable{
 	@JsonIgnore
 	private ClientData client;
 	private String queuer;
+	//This is backwards: False is softEnd enabled
 	private Boolean softEnd;
 	private Integer afterGame;
 	private Integer playedGames;

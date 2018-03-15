@@ -9,7 +9,7 @@
 			queuers.forEach(function(q){
 				var qLine = "<p>";
 				qLine =  qLine + "<b>" + q.queuer + ": </b> " +q.playedGames+"/" + q.winGames + "/" + q. defeatGames + "(P/W/L)";
-				if (q.softEnd == "true"){
+				if (q.softEnd == "false"){
 					qLine = qLine + " - Softend in " + q.afterGame + " games)";
 				}else{
 					qLine = qLine + " - Softend disabled";
