@@ -1,0 +1,124 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready(function() {
+			var editor; // use a global for the submit and return data rendering in the examples
+			//var ajaxBase = {
+			//		dataSrc: "",
+			//		dataType: "json",
+			//		contentType: "application/json; charset=utf-8",
+			//		processData: "false",
+			//		url: "/api/accounts/user/" + /*[[${currentUser.id}]]*/ 
+			//};
+			
+			var restlnk = "/api/admin/globalvars/"
+			
+			editor = new $.fn.dataTable.Editor( {
+					ajax: {
+						create: {
+							type: 'POST',
+							dataType: "json",
+							contentType: "application/json; charset=utf-8",
+							url: restlnk ,
+							data: function ( d ) {
+								return JSON.stringify( d['data'] );
+							}
+						},
+						edit: {
+							type: 'PUT',
+							dataType: "json",
+							contentType: "application/json; charset=utf-8",
+							url: restlnk,
+							data: function ( d ) {
+								return JSON.stringify( d['data'] );
+							}
+						},
+						remove: {
+							type: 'POST',
+							contentType: "application/json; charset=utf-8",
+							dataType: "json",
+							url: restlnk + "delete",
+							data: function ( d ) {
+								return JSON.stringify( d['data'] );
+							}
+						}
+					},
+					table: "#infernalbotmanager-datatable-globalvars",
+					fields: [{
+						label: "ID",
+						name: "id",
+						def: "0",
+						type: 'readonly'
+					},{
+						label: "Name",
+						name: "name"
+					},{
+						label: "Value",
+						name: "value"
+					}],
+					idSrc:'id'
+			} );
+		
+			var table = $('#infernalbotmanager-datatable-globalvars').DataTable( {
+				responsive: true,
+				dom: "Bfrtip",
+				pageLength: 50,
+				ajax:{
+					"url": restlnk ,
+					"dataSrc": "data",
+					"dataType": "json",
+					"cache": false,
+					"contentType": "application/json; charset=utf-8"
+				},
+				columns: [
+				{ data: "id" },
+				{ data: "name"},
+				{ data: "value" },
+
+				],
+				select: true,
+				buttons: [
+				{ extend: "create", editor: editor },
+				{ extend: "edit",   editor: editor },
+				{ extend: "remove", editor: editor },
+				{
+					extend: 'collection',
+					text: 'Export',
+					buttons: [
+						'copy',
+						'excel',
+						'csv',
+						'pdf',
+						'print'
+					]
+				}
+				]
+			} );
+			
+			
+		} );/*]]>*/
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<table id="infernalbotmanager-datatable-globalvars" class="table table-striped table-bordered" width="100%" >
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Name</th>
+								<th>Value</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

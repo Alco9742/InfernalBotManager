@@ -1,0 +1,191 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+			</div>
+			<div class="row">
+				<div class="col-xs-offset-4 col-xs-4">
+					<form action="/" th:object="${settings}" method="POST" enctype="utf8">
+						<div>
+							<label for="settingsGroups">Groups</label>
+							<input id="settingsGroups" th:field="*{groups}"/>
+						</div>
+						<div>
+							<label for="settingsClientPath">Client path</label>
+							<input id="settingsClientPath" th:field="*{clientPath}"/>
+						</div>
+						<div>
+							<label for="settingsClietnVersion">Client version</label>
+							<input id="settingsClientVersion" th:field="*{clientVersion}"/>
+						</div>
+						<div>
+							<label for="settingsTimeSpan">Time between queuers</label>
+							<input id="settingsTimeSpan" th:field="*{timespan}"/>
+						</div>
+						<div>
+							<label for="settingsAutoLogin">Auto login</label>
+							<input id="settingsAutoLogin" th:field="*{autoLogin}"/>
+						</div>
+						<div>
+							<label for="settingsAutoBotStart">Auto bot start</label>
+							<input id="settingsAutoBotStart" th:field="*{autoBotStart}"/>
+						</div>
+						<div>
+							<label for="settingsWildcard">Wildcard</label>
+							<input id="settingsWildcard" th:field="*{wildcard}"/>
+						</div>
+						<div>
+							<label for="settingsMaxLevel">Default max level</label>
+							<input id="settingsMaxLevel" th:field="*{maxLevel}"/>
+						</div>
+						<div>
+							<label for="settingsSleepTime">Default sleep time</label>
+							<input id="settingsSleepTime" th:field="*{sleepTime}"/>
+						</div>
+						<div>
+							<label for="settingsPlayTime">Default play time</label>
+							<input id="settingsPlayTime" th:field="*{playTime}"/>
+						</div>
+						<div>
+							<label for="settingsMaxBe">Default play time</label>
+							<input id="settingsMaxBe" th:field="*{maxBe}"/>
+						</div>
+						<div>
+							<label for="settingsRegione">Default play time</label>
+							<input id="settingsRegion" th:field="*{region}"/>
+						</div>
+						<div>
+							<label for="settingsAktive">Default play time</label>
+							<input id="settingsAktive" th:field="*{aktive}"/>
+						</div>
+						<div>
+							<label for="settingsSurrender">Default play time</label>
+							<input id="settingsSurrender" th:field="*{surrender}"/>
+						</div>
+						<div>
+							<label for="settingsLevelToBeginnerBot">Default play time</label>
+							<input id="settingsLevelToBeginnerBot" th:field="*{levelToBeginnerBot}"/>
+						</div>
+						<div>
+							<label for="settingsClientHide">Default play time</label>
+							<input id="settingsClientHide" th:field="*{clientHide}"/>
+						</div>
+						<div>
+							<label for="settingsLeaderHide">Default play time</label>
+							<input id="settingsLeaderHide" th:field="*{leaderHide}"/>
+						</div>
+						<div>
+							<label for="settingsConsoleHide">Default play time</label>
+							<input id="settingsConsoleHide" th:field="*{consoleHide}"/>
+						</div>
+						<div>
+							<label for="settingsSoftEndDefault">Default play time</label>
+							<input id="settingsSoftEndDefault" th:field="*{softEndDefault}"/>
+						</div>
+						<div>
+							<label for="settingsSoftEndValue">Default play time</label>
+							<input id="settingsSoftEndValue" th:field="*{softEndValue}"/>
+						</div>
+						<div>
+							<label for="settingsQueuerAutoClose">Default play time</label>
+							<input id="settingsQueuerAutoClose" th:field="*{queuerAutoClose}"/>
+						</div>
+						<div>
+							<label for="settignsQueueCloseValue">Default play time</label>
+							<input id="settignsQueueCloseValue" th:field="*{queueCloseValue}"/>
+						</div>
+						<div>
+							<label for="settingsWinReboot">Default play time</label>
+							<input id="settingsWinReboot" th:field="*{winReboot}"/>
+						</div>
+						<div>
+							<label for="settingsWinShutDown">Default play time</label>
+							<input id="settingsWinShutDown" th:field="*{winShutDown}"/>
+						</div>
+						<div>
+							<label for="settingsTimeUntilCheck">Default play time</label>
+							<input id="settingsTimeUntilCheck" th:field="*{timeUntilCheck}"/>
+						</div>
+						<div>
+							<label for="timeUntilReboot">Default play time</label>
+							<input id="timeUntilReboot" th:field="*{timeUntilReboot}"/>
+						</div>
+						<div>
+							<label for="settingsRenderDisable">Default play time</label>
+							<input id="settingsRenderDisable" th:field="*{renderDisable}"/>
+						</div>
+						<div>
+							<label for="settingsCpuBoost">Default play time</label>
+							<input id="settingsCpuBoostt" th:field="*{cpuBoost}"/>
+						</div>
+						<div>
+							<label for="settingsRamManager">Default play time</label>
+							<input id="settingsRamManager" th:field="*{ramManager}"/>
+						</div>
+						<div>
+							<label for="settingsRamMin">Default play time</label>
+							<input id="settingsRamMin" th:field="*{ramMin}"/>
+						</div>
+						<div>
+							<label for="settingsRamMax">Default play time</label>
+							<input id="settingsRamMax" th:field="*{ramMax}"/>
+						</div>
+						<div>
+							<label for="settingsTimeoutLogin">Default play time</label>
+							<input id="settingsTimeoutLogin" th:field="*{timeoutLogin}"/>
+						</div>
+						<div>
+							<label for="settingsTimeoutLobby">Default play time</label>
+							<input id="settingsTimeoutLobby" th:field="*{timeoutLobby}"/>
+						</div>
+						<div>
+							<label for="settingsTimeoutChamp">Default play time</label>
+							<input id="settingsTimeoutChamp" th:field="*{timeoutChamp}"/>
+						</div>
+						<div>
+							<label for="settingsTimeoutMastery">Default play time</label>
+							<input id="settingsTimeoutMastery" th:field="*{timeoutMaster}"/>
+						</div>
+						<div>
+							<label for="settingsTimeoutLoadGame">Default play time</label>
+							<input id="settingsTimeoutLoadGame" th:field="*{timeoutLoadGame}"/>
+						</div>
+						<div>
+							<label for="settingsTimeoutInGame">Default play time</label>
+							<input id="settingsTimeoutInGame" th:field="*{timeoutInGame}"/>
+						</div>
+						<div>
+							<label for="settingsTimeoutInGameFF">Default play time</label>
+							<input id="settingsTimeoutInGameFF" th:field="*{timeoutInGameFF}"/>
+						</div>
+						<div>
+							<label for="settingsTimeoutEndOfGame">Default play time</label>
+							<input id="settingsTimeoutEndOfGame" th:field="*{timeoutEndOfGame}"/>
+						</div>
+						<div>
+							<label for="settingsOpenChest">Default play time</label>
+							<input id="settingsOpenChest" th:field="*{openChest}"/>
+						</div>
+						<div>
+							<label for="settingsOpenHexTech">Default play time</label>
+							<input id="settingsOpenHexTech" th:field="*{openHexTech}"/>
+						</div>
+						<div>
+							<label for="settingsDisChest">Default play time</label>
+							<input id="settingsDisChest" th:field="*{disChest}"/>
+						</div>
+						<div>
+							<label for="settingsPrio">Default play time</label>
+							<input id="settingsPrio" th:field="*{prio}"/>
+						</div>
+						<button type="submit">Submit</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

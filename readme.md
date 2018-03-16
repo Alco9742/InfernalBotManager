@@ -4,12 +4,9 @@
 <ul>
 <li>Test anything registration & email related</li>
 <li>Complete spring security with REST (http://www.baeldung.com/security-spring)</li>
-<li><del>Change Account entity to better match the entity in Infernalbot</del></li>
 <li>Change settings entity on server to exclude data that doesn't need transfering, keep this in the client instead</li>
-<li>Client entity that keeps track of running instances - All layers</li>
-<li>Autoupdater for client</li>
-<li>Temp frontend: botostrap and basic js/jquery </li>
-<li> Contraint on Account/Server : OK for new account, TODO: check at updateAccounts</li>
+<li>Temp frontend: bootstrap and basic js/jquery </li>
+<li>Update page for InfernalSettings
 </ul>
 
 <h3>TODO DURING BETA:</h3>	
