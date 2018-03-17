@@ -39,6 +39,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping("/infernalsettings")
 public class InfernalSettingsController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InfernalSettingsController.class);
 	private static final String VIEW = "infernalsettings/main";
