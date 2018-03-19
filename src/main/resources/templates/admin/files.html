@@ -3,12 +3,11 @@
 		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
 	</head>
 	<body>
+		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+		<br/>
 		<div class="container">
-			<div class="row">
-				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
-			</div>
 			<div class="row" th:if="${message}">
-				<h2 th:text="${message}"/>
+				<h2 th:text="${message}"></h2>
 			s</div>
 			<div class="row">
 			<form th:action="@{'/admin/files/'}" method="POST" enctype="multipart/form-data" action="/">
@@ -21,7 +20,7 @@
 			<div class="row">
 			<ul>
 				<li th:each="file : ${files}">
-					<a th:href="${file}" th:text="${file}" />
+					<a th:href="${file}" th:text="${file}"></a>
 				</li>
 			</ul>
 			</div>

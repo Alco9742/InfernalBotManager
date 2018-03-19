@@ -1,0 +1,359 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+	</head>
+	<body>
+		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+		<br />
+		<div class="container">
+			<form th:action="@{/infernalsettings}" th:object="${settings}" method="POST" enctype="utf8">
+				<div class ="form-group row">
+					<label for="settingsGroups" class="col-sm-2 col-form-label">Groups</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="99" class="form-control" id="settingsGroups" th:field="*{groups}"/>
+					</div>
+				</div>
+				<div class ="form-group row" >
+					<label for="settingsClientPath" class="col-sm-2 col-form-label">Client Path</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="settingsClientPath" th:field="*{clientPath}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsClientVersion" class="col-sm-2 col-form-label">Client Version</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:errorclass="form-control-danger" id="settingsClientVersion" th:field="*{clientVersion}"/>
+						<div th:if="${#fields.hasErrors('clientVersion')}" class="form-control-feedback" th:errors="*{clientVersion}">Incorrect Client Version</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsTimeSpan" class="col-sm-2 col-form-label">Time Between Queuers</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="999" class="form-control" id="settingsTimeSpan" th:field="*{timeSpan}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsAutoLogin" class="col-sm-2 col-form-label">Auto Login</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsAutoLogin" th:field="*{autoLogin}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsAutoBotStart" class="col-sm-2 col-form-label">Auto Bot Start</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsAutoBotStart" th:field="*{autoBotStart}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsWildcard" class="col-sm-2 col-form-label">Wildcard</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="settingsWildcard" th:field="*{wildcard}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsMaxLevel" class="col-sm-2 col-form-label">Default Max Level</label>
+					<div class="col-sm-10">
+						<input type="number" min="0" max="99" class="form-control" id="settingsMaxLevel" th:field="*{maxLevel}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsSleepTime" class="col-sm-2 col-form-label">Default Sleep Time</label>
+					<div class="col-sm-10">
+						<input type="number" min="0" max="24" class="form-control" id="settingsSleepTime" th:field="*{sleepTime}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsPlayTime" class="col-sm-2 col-form-label">Default Play Time</label>
+					<div class="col-sm-10">
+						<input type="number" min="0" max="24" class="form-control" id="settingsPlayTime" th:field="*{playTime}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsMaxBe" class="col-sm-2 col-form-label">Default Max BE</label>
+					<div class="col-sm-10">
+						<input type="number" min="0" max="999999" class="form-control" id="settingsMaxBe" th:field="*{maxBe}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsRegione" class="col-sm-2 col-form-label">Default Region</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsRegion" th:field="*{region}">
+							<option value="EUW">EUW</option>
+							<option value="NA">NA</option>
+							<option value="EUNE">EUNE</option>
+							<option value="BR">BR</option>
+							<option value="LAN">LAN</option>
+							<option value="LAS">LAS</option>
+							<option value="OCE">OCE</option>
+							<option value="RU">RU</option>
+							<option value="TR">TR</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsAktive" class="col-sm-2 col-form-label">Default Active</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsAktive" th:field="*{aktive}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsSurrender" class="col-sm-2 col-form-label">Surrender</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsSurrender" th:field="*{surrender}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsLevelToBeginnerBot" class="col-sm-2 col-form-label">Medium Bots From Level</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="99" class="form-control"  id="settingsLevelToBeginnerBot" th:field="*{levelToBeginnerBot}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsClientHide" class="col-sm-2 col-form-label">Client Hide</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsClientHide" th:field="*{clientHide}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsLeaderHide" class="col-sm-2 col-form-label">Leader Client Hide</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsLeaderHide" th:field="*{leaderHide}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsConsoleHide" class="col-sm-2 col-form-label">Console hide</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsConsoleHide" th:field="*{consoleHide}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsSoftEndDefault" class="col-sm-2 col-form-label">Queuer Safestop</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsSoftEndDefault" th:field="*{softEndDefault}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsSoftEndValue" class="col-sm-2 col-form-label">Safestop After x Games</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="999" class="form-control" id="settingsSoftEndValue" th:field="*{softEndValue}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsQueuerAutoClose" class="col-sm-2 col-form-label">Queuer Autorestart</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsQueuerAutoClose" th:field="*{queuerAutoClose}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsQueueCloseValue" class="col-sm-2 col-form-label">Autorestart After x Games</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="999" class="form-control" id="settingsQueueCloseValue" th:field="*{queueCloseValue}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsWinReboot" class="col-sm-2 col-form-label">Windows Reboot After Safestop</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsWinReboot" th:field="*{winReboot}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsWinShutDown" class="col-sm-2 col-form-label">Windows Shutdown After Safestop</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsWinShutDown" th:field="*{winShutdown}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsTimeUntilCheck" class="col-sm-2 col-form-label">Windows Reboot After Time</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsTimeUntilCheck" th:field="*{timeUntilCheck}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="timeUntilReboot" class="col-sm-2 col-form-label">Windows Reboot Timer</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="timeUntilReboot" th:field="*{timeUntilReboot}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsRenderDisable" class="col-sm-2 col-form-label">Render Disable</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsRenderDisable" th:field="*{renderDisable}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsLeaderRenderDisable" class="col-sm-2 col-form-label">Leader Render Disable</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsLeaderRenderDisable" th:field="*{leaderRenderDisable}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsCpuBoost" class="col-sm-2 col-form-label">CPU Boost</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsCpuBoost" th:field="*{cpuBoost}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsLeaderCpuBoost" class="col-sm-2 col-form-label">Leader CPU Boost</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsLeaderCpuBoost" th:field="*{leaderCpuBoost}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsRamManager" class="col-sm-2 col-form-label">RAM Manager</label>
+					<div class="col-sm-10">	
+						<select class="form-control" id="settingsRamManager" th:field="*{ramManager}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsRamMin" class="col-sm-2 col-form-label">RAM Minimum</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="1024" class="form-control" id="settingsRamMin" th:field="*{ramMin}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsRamMax" class="col-sm-2 col-form-label">RAM Maximum</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="1024" class="form-control" id="settingsRamMax" th:field="*{ramMax}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsTimeoutLogin" class="col-sm-2 col-form-label">Login Timeout</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="99" class="form-control"  id="settingsTimeoutLogin" th:field="*{timeoutLogin}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsTimeoutLobby" class="col-sm-2 col-form-label">Lobby Timeout</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="99" class="form-control" id="settingsTimeoutLobby" th:field="*{timeoutLobby}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsTimeoutChamp" class="col-sm-2 col-form-label">Champion Select Timeout</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="99" class="form-control" id="settingsTimeoutChamp" th:field="*{timeoutChamp}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsTimeoutMastery" class="col-sm-2 col-form-label">Mastery Select Timeout</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="99" class="form-control" id="settingsTimeoutMastery" th:field="*{timeoutMastery}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsTimeoutLoadGame" class="col-sm-2 col-form-label">Load Game Timeout</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="99" class="form-control" id="settingsTimeoutLoadGame" th:field="*{timeoutLoadGame}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsTimeoutInGame" class="col-sm-2 col-form-label">In Game Timeout</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="99" class="form-control" id="settingsTimeoutInGame" th:field="*{timeoutInGame}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsTimeoutInGameFF" class="col-sm-2 col-form-label">In Game Timeout (FF)</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="99" class="form-control" id="settingsTimeoutInGameFF" th:field="*{timeoutInGameFF}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsTimeoutEndOfGame" class="col-sm-2 col-form-label">End Of Game Timeout</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="99" class="form-control" id="settingsTimeoutEndOfGame" th:field="*{timeoutEndOfGame}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsOpenChest" class="col-sm-2 col-form-label">Open Chest</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsOpenChest" th:field="*{openChest}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsOpenHexTech" class="col-sm-2 col-form-label">Open Hextech</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsOpenHexTech" th:field="*{openHexTech}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsDisChest" class="col-sm-2 col-form-label">Disenchant</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="settingsDisChest" th:field="*{disChest}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsPrio" class="col-sm-2 col-form-label">Priority</label>
+					<div class="col-sm-10">
+						<input type="number" min="1" max="9" class="form-control" id="settingsPrio" th:field="*{prio}"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<div class="col-sm-10">
+						<button type="submit" class ="btn btn-primary">Submit</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

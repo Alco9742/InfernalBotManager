@@ -6,12 +6,8 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 import net.nilsghesquiere.entities.InfernalSettings;
-import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.util.enums.Region;
-import net.nilsghesquiere.validation.PasswordMatches;
-import net.nilsghesquiere.validation.ValidEmail;
 
-import org.apache.coyote.http2.Setting;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Data
@@ -19,7 +15,6 @@ public class InfernalSettingsDTO implements Serializable{
 	static final long serialVersionUID = 1L;
 	//SystemSettings 
 	@NotNull
-	@NotEmpty
 	private Integer groups;
 	@NotNull
 	@NotEmpty
@@ -46,7 +41,6 @@ public class InfernalSettingsDTO implements Serializable{
 	@NotNull
 	private Integer maxBe;
 	@NotNull
-	@NotEmpty
 	private Region region;
 	@NotNull
 	private Boolean aktive;

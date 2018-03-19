@@ -4,9 +4,8 @@
 <ul>
 <li>Test anything registration & email related</li>
 <li>Complete spring security with REST (http://www.baeldung.com/security-spring)</li>
-<li>Change settings entity on server to exclude data that doesn't need transfering, keep this in the client instead</li>
 <li>Temp frontend: bootstrap and basic js/jquery </li>
-<li>Update page for InfernalSettings
+<li>Update page for InfernalSettings</li>
 </ul>
 
 <h3>TODO DURING BETA:</h3>	

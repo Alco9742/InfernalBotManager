@@ -3,21 +3,21 @@
 		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
 	</head>
 	<body>
+		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+		<br/>
 		<div class="container">
 			<div class="row">
-				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+				<div class="col-6 offset-3">
+				<p th:text="${'Admin Panel' + currentUser.email}" class="text-center">Admin Panel</p>
+				</div>
 			</div>
 			<div class="row">
-				<h1 th:text="${'Admin Panel'}" class="text-center">Admin Panel</h1>
-				<p th:text="${currentUser.email}" class="text-center">User</p>
-			</div>
-			<div class="row">
-				<div class="col-xs-10 col-xs-offset-1">
+				<div class="col-6 offset-3">
 					<a th:href="@{'/admin/globalvars/'}" class="btn btn-default btn-lg btn-block">Global Variables</a>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-10 col-xs-offset-1">
+				<div class="col-6 offset-3">
 					<a th:href="@{'/admin/files/'}" class="btn btn-default btn-lg btn-block">Files</a>
 				</div>
 			</div>

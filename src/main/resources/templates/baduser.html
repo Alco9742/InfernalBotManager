@@ -21,14 +21,11 @@
 	</script>
 	</head>
 	<body>
+		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
 		<div class="container">
-			<div class="row">
-				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
-			</div>
-			<div class="row">
-				<div class="col-xs-offset-2 col-xs-8">
+			<div class="d-flex justify-content-center">
+				<div class="offset-2 col-8">
 					<h1 th:text="${param.message[0]}">Error</h1>
-					<a th:href="@{/register}">Signup</a>
 					<div th:if="${param.expired[0]}">
 						<h3>Authentication token expire</h3>
 						<button onclick="resendToken()">Resend</button>

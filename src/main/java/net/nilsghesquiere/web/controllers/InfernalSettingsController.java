@@ -30,6 +30,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/infernalsettings")
@@ -53,11 +55,14 @@ public class InfernalSettingsController {
 	public ModelAndView view(){
 		InfernalSettings settings = infernalSettingsService.getByUserId(authenticationFacade.getAuthenticatedUser().getId());
 		InfernalSettingsDTO dto = new InfernalSettingsDTO(settings);
-		return new ModelAndView().addObject("settings",dto);
+		return new ModelAndView(VIEW).addObject("settings",dto);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public String edit(@ModelAttribute("settings") @Valid InfernalSettingsDTO settingsDTO, HttpServletRequest request) {
+	public String edit(@ModelAttribute("settings") @Valid InfernalSettingsDTO settingsDTO,BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			return VIEW;
+		}
 		InfernalSettings oldSettings = infernalSettingsService.getByUserId(authenticationFacade.getAuthenticatedUser().getId());
 		InfernalSettings newSettings = new InfernalSettings(settingsDTO);
 		newSettings.setUser(oldSettings.getUser());
@@ -67,7 +72,7 @@ public class InfernalSettingsController {
 		newSettings.setLolHeight(oldSettings.getLolHeight());
 		newSettings.setLolWidth(oldSettings.getLolWidth());
 		infernalSettingsService.update(newSettings);
-		return "redirect:/register/success";
+		return "redirect:/infernalsettings";
 	}
 
 }
