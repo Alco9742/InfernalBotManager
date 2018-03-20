@@ -8,17 +8,18 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-6 offset-3">
-				<p th:text="${'Admin Panel' + currentUser.email}" class="text-center">Admin Panel</p>
+				<p th:text="${'Admin Panel [' + currentUser.email + ']'}" class="text-center">Admin Panel</p>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-6 offset-3">
-					<a th:href="@{'/admin/globalvars/'}" class="btn btn-default btn-lg btn-block">Global Variables</a>
+					<a th:href="@{'/admin/globalvars/'}" class="btn btn-secondary btn-block">Global Variables</a>
 				</div>
 			</div>
+			<br />
 			<div class="row">
 				<div class="col-6 offset-3">
-					<a th:href="@{'/admin/files/'}" class="btn btn-default btn-lg btn-block">Files</a>
+					<a th:href="@{'/admin/files/'}" class="btn btn-secondary btn-block">Files</a>
 				</div>
 			</div>
 		</div>

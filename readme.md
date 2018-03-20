@@ -5,7 +5,6 @@
 <li>Test anything registration & email related</li>
 <li>Complete spring security with REST (http://www.baeldung.com/security-spring)</li>
 <li>Temp frontend: bootstrap and basic js/jquery </li>
-<li>Update page for InfernalSettings</li>
 </ul>
 
 <h3>TODO DURING BETA:</h3>	
