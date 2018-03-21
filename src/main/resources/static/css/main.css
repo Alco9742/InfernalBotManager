@@ -6,3 +6,8 @@ td.details-control {
 tr.details td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
+
+.no-gutter > [class*='col-'] {
+    padding-right:0;
+    padding-left:0;
+}

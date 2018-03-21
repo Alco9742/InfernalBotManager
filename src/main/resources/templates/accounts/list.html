@@ -72,15 +72,6 @@
 						type: "hidden",
 						def: "0"
 					},{
-						label: "Active:",
-						name: "active",
-						type: "checkbox",
-						options: [
-							{ label: "", value: true }
-						],
-						separator: '',
-						unselectedValue: false
-					},{
 						label: "Account",
 						name: "account"
 					},{
@@ -160,6 +151,15 @@
 						label: "Info",
 						name: "info",
 						def: "No extra info"
+					},{
+						label: "Active:",
+						name: "active",
+						type: "checkbox",
+						options: [
+							{ label: "", value: true }
+						],
+						separator: '',
+						unselectedValue: false
 					}],
 					idSrc:'id'
 			} );
@@ -168,7 +168,11 @@
 				language: { search: "" },
 				lengthChange: false,
 				responsive: true,
-				dom: "<'row'<'col-9'B><'col-3 float-right'f>>rtip",
+				stateSave: true,
+				//"scrollX": true,
+				//dom: "<'row '<'col-12 col-sm-10 col-md-10 col-lg-9'B><'col-12 col-sm-3 col-md-2 col-lg-3 float-right'f>>rtip",
+				//dom: "<'row '<'col-12 col-sm-9'B><'col-12 col-sm-3'f>>rtip",
+				dom: "<'row 'Bf>rtip",
 				pageLength: 50,
 				ajax:{
 					"url": "/api/accounts/user/" + /*[[${currentUser.id}]]*/ ,
@@ -179,7 +183,6 @@
 				},
 				columns: [
 				{ data: "id" },
-				{ data: "active"},
 				{ data: "account" },
 				{ data: "password" },
 				{ data: "summoner" },
@@ -194,17 +197,17 @@
 				{ data: "sleepTime" },
 				{ data: "accountStatus" },
 				{ data: "assignedTo" },
-				{ data: "info" }
-
+				{ data: "info" },
+				{ data: "active"}
 				],
 				columnDefs: [
-				{ targets: [0,4,7,8,9,10,11,12,13,15,16], visible: false}
+				{ targets: [0,3,6,7,8,9,10,11,12,14,15], visible: false}
 				],
 				buttons: [
-				{ extend: "create", editor: editor },
-				{ extend: "edit",   editor: editor },
-				{ extend: "remove", editor: editor },
-				{ extend: "colvis", editor: editor },
+				{ extend: "colvis", editor: editor, className: 'col-sm-6 col-lg-3'},
+				{ extend: "create", editor: editor, className: 'col-md-2 col-lg-1 d-none d-md-block' },
+				{ extend: "edit",   editor: editor, className: 'col-md 2 col-lg-1 d-none d-md-block' },
+				{ extend: "remove", editor: editor, className: 'col-md-2 col-lg-1 d-none d-md-block' },
 				{
 					extend: 'collection',
 					text: 'Export',
@@ -214,14 +217,16 @@
 						'csv',
 						'pdf',
 						'print'
-					]
+					],
+					className: 'col-lg-2 d-none d-lg-block'
 				},
 				{ 	extend: 'collection',
 					text: 'Import',
 					buttons: [
 						{ text: 'Select File',   action: function () {$("#filedialog").click();} },
 						{ extend: "uploadfile", editor: editor }
-					]
+					],
+					className: 'col-lg-2 d-none d-lg-block'
 				},
 				{	text: 'Reset Status',
 					action: function (e, dt, node, config) {
@@ -244,43 +249,55 @@
 								location.reload();
 							}
 						});
-					}
+					},
+					className: 'col-sm-6 col-md-3 col-lg-2'
 				}
 				],
 				select: true
 			} );
 			
-			table.buttons().container()
-				.appendTo( $('.col-md-6:eq(0)', table.table().container() ) );
+			//add cols to button wrapper
+			$('div.dt-buttons').first().addClass(" col-12 col-sm-7 col-md-8 col-lg-9");
+			
+			//add cols and row class to the filter wrapper
+			$('div.dataTables_filter').first().addClass("col-12 col-sm-5 col-md-4 col-lg-3");
+			
+			//add cols class to the filter label
+			$('div.dataTables_filter label').addClass("float-sm-right");
+			
+			//add cols class to the filter input
+			$('div.dataTables_filter label input').addClass("col-12").removeClass("form-control-sm");
 		} );/*]]>*/
 		</script>
 	</head>
 	<body>
 		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
-		<br/>
-		<table id="infernalbotmanager-datatable-accounts" class="table table-striped table-bordered" style="width:100%">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Active</th>
-					<th>Account</th>
-					<th>Password</th>
-					<th>Summoner</th>
-					<th>Region</th>
-					<th>Level</th>
-					<th>M. Lvl</th>
-					<th>XP</th>
-					<th>BE</th>
-					<th>M. BE</th>
-					<th>Priority</th>
-					<th>Playtime</th>
-					<th>Sleeptime</th>
-					<th>Account Status</th>
-					<th>Assigned To</th>
-					<th>Info</th>
-				</tr>
-			</thead>
-		</table>
-		<input id="filedialog" type="file" name ="filedialog" accept="text/plain" style="display:none"/>
+		<div class="container-fluid">
+			<br/>
+			<table id="infernalbotmanager-datatable-accounts" class="table table-striped table-bordered" style="width:100%">
+				<thead>
+					<tr>
+						<th data-priority="9">ID</th>
+						<th data-priority="1" class="all">Account</th>
+						<th data-priority="3">Password</th>
+						<th data-priority="8">Summoner</th>
+						<th data-priority="1">Region</th>
+						<th data-priority="1" class="all">Level</th>
+						<th data-priority="7">M. Lvl</th>
+						<th data-priority="8">XP</th>
+						<th data-priority="8">BE</th>
+						<th data-priority="9">M. BE</th>
+						<th data-priority="8">Priority</th>
+						<th data-priority="9">Playtime</th>
+						<th data-priority="9">Sleeptime</th>
+						<th data-priority="1" class="all">Account Status</th>
+						<th data-priority="8">Assigned To</th>
+						<th data-priority="9">Info</th>
+						<th data-priority="2">Active</th>
+					</tr>
+				</thead>
+			</table>
+			<input id="filedialog" type="file" name ="filedialog" accept="text/plain" style="display:none"/>
+		</div>
 	</body>
 </html>
