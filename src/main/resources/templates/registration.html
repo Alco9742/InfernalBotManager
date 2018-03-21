@@ -6,20 +6,38 @@
 		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
 		<div class="container">
 			<div class="row">
-				<div class="offset-4 col-4">
-					<h1>Register</h1>
-						<form name="register" action="/" method="POST" enctype="utf8">
-							<label for="email">Email</label>
-							<input name="email" id="email" value=""/>
-							<label for="password">Password</label>
-							<input name="password" id="password" type="password"/>
-							<span id = "passwordError" style="display:none"></span>
-							<label for="matchingPassword">Confirm password</label>
-							<input name="matchingPassword" id="matchingPassword" type="password"/>
-							<span id = "globalError" style="display:none"></span>
-							<button type="submit" class="btn btn-primary">Submit</button>
-						</form>
-						<a th:href="@{/login}">Login</a>
+				<h1 class = "offset-2 col-8" >Register</h1>
+			</div>
+			<form name="register" action="/" method="post" enctype="utf8">
+				<div class ="form-group row">
+					<label for="username" class="offset-2 col-2 col-form-label">Email:</label>
+					<div class="col-6">
+						<input type="text" class="form-control" id="email" name="email" autofocus="autofocus"/>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="password" class="offset-2 col-2 col-form-label">Password:</label>
+					<div class="col-6">
+						<input type="password" class="form-control" id="password" name="password" autofocus="autofocus"/>
+						<span id = "passwordError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="password" class="offset-2 col-2 col-form-label">Confirm password:</label>
+					<div class="col-6">
+						<input type="password" class="form-control" id="matchingPassword" name="matchingPassword" autofocus="autofocus"/>
+						<span id = "globalError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<div class="offset-2 col-8">
+						<button type="submit" class ="btn btn-primary btn-block">Register</button>
+					</div>
+				</div>
+			</form>
+			<div class="row">
+				<div class = "offset-2 col-8">
+					<a class="btn btn-secondary btn-block" th:href="@{/login.html}">Log in</a>
 				</div>
 			</div>
 		</div>

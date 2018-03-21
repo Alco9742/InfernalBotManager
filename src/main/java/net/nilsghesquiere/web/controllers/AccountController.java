@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/accounts")
-@PreAuthorize("hasAnyAuthority('appadmin','basicuser')")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
 public class AccountController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 	private static final String LIST_VIEW = "accounts/list";

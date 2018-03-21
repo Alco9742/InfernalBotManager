@@ -1,11 +1,12 @@
 package net.nilsghesquiere.configuration;
 
-import net.nilsghesquiere.util.enums.UserType;
+import net.nilsghesquiere.security.CustomAuthenticationProvider;
+import net.nilsghesquiere.util.enums.RoleEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
-@Order(2)
+@ComponentScan("net.nilsghesquiere.security")
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
@@ -60,10 +61,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.csrf()
 				.disable()
 			.authorizeRequests()
+				.antMatchers("/test/**").permitAll()
 				.antMatchers("/admin/files/**").permitAll()
-				.antMatchers("/admin/**").hasAuthority(UserType.ADMIN.getName())
-				.antMatchers("/account/**").hasAnyAuthority(UserType.ADMIN.getName(),UserType.USER.getName())
-				.antMatchers("/clients/**").hasAnyAuthority(UserType.ADMIN.getName(),UserType.USER.getName())
+				.antMatchers("/admin/**").hasRole(RoleEnum.ADMIN.getName())
+				.antMatchers("/account/**").hasAnyRole(RoleEnum.ADMIN.getName(),RoleEnum.USER.getName(),RoleEnum.PAID_USER.getName())
+				.antMatchers("/clients/**").hasAnyRole(RoleEnum.ADMIN.getName(),RoleEnum.USER.getName(),RoleEnum.PAID_USER.getName())
 				.antMatchers("/user/updatePassword*", "/user/savePassword*","/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
 				.antMatchers("/login*").permitAll()
 				.antMatchers("/logout*").permitAll()

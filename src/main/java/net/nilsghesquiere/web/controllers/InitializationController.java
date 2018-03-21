@@ -11,7 +11,7 @@ import net.nilsghesquiere.service.web.LolAccountService;
 import net.nilsghesquiere.service.web.RoleService;
 import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.enums.Region;
-import net.nilsghesquiere.util.enums.UserType;
+import net.nilsghesquiere.util.enums.RoleEnum;
 import net.nilsghesquiere.web.dto.UserDTO;
 
 import org.slf4j.Logger;
@@ -41,16 +41,19 @@ public class InitializationController {
 	public String init() {
 		if (roleService.findAll().size() == 0 ){
 			//create the roles and commit to DB
-			Role userRole = new Role(UserType.USER.getName());
-			Role adminRole = new Role(UserType.ADMIN.getName());
-			roleService.create(userRole);
+			Role freeUserRole = new Role(RoleEnum.USER.getName());
+			Role paidUserRole = new Role(RoleEnum.PAID_USER.getName());
+			Role adminRole = new Role(RoleEnum.ADMIN.getName());
+			roleService.create(freeUserRole);
+			roleService.create(paidUserRole);
 			roleService.create(adminRole);
 			
 			//creat userand account and commit to DB
 			UserDTO userDTO = new UserDTO("ghesquiere.nils@gmail.com", "Syntra1234");
 			User user = userService.registerNewUserAccount(userDTO);
 			List<Role> roles = new  ArrayList<>();
-			roles.add(userRole);
+			roles.add(freeUserRole);
+			roles.add(paidUserRole);
 			roles.add(adminRole);
 			user.setEnabled(true);
 			user.setRoles(roles);

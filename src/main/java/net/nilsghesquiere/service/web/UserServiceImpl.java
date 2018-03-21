@@ -16,7 +16,7 @@ import net.nilsghesquiere.persistence.dao.RoleRepository;
 import net.nilsghesquiere.persistence.dao.UserRepository;
 import net.nilsghesquiere.persistence.dao.VerificationTokenRepository;
 import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
-import net.nilsghesquiere.util.enums.UserType;
+import net.nilsghesquiere.util.enums.RoleEnum;
 import net.nilsghesquiere.web.dto.UserDTO;
 import net.nilsghesquiere.web.error.EmailExistsException;
 
@@ -110,10 +110,12 @@ public class UserServiceImpl implements UserService{
 			throw new EmailExistsException("There is already an account with that email adress: "+ userDTO.getEmail());
 		}
 		User user = new User();
+		
 		user.setEmail(userDTO.getEmail());
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-		user.setRoles(Arrays.asList(roleRepository.findByName(UserType.USER.getName())));
+		user.setRoles(Arrays.asList(roleRepository.findByName(RoleEnum.USER.getName())));
 		User returnUser = userRepository.save(user);
+		
 		InfernalSettings inferalSettings = infernalSettingsService.create(new InfernalSettings(returnUser));
 		user.setInfernalSettings(inferalSettings);
 		return returnUser;

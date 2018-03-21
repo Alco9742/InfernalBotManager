@@ -42,6 +42,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/infernalsettings")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
 public class InfernalSettingsController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InfernalSettingsController.class);
 	private static final String VIEW = "infernalsettings/main";

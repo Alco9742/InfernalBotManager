@@ -3,28 +3,10 @@
 		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
 	</head>
 	<body>
+		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
 		<div class="container">
 			<div class="row">
-				<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
-			</div>
-			<div class="row">
-				<h1 th:text="${'Test Panel [' +  currentUser.username + ']'}" class="text-center">Test Panel</h1>
-			</div>
-			<div class="row">
-				<h2>General tests</h2>
-			<div class="row">
-				<div class="col-10 offset-1">
-					<a th:href="@{'/test/rates'}" class="btn btn-default btn-lg btn-block">Rates</a>
-				</div>
-			</div>
-			</div>
-			<div class="row">
-				<h2>Summoner tests</h2>
-			</div>
-			<div class="row">
-				<div class="col-10 col-offset-1">
-					<a th:href="@{'/test/summoner'}" class="btn btn-default btn-lg btn-block">Summoner</a>
-				</div>
+				<h1>Test page</h1>
 			</div>
 		</div>
 	</body>

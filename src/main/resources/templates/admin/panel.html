@@ -1,4 +1,4 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<head>
 		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
 	</head>
@@ -8,8 +8,15 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-6 offset-3">
-				<p th:text="${'Admin Panel [' + currentUser.email + ']'}" class="text-center">Admin Panel</p>
+					<p th:text="${'Admin Panel}" class="text-center">Admin Panel</p>
 				</div>
+			</div>
+			<div class="row">
+				<sec:authorize access="isAuthenticated()">
+					<div class="col-6 offset-3">
+						<p> authenticated as <sec:authentication property="principal.username" /></p>
+					</div>
+				</sec:authorize>
 			</div>
 			<div class="row">
 				<div class="col-6 offset-3">

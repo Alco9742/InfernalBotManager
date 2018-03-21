@@ -2,6 +2,7 @@ package net.nilsghesquiere.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -39,10 +40,10 @@ public class User implements Serializable{
 	private boolean enabled;
 	@ManyToMany
 	@JoinTable(
-			name="userroles",
+			name="users_roles",
 			joinColumns=@JoinColumn(name="userid", referencedColumnName="id"),
 			inverseJoinColumns=@JoinColumn(name="roleid", referencedColumnName="id"))
-	private List<Role> roles;
+	private Collection<Role> roles;
 	@OneToMany(mappedBy="user",cascade=CascadeType.REMOVE,fetch = FetchType.LAZY)
 	@OrderBy("id")
 	@JsonIgnore
@@ -60,7 +61,7 @@ public class User implements Serializable{
 		this.enabled = false;
 	}
 	
-	public User(String email, String password, List<Role> roles, boolean enabled) {
+	public User(String email, String password, Collection<Role> roles, boolean enabled) {
 		super();
 		this.email = email;
 		this.password = password;
@@ -69,7 +70,7 @@ public class User implements Serializable{
 		this.lolAccounts = new ArrayList<>();
 	}
 	
-	public User(String email,String username, String password, List<Role> roles) {
+	public User(String email,String username, String password, Collection<Role> roles) {
 		super();
 		this.email = email;
 		this.password = password;
@@ -112,6 +113,4 @@ public class User implements Serializable{
 				+ ", roles=" + roles + " + #LolAccounts=" + lolAccounts.size() + "]";
 	}
 
-	
-	
 }

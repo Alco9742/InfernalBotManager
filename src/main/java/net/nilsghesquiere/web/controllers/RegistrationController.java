@@ -149,7 +149,7 @@ public class RegistrationController {
 		//	throw new InvalidOldPasswordException();
 		//}
 		userService.changeUserPassword(user, password);
-		return new GenericResponse("Succesfully upadted password");
+		return new GenericResponse("Succesfully updated password");
 	}
 	
 	//PRIVATE METHODS

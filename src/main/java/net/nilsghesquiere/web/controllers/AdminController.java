@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,6 +34,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 	private static final String PANEL_VIEW = "admin/panel";
@@ -59,14 +61,14 @@ public class AdminController {
 	ModelAndView panel() {
 		Optional<User> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
 		LOGGER.info("Loading admin panel for " + currentUser.get().getEmail());
-		return new ModelAndView(PANEL_VIEW).addObject("currentUser",currentUser.get());
+		return new ModelAndView(PANEL_VIEW).addObject("currentUser");
 	}
 	
 	@RequestMapping(value = "/globalvars", method = RequestMethod.GET)
 	ModelAndView globalVars() {
 		Optional<User> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
 		LOGGER.info("Loading Accounts list for user [" + currentUser.get().getEmail() + "].");
-		return new ModelAndView(GLOBAL_VARS_VIEW).addObject("currentUser", currentUser.get());
+		return new ModelAndView(GLOBAL_VARS_VIEW).addObject("currentUser");
 		}
 	
 	//Everything below is copied straight from a spring tutorial
