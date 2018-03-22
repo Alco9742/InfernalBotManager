@@ -1,7 +1,9 @@
 package net.nilsghesquiere.service.rest;
 
+import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
+import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +29,13 @@ public class UserRestController {
 	@RequestMapping(path = "/username/{username:.+}", method = RequestMethod.GET)
 	public ResponseEntity<Long> findByUserName(@PathVariable String username) {
 		//PROCESSING
-		Long userId = userService.findUserByEmail(username).getId();
-		//test
-		LOGGER.info(authenticationFacade.getAuthenticatedUser().toString());
+		User user = userService.findUserByEmail(username);
+		//Authenticated user check
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
 		//RETURN
-		return new ResponseEntity<Long>(userId, HttpStatus.OK);
+		return new ResponseEntity<Long>(user.getId(), HttpStatus.OK);
 	}
 	
 }

@@ -1,5 +1,6 @@
 package net.nilsghesquiere.service.rest;
 
+import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 import net.nilsghesquiere.web.error.UserNotFoundException;
 import net.nilsghesquiere.web.util.GenericResponse;
 
@@ -31,6 +32,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	public ResponseEntity<Object> handleUserNotFound(RuntimeException ex, WebRequest request) {
 		LOGGER.error("404 Status Code", ex);
 		GenericResponse bodyOfResponse = new GenericResponse("Could not find the requested user", "UserNotFound");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler({ UserIsNotOwnerOfResourceException.class })
+	public ResponseEntity<Object> handleUserIsNotOwner(RuntimeException ex, WebRequest request) {
+		LOGGER.error("500 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("User is not the owner of the requested resource", "AccessError");
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 	

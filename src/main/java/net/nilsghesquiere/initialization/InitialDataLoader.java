@@ -62,11 +62,12 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		final List<Privilege> userPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, passwordPrivilege));
 		
 		final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-		createRoleIfNotFound("ROLE_USER", userPrivileges);
+		final Role userRole = createRoleIfNotFound("ROLE_USER", userPrivileges);
 		
-		// == create initial user
+		// == create initial users
 		createUserIfNotFound("ghesquiere.nils@gmail.com", "Syntra1234", new ArrayList<Role>(Arrays.asList(adminRole)));
-
+		createUserIfNotFound("ghesquiere.test@gmail.com", "Syntra1234", new ArrayList<Role>(Arrays.asList(userRole)));
+		
 		alreadySetup = true;
 
 	}

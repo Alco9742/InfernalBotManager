@@ -14,6 +14,7 @@ import net.nilsghesquiere.entities.Role;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.RoleService;
 import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.web.error.IPBlockedException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
