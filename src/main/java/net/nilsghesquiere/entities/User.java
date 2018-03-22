@@ -50,6 +50,7 @@ public class User implements Serializable{
 	private List<LolAccount>lolAccounts;
 	@OneToOne
 	@JoinColumn(name="infernalsettingsid")
+	@JsonIgnore
 	private InfernalSettings infernalSettings;
 	@OneToMany(mappedBy="user",cascade=CascadeType.REMOVE,fetch = FetchType.LAZY)
 	@OrderBy("id")
@@ -108,9 +109,17 @@ public class User implements Serializable{
 	}
 	@Override
 	public String toString() {
+		String roleList = "[";
+		for (Role role : this.getRoles()){
+			roleList = roleList + role.getName() + ",";
+		}
+		if (roleList.length() !=1){
+			roleList = roleList.substring(0, roleList.length()-1);
+		}
+		roleList = roleList + "]";
 		return "User [id=" + id + ", email=" + email 
 				+ ", password=" + password + ", enabled=" + enabled
-				+ ", roles=" + roles + " + #LolAccounts=" + lolAccounts.size() + "]";
+				+ ", roles=" + roleList + " + #LolAccounts=" + lolAccounts.size() + "]";
 	}
 
 }

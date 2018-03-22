@@ -11,15 +11,15 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("authenticationFailureHandler")
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-		setDefaultFailureUrl("/login.html?error=true");
+		setDefaultFailureUrl("/login?error=true");
 		super.onAuthenticationFailure(request, response, exception);
 		
-		String errorMessage = "Bad credential";
+		String errorMessage = "Bad credentials";
  
 		if (exception.getMessage().equalsIgnoreCase("User is disabled")) {
 			errorMessage = "User is disabled";
@@ -30,4 +30,6 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 		}
 		request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, errorMessage);
 	}
+	
+
 }

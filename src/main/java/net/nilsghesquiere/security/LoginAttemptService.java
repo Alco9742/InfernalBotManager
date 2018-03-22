@@ -2,6 +2,8 @@ package net.nilsghesquiere.security;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.google.common.cache.CacheBuilder;
@@ -10,6 +12,7 @@ import com.google.common.cache.LoadingCache;
 
 @Service
 public class LoginAttemptService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(LoginAttemptService.class);
 	private final int MAX_ATTEMPT = 10;
 	private LoadingCache<String, Integer> attemptsCache;
  

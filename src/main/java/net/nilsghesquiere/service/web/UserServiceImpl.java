@@ -21,6 +21,7 @@ import net.nilsghesquiere.web.dto.UserDTO;
 import net.nilsghesquiere.web.error.EmailExistsException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public List<User> findAll() {
 		return (List<User>) userRepository.findAll();
 	}
@@ -67,12 +69,14 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	@ModifyingTransactionalServiceMethod
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
 	public void update(User user) {
 		userRepository.save(user);
 	}
 
 	@Override
 	@ModifyingTransactionalServiceMethod
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void delete(User user) {
 		userRepository.delete(user);
 	}
@@ -155,11 +159,13 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
 	public Optional<User> findOptionalByEmail(String email) {
 		return Optional.of(userRepository.findByEmailIgnoreCase(email));
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
 	public Optional<User> findOptionalByUserId(Long userId) {
 		return Optional.of(userRepository.findById(userId));
 	}

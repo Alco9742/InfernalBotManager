@@ -18,6 +18,7 @@ import net.nilsghesquiere.service.web.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,22 +43,18 @@ public class MyUserDetailsService implements UserDetailsService {
 	@Autowired
 	private HttpServletRequest request;
 	
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException,IPBlockedException {
 		String ip = getClientIP();
 		if (loginAttemptService.isBlocked(ip)) {
-			throw new RuntimeException("blocked");
+			throw new IPBlockedException("blocked");
 		}
-		try{
-			User user = userService.findUserByEmail(email);
-			if (user == null) {
-				throw new UsernameNotFoundException("No user found with username: " + email);
-			}
-			return new org.springframework.security.core.userdetails.User(
-					user.getEmail(), user.getPassword(), user.isEnabled(), true, true,true, 
-					getAuthorities(user.getRoles()));
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		User user = userService.findUserByEmail(email);
+		if (user == null) {
+			throw new UsernameNotFoundException("No user found with username: " + email);
 		}
+		return new org.springframework.security.core.userdetails.User(
+				user.getEmail(), user.getPassword(), user.isEnabled(), true, true,true, 
+				getAuthorities(user.getRoles()));
 	}
 
     private final Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {

@@ -15,6 +15,7 @@ import net.nilsghesquiere.web.error.StorageFileNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
@@ -31,6 +32,7 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void store(MultipartFile file) {
 		String filename = StringUtils.cleanPath(file.getOriginalFilename());
 		try {
@@ -48,6 +50,7 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Stream<Path> loadAll() {
 		try {
 			return Files.walk(this.rootLocation, 1).filter(path -> !path.equals(this.rootLocation)).map(path -> this.rootLocation.relativize(path));
@@ -57,11 +60,13 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public Path load(String filename) {
 		return rootLocation.resolve(filename);
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public Resource loadAsResource(String filename) {
 		try {
 			Path file = load(filename);
@@ -79,6 +84,7 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public void deleteAll() {
 		FileSystemUtils.deleteRecursively(rootLocation.toFile());
 	}

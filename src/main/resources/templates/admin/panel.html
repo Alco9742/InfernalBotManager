@@ -8,15 +8,8 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-6 offset-3">
-					<p th:text="${'Admin Panel}" class="text-center">Admin Panel</p>
+					<h3 th:text="${'Admin Panel'}" class="text-center">Admin Panel</h3>
 				</div>
-			</div>
-			<div class="row">
-				<sec:authorize access="isAuthenticated()">
-					<div class="col-6 offset-3">
-						<p> authenticated as <sec:authentication property="principal.username" /></p>
-					</div>
-				</sec:authorize>
 			</div>
 			<div class="row">
 				<div class="col-6 offset-3">

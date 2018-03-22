@@ -13,6 +13,7 @@ import net.nilsghesquiere.persistence.dao.QueuerRepository;
 import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,12 +30,14 @@ public class ClientDataServiceImpl implements ClientDataService{
 		this.queuerLolAccountRepository = queuerLolAccountRepository;
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ClientData read(Long id){
 		return clientDataRepository.findOne(id);
 	}
 	
 	@Override
 	@ModifyingTransactionalServiceMethod
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ClientData create(ClientData clientData) {
 		// Setting the relationships
 		for(Queuer queuer: clientData.getQueuers()){
@@ -49,6 +52,7 @@ public class ClientDataServiceImpl implements ClientDataService{
 	
 	@Override
 	@ModifyingTransactionalServiceMethod
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ClientData update(ClientData clientData) {
 		// Deleting the current data
 		ClientData dataToDelete = clientDataRepository.findByTagAndUserId(clientData.getTag(), clientData.getUser().getId());
@@ -66,21 +70,25 @@ public class ClientDataServiceImpl implements ClientDataService{
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public void deleteById(Long id) {
 		clientDataRepository.deleteById(id);
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public void delete(ClientData clientData) {
 		clientDataRepository.delete(clientData);
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public List<ClientData> findByUserId(Long userid) {
 		return clientDataRepository.findByUserId(userid);
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ClientData findByTagAndUserId(String tag, Long userid) {
 		return clientDataRepository.findByTagAndUserId(tag,userid);
 	}

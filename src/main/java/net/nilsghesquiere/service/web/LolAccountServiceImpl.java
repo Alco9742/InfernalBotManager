@@ -15,6 +15,7 @@ import net.nilsghesquiere.util.enums.Region;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,32 +33,38 @@ public class LolAccountServiceImpl implements LolAccountService{
 	}
 	
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public Optional<LolAccount> findOptionalById(Long id) {
 		return Optional.of(lolAccountRepository.findById(id));
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	public List<LolAccount> findAll() {
 		return lolAccountRepository.findAll();
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public List<LolAccount> findByUser(User user) {
 		return lolAccountRepository.findByUser(user);
 	}
 	
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public List<LolAccount> findByUserId(Long userId) {
 		return lolAccountRepository.findByUserId(userId);
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public List<LolAccount> findByUserEmail(String email) {
 		return lolAccountRepository.findByUserEmail(email);
 	}
 
 	@Override
 	@ModifyingTransactionalServiceMethod
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public LolAccount create(LolAccount lolAccount) {
 		LolAccount returnAccount = null;
 		//check if account with that name/server combo exists
@@ -70,6 +77,7 @@ public class LolAccountServiceImpl implements LolAccountService{
 	
 	@Override
 	@ModifyingTransactionalServiceMethod
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public LolAccount update(LolAccount lolAccount) {
 		//TODO works perfectly with NA, EUW and EUNE, but not with other servers for some reason
 		Boolean accountAlreadyExistsOnRegion = false;
@@ -96,16 +104,19 @@ public class LolAccountServiceImpl implements LolAccountService{
 	
 	@Override
 	@ModifyingTransactionalServiceMethod
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public void delete(LolAccount lolAccount) {
 		lolAccountRepository.delete(lolAccount);
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public void deleteById(Long id) {
 		lolAccountRepository.deleteById(id);
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public List<LolAccount> findUsableAccounts(Long userid, Region region, Integer amount) {
 		// limit using a Pageable
 		Pageable pageable = new PageRequest(0,amount);
@@ -119,6 +130,7 @@ public class LolAccountServiceImpl implements LolAccountService{
 	}
 	
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public List<LolAccount> findBufferAccounts(Long userid, Region region, Integer amount) {
 		// limit using a Pageable
 		Pageable pageable = new PageRequest(0,amount);
@@ -132,6 +144,7 @@ public class LolAccountServiceImpl implements LolAccountService{
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public LolAccount findByUserIdAndRegionAndAccount(Long userid, Region region, String account) {
 		return lolAccountRepository.findByAccountIgnoreCaseAndRegionAndUserId(account, region, userid);
 	}
