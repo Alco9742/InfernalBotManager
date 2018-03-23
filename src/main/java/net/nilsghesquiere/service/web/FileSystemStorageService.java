@@ -60,13 +60,11 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
-	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public Path load(String filename) {
 		return rootLocation.resolve(filename);
 	}
 
 	@Override
-	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public Resource loadAsResource(String filename) {
 		try {
 			Path file = load(filename);

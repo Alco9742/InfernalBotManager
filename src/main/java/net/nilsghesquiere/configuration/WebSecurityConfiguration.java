@@ -125,8 +125,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.csrf()
 					.disable()
 				.authorizeRequests()
+					.antMatchers("/downloads/**").permitAll()
 					.antMatchers("/test/**").permitAll()
-					.antMatchers("/admin/files/**").permitAll()
 					.antMatchers("/admin/**").hasRole(RoleEnum.ADMIN.getName())
 					.antMatchers("/accounts/**").hasAnyRole(RoleEnum.ADMIN.getName(),RoleEnum.USER.getName(),RoleEnum.PAID_USER.getName())
 					.antMatchers("/clients/**").hasAnyRole(RoleEnum.ADMIN.getName(),RoleEnum.USER.getName(),RoleEnum.PAID_USER.getName())
@@ -161,8 +161,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 					.invalidSessionUrl("/invalidSession")
 					.maximumSessions(1)
-					.expiredUrl("/sessionExpired")
-					;
+					.expiredUrl("/sessionExpired");
 		}
 	
 		@Bean
