@@ -8,6 +8,7 @@ import net.nilsghesquiere.service.web.InfernalSettingsService;
 import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.InfernalSettingsWrapper;
+import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +40,11 @@ public class InfernalSettingsRestController {
 		InfernalSettingsWrapper wrapper;
 		String error = "";
 		
-		//CHECKS
-		error = checkUser(userid);
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
 		
 		//PROCESSING
 		InfernalSettings infernalSettings = infernalSettingsService.getByUserId(userid);
@@ -54,25 +58,4 @@ public class InfernalSettingsRestController {
 		return new ResponseEntity<InfernalSettingsWrapper>(wrapper, HttpStatus.OK);
 	}
 	
-	//TODO authentication
-	private String checkUser(Long userid){
-		String error = "";
-		//CHECKS
-		Optional<User> optionalUserFromId = userService.findOptionalByUserId(userid);
-		if(!optionalUserFromId.isPresent()){
-			error = "User with id " + userid + " does not exist";
-		}/* else {
-			User userFromId = optionalUserFromId.get();
-			Optional<User> optionalAuthenticatedUser = authenticationFacade.getOptionalAuthenticatedUser();
-			if(!optionalAuthenticatedUser.isPresent()){
-				error = "You are currently not authenticated, log in to the site";	
-			} else{
-				User authenticatedUser = optionalAuthenticatedUser.get();
-				if(!userFromId.equals(authenticatedUser)){
-					error = "The requested accounts are not owned by the authenticated user";	
-				}
-			}
-		}*/
-		return error;
-	}
 }

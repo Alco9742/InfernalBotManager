@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,6 +21,7 @@ import net.nilsghesquiere.util.wrappers.LolAccountWrapper;
 import net.nilsghesquiere.util.wrappers.LolMixedAccountMap;
 import net.nilsghesquiere.util.wrappers.StringResponseMap;
 import net.nilsghesquiere.web.error.AccountNotFoundException;
+import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 import net.nilsghesquiere.web.error.UserNotFoundException;
 
 import org.slf4j.Logger;
@@ -38,6 +38,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.Preconditions;
+
+//TODO:CHeckuser uitwerken
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -59,6 +61,11 @@ public class LolAccountRestController {
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		String error = "";
 		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
 		//PROCESSING
 		List<LolAccount> lolAccounts = lolAccountService.findByUserId(userid);
 		
@@ -77,6 +84,12 @@ public class LolAccountRestController {
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		String error = "";
 		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
 		//PROCESSING
 		List<LolAccount> lolAccounts = lolAccountService.findUsableAccounts(userid, region,amount);
 		
@@ -94,6 +107,12 @@ public class LolAccountRestController {
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		String error = "";
 		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
 		//PROCESSING
 		List<LolAccount> lolAccounts = lolAccountService.findBufferAccounts(userid, region,amount);
 		
@@ -107,6 +126,13 @@ public class LolAccountRestController {
 	
 	@RequestMapping(path = "/user/{userid}/region/{region}/account/{account}", method = RequestMethod.GET)
 	public ResponseEntity<LolAccount> findAccountId(@PathVariable Long userid, @PathVariable Region region, @PathVariable String account) {
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
 		//PROCESSING
 		LOGGER.info("userid=" + userid +", account=" + account);
 		LolAccount lolAccount = lolAccountService.findByUserIdAndRegionAndAccount(userid, region, account);
@@ -118,6 +144,13 @@ public class LolAccountRestController {
 	
 	@RequestMapping(path = "/user/{userid}", method = RequestMethod.POST)
 	public ResponseEntity<LolAccountWrapper> create(@PathVariable Long userid, @RequestBody LolAccountMap lolAccountMap) {
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
 		//VARS
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		List<LolAccount> returnAccounts = new ArrayList<>();
@@ -126,12 +159,11 @@ public class LolAccountRestController {
 		//LOOP (Will always be 1 account for now)
 		for(LolAccount lolAccount: lolAccountMap.getMap().values()){
 			//CHECKS
-			error = checkUser(userid);
-			if (lolAccount == null && error.equals("")){
+			error = "";
+			if (lolAccount == null){
 				error = "Account is empty";
 			}
 			//PROCESSING
-			User user = userService.read(userid);
 			LolAccount newAccount = new LolAccount(user,lolAccount.getAccount(),lolAccount.getPassword(),lolAccount.getRegion());	
 			LolAccount createdAccount = lolAccountService.create(newAccount);
 			if(createdAccount != null){
@@ -151,6 +183,13 @@ public class LolAccountRestController {
 	
 	@RequestMapping(path = "/user/{userid}",method = RequestMethod.PUT)
 	public ResponseEntity<LolAccountWrapper> update(@PathVariable Long userid,@RequestBody LolAccountMap lolAccountMap) {
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
 		String error = "";
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		List<LolAccount> returnAccounts = new ArrayList<>();
@@ -180,6 +219,13 @@ public class LolAccountRestController {
 	public ResponseEntity<LolAccountWrapper> delete(@PathVariable Long userid, @RequestBody LolAccountMap lolAccountMap) {
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		List<LolAccount> deletedAccounts = new ArrayList<>();
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
 		for (LolAccount lolAccount : lolAccountMap.getMap().values()){
 			validateAccountById(lolAccount.getId());
 			validateUserByUserId(userid);
@@ -199,9 +245,11 @@ public class LolAccountRestController {
 		List<LolAccount> importedAccounts = new ArrayList<>();
 		List<LolAccount> createdAccounts = new ArrayList<>();
 		
-		//CHECKS
-		validateUserByUserId(userid);
-		User user = userService.read(userid);
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
 		
 		//PROCESSING
 		if (file.getContentType().equals("text/plain")){
@@ -253,6 +301,13 @@ public class LolAccountRestController {
 		//VARS
 		StringResponseMap responseMap = new StringResponseMap();
 		String response = "OK";
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
 		//update existing accounts
 		for (LolAccount lolAccount : lolMixedAccountMap.getMap().values()){
 			Preconditions.checkNotNull(lolAccount);
@@ -268,8 +323,8 @@ public class LolAccountRestController {
 		//create new accounts
 		for(LolAccount lolAccount: lolMixedAccountMap.getNewAccs()){
 			//CHECKS
-			String error = checkUser(userid);
-			if (lolAccount == null && !error.equals("")){
+			String error = "";
+			if (lolAccount == null){
 				error = "Account is empty";
 			}
 			//PROCESSING
@@ -294,6 +349,13 @@ public class LolAccountRestController {
 	public ResponseEntity<LolAccountWrapper> resetStatus(@PathVariable Long userid,@RequestBody Long[] ids) {
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		List<LolAccount> returnAccounts = new ArrayList<>();
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
 		for (Long id : ids){
 			LolAccount lolAccount = lolAccountService.read(id);
 			Preconditions.checkNotNull(lolAccount);
@@ -307,27 +369,5 @@ public class LolAccountRestController {
 		wrapper.add("data",returnAccounts);
 		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
 	}
-		
 	
-	//TODO authentication
-	private String checkUser(Long userid){
-		String error = "";
-		//CHECKS
-		Optional<User> optionalUserFromId = userService.findOptionalByUserId(userid);
-		if(!optionalUserFromId.isPresent()){
-			error = "User with id " + userid + " does not exist";
-		}/* else {
-			User userFromId = optionalUserFromId.get();
-			Optional<User> optionalAuthenticatedUser = authenticationFacade.getOptionalAuthenticatedUser();
-			if(!optionalAuthenticatedUser.isPresent()){
-				error = "You are currently not authenticated, log in to the site";	
-			} else{
-				User authenticatedUser = optionalAuthenticatedUser.get();
-				if(!userFromId.equals(authenticatedUser)){
-					error = "The requested accounts are not owned by the authenticated user";	
-				}
-			}
-		}*/
-		return error;
-	}
 }

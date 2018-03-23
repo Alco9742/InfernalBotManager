@@ -7,8 +7,10 @@ import net.nilsghesquiere.entities.ClientData;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.ClientDataService;
 import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.ClientDataMap;
 import net.nilsghesquiere.util.wrappers.ClientDataWrapper;
+import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +34,20 @@ public class ClientDataRestController {
 	@Autowired
 	private ClientDataService clientDataService;
 	
+	@Autowired
+	private AuthenticationFacade authenticationFacade;	
 	
 	@RequestMapping(path = "/user/{userid}", method = RequestMethod.GET)
 	public ResponseEntity<ClientDataWrapper> findClientsByUserId(@PathVariable Long userid) {
 		//VARS
 		ClientDataWrapper wrapper = new ClientDataWrapper();
 		String error = "";
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
 		
 		//PROCESSING
 		List<ClientData> clientDatas = clientDataService.findByUserId(userid);
@@ -58,6 +68,12 @@ public class ClientDataRestController {
 		List<ClientData> returnClientDatas = new ArrayList<>();
 		String error = "";
 		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
 		//LOOP (Will always be 1 clientData for now)
 		for(ClientData clientData: clientDataMap.getMap().values()){
 			//CHECKS
@@ -66,7 +82,6 @@ public class ClientDataRestController {
 			}
 			//PROCESSING
 			System.out.println(clientData);
-			User user = userService.read(userid);
 			clientData.setUser(user);
 			ClientData clientDataFromDB = clientDataService.findByTagAndUserId(clientData.getTag(), userid);
 			ClientData newClientData = null;
@@ -96,10 +111,14 @@ public class ClientDataRestController {
 	public ResponseEntity<ClientDataWrapper> delete(@PathVariable Long userid, @RequestBody ClientDataMap clientDataMap) {
 		ClientDataWrapper wrapper = new ClientDataWrapper();
 		List<ClientData> deletedClientDatas = new ArrayList<>();
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
 		for (ClientData clientData : clientDataMap.getMap().values()){
-			//TODO checks
-			//validateAccountById(lolAccount.getId());
-			//validateUserByUserId(userid);
 			clientDataService.delete(clientData);
 			deletedClientDatas.add(clientData);
 		}

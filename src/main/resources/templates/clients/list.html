@@ -62,7 +62,10 @@
 						name: "tag"
 					},{
 						label: "Date",
-						name: "date"
+						name: "date",
+						type: 'datetime',
+						def: function () { return new Date(); },
+						format: 'DD-MM-YYYY HH:mm'
 					},{
 						label: "Status",
 						name: "status"
