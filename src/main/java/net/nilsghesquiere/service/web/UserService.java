@@ -11,8 +11,8 @@ import net.nilsghesquiere.web.error.EmailExistsException;
 public interface UserService {
 	User read(Long id);
 	List<User> findAll();
-	void create(User user);
-	void update(User user);
+	User create(User user);
+	User update(User user);
 	void delete(User user);
 	Optional<User> findOptionalByEmail(String email);
 	Optional<User> findOptionalByUserId(Long userId);

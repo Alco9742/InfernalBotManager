@@ -1,7 +1,6 @@
 package net.nilsghesquiere.initialization;
 
 import net.nilsghesquiere.service.web.StorageService;
-import net.nilsghesquiere.web.controllers.AdminController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

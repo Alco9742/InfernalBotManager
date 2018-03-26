@@ -39,6 +39,7 @@ public class AdminController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 	private static final String PANEL_VIEW = "admin/panel";
 	private static final String GLOBAL_VARS_VIEW = "admin/globalvars";
+	private static final String USERS_VIEW = "admin/users";
 	private static final String FILES_VIEW = "admin/files";
 	
 	@Autowired
@@ -64,11 +65,16 @@ public class AdminController {
 		return new ModelAndView(PANEL_VIEW).addObject("currentUser");
 	}
 	
+	//GLOBAL VARS
 	@RequestMapping(value = "/globalvars", method = RequestMethod.GET)
 	ModelAndView globalVars() {
-		Optional<User> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
-		LOGGER.info("Loading Accounts list for user [" + currentUser.get().getEmail() + "].");
-		return new ModelAndView(GLOBAL_VARS_VIEW).addObject("currentUser");
+		return new ModelAndView(GLOBAL_VARS_VIEW);
+		}
+
+	//GLOBAL VARS
+	@RequestMapping(value = "/users", method = RequestMethod.GET)
+	ModelAndView users() {
+		return new ModelAndView(USERS_VIEW);
 		}
 	
 	//Everything below is copied straight from a spring tutorial

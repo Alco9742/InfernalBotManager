@@ -63,15 +63,15 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	@ModifyingTransactionalServiceMethod
-	public void create(User user) {
-		userRepository.save(user);
+	public User create(User user) {
+		return userRepository.save(user);
 	}
 
 	@Override
 	@ModifyingTransactionalServiceMethod
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-	public void update(User user) {
-		userRepository.save(user);
+	public User update(User user) {
+		return userRepository.save(user);
 	}
 
 	@Override

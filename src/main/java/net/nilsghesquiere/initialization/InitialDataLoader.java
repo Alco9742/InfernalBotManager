@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -16,7 +15,6 @@ import net.nilsghesquiere.service.web.InfernalSettingsService;
 import net.nilsghesquiere.service.web.PrivilegeService;
 import net.nilsghesquiere.service.web.RoleService;
 import net.nilsghesquiere.service.web.UserService;
-import net.nilsghesquiere.util.enums.RoleEnum;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
