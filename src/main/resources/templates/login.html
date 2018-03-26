@@ -1,6 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+		<script th:inline="javascript">
+			$(document).ready(function() {
+				$( "#navLogin" ).addClass( "active" );
+			});
+		</script>
 	</head>
 	<body>
 		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->

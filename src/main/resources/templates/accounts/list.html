@@ -5,8 +5,10 @@
 		/*<![CDATA[*/
 		$(document).ready(function() {
 			var editor; 
-			
 			var restlnk = "/api/accounts/user/" + /*[[${currentUser.id}]]*/
+			
+			$( "#navAccounts" ).addClass( "active" );
+			
 			$.fn.dataTable.ext.buttons.uploadfile = {
 					text: 'Import',
 					action: function ( e, dt, node, config ) {
@@ -159,7 +161,7 @@
 		
 			var table = $('#infernalbotmanager-datatable-accounts').DataTable( {
 				language: { search: "" },
-				lengthChange: false,
+				lengthChange: true,
 				responsive: true,
 				stateSave: true,
 				dom: "<'row 'Bf>rtip",
@@ -269,10 +271,10 @@
 					<tr>
 						<th data-priority="9">ID</th>
 						<th data-priority="1" class="all">Account</th>
-						<th data-priority="3">Password</th>
+						<th data-priority="4">Password</th>
 						<th data-priority="8">Summoner</th>
 						<th data-priority="1">Region</th>
-						<th data-priority="1" class="all">Level</th>
+						<th data-priority="2">Level</th>
 						<th data-priority="7">M. Lvl</th>
 						<th data-priority="8">XP</th>
 						<th data-priority="8">BE</th>
@@ -283,7 +285,7 @@
 						<th data-priority="1" class="all">Account Status</th>
 						<th data-priority="8">Assigned To</th>
 						<th data-priority="9">Info</th>
-						<th data-priority="2">Active</th>
+						<th data-priority="3">Active</th>
 					</tr>
 				</thead>
 			</table>

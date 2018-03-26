@@ -1,21 +1,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 		<script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
-		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
 		<script th:inline="javascript">
 		/*<![CDATA[*/
+			
 		function format ( d ) {
 			var resultHtml = "";
 			var queuers = d.queuers;
 			queuers.forEach(function(q){
 				var qLine = "<p>";
 				qLine =  qLine + "<b>" + q.queuer + ": </b> " +q.playedGames+"/" + q.winGames + "/" + q. defeatGames + "(P/W/L)";
-				console.log(q.softEnd);
-				if (q.softEnd == "false"){
-					qLine = qLine + " - Softend in " + q.afterGame + " games)";
+				if (q.softEnd == false){
+					qLine = qLine + " - Safestop in " + q.afterGame + " games";
 				}else{
-					qLine = qLine + " - Softend disabled";
+					qLine = qLine + " - Safestop disabled";
 				}
 				resultHtml = resultHtml + qLine;
 				var lolAccs = q.queuerLolAccounts;
@@ -45,19 +45,13 @@
 		        return moment( d, format, locale, true ).unix();
 		    };
 		};
-		
+
 		$(document).ready(function() {
 			$.fn.dataTable.moment( 'DD-MM-YYYY HH:mm' );
-			var editor; // use a global for the submit and return data rendering in the examples
-			//var ajaxBase = {
-			//		dataSrc: "",
-			//		dataType: "json",
-			//		contentType: "application/json; charset=utf-8",
-			//		processData: "false",
-			//		url: "/api/accounts/user/" + /*[[${currentUser.id}]]*/ 
-			//};
-			
+			var editor;
 			var restlnk = "/api/clients/user/" + /*[[${currentUser.id}]]*/
+			
+			$( "#navClients" ).addClass( "active" );
 			
 			editor = new $.fn.dataTable.Editor( {
 					ajax: {
@@ -96,6 +90,7 @@
 			var table = $('#infernalbotmanager-datatable-clients').DataTable( {
 				responsive: false,
 				dom: "Brtip",
+				scrollX: true,
 				pageLength: 50,
 				ajax:{
 					"url": "/api/clients/user/" + /*[[${currentUser.id}]]*/ ,
@@ -113,7 +108,11 @@
 					defaultContent: ''
 				},
 				{ data: "tag"},
-				{ data: "date"},
+				{ data: "date",
+				  render: function ( data ) {
+				  			return (moment(data).isValid()) ? moment(data).format("DD-MM-YYYY HH:mm") : "-";
+				  		}
+				},
 				{ data: "status"}
 				],
 				columnDefs: [
@@ -162,7 +161,7 @@
 	<body>
 		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
 		<br/>
-		<table id="infernalbotmanager-datatable-clients" class="table table-striped table-bordered display" style="width:100%" >
+		<table id="infernalbotmanager-datatable-clients" class="table table-striped table-bordered display nowrap" style="width:100%" >
 			<thead>
 				<tr>
 					<th>ID</th>

@@ -1,6 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<head>
 		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+		<script th:inline="javascript">
+			$(document).ready(function() {
+				$( "#navAdmin" ).addClass( "active" );
+			});
+		</script>
 	</head>
 	<body>
 		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
