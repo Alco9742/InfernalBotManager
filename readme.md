@@ -2,10 +2,9 @@
 <h2>InfernalManager</h2>
 <h3>TODO BEFORE BETA:</h3>	
 <ul>
-<li>In any method that gets used: check if authenticated user is the owner of the resource</li>
+
 <li>Test anything registration & email related</li>
 <li>Temp frontend: bootstrap and basic js/jquery </li>
-<li>User administration for admin</li>
 <li>Index page</li>
 <lI>Settings page</li>
 </ul>

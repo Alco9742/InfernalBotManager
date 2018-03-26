@@ -48,7 +48,7 @@ public class User implements Serializable{
 	@OrderBy("id")
 	@JsonIgnore
 	private List<LolAccount>lolAccounts;
-	@OneToOne
+	@OneToOne(cascade=CascadeType.REMOVE)
 	@JoinColumn(name="infernalsettingsid")
 	@JsonIgnore
 	private InfernalSettings infernalSettings;

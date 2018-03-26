@@ -1,5 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+		<script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
 		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
 		<script th:inline="javascript">
 		/*<![CDATA[*/
@@ -9,6 +11,7 @@
 			queuers.forEach(function(q){
 				var qLine = "<p>";
 				qLine =  qLine + "<b>" + q.queuer + ": </b> " +q.playedGames+"/" + q.winGames + "/" + q. defeatGames + "(P/W/L)";
+				console.log(q.softEnd);
 				if (q.softEnd == "false"){
 					qLine = qLine + " - Softend in " + q.afterGame + " games)";
 				}else{
@@ -91,7 +94,7 @@
 			} );
 		
 			var table = $('#infernalbotmanager-datatable-clients').DataTable( {
-				responsive: true,
+				responsive: false,
 				dom: "Brtip",
 				pageLength: 50,
 				ajax:{

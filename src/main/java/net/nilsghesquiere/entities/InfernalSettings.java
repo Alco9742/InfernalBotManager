@@ -2,6 +2,7 @@ package net.nilsghesquiere.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -27,7 +28,7 @@ public class InfernalSettings implements Serializable{
 	private static final long serialVersionUID = 1L;
 	//Manager VARS
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
-	@OneToOne(fetch = FetchType.EAGER, optional = false)
+	@OneToOne(fetch = FetchType.LAZY, cascade =CascadeType.ALL)
 	@JoinColumn(name = "userid")
 	@JsonIgnore
 	private User user;

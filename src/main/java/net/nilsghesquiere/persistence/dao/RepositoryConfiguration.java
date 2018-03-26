@@ -9,6 +9,7 @@ import net.nilsghesquiere.entities.QueuerLolAccount;
 import net.nilsghesquiere.entities.User;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.rest.RepositoryRestMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +24,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = RepositoryRestMvcAutoConfiguration.class)
 @EntityScan(basePackages = {"net.nilsghesquiere.entities"})
 @EnableJpaRepositories(basePackages = {"net.nilsghesquiere.persistence.dao"})
 @EnableTransactionManagement

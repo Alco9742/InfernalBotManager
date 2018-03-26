@@ -7,41 +7,41 @@
 		<br/>
 		<div class="container">
 			<div class="row">
-				<h1 class = "offset-2 col-8" >Login</h1>
+				<h1 class = "col-12 offset-sm-2 col-sm-8" >Login</h1>
 			</div>
 			<div class="row">
-				<div class = "offset-2 col-8 alert alert-info" th:if="${param.message != null}" th:text="${param.message[0]}">message</div>
+				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-info" th:if="${param.message != null}" th:text="${param.message[0]}">message</div>
 			</div>
 			<div class="row">
-				<div class = "offset-2 col-8 alert alert-danger"  th:if="${param.error != null}" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
+				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-danger"  th:if="${param.error != null}" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
 			</div>
 			<form name="login" th:action="@{/login}" method="post">
 				<div class ="form-group row">
-					<label for="username" class="offset-2 col-2 col-form-label">Email:</label>
-					<div class="col-6">
+					<label for="username" class="col-12 offset-sm-2 col-sm-2 col-form-label">Email:</label>
+					<div class="col-12 col-sm-6">
 						<input type="text" class="form-control" id="username" name="username" autofocus="autofocus"/>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="password" class="offset-2 col-2 col-form-label">Password:</label>
-					<div class="col-6">
+					<label for="password" class="col-12 offset-sm-2 col-sm-2 col-form-label">Password:</label>
+					<div class="col-12 col-sm-6">
 						<input type="password" class="form-control" id="password" name="password" autofocus="autofocus"/>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<div class="offset-2 col-8">
+					<div class="col-12 offset-sm-2 col-sm-8">
 						<button type="submit" class ="btn btn-primary btn-block">Log in</button>
 					</div>
 				</div>
 			</form>
 			<div class="row">
-				<div class = "offset-2 col-8">
+				<div class = "col-12 offset-sm-2 col-sm-8">
 					<a class="btn btn-secondary btn-block" th:href="@{/forgotPassword}">Forgot password</a>
 				</div>
 			</div>
 			<br />
 			<div class="row">
-				<div class = "offset-2 col-8">
+				<div class = "col-12 offset-2 col-sm-8">
 					<a class="btn btn-secondary btn-block" th:href="@{/registration}">Register</a>
 				</div>
 			</div>

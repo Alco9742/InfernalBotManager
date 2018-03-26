@@ -4,14 +4,7 @@
 		<script th:inline="javascript">
 		/*<![CDATA[*/
 		$(document).ready(function() {
-			var editor; // use a global for the submit and return data rendering in the examples
-			//var ajaxBase = {
-			//		dataSrc: "",
-			//		dataType: "json",
-			//		contentType: "application/json; charset=utf-8",
-			//		processData: "false",
-			//		url: "/api/accounts/user/" + /*[[${currentUser.id}]]*/ 
-			//};
+			var editor; 
 			
 			var restlnk = "/api/accounts/user/" + /*[[${currentUser.id}]]*/
 			$.fn.dataTable.ext.buttons.uploadfile = {
@@ -169,9 +162,6 @@
 				lengthChange: false,
 				responsive: true,
 				stateSave: true,
-				//"scrollX": true,
-				//dom: "<'row '<'col-12 col-sm-10 col-md-10 col-lg-9'B><'col-12 col-sm-3 col-md-2 col-lg-3 float-right'f>>rtip",
-				//dom: "<'row '<'col-12 col-sm-9'B><'col-12 col-sm-3'f>>rtip",
 				dom: "<'row 'Bf>rtip",
 				pageLength: 50,
 				ajax:{
