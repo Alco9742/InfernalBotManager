@@ -10,7 +10,7 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 public class WebSecurityInit extends AbstractSecurityWebApplicationInitializer {
-
+	
 	@Override
 	protected void beforeSpringSecurityFilterChain(ServletContext context) {
 		super.insertFilters(context, new CharacterEncodingFilter("UTF-8")); 

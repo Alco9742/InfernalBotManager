@@ -32,19 +32,19 @@
 		<appender-ref ref="STDOUT" />
 	</root>
 
-	<logger name="org.springframework.web">
+	<logger name="org.springframework.web" additivity="false">
 		<level value="INFO" />
 		<appender-ref ref="FILE" />
 		<appender-ref ref="STDOUT" />
 	</logger>
 	
-	<logger name="org.hibernate">
+	<logger name="org.hibernate" additivity="false">
 		<level value="ERROR" />
 		<appender-ref ref="FILE" />
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-	<logger name="org.thymeleaf">
+	<logger name="org.thymeleaf" additivity="false">
 		<level value="ERROR" />
 		<appender-ref ref="FILE" />
 		<appender-ref ref="STDOUT" />
