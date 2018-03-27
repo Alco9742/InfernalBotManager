@@ -4,7 +4,6 @@
 <ul>
 <li>Test anything registration & email related</li>
 <li>Temp frontend: bootstrap and basic js/jquery </li>
-<li>Index page</li>
 <lI>Settings page</li>
 <li>Check why everything is getting initialized twice</li>
 </ul>
