@@ -4,87 +4,76 @@
 	</head>
 	<body>
 		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+		<br/>
 		<div class="container">
-			<div th:if="${errors}" class="row">
-				<div  class="col-12">
-					<div th:each="error : ${errors}" th:inline="text" class='alert alert-danger'>
-						[[${error}]].
-						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<div class="row">
+				<h1 class = "col-12 offset-sm-2 col-sm-8" >Change password</h1>
+			</div>
+			<div class="row">
+				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-success" th:if="${resultM != null}" th:text="${resultM}">Success!</div>
+			</div>
+			<div class="row">
+				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-success" th:if="${successM != null}" th:text="${successM}">Success!</div>
+			</div>
+			<div class="row">
+				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-success" th:if="${failM != null}" th:text="${failM}">Success!</div>
+			</div>
+			<div class="row">
+				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-info" th:if="${param.message != null}" th:text="${param.message[0]}">message</div>
+			</div>
+			<div class="row">
+				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-danger"  th:if="${param.error != null}" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
+			</div>
+			<form id="changePasswordForm" th:action="@{/user}" th:object="${passForm}" method="post">
+				<div class="form-group row">
+					<label for="oldpassword" class="col-12 offset-sm-2 col-sm-2 col-form-label"  >Current password:</label>
+					<div class="col-12 col-sm-6">
+						<input type="password" id="oldPassword" class="form-control" th:field="*{oldPassword}"/> 
+						<div th:if="${#fields.hasErrors('*{oldPassword}')}" class="invalid-feedback" th:errors="*{oldPassword}">Incorrect old password</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-5 ">
-					<form id="accountform" class="ng-submitform" th:action="@{'/user/' + ${currentUser.id} + '/password.html'}" method="post">
-						<div class="form-group row">
-							<label for="oldpassword" class="form-label"  >Current password</label>
-							<input id="oldpassword" type="text" class="form-control"/> 
-						</div>
-						<div class="form-group row">
-							<label for="password1" class="form-label">New password</label>
-							<input id="password1" type="text" class="form-control"/> 
-						</div>
-						<div class="form-group row">
-							<label for="password2" class="form-label">Retype new password</label>
-							<input id="password2" type="text" class="form-control"/> 
-						</div>
-						<div class="form-group row">
-							<button type="submit" id="ng-submitbut" class="form-control btn btn-default ng-submitbut">Edit settings</button>
-						</div>
-					</form>
+				<div class="form-group row">
+					<label for="password1" class="col-12 offset-sm-2 col-sm-2 col-form-label">New password:</label>
+					<div class="col-12 col-sm-6">
+						<input type="password" id="password" class="form-control" th:field="*{newPassword}"/> 
+						<div th:if="${#fields.hasErrors('*{newPassword}')}" class="invalid-feedback" th:errors="*{newPassword}">Incorrect new password</div>
+					</div>
 				</div>
-				<div class="col-5 col-offset-2">
-					<form id="todoform" class="ng-submitform" th:action="@{'/user/' + ${currentUser.id} + '/password.html'}" method="post">
-						<div class="form-group row">
-							<label for="oldpassword" class="form-label"  >TODO</label>
-							<input id="oldpassword" type="text" class="form-control"/> 
-						</div>
-						<div class="form-group row">
-							<label for="password1" class="form-label">TODO</label>
-							<input id="password1" type="text" class="form-control"/> 
-						</div>
-						<div class="form-group row">
-							<label for="password2" class="form-label">TODO</label>
-							<input id="password2" type="text" class="form-control"/> 
-						</div>
-						<div class="form-group row">
-							<button type="submit" id="ng-submitbut" class="form-control btn btn-default ng-submitbut">Edit settings</button>
-						</div>
-					</form>
+				<div class="form-group row">
+					<label for="password2" class="col-12 offset-sm-2 col-sm-2 col-form-label">Repeat new password:</label>
+					<div class="col-12 col-sm-6">
+						<input type="password" id="matchingPassword" class="form-control" th:field="*{matchingPassword}"/>
+						<div th:if="${#fields.hasErrors('*{matchingPassword}')}" class="invalid-feedback" th:errors="*{matchingPassword}">Incorrect matching password</div> 
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-12">
-					<table class="table table-striped table-bordered ng-datatable-apikeys" width="100%" >
-						<thead>
-							<tr>
-								<th>Handle</th>
-								<th>Consumer Key</th>
-								<th>Consumer Secret</th>
-								<th>Tools</th>
-							</tr>
-						</thead>
-						<tfoot>
-							<tr>
-								<td colspan="8">
-									<a th:href="@{'/user/apikey/create.html'}" class="btn btn-default">Add Api Key <span class="glyphicon glyphicon-plus"></span></a>
-								</td>
-							</tr>
-						</tfoot>
-						<tbody>
-							<tr th:each="apikey : ${currentUser.twitterApiCodes}">
-								<td th:text="${apikey.handle}">FieldNotFound</td>
-								<td th:text="${apikey.consumerKey}">FieldNotFound</td>
-								<td th:text="${apikey.consumerSecret}">FieldNotFound</td>
-								<td>
-									<a th:href="@{'/user/apikey/' + ${apikey.id} + '/edit/'}"><span class="glyphicon glyphicon-edit"></span></a>
-									<a th:href="@{'/user/apikey/' + ${apikey.id} + '/delete/'}"><span class="glyphicon glyphicon-remove"></span></a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="form-group row">
+					<button type="submit" id="ng-submitbut" class="col-12 offset-sm-2 col-sm-8 btn btn-primary btn-block">Change Password</button>
 				</div>
-			</div>
+			</form>
 		</div>
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+			$(document).ready(function () {
+				options = {
+						common: {minChar:8},
+						ui: {
+							showVerdictsInsideProgressBar:true,
+							showErrors:true,
+							errorMessages:{
+								wordLength: '<spring:message code="error.wordLength"/>',
+								wordNotEmail: '<spring:message code="error.wordNotEmail"/>',
+								wordSequences: '<spring:message code="error.wordSequences"/>',
+								wordLowercase: '<spring:message code="error.wordLowercase"/>',
+								wordUppercase: '<spring:message code="error.wordUppercase"/>',
+								wordOneNumber: '<spring:message code="error.wordOneNumber"/>',
+								wordOneSpecialChar: '<spring:message code="error.wordOneSpecialChar"/>'
+							}
+						}
+					};
+					$('#password').pwstrength(options);
+			});
+			
+		/*]]>*/
+		</script>
 	</body>
 </html>

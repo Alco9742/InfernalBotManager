@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body th:fragment="mainNav">
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark" role="navigation">
-		<a class="navbar-brand" href="#">InfernalBot Manager</a>
+		<a class="navbar-brand" th:href="@{/}">InfernalBot Manager</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -23,7 +23,7 @@
 					<a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">Admin</a>
 				</li>
 				<li id="navSettings" class="nav-item">
-					<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user}">Settings</a>
+					<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user}">User</a>
 				</li>
 				<li id="navLogin" class="nav-item">
 					<a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a>

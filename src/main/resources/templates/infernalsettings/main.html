@@ -11,6 +11,15 @@
 		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
 		<br />
 		<div class="container">
+			<div class="row">
+				<h1 class = "col-12 offset-sm-1 col-sm-10" >Infernalbot Settings</h1>
+			</div>
+			<div class="row">
+				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-success" th:if="${resultM != null}" th:text="${resultM}">Success!</div>
+			</div>
+			<div class="row">
+				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-success" th:if="${successM != null}" th:text="${successM}">Success!</div>
+			</div>
 			<form th:action="@{/infernalsettings}" th:object="${settings}" method="POST" enctype="utf8">
 				<div class ="form-group row">
 					<label for="settingsGroups" class="col-12 offset-sm-1 col-sm-4 col-form-label">Groups</label>

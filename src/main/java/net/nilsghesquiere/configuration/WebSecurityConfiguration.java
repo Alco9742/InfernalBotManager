@@ -1,5 +1,6 @@
 package net.nilsghesquiere.configuration;
 
+
 import net.nilsghesquiere.security.MySavedRequestAwareAuthenticationSuccessHandler;
 import net.nilsghesquiere.security.RestAuthenticationEntryPoint;
 import net.nilsghesquiere.util.enums.RoleEnum;
@@ -128,6 +129,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					.antMatchers("/downloads/**").permitAll()
 					.antMatchers("/test/**").permitAll()
 					.antMatchers("/admin/**").hasRole(RoleEnum.ADMIN.getName())
+					.antMatchers("/user/**").hasAnyRole(RoleEnum.ADMIN.getName(),RoleEnum.USER.getName(),RoleEnum.PAID_USER.getName())
 					.antMatchers("/accounts/**").hasAnyRole(RoleEnum.ADMIN.getName(),RoleEnum.USER.getName(),RoleEnum.PAID_USER.getName())
 					.antMatchers("/clients/**").hasAnyRole(RoleEnum.ADMIN.getName(),RoleEnum.USER.getName(),RoleEnum.PAID_USER.getName())
 					.antMatchers("/user/updatePassword*", "/user/savePassword*","/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
