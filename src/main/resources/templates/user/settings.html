@@ -16,10 +16,17 @@
 				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-success" th:if="${successM != null}" th:text="${successM}">Success!</div>
 			</div>
 			<div class="row">
-				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-success" th:if="${failM != null}" th:text="${failM}">Success!</div>
+				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-danger" th:if="${failM != null}" th:inline="text">
+					[[${failM}]]
+					<ul>
+						<li th:each="error : ${errorList}">
+							[[${error}]]
+						</li>
+					</ul>
+				</div>
 			</div>
-			<div class="row">
-				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-info" th:if="${param.message != null}" th:text="${param.message[0]}">message</div>
+			<div class="row">				
+				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-info" th:if="${param.message != null}" th:text="${param.message[0]}">Info</div>
 			</div>
 			<div class="row">
 				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-danger"  th:if="${param.error != null}" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
@@ -29,21 +36,18 @@
 					<label for="oldpassword" class="col-12 offset-sm-2 col-sm-2 col-form-label"  >Current password:</label>
 					<div class="col-12 col-sm-6">
 						<input type="password" id="oldPassword" class="form-control" th:field="*{oldPassword}"/> 
-						<div th:if="${#fields.hasErrors('*{oldPassword}')}" class="invalid-feedback" th:errors="*{oldPassword}">Incorrect old password</div>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="password1" class="col-12 offset-sm-2 col-sm-2 col-form-label">New password:</label>
 					<div class="col-12 col-sm-6">
-						<input type="password" id="password" class="form-control" th:field="*{newPassword}"/> 
-						<div th:if="${#fields.hasErrors('*{newPassword}')}" class="invalid-feedback" th:errors="*{newPassword}">Incorrect new password</div>
+						<input type="password" id="password" class="form-control" th:field="*{newPassword}"/>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="password2" class="col-12 offset-sm-2 col-sm-2 col-form-label">Repeat new password:</label>
 					<div class="col-12 col-sm-6">
 						<input type="password" id="matchingPassword" class="form-control" th:field="*{matchingPassword}"/>
-						<div th:if="${#fields.hasErrors('*{matchingPassword}')}" class="invalid-feedback" th:errors="*{matchingPassword}">Incorrect matching password</div> 
 					</div>
 				</div>
 				<div class="form-group row">

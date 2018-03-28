@@ -1,12 +1,14 @@
 package net.nilsghesquiere.web.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
-import net.nilsghesquiere.web.dto.InfernalSettingsDTO;
 import net.nilsghesquiere.web.dto.UserChangePasswordDTO;
 
 import org.slf4j.Logger;
@@ -16,11 +18,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/user")
@@ -43,14 +45,16 @@ public class UserController {
 	public ModelAndView home(HttpServletRequest request) {
 		UserChangePasswordDTO dto = new UserChangePasswordDTO();
 		String result = (String) request.getSession().getAttribute("resultM");
-		System.out.println(result);
 		if (result != null && !result.isEmpty()){
 			request.getSession().removeAttribute("resultM");
 			if(result.toLowerCase().contains("success")){
 				return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("successM", result);
 			}
 			if(result.toLowerCase().contains("failure")){
-				return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("failM", result);
+				@SuppressWarnings("unchecked")
+				List<String> errorList = (List<String>) request.getSession().getAttribute("errorList");
+				request.getSession().removeAttribute("errorList");
+				return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("failM", result).addObject("errorList", errorList);
 			}
 			return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("resultM", result);
 		} else {
@@ -59,26 +63,38 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public String savePassword(@ModelAttribute("passForm") @Valid UserChangePasswordDTO passwordDTO, BindingResult bindingResult,HttpServletRequest request) {
-		System.out.println(passwordDTO.getOldPassword());
-		System.out.println(passwordDTO.getNewPassword());
-		System.out.println(passwordDTO.getMatchingPassword());
-		if(bindingResult.hasErrors()) {
-			System.out.println("test1");
-			System.out.println(bindingResult.toString());
-			return USER_SETTINGS_VIEW;
-		}
-		System.out.println("test2");
+	public String savePassword(@ModelAttribute("passForm") @Valid UserChangePasswordDTO passForm, BindingResult bindingResult,HttpServletRequest request) {
+		List<String> errorList = new ArrayList<>();
 		User user = authenticationFacade.getAuthenticatedUser();
-		if (!passwordEncoder.matches(passwordDTO.getOldPassword(), user.getPassword())){
-			System.out.println("test3");
-			request.getSession().setAttribute("resultM","Failure: old password is not correct");
-			return "redirect:/user";	
+		if (!passwordEncoder.matches(passForm.getOldPassword(), user.getPassword())){
+			errorList.add("Old password is incorrect");
 		}
-		System.out.println("test4");
-		userService.changeUserPassword(user, passwordDTO.getNewPassword());
-		request.getSession().setAttribute("resultM","Succesfully changed InfernalBot settings!");
-		return "redirect:/user";
+		if(bindingResult.hasErrors()) {
+			for( ObjectError error : bindingResult.getAllErrors()){
+				String defaultMsg = error.getDefaultMessage();
+				if(defaultMsg.contains(",")){
+					for( String msg : defaultMsg.split(",")){
+						if(!msg.isEmpty()){
+							if(!errorList.contains(msg)){
+								errorList.add(msg);
+							}
+						}
+					}
+				} else {
+					errorList.add(defaultMsg);
+				}
+			}
+		}
+		
+		if (!errorList.isEmpty()){
+			request.getSession().setAttribute("resultM","Failure changing password:");
+			request.getSession().setAttribute("errorList",errorList);
+			return "redirect:/user";	
+		} else {
+			userService.changeUserPassword(user, passForm.getNewPassword());
+			request.getSession().setAttribute("resultM","Succesfully changed password!");
+			return "redirect:/user";
+		}
 	}
 	
 }
