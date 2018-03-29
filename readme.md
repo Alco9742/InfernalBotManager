@@ -4,7 +4,6 @@
 <ul>
 <li>Test anything registration & email related</li>
 <li>Temp frontend: bootstrap and basic js/jquery </li>
-<lI>Settings page</li>
 </ul>
 
 <h3>TODO DURING BETA:</h3>	
