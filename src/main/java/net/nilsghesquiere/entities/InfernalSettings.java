@@ -19,7 +19,6 @@ import lombok.EqualsAndHashCode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-//TODO overlopen en onnodige settings niet verzenden via rest
 @Data
 @Entity
 @Table(name ="infernalsettings")
@@ -88,7 +87,17 @@ public class InfernalSettings implements Serializable{
 	private Boolean replaceConfig;
 	private Integer lolHeight;
 	private Integer lolWidth;
+	//new 29/03/2018
+	private Boolean enableAutoExport;
+	private String exportPath;
+	private String exportWildCard;
+	private Boolean exportRegion;
+	private Boolean exportLevel;
+	private Boolean exportBE;
 
+	//TODO Enable API SETTINGS?
+	
+	
 	public InfernalSettings(){} 
 	public InfernalSettings(User user) {
 		super();
@@ -138,6 +147,12 @@ public class InfernalSettings implements Serializable{
 		this.openChest = true;
 		this.openHexTech = true;
 		this.disChest = true;
+		this.enableAutoExport = false;
+		this.exportPath = "";
+		this.exportWildCard = ";";
+		this. exportRegion= false;
+		this.exportLevel = false;
+		this.exportBE = false;
 	}
 	
 	public InfernalSettings(Long id, User user, String sets, Integer groups,
@@ -158,7 +173,9 @@ public class InfernalSettings implements Serializable{
 			Integer timeoutInGameFF, Integer timeoutEndOfGame,
 			Boolean openChest, Boolean openHexTech, Boolean disChest,
 			Integer prio, Boolean replaceConfig, Integer lolHeight,
-			Integer lolWidth) {
+			Integer lolWidth, Boolean enableAutoExport, String exportPath,
+			String exportWildCard, Boolean exportRegion, Boolean exportLevel,
+			Boolean exportBE) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -211,6 +228,12 @@ public class InfernalSettings implements Serializable{
 		this.replaceConfig = replaceConfig;
 		this.lolHeight = lolHeight;
 		this.lolWidth = lolWidth;
+		this.enableAutoExport = enableAutoExport;
+		this.exportPath = exportPath;
+		this.exportWildCard = exportWildCard;
+		this. exportRegion= exportRegion;
+		this.exportLevel = exportLevel;
+		this.exportBE = exportBE;
 	}
 	
 	public InfernalSettings(InfernalSettingsDTO dto){
@@ -259,5 +282,11 @@ public class InfernalSettings implements Serializable{
 		this.openHexTech = dto.getOpenHexTech();
 		this.disChest = dto.getDisChest();
 		this.prio = dto.getPrio();
+		this.enableAutoExport = dto.getEnableAutoExport();
+		this.exportPath = dto.getExportPath();
+		this.exportWildCard = dto.getExportWildCard();
+		this.exportRegion= dto.getExportRegion();
+		this.exportLevel = dto.getExportLevel();
+		this.exportBE = dto.getExportBE();
 	}
 }

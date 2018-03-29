@@ -19,8 +19,6 @@ public class InfernalSettingsDTO implements Serializable{
 	@NotNull
 	@NotEmpty
 	private String clientPath;
-	@NotNull
-	@NotEmpty
 	private String clientVersion;
 	@NotNull
 	private Integer timeSpan;
@@ -114,6 +112,19 @@ public class InfernalSettingsDTO implements Serializable{
 	//OTHER VARS (Not in API)
 	@NotNull
 	private Integer prio;
+	//new 29/03/2018
+	@NotNull
+	private Boolean enableAutoExport;
+	private String exportPath;
+	@NotNull
+	@NotEmpty
+	private String exportWildCard;
+	@NotNull
+	private Boolean exportRegion;
+	@NotNull
+	private Boolean exportLevel;
+	@NotNull
+	private Boolean exportBE;
 	
 	public InfernalSettingsDTO(){super();}
 
@@ -134,7 +145,9 @@ public class InfernalSettingsDTO implements Serializable{
 			Integer timeoutLoadGame, Integer timeoutInGame,
 			Integer timeoutInGameFF, Integer timeoutEndOfGame,
 			Boolean openChest, Boolean openHexTech, Boolean disChest,
-			Integer prio) {
+			Integer prio, Boolean enableAutoExport, String exportPath,
+			String exportWildCard, Boolean exportRegion, Boolean exportLevel,
+			Boolean exportBE) {
 		super();
 		this.groups = groups;
 		this.clientPath = clientPath;
@@ -181,6 +194,12 @@ public class InfernalSettingsDTO implements Serializable{
 		this.openHexTech = openHexTech;
 		this.disChest = disChest;
 		this.prio = prio;
+		this.enableAutoExport = enableAutoExport;
+		this.exportPath = exportPath;
+		this.exportWildCard = exportWildCard;
+		this. exportRegion= exportRegion;
+		this.exportLevel = exportLevel;
+		this.exportBE = exportBE;
 	}
 	
 	public InfernalSettingsDTO(InfernalSettings settings){
@@ -229,5 +248,11 @@ public class InfernalSettingsDTO implements Serializable{
 		this.openHexTech = settings.getOpenHexTech();
 		this.disChest = settings.getDisChest();
 		this.prio = settings.getPrio();
+		this.enableAutoExport = settings.getEnableAutoExport();
+		this.exportPath = settings.getExportPath();
+		this.exportWildCard = settings.getExportWildCard();
+		this. exportRegion= settings.getExportRegion();
+		this.exportLevel = settings.getExportLevel();
+		this.exportBE = settings.getExportBE();
 	}
 }

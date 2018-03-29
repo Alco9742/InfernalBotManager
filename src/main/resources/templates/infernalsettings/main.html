@@ -59,6 +59,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
+						<div th:if="${#fields.hasErrors('autoLogin')}" class="invalid-feedback" th:errors="*{autoLogin}">Incorrect Auto Login</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -406,6 +407,60 @@
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="9" class="form-control" th:errorclass="is-invalid" id="settingsPrio" th:field="*{prio}"/>
 						<div th:if="${#fields.hasErrors('prio')}" class="invalid-feedback" th:errors="*{prio}">Incorrect Priority</div>
+					</div>
+				</div>
+					<div class ="form-group row">
+					<label for="settingsEnableAutoExport" class="col-12 offset-sm-1 col-sm-4 col-form-label">Enable Auto Export</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" th:errorclass="is-invalid" id="settingsEnableAutoExport" th:field="*{enableAutoExport}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<div th:if="${#fields.hasErrors('enableAutoExport')}" class="invalid-feedback" th:errors="*{enableAutoExport}">Incorrect Enable Auto Export</div>
+					</div>
+				</div>
+				<div class ="form-group row" >
+					<label for="settingsExportPath" class="col-12 offset-sm-1 col-sm-4 col-form-label">Export Path</label>
+					<div class="col-12  col-sm-6">
+						<input type="text" class="form-control" th:errorclass="is-invalid" id="settingsExportPath" th:field="*{exportPath}"/>
+						<div th:if="${#fields.hasErrors('*{exportPath}')}" class="invalid-feedback" th:errors="*{exportPath}">Incorrect Export Path</div>
+					</div>
+				</div>
+				<div class ="form-group row" >
+					<label for="settingsExportWildCard" class="col-12 offset-sm-1 col-sm-4 col-form-label">Export Wildcard</label>
+					<div class="col-12  col-sm-6">
+						<input type="text" class="form-control" th:errorclass="is-invalid" id="settingsExportWildCard" th:field="*{exportWildCard}"/>
+						<div th:if="${#fields.hasErrors('*{exportWildCard}')}" class="invalid-feedback" th:errors="*{exportWildCard}">Incorrect Export Wildcard</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsExportRegion" class="col-12 offset-sm-1 col-sm-4 col-form-label">Export Region</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" th:errorclass="is-invalid" id="settingsExportRegion" th:field="*{exportRegion}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<div th:if="${#fields.hasErrors('exportRegion')}" class="invalid-feedback" th:errors="*{exportRegion}">Incorrect Export Region</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsExportLevel" class="col-12 offset-sm-1 col-sm-4 col-form-label">Export Level</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" th:errorclass="is-invalid" id="settingsExportLevel" th:field="*{exportLevel}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<div th:if="${#fields.hasErrors('exportLevel')}" class="invalid-feedback" th:errors="*{exportLevel}">Incorrect Export Level</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsExportBE" class="col-12 offset-sm-1 col-sm-4 col-form-label">Export BE</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" th:errorclass="is-invalid" id="settingsExportBE" th:field="*{exportBE}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<div th:if="${#fields.hasErrors('exportBE')}" class="invalid-feedback" th:errors="*{exportBE}">Incorrect Export BE</div>
 					</div>
 				</div>
 				<div class ="form-group row">
