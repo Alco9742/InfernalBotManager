@@ -27,7 +27,7 @@
 				<div class="offset-2 col-8">
 					<h1 th:text="${param.message[0]}">Error</h1>
 					<div th:if="${param.expired[0]}">
-						<h3>Authentication token expire</h3>
+						<h3>Authentication token expired</h3>
 						<button onclick="resendToken()">Resend</button>
 					</div>
 				</div>

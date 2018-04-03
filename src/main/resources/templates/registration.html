@@ -8,13 +8,21 @@
 			<div class="row">
 				<h1 class = "col-12 offset-sm-2 col-sm-8" >Register</h1>
 			</div>
+			<div class="row">
+				<div id="success" class = "col-12 offset-sm-2 col-sm-8 alert alert-success" style="display: none">Success</div>
+			</div>
+			<div class="row">
+				<div id="error" class = "col-12 offset-sm-2 col-sm-8 alert alert-danger" style="display: none" >Error</div>
+			</div>
 			<form name="register" action="/" method="post" enctype="utf8">
 				<div class ="form-group row">
 					<label for="username" class="col-12 offset-sm-2 col-sm-2 col-form-label">Email:</label>
 					<div class="col-12 col-sm-6">
 						<input type="text" class="form-control" id="email" name="email" autofocus="autofocus"/>
+						<span id="emailError" class="alert alert-danger col-sm-4" style="display:none"></span>
 					</div>
 				</div>
+				 <span id="firstNameError" class="alert alert-danger col-sm-4" style="display:none"></span>
 				<div class ="form-group row">
 					<label for="password" class="col-12 offset-sm-2 col-sm-2 col-form-label">Password:</label>
 					<div class="col-12 col-sm-6">
@@ -23,10 +31,11 @@
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="password" class="col-12 offset-sm-2 col-sm-2 col-form-label">Confirm password:</label>
+					<label for="matchingPassword" class="col-12 offset-sm-2 col-sm-2 col-form-label">Confirm password:</label>
 					<div class="col-12 col-sm-6">
 						<input type="password" class="form-control" id="matchingPassword" name="matchingPassword" autofocus="autofocus"/>
 						<span id = "globalError" class="invalid-feedback" style="display:none"></span>
+						<span id = "passwordMatchesError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -46,6 +55,7 @@
 			var serverContext = [[@{/}]];
 		
 			$(document).ready(function () {
+				$(".alert").html("").hide()
 				$('form').submit(function(event) {
 					register(event);
 				});
@@ -70,25 +80,29 @@
 			});
 			
 			function register(event){
+				$(".alert").html("").hide()
+				$(".invalid-feedback").html("").hide()
 				event.preventDefault();
-				$(".alert").html("").hide();
 				var formData= $('form').serialize();
 				$.post(serverContext + "registration",formData ,function(data){
-					 if(data.message == "success"){
-						window.location.href = serverContext +"registered";
+					 if(data.message == "Success"){
+						 $("#success").show().html("Succesfully registered, confirm your email.");
 					}
 				})
 				.fail(function(data) {
 					if(data.responseJSON.error.indexOf("MailError") > -1){
 						window.location.href = serverContext + "emailError";
+					} else if(data.responseJSON.message.indexOf("EmailExistsException") > -1){
+						$("#error").show().html("A user with that email already exists");
+						
 					} else if(data.responseJSON.error.indexOf("InternalError") > -1){
-						window.location.href = serverContext + "login?message=" + data.responseJSON.message;
-					} else if(data.responseJSON.error == "UserAlreadyExist"){
-						$("#emailError").show().html(data.responseJSON.message);
+						$("#error").show().html(data.responseJSON.message);
+					}else if(data.responseJSON.error == "EmailAlreadyExists"){
+						$("#error").show().html(data.responseJSON.message);
 					} else {
 						var errors = $.parseJSON(data.responseJSON.message);
 						$.each( errors, function( index,item ){
-							$("#"+item.field+"Error").show().html(item.defaultMessage);
+							$("#"+item.field+"Error").show().html(item.defaultMessage+"<br/>");
 						});
 						errors = $.parseJSON(data.responseJSON.error);
 						$.each( errors, function( index,item ){

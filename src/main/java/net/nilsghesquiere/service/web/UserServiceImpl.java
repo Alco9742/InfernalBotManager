@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService{
 		
 		user.setEmail(userDTO.getEmail());
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-		user.setRoles(Arrays.asList(roleRepository.findByName(RoleEnum.USER.getName())));
+		user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
 		User returnUser = userRepository.save(user);
 		
 		InfernalSettings inferalSettings = infernalSettingsService.create(new InfernalSettings(returnUser));

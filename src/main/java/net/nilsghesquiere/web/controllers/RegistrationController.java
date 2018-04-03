@@ -58,7 +58,8 @@ public class RegistrationController {
 		return "registration";
 	}
 	
-	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	@RequestMapping(value = "/registration", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
 	public GenericResponse registerUserAccount(@ModelAttribute("user") @Valid UserDTO userDTO, HttpServletRequest request) {
 		LOGGER.debug("Registering user account with information: {}", userDTO);
 		User registered = createUserAccount(userDTO);
@@ -84,8 +85,8 @@ public class RegistrationController {
 		if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
 			String messageValue = "Authentication token expired";
 			model.addAttribute("message", messageValue);
-			 model.addAttribute("expired", true);
-			 model.addAttribute("token", token);
+			model.addAttribute("expired", true);
+			model.addAttribute("token", token);
 			return "redirect:/baduser";
 		}
 		
