@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,6 +34,7 @@ public class PasswordResetToken implements Serializable{
 	private String token;
 	@OneToOne(targetEntity= User.class, fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false, name = "user_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private User user;
 	private Date expiryDate;
 
