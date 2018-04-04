@@ -17,7 +17,7 @@ public class MailConfiguration {
 	    mailSender.setPort(587);
 	     
 	    mailSender.setUsername("infernalbotmanager@gmail.com");
-	    mailSender.setPassword("wdkemenwgzcbsgir");
+	    mailSender.setPassword("xnggmjmdgczqyfkh");
 	     
 	    Properties props = mailSender.getJavaMailProperties();
 	    props.put("mail.transport.protocol", "smtp");
