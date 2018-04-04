@@ -7,10 +7,12 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import net.nilsghesquiere.entities.GlobalVariable;
 import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.Privilege;
 import net.nilsghesquiere.entities.Role;
 import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.service.web.GlobalVariableService;
 import net.nilsghesquiere.service.web.InfernalSettingsService;
 import net.nilsghesquiere.service.web.PrivilegeService;
 import net.nilsghesquiere.service.web.RoleService;
@@ -40,6 +42,9 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 	@Autowired
 	private InfernalSettingsService infernalSettingsService;
+
+	@Autowired
+	private GlobalVariableService globalVariableService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -63,9 +68,15 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		final Role userRole = createRoleIfNotFound("ROLE_USER", userPrivileges);
 		
 		// == create initial users
-		createUserIfNotFound("ghesquiere.nils@gmail.com", "Syntra1234", new ArrayList<Role>(Arrays.asList(adminRole)));
-		createUserIfNotFound("ghesquiere.test@gmail.com", "Syntra1234", new ArrayList<Role>(Arrays.asList(userRole)));
+		createUserIfNotFound("ghesquiere.nils@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(adminRole)));
+		createUserIfNotFound("ghesquiere.test@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(userRole)));
 		
+		// == create initial global vars
+		createGlobalVariableIfNotFound("connection", "Connected");
+		createGlobalVariableIfNotFound("killSwitch", "Off");
+		createGlobalVariableIfNotFound("killSwitchMessage", "InfernalBotManager is currently disabled");
+		createGlobalVariableIfNotFound("serverVersion", "x.x.x");
+		createGlobalVariableIfNotFound("clientVersion", "x.x.x");
 		alreadySetup = true;
 
 	}
@@ -109,4 +120,15 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		}
 		return user;
 	}
+
+	@Transactional
+	private GlobalVariable createGlobalVariableIfNotFound(String name, String value) {
+		GlobalVariable var = globalVariableService.findByName(name);
+		if (var == null) {
+			var = new GlobalVariable(name, value);
+			globalVariableService.create(var);
+		}
+		return var;
+	}
+	
 }
