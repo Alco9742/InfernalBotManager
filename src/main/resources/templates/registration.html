@@ -40,7 +40,7 @@
 				</div>
 				<div class ="form-group row">
 					<div class="col-12 offset-sm-2 col-sm-8">
-						<button type="submit" class ="btn btn-primary btn-block">Register</button>
+						<button type="submit" id="registerButton"class ="btn btn-primary btn-block">Register</button>
 					</div>
 				</div>
 			</form>
@@ -80,13 +80,15 @@
 			});
 			
 			function register(event){
+				event.preventDefault();
 				$(".alert").html("").hide()
 				$(".invalid-feedback").html("").hide()
-				event.preventDefault();
+				$("#registerButton").html("Sending...").disabled=true; 
 				var formData= $('form').serialize();
 				$.post(serverContext + "registration",formData ,function(data){
 					 if(data.message == "Success"){
 						 $("#success").show().html("Succesfully registered, confirm your email.");
+						 $("#registerButton").html("Success");
 					}
 				})
 				.fail(function(data) {
@@ -94,7 +96,6 @@
 						window.location.href = serverContext + "emailError";
 					} else if(data.responseJSON.message.indexOf("EmailExistsException") > -1){
 						$("#error").show().html("A user with that email already exists");
-						
 					} else if(data.responseJSON.error.indexOf("InternalError") > -1){
 						$("#error").show().html(data.responseJSON.message);
 					}else if(data.responseJSON.error == "EmailAlreadyExists"){
@@ -109,6 +110,7 @@
 							$("#globalError").show().append(item.defaultMessage+"<br/>");
 						});
 					}
+					$("#registerButton").html("Register").disabled=false; 
 				});
 			}
 		/*]]>*/
