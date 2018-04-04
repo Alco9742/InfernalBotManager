@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 import net.nilsghesquiere.validation.PasswordMatches;
 import net.nilsghesquiere.validation.ValidEmail;
+import net.nilsghesquiere.validation.ValidPassword;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -21,6 +22,7 @@ public class UserDTO implements Serializable{
 	
 	@NotNull
 	@NotEmpty
+	@ValidPassword
 	private String password;
 	private String matchingPassword;
 	
