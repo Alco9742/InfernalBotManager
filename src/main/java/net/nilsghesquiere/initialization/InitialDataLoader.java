@@ -73,11 +73,11 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		createUserIfNotFound("ghesquiere.test@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(userRole)));
 		
 		// == create initial global vars
-		createGlobalVariableIfNotFound("connection", "Connected");
-		createGlobalVariableIfNotFound("killSwitch", "Off");
-		createGlobalVariableIfNotFound("killSwitchMessage", "InfernalBotManager is currently disabled");
-		createGlobalVariableIfNotFound("serverVersion", "x.x.x");
-		createGlobalVariableIfNotFound("clientVersion", "x.x.x");
+		//createGlobalVariableIfNotFound("connection", "Connected");
+		//createGlobalVariableIfNotFound("killSwitch", "Off");
+		//createGlobalVariableIfNotFound("killSwitchMessage", "InfernalBotManager is currently disabled");
+		//createGlobalVariableIfNotFound("serverVersion", "x.x.x");
+		//createGlobalVariableIfNotFound("clientVersion", "x.x.x");
 		alreadySetup = true;
 
 	}
@@ -123,7 +123,6 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	}
 
 	@Transactional
-	@Secured({"RUN_AS_ADMIN"})
 	private GlobalVariable createGlobalVariableIfNotFound(String name, String value) {
 		GlobalVariable var = globalVariableService.findByName(name);
 		if (var == null) {
