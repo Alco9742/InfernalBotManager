@@ -7,5 +7,5 @@
 <li>Check Riot servers and keep track of status in a database</li>
 <li>Data auditing for database</li>
 <li>Better frontend (Angular?)</li>
-<li>OAuth2 authentication<li>
+<li>OAuth2 authentication</li>
 </ul>
