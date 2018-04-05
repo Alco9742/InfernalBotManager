@@ -19,7 +19,7 @@
 				}
 				resultHtml = resultHtml + qLine;
 				var lolAccs = q.queuerLolAccounts;
-				var lTable = "<table class='table table-striped table-bordered' style='width:100%'><thead><tr><th>Account</th><th>Level</th><th>XP</th><th>BE</th><th>Champion</th><th>LPQ</th></tr></thead><tbody>"
+				var lTable = "<table class='table table-striped table-bordered' style='width:100%'><thead><tr><th style='width:20%'>Account</th><th style='width:15%'>Level</th><th style='width:15%'>XP</th><th style='width:15%'>BE</th><th style='width:20%'>Champion</th><th style='width:15%'>LPQ</th></tr></thead><tbody>"
 				lolAccs.forEach(function(l){
 					var lRow = "<tr><td>" + l.account +"</td><td>" + l.level + " / " + l.maxLevel + "</td><td>" + l.xp + " / " + l.xpCap + "</td><td>" + l.be + "</td><td>" + l.champ + "</td><td>" + l.lpq + "</td></tr>";
 					lTable = lTable + lRow;
