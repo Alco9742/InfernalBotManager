@@ -13,7 +13,6 @@ import org.passay.PasswordData;
 import org.passay.PasswordValidator;
 import org.passay.QwertySequenceRule;
 import org.passay.RuleResult;
-import org.passay.SpecialCharacterRule;
 import org.passay.UppercaseCharacterRule;
 import org.passay.WhitespaceRule;
 
@@ -41,7 +40,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
 		}
 		context.disableDefaultConstraintViolation();
 		context.buildConstraintViolationWithTemplate(
-			Joiner.on(",").join(validator.getMessages(result)))
+			Joiner.on("<br/>").join(validator.getMessages(result)))
 			.addConstraintViolation();
 		return false;
 	}

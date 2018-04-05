@@ -248,6 +248,9 @@ public class LolAccountRestController {
 		List<LolAccount> importedAccounts = new ArrayList<>();
 		List<LolAccount> createdAccounts = new ArrayList<>();
 		
+		//sizeCheck TODO
+		LOGGER.info("file size" +file.getSize());
+		
 		//USER CHECK
 		User user = userService.findUserByUserId(userid);
 		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
@@ -278,6 +281,9 @@ public class LolAccountRestController {
 					}
 				}
 			}
+		}
+		if (hasError){
+			//TODO Write error handling code here
 		}
 		
 		//RESPONSE

@@ -34,7 +34,6 @@
 					<label for="matchingPassword" class="col-12 offset-sm-2 col-sm-2 col-form-label">Confirm password:</label>
 					<div class="col-12 col-sm-6">
 						<input type="password" class="form-control" id="matchingPassword" name="matchingPassword" autofocus="autofocus"/>
-						<span id = "globalError" class="invalid-feedback" style="display:none"></span>
 						<span id = "passwordMatchesError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
@@ -46,7 +45,7 @@
 			</form>
 			<div class="row">
 				<div class = "col-12 offset-sm-2 col-sm-8">
-					<a class="btn btn-secondary btn-block" th:href="@{/login.html}">Log in</a>
+					<a class="btn btn-secondary btn-block" th:href="@{/login}">Log in</a>
 				</div>
 			</div>
 		</div>
@@ -107,7 +106,7 @@
 						});
 						errors = $.parseJSON(data.responseJSON.error);
 						$.each( errors, function( index,item ){
-							$("#globalError").show().append(item.defaultMessage+"<br/>");
+							$("#error").show().append(item.defaultMessage+"<br/>");
 						});
 					}
 					$("#registerButton").html("Register").disabled=false; 

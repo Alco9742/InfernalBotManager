@@ -69,11 +69,12 @@ public class UserController {
 		if (!passwordEncoder.matches(passForm.getOldPassword(), user.getPassword())){
 			errorList.add("Old password is incorrect");
 		}
+		//TODO Do this the same way as in registration
 		if(bindingResult.hasErrors()) {
 			for( ObjectError error : bindingResult.getAllErrors()){
 				String defaultMsg = error.getDefaultMessage();
-				if(defaultMsg.contains(",")){
-					for( String msg : defaultMsg.split(",")){
+				if(defaultMsg.contains("<br/>")){
+					for( String msg : defaultMsg.split("<br/>")){
 						if(!msg.isEmpty()){
 							if(!errorList.contains(msg)){
 								errorList.add(msg);
