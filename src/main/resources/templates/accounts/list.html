@@ -13,6 +13,7 @@
 					text: 'Import',
 					action: function ( e, dt, node, config ) {
 						var file_data = $("#filedialog").prop("files")[0];
+						console.log(file_data);
 						var form_data = new FormData();
 						form_data.append("file", file_data);
 						 $.ajax({
@@ -23,10 +24,26 @@
 							processData: false,
 							data:form_data,
 							type: 'POST',
-							success: function(returnedData) {
-								location.reload();
+							success: function(returnedData){
+								if (returnedData.error != ""){
+									if(returnedData.data.length > 0){
+										$('#warningModalMessage p').html(returnedData.error + "Succesfully uploaded " + returnedData.data.length + " remaining accounts");
+										$('#warningModal').modal('show');
+									} else {
+										$('#errorModalMessage p').html(returnedData.error + "No accounts were uploaded");
+										$('#errorModal').modal('show');
+									}
+								} else {
+									$('#successModalMessage p').html("Succesfully uploaded " + returnedData.data.length + " accounts");
+									$('#successModal').modal('show');
+								}
+								table.ajax.reload();
+							},
+							error:function(returnedData){
+								$('#errorModalMessage p').html(returnedData.responseJSON.message);
+								$('#errorModal').modal('show');
 							}
-						 });
+						});
 					}
 				};
 			
@@ -266,6 +283,51 @@
 		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
 		<div class="container-fluid">
 			<br/>
+			<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					 <div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="errorModalLabel">Error</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body" id="errorModalMessage">
+							<p>Unspecified error!</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					 <div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="warningModalLabel">Warning</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body" id="warningModalMessage">
+							<p>Unspecified warning!</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					 <div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="successModallLabel">Success</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body" id="successModalMessage">
+							<p>Unspecified success!</p>
+						</div>
+					</div>
+				</div>
+			</div>
 			<table id="infernalbotmanager-datatable-accounts" class="table table-striped table-bordered" style="width:100%">
 				<thead>
 					<tr>

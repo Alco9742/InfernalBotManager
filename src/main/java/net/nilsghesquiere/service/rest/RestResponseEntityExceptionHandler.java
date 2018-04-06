@@ -1,5 +1,10 @@
 package net.nilsghesquiere.service.rest;
 
+import net.nilsghesquiere.web.error.UploadedFileContentTypeException;
+import net.nilsghesquiere.web.error.UploadedFileEmptyException;
+import net.nilsghesquiere.web.error.UploadedFileMalformedException;
+import net.nilsghesquiere.web.error.UploadedFileNullException;
+import net.nilsghesquiere.web.error.UploadedFileSizeException;
 import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 import net.nilsghesquiere.web.error.UserNotFoundException;
 import net.nilsghesquiere.web.util.GenericResponse;
@@ -39,21 +44,56 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	public ResponseEntity<Object> handleUserIsNotOwner(RuntimeException ex, WebRequest request) {
 		LOGGER.error("500 Status Code", ex);
 		GenericResponse bodyOfResponse = new GenericResponse("User is not the owner of the requested resource", "AccessError");
-		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
 	}
 	
 	@ExceptionHandler({ MailAuthenticationException.class })
 	public ResponseEntity<Object> handleMail(RuntimeException ex, WebRequest request) {
 		LOGGER.error("500 Status Code", ex);
 		GenericResponse bodyOfResponse = new GenericResponse("Problem sending mail", "MailError");
-		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+	}
+	
+	@ExceptionHandler({ UploadedFileSizeException.class })
+	public ResponseEntity<Object> handleFileSizeException(RuntimeException ex, WebRequest request) {
+		LOGGER.error("500 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("Maximum upload file size is 1MB!", "UploadSizeError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ UploadedFileContentTypeException.class })
+	public ResponseEntity<Object> handleFileContentTypeException(RuntimeException ex, WebRequest request) {
+		LOGGER.error("500 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("Uploaded file is not a plain text file!", "ContentTypeError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ UploadedFileNullException.class })
+	public ResponseEntity<Object> handleFileNullException(RuntimeException ex, WebRequest request) {
+		LOGGER.error("500 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("Select a file before importing!", "NullFileError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ UploadedFileMalformedException.class })
+	public ResponseEntity<Object> handleFileMallformedException(RuntimeException ex, WebRequest request) {
+		LOGGER.error("500 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("Uploaded file is malformed. <br /> Check your syntax (ACCOUNT:PASSWORD:REGION)", "MalformedFileError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ UploadedFileEmptyException.class })
+	public ResponseEntity<Object> handleFileEmptyException(RuntimeException ex, WebRequest request) {
+		LOGGER.error("500 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("The uploaded file is empty!", "EmptysFileError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
 	@ExceptionHandler({ Exception.class })
 	public ResponseEntity<Object> handleInternal(RuntimeException ex, WebRequest request) {
 		LOGGER.error("500 Status Code", ex);
 		GenericResponse bodyOfResponse = new GenericResponse("Internal Server Error", "InternalError");
-		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
 	}
 	
 	@Override

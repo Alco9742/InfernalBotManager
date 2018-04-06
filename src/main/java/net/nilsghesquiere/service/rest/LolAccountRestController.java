@@ -21,6 +21,11 @@ import net.nilsghesquiere.util.wrappers.LolAccountWrapper;
 import net.nilsghesquiere.util.wrappers.LolMixedAccountMap;
 import net.nilsghesquiere.util.wrappers.StringResponseMap;
 import net.nilsghesquiere.web.error.AccountNotFoundException;
+import net.nilsghesquiere.web.error.UploadedFileContentTypeException;
+import net.nilsghesquiere.web.error.UploadedFileEmptyException;
+import net.nilsghesquiere.web.error.UploadedFileMalformedException;
+import net.nilsghesquiere.web.error.UploadedFileNullException;
+import net.nilsghesquiere.web.error.UploadedFileSizeException;
 import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 import net.nilsghesquiere.web.error.UserNotFoundException;
 
@@ -242,14 +247,11 @@ public class LolAccountRestController {
 	@RequestMapping(value="/user/{userid}/import", method=RequestMethod.POST)
 	public ResponseEntity<LolAccountWrapper> processUpload(@PathVariable Long userid, @RequestParam MultipartFile file) throws IOException {
 		//VARS
-		boolean hasError = false;
 		String error = "";
+		StringBuilder errorBuilder = new StringBuilder("");
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		List<LolAccount> importedAccounts = new ArrayList<>();
 		List<LolAccount> createdAccounts = new ArrayList<>();
-		
-		//sizeCheck TODO
-		LOGGER.info("file size" +file.getSize());
 		
 		//USER CHECK
 		User user = userService.findUserByUserId(userid);
@@ -257,33 +259,52 @@ public class LolAccountRestController {
 			throw new UserIsNotOwnerOfResourceException();
 		}
 		
-		//PROCESSING
-		if (file.getContentType().equals("text/plain")){
-			try(Stream<String> stream = new BufferedReader(new InputStreamReader(file.getInputStream(), Charset.forName("UTF-8"))).lines()){
-				importedAccounts = stream
-									.map(line -> LolAccount.buildFromString(user,line))
-									.collect(Collectors.toList());
-			}
-		} else {
-			hasError = true;
-			error = "Uploaded file is not a plain text file!";
+		//NULL CHECK --> TODO fix
+		if(file == null){
+			throw new UploadedFileNullException();
 		}
+		
+		//SIZE CHECK: geen bestanden groter dan 1 MB
+		if(file.getSize() > 1048576){
+			LOGGER.info("User " + userid + " attempted to upload a file of " + file.getSize() + " bytes");
+			throw new UploadedFileSizeException();
+		}
+		
+		//TYPE CHECK
+		if(!file.getContentType().equals("text/plain")){
+			LOGGER.info("User " + userid + " attempted to upload a file of type " + file.getContentType());
+			throw new UploadedFileContentTypeException();
+		}
+		
+		//MAP THE INPUT TO LOLACCOUNTS & FILE FORM CHECK
+		try(Stream<String> stream = new BufferedReader(new InputStreamReader(file.getInputStream(), Charset.forName("UTF-8"))).lines()){
+			importedAccounts = stream
+								.map(line -> LolAccount.buildFromString(user,line))
+								.collect(Collectors.toList());
+		} catch (IllegalArgumentException | IllegalStateException | ArrayIndexOutOfBoundsException e) {
+			throw new UploadedFileMalformedException();
+		}
+		
+		//EMPTY ACCOUNTLISTCHECK
+		if(importedAccounts.isEmpty()){
+			throw new UploadedFileEmptyException();
+		}
+		
 		for (LolAccount importedAccount : importedAccounts){
 			LolAccount createdAccount = lolAccountService.create(importedAccount);
 			if (createdAccount != null){
 				createdAccounts.add(createdAccount);
 			} else {
-				if (!error.equals("Uploaded file is not a plain text file!")){
-					if (error.equals("")){
-						error= "The following account/region combinations already exist in the database: " + importedAccount.getAccount() + "/" + importedAccount.getRegion();
-					} else {
-						error = error + ", " +  importedAccount.getAccount() + "/" + importedAccount.getRegion();
-					}
+				if (errorBuilder.toString().equals("")){
+					errorBuilder.append("The following combinations already exist: <ul><li>" + importedAccount.getAccount() + "/" + importedAccount.getRegion() + "</li>");
+				} else {
+					errorBuilder.append("<li>" + importedAccount.getAccount() + "/" + importedAccount.getRegion() + "</li>");
 				}
 			}
 		}
-		if (hasError){
-			//TODO Write error handling code here
+		if (!errorBuilder.toString().equals("")){
+			errorBuilder.append("</ul>");
+			error = errorBuilder.toString();
 		}
 		
 		//RESPONSE
