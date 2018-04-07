@@ -13,37 +13,44 @@
 					text: 'Import',
 					action: function ( e, dt, node, config ) {
 						var file_data = $("#filedialog").prop("files")[0];
-						console.log(file_data);
-						var form_data = new FormData();
-						form_data.append("file", file_data);
-						 $.ajax({
-							url: restlnk + "/import",
-							dataType: "json",
-							cache: false,
-							contentType: false,
-							processData: false,
-							data:form_data,
-							type: 'POST',
-							success: function(returnedData){
-								if (returnedData.error != ""){
-									if(returnedData.data.length > 0){
-										$('#warningModalMessage p').html(returnedData.error + "Succesfully uploaded " + returnedData.data.length + " remaining accounts");
-										$('#warningModal').modal('show');
+						if(file_data === undefined){
+							$('#errorModalMessage p').html("Select a file first!");
+							$('#errorModal').modal('show');
+						} else if (file_data.size > 1000000 ){
+							$('#errorModalMessage p').html("Maximum upload file size is 1MB!");
+							$('#errorModal').modal('show');
+						} else {
+							var form_data = new FormData();
+							form_data.append("file", file_data);
+							 $.ajax({
+								url: restlnk + "/import",
+								dataType: "json",
+								cache: false,
+								contentType: false,
+								processData: false,
+								data:form_data,
+								type: 'POST',
+								success: function(returnedData){
+									if (returnedData.error != ""){
+										if(returnedData.data.length > 0){
+											$('#warningModalMessage p').html(returnedData.error + "Succesfully uploaded " + returnedData.data.length + " remaining accounts");
+											$('#warningModal').modal('show');
+										} else {
+											$('#errorModalMessage p').html(returnedData.error + "No accounts were uploaded");
+											$('#errorModal').modal('show');
+										}
 									} else {
-										$('#errorModalMessage p').html(returnedData.error + "No accounts were uploaded");
-										$('#errorModal').modal('show');
+										$('#successModalMessage p').html("Succesfully uploaded " + returnedData.data.length + " accounts");
+										$('#successModal').modal('show');
 									}
-								} else {
-									$('#successModalMessage p').html("Succesfully uploaded " + returnedData.data.length + " accounts");
-									$('#successModal').modal('show');
+									table.ajax.reload();
+								},
+								error:function(returnedData){
+									$('#errorModalMessage p').html(returnedData.responseJSON.message);
+									$('#errorModal').modal('show');
 								}
-								table.ajax.reload();
-							},
-							error:function(returnedData){
-								$('#errorModalMessage p').html(returnedData.responseJSON.message);
-								$('#errorModal').modal('show');
-							}
-						});
+							});
+						}
 					}
 				};
 			
