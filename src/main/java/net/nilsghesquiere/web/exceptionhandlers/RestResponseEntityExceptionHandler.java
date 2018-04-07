@@ -1,4 +1,4 @@
-package net.nilsghesquiere.service.rest;
+package net.nilsghesquiere.web.exceptionhandlers;
 
 import net.nilsghesquiere.web.error.UploadedFileContentTypeException;
 import net.nilsghesquiere.web.error.UploadedFileEmptyException;

@@ -1,4 +1,4 @@
-package net.nilsghesquiere.web.controllers;
+package net.nilsghesquiere.web.exceptionhandlers;
 
 import java.util.ArrayList;
 import java.util.List;

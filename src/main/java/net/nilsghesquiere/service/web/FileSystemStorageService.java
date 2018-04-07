@@ -9,9 +9,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 import net.nilsghesquiere.configuration.properties.StorageProperties;
-import net.nilsghesquiere.service.rest.RestResponseEntityExceptionHandler;
 import net.nilsghesquiere.web.error.StorageException;
 import net.nilsghesquiere.web.error.StorageFileNotFoundException;
+import net.nilsghesquiere.web.exceptionhandlers.RestResponseEntityExceptionHandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,9 +39,6 @@ public class FileSystemStorageService implements StorageService {
 	public void store(MultipartFile file) {
 		String filename = StringUtils.cleanPath(file.getOriginalFilename());
 		try {
-			LOGGER.info("Size: " + file.getSize());
-			LOGGER.info("Name: " + file.getName());
-			LOGGER.info("OriginalName: " + file.getOriginalFilename());
 			if (file.isEmpty()) {
 				throw new StorageException("Failed to store empty file " + filename);
 			}
