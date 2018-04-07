@@ -1,6 +1,7 @@
 package net.nilsghesquiere.web.controllers;
 
 import net.nilsghesquiere.service.web.StorageService;
+import net.nilsghesquiere.web.annotations.ViewController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@ViewController
 @RequestMapping("/downloads")
 public class DownloadsController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DownloadsController.class);	

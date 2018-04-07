@@ -5,8 +5,8 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
-import net.nilsghesquiere.validation.PasswordMatches;
-import net.nilsghesquiere.validation.ValidEmail;
+import net.nilsghesquiere.web.validation.PasswordMatches;
+import net.nilsghesquiere.web.validation.ValidEmail;
 
 import org.hibernate.validator.constraints.NotEmpty;
 

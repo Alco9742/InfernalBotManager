@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.service.web.InfernalSettingsService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
+import net.nilsghesquiere.web.annotations.ViewController;
 import net.nilsghesquiere.web.dto.InfernalSettingsDTO;
 
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@ViewController
 @RequestMapping("/infernalsettings")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
 public class InfernalSettingsController {

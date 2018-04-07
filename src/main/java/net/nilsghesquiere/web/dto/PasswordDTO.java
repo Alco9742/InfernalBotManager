@@ -1,10 +1,9 @@
 package net.nilsghesquiere.web.dto;
 
-import net.nilsghesquiere.validation.ValidPassword;
-
 import java.io.Serializable;
 
 import lombok.Data;
+import net.nilsghesquiere.web.validation.ValidPassword;
 
 @Data
 public class PasswordDTO implements Serializable{

@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
+import net.nilsghesquiere.web.annotations.ViewController;
 import net.nilsghesquiere.web.dto.UserChangePasswordDTO;
 
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@ViewController
 @RequestMapping("/user")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
 public class UserController {

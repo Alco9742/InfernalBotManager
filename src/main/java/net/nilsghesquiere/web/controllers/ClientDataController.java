@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
+import net.nilsghesquiere.web.annotations.ViewController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@ViewController
 @RequestMapping("/clients")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
 public class ClientDataController {

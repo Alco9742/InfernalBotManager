@@ -12,6 +12,7 @@ import net.nilsghesquiere.service.web.RoleService;
 import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.enums.Region;
 import net.nilsghesquiere.util.enums.RoleEnum;
+import net.nilsghesquiere.web.annotations.ViewController;
 import net.nilsghesquiere.web.dto.UserDTO;
 
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
+@ViewController
 @RequestMapping("/init")
 public class InitializationController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InitializationController.class);

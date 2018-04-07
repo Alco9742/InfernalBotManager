@@ -3,6 +3,7 @@ package net.nilsghesquiere.web.controllers;
 import javax.servlet.http.HttpServletRequest;
 
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
+import net.nilsghesquiere.web.annotations.ViewController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
+@ViewController
 @RequestMapping("/test")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class TestController {

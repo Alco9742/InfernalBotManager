@@ -10,6 +10,7 @@ import net.nilsghesquiere.service.web.GlobalVariableService;
 import net.nilsghesquiere.service.web.StorageService;
 import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
+import net.nilsghesquiere.web.annotations.ViewController;
 import net.nilsghesquiere.web.error.StorageFileNotFoundException;
 
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@ViewController
 @RequestMapping("/admin")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {

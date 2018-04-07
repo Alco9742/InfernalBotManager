@@ -14,6 +14,7 @@ import net.nilsghesquiere.registration.OnRegistrationCompleteEvent;
 import net.nilsghesquiere.security.IUserSecurityService;
 import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
+import net.nilsghesquiere.web.annotations.ViewController;
 import net.nilsghesquiere.web.dto.PasswordDTO;
 import net.nilsghesquiere.web.dto.UserDTO;
 import net.nilsghesquiere.web.error.EmailExistsException;
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 @Controller
+@ViewController
 public class RegistrationController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
 	

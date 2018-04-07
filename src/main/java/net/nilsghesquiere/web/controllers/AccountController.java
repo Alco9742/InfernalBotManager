@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
+import net.nilsghesquiere.web.annotations.ViewController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@ViewController
 @RequestMapping("/accounts")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-public class AccountController {
+public class AccountController{
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 	private static final String LIST_VIEW = "accounts/list";
 	

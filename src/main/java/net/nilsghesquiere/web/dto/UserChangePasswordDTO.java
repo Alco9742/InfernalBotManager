@@ -1,12 +1,11 @@
 package net.nilsghesquiere.web.dto;
 
-import net.nilsghesquiere.validation.ChangePasswordMatches;
-import net.nilsghesquiere.validation.PasswordMatches;
-import net.nilsghesquiere.validation.ValidPassword;
-
 import java.io.Serializable;
 
 import lombok.Data;
+import net.nilsghesquiere.web.validation.ChangePasswordMatches;
+import net.nilsghesquiere.web.validation.PasswordMatches;
+import net.nilsghesquiere.web.validation.ValidPassword;
 
 @Data
 @ChangePasswordMatches
