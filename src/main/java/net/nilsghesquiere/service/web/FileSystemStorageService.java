@@ -9,9 +9,12 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 import net.nilsghesquiere.configuration.properties.StorageProperties;
+import net.nilsghesquiere.service.rest.RestResponseEntityExceptionHandler;
 import net.nilsghesquiere.web.error.StorageException;
 import net.nilsghesquiere.web.error.StorageFileNotFoundException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -23,9 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileSystemStorageService implements StorageService {
-
 	private final Path rootLocation;
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemStorageService.class);
+	
 	@Autowired
     public FileSystemStorageService(StorageProperties properties) {
 		this.rootLocation = Paths.get(properties.getLocation());
@@ -36,6 +39,9 @@ public class FileSystemStorageService implements StorageService {
 	public void store(MultipartFile file) {
 		String filename = StringUtils.cleanPath(file.getOriginalFilename());
 		try {
+			LOGGER.info("Size: " + file.getSize());
+			LOGGER.info("Name: " + file.getName());
+			LOGGER.info("OriginalName: " + file.getOriginalFilename());
 			if (file.isEmpty()) {
 				throw new StorageException("Failed to store empty file " + filename);
 			}
