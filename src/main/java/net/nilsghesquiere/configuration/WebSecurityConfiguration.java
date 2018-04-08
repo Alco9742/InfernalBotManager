@@ -163,7 +163,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					.sessionFixation().migrateSession()
 					.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 					.invalidSessionUrl("/invalidSession")
-					.maximumSessions(1)
+					.maximumSessions(3)
 					.expiredUrl("/sessionExpired");
 		}
 	

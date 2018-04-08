@@ -125,6 +125,11 @@
 				]
 			} );
 
+			// reload every 5 minutes
+			setInterval( function () {
+				table.ajax.reload( null, false ); // user paging is not reset on reload
+			}, 300000 );
+			
 			// Array to track the ids of the details displayed rows
 			var detailRows = [];
 		
