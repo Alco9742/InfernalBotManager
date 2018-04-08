@@ -18,6 +18,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.enums.Region;
+import net.nilsghesquiere.web.error.UploadedFileMalformedException;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -75,6 +76,27 @@ public class LolAccount implements Serializable{
 		this.info = "";
 	}
 	
+	public LolAccount(User user, String account, String password, Region region, Integer level) {
+		super();
+		this.user = user;
+		this.account = account;
+		this.password = password;
+		this.summoner = "";
+		this.region = region;
+		this.level = level;
+		this.maxLevel = user.getInfernalSettings().getMaxLevel();
+		this.xp = 0;
+		this.be = 0;
+		this.maxBe = user.getInfernalSettings().getMaxBe();
+		this.priority = user.getInfernalSettings().getPrio();
+		this.playTime = user.getInfernalSettings().getPlayTime();
+		this.sleepTime = user.getInfernalSettings().getSleepTime();
+		this.active = user.getInfernalSettings().getAktive();
+		this.accountStatus = AccountStatus.NEW;
+		this.assignedTo = "";
+		this.info = "";
+	}
+
 	public void setUser(User user) {
 		if (this.user != null && this.user.getLolAccounts().contains(this)){
 			this.user.removeLolAccount(this);
@@ -87,10 +109,23 @@ public class LolAccount implements Serializable{
 	
 	public static LolAccount buildFromString(User user, String line){
 		String input[] = line.split(":");
-		String account = input[0];
-		String password = input[1];
-		String regionString = input[2];
-		Region region = Region.valueOf(regionString);
-		return new LolAccount(user,account,password, region);
+		if (input.length == 3){
+			String account = input[0];
+			String password = input[1];
+			String regionString = input[2];
+			Region region = Region.valueOf(regionString);
+			return new LolAccount(user,account,password, region);		
+		} else {
+			if (input.length == 4){
+				String account = input[0];
+				String password = input[1];
+				String regionString = input[2];
+				Region region = Region.valueOf(regionString);
+				Integer level = Integer.parseInt(input[3]);
+				return new LolAccount(user,account,password, region, level);		
+			} else {
+				throw new UploadedFileMalformedException();
+			}
+		}
 	}
 }

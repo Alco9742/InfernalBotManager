@@ -78,7 +78,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@ExceptionHandler({ UploadedFileMalformedException.class })
 	public ResponseEntity<Object> handleFileMallformedException(RuntimeException ex, WebRequest request) {
 		LOGGER.error("500 Status Code", ex);
-		GenericResponse bodyOfResponse = new GenericResponse("Uploaded file is malformed. <br /> Check your syntax (ACCOUNT:PASSWORD:REGION)", "MalformedFileError");
+		GenericResponse bodyOfResponse = new GenericResponse("Uploaded file is malformed, accepted syntax: <br /> ACCOUNT:PASSWORD:REGION <br />  ACCOUNT:PASSWORD:REGION:LEVEL", "MalformedFileError");
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	

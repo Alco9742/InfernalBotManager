@@ -281,7 +281,7 @@ public class LolAccountRestController {
 			importedAccounts = stream
 								.map(line -> LolAccount.buildFromString(user,line))
 								.collect(Collectors.toList());
-		} catch (IllegalArgumentException | IllegalStateException | ArrayIndexOutOfBoundsException e) {
+		} catch (IllegalArgumentException | IllegalStateException | ArrayIndexOutOfBoundsException | UploadedFileMalformedException e) {
 			throw new UploadedFileMalformedException();
 		}
 		
