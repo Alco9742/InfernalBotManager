@@ -1,0 +1,52 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+		<script th:inline="javascript">
+			$(document).ready(function() {
+				$( "#navAdmin" ).addClass( "active" );
+			});
+		</script>
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready(function() {
+			var editor; 
+			
+			var restlnk = "/api/admin/metrics/"
+		
+			var table = $('#infernalbotmanager-datatable-metrics').DataTable( {
+				responsive: true,
+				dom: "<'row'<'col-9'B><'col-3 float-right'f>>rtip",
+				pageLength: 50,
+				scrollX: true,
+				ajax:{
+					"url": restlnk ,
+					"dataSrc": "data",
+					"dataType": "json",
+					"cache": false,
+					"contentType": "application/json; charset=utf-8"
+				},
+				columns: [
+				{ data: "id" },
+				{ data: "name"},
+				{ data: "value" }
+				],
+			} );
+			
+			
+		} );/*]]>*/
+		</script>
+	</head>
+	<body>
+		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+		<br/>
+		<table id="infernalbotmanager-datatable-metrics" class="table table-striped table-bordered nowrap" style="width:100%" >
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Value</th>
+				</tr>
+			</thead>
+		</table>
+	</body>
+</html>

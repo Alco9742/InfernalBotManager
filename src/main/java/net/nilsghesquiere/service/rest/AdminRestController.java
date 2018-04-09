@@ -5,23 +5,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import net.nilsghesquiere.entities.GlobalVariable;
-import net.nilsghesquiere.entities.InfernalSettings;
-import net.nilsghesquiere.entities.Metric;
-import net.nilsghesquiere.entities.Role;
-import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.service.web.GlobalVariableService;
-import net.nilsghesquiere.service.web.InfernalSettingsService;
-import net.nilsghesquiere.service.web.MetricService;
-import net.nilsghesquiere.service.web.RoleService;
-import net.nilsghesquiere.service.web.UserService;
-import net.nilsghesquiere.util.wrappers.GlobalVariableMap;
-import net.nilsghesquiere.util.wrappers.GlobalVariableWrapper;
-import net.nilsghesquiere.util.wrappers.MetricWrapper;
-import net.nilsghesquiere.util.wrappers.UserMap;
-import net.nilsghesquiere.util.wrappers.UserWrapper;
-import net.nilsghesquiere.web.dto.UserAdminDTO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +16,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import net.nilsghesquiere.entities.GlobalVariable;
+import net.nilsghesquiere.entities.InfernalSettings;
+import net.nilsghesquiere.entities.Metric;
+import net.nilsghesquiere.entities.Role;
+import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.service.web.ClientDataService;
+import net.nilsghesquiere.service.web.GlobalVariableService;
+import net.nilsghesquiere.service.web.InfernalSettingsService;
+import net.nilsghesquiere.service.web.LolAccountService;
+import net.nilsghesquiere.service.web.MetricService;
+import net.nilsghesquiere.service.web.RoleService;
+import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.util.wrappers.GlobalVariableMap;
+import net.nilsghesquiere.util.wrappers.GlobalVariableWrapper;
+import net.nilsghesquiere.util.wrappers.MetricWrapper;
+import net.nilsghesquiere.util.wrappers.UserMap;
+import net.nilsghesquiere.util.wrappers.UserWrapper;
+import net.nilsghesquiere.web.dto.UserAdminDTO;
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -57,6 +59,12 @@ public class AdminRestController {
 	private InfernalSettingsService infernalSettingsService;
 	
 	@Autowired
+	private LolAccountService accountService;
+	
+	@Autowired
+	private ClientDataService clientDataService;
+	
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 //METRICS
@@ -71,6 +79,12 @@ public class AdminRestController {
 		
 		//Generate all metrics
 		Metric totalUserMetric = new Metric ("totalUsers",Long.toString(userService.countAll()));
+		Metric totalAccountsMetric = new Metric("totalAccounts", Long.toString(accountService.countAll()));
+		Metric runningQueuersMetric = new Metric("runningQueuers", Long.toString(clientDataService.countActiveQueuers()));
+		createOrUpdateMetric(totalUserMetric);
+		createOrUpdateMetric(totalAccountsMetric);
+		createOrUpdateMetric(runningQueuersMetric);
+		
 		
 		//Get all metrics
 		List<Metric> metrics = metricService.findAll();
@@ -83,6 +97,16 @@ public class AdminRestController {
 		return new ResponseEntity<MetricWrapper>(wrapper, HttpStatus.OK);
 	}
 	
+	private void createOrUpdateMetric(Metric metric) {
+		Metric metricFromDB = metricService.findByName(metric.getName());
+		if (metricFromDB == null){
+			metricService.create(metric);
+		} else {
+			metricFromDB.setValue(metric.getValue());
+			metricService.update(metricFromDB);
+		}
+	}
+
 //GLOBAL VARIABLES
 	
 	@RequestMapping(path = "/globalvars", method = RequestMethod.GET)

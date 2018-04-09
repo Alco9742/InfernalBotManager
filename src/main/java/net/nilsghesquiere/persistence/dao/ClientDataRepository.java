@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClientDataRepository extends JpaRepository<ClientData, Long> {
 	void deleteById(Long id);
+	List<ClientData> findAll();
 	List<ClientData> findByUserId(Long userid);
 	ClientData findByTagAndUserId(String tag, Long userid);
 }

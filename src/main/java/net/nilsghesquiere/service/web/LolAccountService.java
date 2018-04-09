@@ -21,4 +21,5 @@ public interface LolAccountService {
 	List <LolAccount> findUsableAccounts(Long userid, Region region, Integer amount);
 	List <LolAccount> findBufferAccounts(Long userid, Region region, Integer amount);
 	LolAccount findByUserIdAndRegionAndAccount(Long userid, Region region, String account);
+	long countAll();
 }

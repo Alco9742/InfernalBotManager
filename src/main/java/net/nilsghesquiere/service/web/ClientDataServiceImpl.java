@@ -94,4 +94,15 @@ public class ClientDataServiceImpl implements ClientDataService{
 	public ClientData findByTagAndUserId(String tag, Long userid) {
 		return clientDataRepository.findByTagAndUserId(tag,userid);
 	}
+
+	@Override
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public long countActiveQueuers() {
+		long count = 0L;
+		List<ClientData> allClientDatas = clientDataRepository.findAll();
+		for (ClientData data : allClientDatas){
+			count += data.getQueuers().size();
+		}
+		return count;
+	}
 }

@@ -12,4 +12,5 @@ public interface ClientDataService {
 	void deleteById(Long id);
 	List<ClientData> findByUserId(Long userid);
 	ClientData findByTagAndUserId(String tag, Long userid);
+	long countActiveQueuers();
 }

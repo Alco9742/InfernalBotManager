@@ -147,4 +147,9 @@ public class LolAccountServiceImpl implements LolAccountService{
 	public LolAccount findByUserIdAndRegionAndAccount(Long userid, Region region, String account) {
 		return lolAccountRepository.findByAccountIgnoreCaseAndRegionAndUserId(account, region, userid);
 	}
+
+	@Override
+	public long countAll() {
+		return lolAccountRepository.count();
+	}
 }
