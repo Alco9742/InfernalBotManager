@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class InitialDataLoader implements ApplicationListener<ContextRefreshedEvent> {
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(InitialDataLoader.class);
 	boolean alreadySetup = false;
 	

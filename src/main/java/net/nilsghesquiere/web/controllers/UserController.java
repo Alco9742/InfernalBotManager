@@ -30,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/user")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
 public class UserController {
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 	private static final String USER_SETTINGS_VIEW= "user/settings";
 	
@@ -71,7 +72,6 @@ public class UserController {
 		if (!passwordEncoder.matches(passForm.getOldPassword(), user.getPassword())){
 			errorList.add("Old password is incorrect");
 		}
-		//TODO Do this the same way as in registration
 		if(bindingResult.hasErrors()) {
 			for( ObjectError error : bindingResult.getAllErrors()){
 				String defaultMsg = error.getDefaultMessage();

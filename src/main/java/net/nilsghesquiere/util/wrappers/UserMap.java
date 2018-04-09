@@ -3,7 +3,6 @@ package net.nilsghesquiere.util.wrappers;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.web.dto.UserAdminDTO;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;

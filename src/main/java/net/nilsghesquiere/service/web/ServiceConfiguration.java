@@ -8,5 +8,5 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAutoConfiguration
 @EnableTransactionManagement
 public class ServiceConfiguration {
-//TODO READONLY AND MODYFIEN TOEPASSEN (VOORLOPIG ALLES MODIFYING)
+//TODO Read-only and modifying transactions
 }

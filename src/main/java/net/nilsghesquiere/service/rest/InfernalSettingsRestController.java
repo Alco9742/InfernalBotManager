@@ -1,7 +1,5 @@
 package net.nilsghesquiere.service.rest;
 
-import java.util.Optional;
-
 import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.InfernalSettingsService;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/infernalsettings")
 public class InfernalSettingsRestController {
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(InfernalSettingsRestController.class);
 
 	@Autowired

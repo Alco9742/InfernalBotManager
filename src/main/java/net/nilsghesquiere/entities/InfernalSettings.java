@@ -95,8 +95,7 @@ public class InfernalSettings implements Serializable{
 	private Boolean exportLevel;
 	private Boolean exportBE;
 
-	//TODO Enable API SETTINGS?
-	
+	//TODO: API SETTINGS
 	
 	public InfernalSettings(){} 
 	public InfernalSettings(User user) {

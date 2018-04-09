@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileSystemStorageService implements StorageService {
 	private final Path rootLocation;
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemStorageService.class);
 	
 	@Autowired

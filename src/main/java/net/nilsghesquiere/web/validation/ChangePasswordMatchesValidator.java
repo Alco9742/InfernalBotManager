@@ -4,7 +4,6 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import net.nilsghesquiere.web.dto.UserChangePasswordDTO;
-import net.nilsghesquiere.web.dto.UserDTO;
 
 public class ChangePasswordMatchesValidator implements ConstraintValidator<ChangePasswordMatches, Object> { 
 

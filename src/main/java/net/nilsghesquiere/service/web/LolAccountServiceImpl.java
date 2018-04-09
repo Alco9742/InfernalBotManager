@@ -79,7 +79,6 @@ public class LolAccountServiceImpl implements LolAccountService{
 	@ModifyingTransactionalServiceMethod
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public LolAccount update(LolAccount lolAccount) {
-		//TODO works perfectly with NA, EUW and EUNE, but not with other servers for some reason
 		Boolean accountAlreadyExistsOnRegion = false;
 		// find the account with that ID in the database
 		LolAccount currentDBAccount = lolAccountRepository.findById(lolAccount.getId());

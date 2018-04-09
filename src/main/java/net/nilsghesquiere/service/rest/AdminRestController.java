@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/api/admin")
 public class AdminRestController {
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminRestController.class);
 	
 	@Autowired 

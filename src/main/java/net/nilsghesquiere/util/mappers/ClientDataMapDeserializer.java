@@ -63,7 +63,6 @@ public class ClientDataMapDeserializer extends JsonDeserializer<ClientDataMap>{
 				Queuer queuer = new Queuer(queuerId,queuerQueuer,queuerSoftEnd,queuerAfterGame,queuerPlayedGames,queuerWinGames,queuerDefeatGames,lolAccounts);
 				queuers.add(queuer);
 			}
-			JsonNode statusNodes = clientNode.get("statusList");;
 			final String clientDateString = clientNode.get("date").asText();
 			final LocalDateTime clientDate = LocalDateTime.parse(clientDateString);
 			final String clientStatus = clientNode.get("status").asText();

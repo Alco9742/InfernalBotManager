@@ -24,7 +24,6 @@ import net.nilsghesquiere.web.error.AccountNotFoundException;
 import net.nilsghesquiere.web.error.UploadedFileContentTypeException;
 import net.nilsghesquiere.web.error.UploadedFileEmptyException;
 import net.nilsghesquiere.web.error.UploadedFileMalformedException;
-import net.nilsghesquiere.web.error.UploadedFileNullException;
 import net.nilsghesquiere.web.error.UploadedFileSizeException;
 import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 import net.nilsghesquiere.web.error.UserNotFoundException;
@@ -44,7 +43,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.Preconditions;
 
-//TODO:CHeckuser uitwerken
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -259,11 +257,6 @@ public class LolAccountRestController {
 			throw new UserIsNotOwnerOfResourceException();
 		}
 		
-		//NULL CHECK --> TODO fix
-		if(file == null){
-			throw new UploadedFileNullException();
-		}
-		
 		//SIZE CHECK: geen bestanden groter dan 1 MB
 		if(file.getSize() > 1048576){
 			LOGGER.info("User " + userid + " attempted to upload a file of " + file.getSize() + " bytes");
@@ -327,7 +320,6 @@ public class LolAccountRestController {
 	
 	@RequestMapping(path = "/user/{userid}/infernalImport",method = RequestMethod.PUT)
 	public ResponseEntity<StringResponseMap> infernalImport(@PathVariable Long userid,@RequestBody LolMixedAccountMap lolMixedAccountMap) {
-		//TODO put better error handling in this
 		//VARS
 		StringResponseMap responseMap = new StringResponseMap();
 		String response = "OK";

@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import lombok.Data;
 import net.nilsghesquiere.web.validation.ChangePasswordMatches;
-import net.nilsghesquiere.web.validation.PasswordMatches;
 import net.nilsghesquiere.web.validation.ValidPassword;
 
 @Data

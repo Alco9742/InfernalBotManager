@@ -1,7 +1,6 @@
 package net.nilsghesquiere.security;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,7 +8,6 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
-import net.nilsghesquiere.entities.Privilege;
 import net.nilsghesquiere.entities.Role;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.RoleService;
@@ -19,7 +17,6 @@ import net.nilsghesquiere.web.error.IPBlockedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +27,7 @@ import org.springframework.stereotype.Service;
 @Service("userDetailsService")
 @Transactional
 public class MyUserDetailsService implements UserDetailsService {
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyUserDetailsService.class);
 	
 	@Autowired

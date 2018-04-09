@@ -63,7 +63,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 					.anyRequest().authenticated()
 				.and()
-				// TODO: Stateless REST is prefered but not workable with grids atm
+				// TODO: Stateless REST
 				//.sessionManagement()
 				//	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				//.and()

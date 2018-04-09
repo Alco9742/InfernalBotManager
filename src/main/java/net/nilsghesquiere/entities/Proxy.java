@@ -12,7 +12,7 @@ import lombok.Data;
 import net.nilsghesquiere.util.enums.ProxyType;
 
 import org.hibernate.validator.constraints.NotBlank;
-//TODO when everything else works
+//TODO: Proxies
 
 @Data
 @Entity

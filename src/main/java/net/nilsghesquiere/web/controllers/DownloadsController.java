@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ViewController
 @RequestMapping("/downloads")
 public class DownloadsController {
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(DownloadsController.class);	
 	@Autowired
 	private StorageService storageService;

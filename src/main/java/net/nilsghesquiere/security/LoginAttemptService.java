@@ -12,6 +12,7 @@ import com.google.common.cache.LoadingCache;
 
 @Service
 public class LoginAttemptService {
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoginAttemptService.class);
 	private final int MAX_ATTEMPT = 10;
 	private LoadingCache<String, Integer> attemptsCache;

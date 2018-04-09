@@ -16,7 +16,6 @@ import net.nilsghesquiere.persistence.dao.RoleRepository;
 import net.nilsghesquiere.persistence.dao.UserRepository;
 import net.nilsghesquiere.persistence.dao.VerificationTokenRepository;
 import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
-import net.nilsghesquiere.util.enums.RoleEnum;
 import net.nilsghesquiere.web.dto.UserDTO;
 import net.nilsghesquiere.web.error.EmailExistsException;
 
@@ -81,7 +80,6 @@ public class UserServiceImpl implements UserService{
 		userRepository.delete(user);
 	}
 
-	//TODO optional use bekijken
 	@Override
 	public User findUserByEmail(String username) {
 		return userRepository.findByEmailIgnoreCase(username);

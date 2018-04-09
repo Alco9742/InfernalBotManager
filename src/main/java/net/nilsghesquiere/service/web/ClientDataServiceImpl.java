@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class ClientDataServiceImpl implements ClientDataService{
 	private final ClientDataRepository clientDataRepository;
+	@SuppressWarnings("unused")
 	private final QueuerRepository queuerRepository;
+	@SuppressWarnings("unused")
 	private final QueuerLolAccountRepository queuerLolAccountRepository;
 	
 	@Autowired
