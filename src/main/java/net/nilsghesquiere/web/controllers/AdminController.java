@@ -41,6 +41,7 @@ public class AdminController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 	private static final String PANEL_VIEW = "admin/panel";
 	private static final String GLOBAL_VARS_VIEW = "admin/globalvars";
+	private static final String METRICS_VIEW = "admin/metrics";
 	private static final String USERS_VIEW = "admin/users";
 	private static final String FILES_VIEW = "admin/files";
 	
@@ -70,7 +71,7 @@ public class AdminController {
 	//METRICS
 	@RequestMapping(value = "/metrics", method = RequestMethod.GET)
 	ModelAndView metrics() {
-		return new ModelAndView(GLOBAL_VARS_VIEW);
+		return new ModelAndView(METRICS_VIEW);
 		}
 	
 	//GLOBAL VARS
