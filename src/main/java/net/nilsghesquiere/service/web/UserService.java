@@ -29,4 +29,5 @@ public interface UserService {
 	VerificationToken generateNewVerificationToken(String token);
 	void createPasswordResetTokenForUser(User user, String token);
 	void changeUserPassword(User user, String newPassword);
+	long countAll();
 }

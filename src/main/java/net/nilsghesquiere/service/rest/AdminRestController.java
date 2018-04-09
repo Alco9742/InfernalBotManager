@@ -7,14 +7,17 @@ import java.util.List;
 
 import net.nilsghesquiere.entities.GlobalVariable;
 import net.nilsghesquiere.entities.InfernalSettings;
+import net.nilsghesquiere.entities.Metric;
 import net.nilsghesquiere.entities.Role;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.GlobalVariableService;
 import net.nilsghesquiere.service.web.InfernalSettingsService;
+import net.nilsghesquiere.service.web.MetricService;
 import net.nilsghesquiere.service.web.RoleService;
 import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.wrappers.GlobalVariableMap;
 import net.nilsghesquiere.util.wrappers.GlobalVariableWrapper;
+import net.nilsghesquiere.util.wrappers.MetricWrapper;
 import net.nilsghesquiere.util.wrappers.UserMap;
 import net.nilsghesquiere.util.wrappers.UserWrapper;
 import net.nilsghesquiere.web.dto.UserAdminDTO;
@@ -38,6 +41,9 @@ public class AdminRestController {
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminRestController.class);
 	
+	@Autowired
+	private MetricService metricService;
+	
 	@Autowired 
 	private GlobalVariableService globalVariableService;
 	
@@ -52,6 +58,30 @@ public class AdminRestController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+//METRICS
+
+	@RequestMapping(path = "/metrics", method = RequestMethod.GET)
+	public ResponseEntity<MetricWrapper> findAllMetrics() {
+		//VARS
+		MetricWrapper wrapper = new MetricWrapper();
+		String error = "";
+		
+		//PROCESSING
+		
+		//Generate all metrics
+		Metric totalUserMetric = new Metric ("totalUsers",Long.toString(userService.countAll()));
+		
+		//Get all metrics
+		List<Metric> metrics = metricService.findAll();
+		
+		//RESPONSE
+		wrapper.setError(error);
+		wrapper.add("data",metrics);
+		
+		//RETURN
+		return new ResponseEntity<MetricWrapper>(wrapper, HttpStatus.OK);
+	}
 	
 //GLOBAL VARIABLES
 	
