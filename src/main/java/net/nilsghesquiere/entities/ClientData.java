@@ -37,18 +37,22 @@ public class ClientData implements Serializable{
 	private List<Queuer> queuers;
 	private LocalDateTime date;
 	private String status;
+	private String ramInfo;
+	private String cpuInfo;
 	
 	public ClientData() {
 		this.queuers = new ArrayList<Queuer>();
 	}
 	
-	public ClientData(Long id, String tag, List<Queuer> queuers, LocalDateTime date, String status) {
+	public ClientData(Long id, String tag, List<Queuer> queuers, LocalDateTime date, String status, String ramInfo, String cpuInfo) {
 		super();
 		this.id = id;
 		this.tag = tag;
 		this.queuers = queuers;
 		this.date = date;
 		this.status = status;
+		this.ramInfo = ramInfo;
+		this.cpuInfo = cpuInfo;
 	}
 	
 	public void setUser(User user) {

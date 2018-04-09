@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.nilsghesquiere.entities.ClientData;
 import net.nilsghesquiere.entities.Queuer;
@@ -68,7 +67,9 @@ public class ClientDataMapDeserializer extends JsonDeserializer<ClientDataMap>{
 			final String clientDateString = clientNode.get("date").asText();
 			final LocalDateTime clientDate = LocalDateTime.parse(clientDateString);
 			final String clientStatus = clientNode.get("status").asText();
-			ClientData clientData = new ClientData(clientId,clientTag,queuers,clientDate,clientStatus);
+			final String clientRamInfo = clientNode.get("ramInfo").asText();
+			final String clientCpuInfo = clientNode.get("cpuInfo").asText();
+			ClientData clientData = new ClientData(clientId,clientTag,queuers,clientDate,clientStatus,clientRamInfo,clientCpuInfo);
 			map.add(key, clientData);
 		}
 		return map;

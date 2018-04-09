@@ -81,6 +81,12 @@
 						def: function () { return new Date(); },
 						format: 'DD-MM-YYYY HH:mm'
 					},{
+						label: "RAM",
+						name: "ramInfo"
+					},{
+						label: "CPU",
+						name: "cpuInfo"
+					},{
 						label: "Status",
 						name: "status"
 					}],
@@ -114,6 +120,8 @@
 				  			return (moment(data).isValid()) ? moment(data).format("DD-MM-YYYY HH:mm") : "-";
 				  		}
 				},
+				{ data: "ramInfo"},
+				{ data: "cpuInfo"},
 				{ data: "status"}
 				],
 				columnDefs: [
@@ -174,6 +182,8 @@
 					<th></th>
 					<th>Tag</th>
 					<th>Date</th>
+					<th>RAM</th>
+					<th>CPU</th>
 					<th>Status</th>
 				</tr>
 			</thead>
