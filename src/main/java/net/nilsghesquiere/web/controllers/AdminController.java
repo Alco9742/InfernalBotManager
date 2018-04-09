@@ -66,6 +66,12 @@ public class AdminController {
 		LOGGER.info("Loading admin panel for " + currentUser.get().getEmail());
 		return new ModelAndView(PANEL_VIEW).addObject("currentUser");
 	}
+
+	//METRICS
+	@RequestMapping(value = "/metrics", method = RequestMethod.GET)
+	ModelAndView metrics() {
+		return new ModelAndView(GLOBAL_VARS_VIEW);
+		}
 	
 	//GLOBAL VARS
 	@RequestMapping(value = "/globalvars", method = RequestMethod.GET)

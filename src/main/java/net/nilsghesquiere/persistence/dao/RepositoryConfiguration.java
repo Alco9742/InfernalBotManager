@@ -4,6 +4,7 @@ import net.nilsghesquiere.entities.ClientData;
 import net.nilsghesquiere.entities.GlobalVariable;
 import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.LolAccount;
+import net.nilsghesquiere.entities.Metric;
 import net.nilsghesquiere.entities.Queuer;
 import net.nilsghesquiere.entities.QueuerLolAccount;
 import net.nilsghesquiere.entities.User;
@@ -35,7 +36,7 @@ public class RepositoryConfiguration {
 		return new RepositoryRestConfigurerAdapter() {
 			@Override
 			public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-				config.exposeIdsFor(User.class,LolAccount.class,InfernalSettings.class, GlobalVariable.class, ClientData.class, Queuer.class, QueuerLolAccount.class);
+				config.exposeIdsFor(User.class,LolAccount.class,InfernalSettings.class, GlobalVariable.class, ClientData.class, Queuer.class, QueuerLolAccount.class, Metric.class);
 			}
 			
 			@Override 
