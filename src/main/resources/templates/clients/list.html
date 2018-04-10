@@ -96,6 +96,7 @@
 		
 			var table = $('#infernalbotmanager-datatable-clients').DataTable( {
 				responsive: false,
+				rowId: 'id',
 				dom: "Brtip",
 				scrollX: true,
 				pageLength: 50,
@@ -168,7 +169,6 @@
 			
 			// reload table data every minute
 			setInterval( function () {
-				console.log(detailRows);
 				table.ajax.reload( null, false ); // user paging is not reset on reload
 			}, 60000 );
 			
