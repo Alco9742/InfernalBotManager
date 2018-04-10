@@ -37,6 +37,7 @@ public class Queuer implements Serializable{
 	private Integer playedGames;
 	private Integer winGames;
 	private Integer defeatGames;
+	private String  state;
 	@OneToMany(mappedBy="queuer",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@OrderBy("id")
 	private List<QueuerLolAccount> queuerLolAccounts;
@@ -47,7 +48,7 @@ public class Queuer implements Serializable{
 	
 	public Queuer(Long id, String queuer, Boolean softEnd,
 			Integer afterGame, Integer playedGames, Integer winGames,
-			Integer defeatGames, List<QueuerLolAccount> queuerLolAccounts) {
+			Integer defeatGames, String state, List<QueuerLolAccount> queuerLolAccounts) {
 		super();
 		this.id = id;
 		this.queuer = queuer;
@@ -56,6 +57,7 @@ public class Queuer implements Serializable{
 		this.playedGames = playedGames;
 		this.winGames = winGames;
 		this.defeatGames = defeatGames;
+		this.state = state;
 		this.queuerLolAccounts = queuerLolAccounts;
 	}
 	

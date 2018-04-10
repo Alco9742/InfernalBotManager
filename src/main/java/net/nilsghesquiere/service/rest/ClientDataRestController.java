@@ -82,7 +82,6 @@ public class ClientDataRestController {
 				error = "Client data is empty";
 			}
 			//PROCESSING
-			System.out.println(clientData);
 			clientData.setUser(user);
 			ClientData clientDataFromDB = clientDataService.findByTagAndUserId(clientData.getTag(), userid);
 			ClientData newClientData = null;
@@ -120,7 +119,7 @@ public class ClientDataRestController {
 		}
 		
 		for (ClientData clientData : clientDataMap.getMap().values()){
-			clientDataService.delete(clientData);
+			clientDataService.deleteById(clientData.getId());
 			deletedClientDatas.add(clientData);
 		}
 		wrapper.add("data",deletedClientDatas);
