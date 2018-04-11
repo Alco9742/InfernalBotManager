@@ -14,8 +14,7 @@ import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.web.annotations.ViewController;
 import net.nilsghesquiere.web.dto.UserChangePasswordDTO;
-import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
-import net.nilsghesquiere.web.util.GenericResponse;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -59,7 +57,7 @@ public class UserController {
 		String result = (String) request.getSession().getAttribute("resultM");
 		if (result != null && !result.isEmpty()){
 			request.getSession().removeAttribute("resultM");
-			if(result.toLowerCase().contains("success")){
+			if(result.toLowerCase().contains("succes")){
 				return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("successM", result);
 			}
 			if(result.toLowerCase().contains("failure")){
