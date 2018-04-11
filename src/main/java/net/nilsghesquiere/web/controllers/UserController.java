@@ -57,7 +57,7 @@ public class UserController {
 		String result = (String) request.getSession().getAttribute("resultM");
 		if (result != null && !result.isEmpty()){
 			request.getSession().removeAttribute("resultM");
-			if(result.toLowerCase().contains("succes")){
+			if(result.toLowerCase().contains("success")){
 				return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("successM", result);
 			}
 			if(result.toLowerCase().contains("failure")){
@@ -102,7 +102,7 @@ public class UserController {
 			return "redirect:/user";	
 		} else {
 			userService.changeUserPassword(user, passForm.getNewPassword());
-			request.getSession().setAttribute("resultM","Succesfully changed password!");
+			request.getSession().setAttribute("resultM","Successfully changed password!");
 			return "redirect:/user";
 		}
 	}
@@ -123,7 +123,7 @@ public class UserController {
 			aantalAccounts += 1;
 		}
 		//RESPONSE
-		request.getSession().setAttribute("resultM","Succesfully reset the status of " + aantalAccounts + " accounts.");
+		request.getSession().setAttribute("resultM","Successfully reset the status of " + aantalAccounts + " accounts.");
 		return "redirect:/user";
 	}
 	
