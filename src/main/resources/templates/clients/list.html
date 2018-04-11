@@ -11,11 +11,11 @@
 			var queuers = d.queuers;
 			queuers.forEach(function(q){
 				var qLine = "<div class ='row'>";
-				qLine =  qLine + "<div class='col-8'><p><strong>" + q.queuer + ": " + q.state;
+				qLine =  qLine + "<div class='col-8'><strong>" + q.queuer + ": " + q.state;
 				if (q.lpq == true){
-					qLine = qLine + "</p><p class ='text-danger'>LPQ"</p>;
+					qLine = qLine + " <span class ='text-danger'>LPQ</span>";
 				} 
-				qLine = qLine + "</p></strong></div>";
+				qLine = qLine + "</strong></div>";
 				if (q.softEnd == false){
 					qLine = qLine + "<div class= 'col-4'><p class='float-right'>" +q.playedGames+"/" + q.winGames + "/" + q. defeatGames + "(P/W/L) - Safestop in " + q.afterGame + " games</p></div>";
 				}else{
