@@ -109,7 +109,7 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(path = "/user/resetAllStatus",method = RequestMethod.POST)
+	@RequestMapping(path = "/resetAllStatus",method = RequestMethod.POST)
 	public String resetAllStatus(HttpServletRequest request) {
 		//VARS
 		int aantalAccounts = 0;
