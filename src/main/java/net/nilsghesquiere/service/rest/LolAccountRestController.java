@@ -27,6 +27,7 @@ import net.nilsghesquiere.web.error.UploadedFileMalformedException;
 import net.nilsghesquiere.web.error.UploadedFileSizeException;
 import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 import net.nilsghesquiere.web.error.UserNotFoundException;
+import net.nilsghesquiere.web.util.GenericResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -381,6 +382,30 @@ public class LolAccountRestController {
 		}
 		wrapper.add("data",returnAccounts);
 		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/user/{userid}/resetAllStatus",method = RequestMethod.POST)
+	public GenericResponse resetAllStatus(@PathVariable Long userid) {
+		//VARS
+		int aantalAccounts = 0;
+	
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		
+		//PROCESSING
+		for (LolAccount lolAccount : lolAccountService.findByUser(user)){
+			lolAccount.setAccountStatus(AccountStatus.READY_FOR_USE);
+			lolAccount.setAssignedTo("");
+			lolAccountService.update(lolAccount);
+			aantalAccounts += 1;
+		}
+		
+		//RESPONSE
+		return new GenericResponse("Succesfully reset the status of " + aantalAccounts + " accounts.");
 	}
 	
 	//todo nut van deze bekijken

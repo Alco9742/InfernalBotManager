@@ -7,10 +7,10 @@
 		<br/>
 		<div class="container">
 			<div class="row">
-				<h1 class = "col-12 offset-sm-2 col-sm-8" >Change password</h1>
+				<h2 class = "col-12 offset-sm-2 col-sm-8">Change password</h2>
 			</div>
 			<div class="row">
-				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-success" th:if="${resultM != null}" th:text="${resultM}">Success!</div>
+				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-success" th:if="${resultM != null}" th:text="${resultM}">Result!</div>
 			</div>
 			<div class="row">
 				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-success" th:if="${successM != null}" th:text="${successM}">Success!</div>
@@ -24,12 +24,6 @@
 						</li>
 					</ul>
 				</div>
-			</div>
-			<div class="row">				
-				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-info" th:if="${param.message != null}" th:text="${param.message[0]}">Info</div>
-			</div>
-			<div class="row">
-				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-danger"  th:if="${param.error != null}" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
 			</div>
 			<form id="changePasswordForm" th:action="@{/user}" th:object="${passForm}" method="post">
 				<div class="form-group row">
@@ -55,10 +49,10 @@
 				</div>
 			</form>
 			<div class="row">
-				<h1 class = "col-12 offset-sm-2 col-sm-8" >Account actions</h1>
+				<h2 class = "col-12 offset-sm-2 col-sm-8" >User actions</h2>
 			</div>
 			<div class="row">				
-				<div id="resetAllAccountStatus" class = "col-12 offset-sm-2 col-sm-8 btn btn-primary btn-block">Reset All AccountStatus</div>
+				<div id="resetAllAccountStatus" class = "col-12 offset-sm-2 col-sm-8 btn btn-primary btn-block">Reset all accounts status</div>
 			</div>
 			<div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered" role="document">
@@ -94,11 +88,29 @@
 					</div>
 				</div>
 			</div>
+			<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					 <div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="errorModalLabel">Error</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body" id="errorModalMessage">
+							<p>Unspecified error!</p>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<script th:inline="javascript">
 		/*<![CDATA[*/
-			var serverContext = [[@{/}]];
-		
+
+			//var serverContext = [[@{/}]]; 
+			var serverContext = "http://localhost:8080/" //testing
+			var restBase = serverContext + "api/accounts/user/" + /*[[${currentUser.id}]]*/
+			
 			$(document).ready(function () {
 				//Password strength
 				options = {
@@ -128,10 +140,16 @@
 				//resetAllAccountsConfirm
 				$('#resetAccountStatusConfirm').click(function(event) {
 					$('#warningModal').modal('hide');
-					$.post(serverContext + "user/resetAllStatus");
+					$.post( restBase + "/resetAllStatus",function(data){
+						$('#successModalMessage p').html(data.message);
+						$('#successModal').modal('show');
+					})
+					.fail(function(data) {
+						$('#errorModalMessage p').html(data.message);
+						$('#errorModal').modal('show');
+					});
 				});
 			});
-			
 		/*]]>*/
 		</script>
 	</body>

@@ -6,15 +6,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.service.web.LolAccountService;
 import net.nilsghesquiere.service.web.UserService;
-import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.web.annotations.ViewController;
 import net.nilsghesquiere.web.dto.UserChangePasswordDTO;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,28 +43,26 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	@Autowired
-	private LolAccountService lolAccountService;
-	
 	//HOME
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView home(HttpServletRequest request) {
+		User currentUser = authenticationFacade.getAuthenticatedUser();
 		UserChangePasswordDTO dto = new UserChangePasswordDTO();
 		String result = (String) request.getSession().getAttribute("resultM");
 		if (result != null && !result.isEmpty()){
 			request.getSession().removeAttribute("resultM");
 			if(result.toLowerCase().contains("success")){
-				return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("successM", result);
+				return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("successM", result).addObject("currentUser", currentUser);
 			}
 			if(result.toLowerCase().contains("failure")){
 				@SuppressWarnings("unchecked")
 				List<String> errorList = (List<String>) request.getSession().getAttribute("errorList");
 				request.getSession().removeAttribute("errorList");
-				return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("failM", result).addObject("errorList", errorList);
+				return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("failM", result).addObject("errorList", errorList).addObject("currentUser", currentUser);
 			}
-			return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("resultM", result);
+			return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("resultM", result).addObject("currentUser", currentUser);
 		} else {
-			return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto);
+			return new ModelAndView(USER_SETTINGS_VIEW).addObject("passForm",dto).addObject("currentUser", currentUser);
 		}
 	}
 	
@@ -106,25 +100,4 @@ public class UserController {
 			return "redirect:/user";
 		}
 	}
-	
-	@RequestMapping(path = "/resetAllStatus",method = RequestMethod.POST)
-	public String resetAllStatus(HttpServletRequest request) {
-		//VARS
-		int aantalAccounts = 0;
-	
-		//USER CHECK
-		User user = authenticationFacade.getAuthenticatedUser();
-		
-		//PROCESSING
-		for (LolAccount lolAccount : lolAccountService.findByUser(user)){
-			lolAccount.setAccountStatus(AccountStatus.READY_FOR_USE);
-			lolAccount.setAssignedTo("");
-			lolAccountService.update(lolAccount);
-			aantalAccounts += 1;
-		}
-		//RESPONSE
-		request.getSession().setAttribute("resultM","Successfully reset the status of " + aantalAccounts + " accounts.");
-		return "redirect:/user";
-	}
-	
 }
