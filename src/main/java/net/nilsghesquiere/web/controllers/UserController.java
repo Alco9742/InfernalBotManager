@@ -6,11 +6,16 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.service.web.LolAccountService;
 import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.web.annotations.ViewController;
 import net.nilsghesquiere.web.dto.UserChangePasswordDTO;
+import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
+import net.nilsghesquiere.web.util.GenericResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -42,6 +48,9 @@ public class UserController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private LolAccountService lolAccountService;
 	
 	//HOME
 	@RequestMapping(method = RequestMethod.GET)
@@ -98,6 +107,26 @@ public class UserController {
 			request.getSession().setAttribute("resultM","Succesfully changed password!");
 			return "redirect:/user";
 		}
+	}
+	
+	@RequestMapping(path = "/user/resetAllStatus",method = RequestMethod.POST)
+	public String resetAllStatus(HttpServletRequest request) {
+		//VARS
+		int aantalAccounts = 0;
+	
+		//USER CHECK
+		User user = authenticationFacade.getAuthenticatedUser();
+		
+		//PROCESSING
+		for (LolAccount lolAccount : lolAccountService.findByUser(user)){
+			lolAccount.setAccountStatus(AccountStatus.READY_FOR_USE);
+			lolAccount.setAssignedTo("");
+			lolAccountService.update(lolAccount);
+			aantalAccounts += 1;
+		}
+		//RESPONSE
+		request.getSession().setAttribute("resultM","Succesfully reset the status of " + aantalAccounts + " accounts.");
+		return "redirect:/user";
 	}
 	
 }

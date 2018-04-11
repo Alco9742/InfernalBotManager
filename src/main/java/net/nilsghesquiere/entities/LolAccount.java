@@ -112,14 +112,14 @@ public class LolAccount implements Serializable{
 		if (input.length == 3){
 			String account = input[0];
 			String password = input[1];
-			String regionString = input[2];
+			String regionString = input[2].toUpperCase();
 			Region region = Region.valueOf(regionString);
 			return new LolAccount(user,account,password, region);		
 		} else {
 			if (input.length == 4){
 				String account = input[0];
 				String password = input[1];
-				String regionString = input[2];
+				String regionString = input[2].toUpperCase();
 				Region region = Region.valueOf(regionString);
 				Integer level = Integer.parseInt(input[3]);
 				return new LolAccount(user,account,password, region, level);		

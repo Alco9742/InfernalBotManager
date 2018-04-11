@@ -120,9 +120,9 @@ public class LolAccountServiceImpl implements LolAccountService{
 		// limit using a Pageable
 		Pageable pageable = new PageRequest(0,amount);
 		List<LolAccount> lolAccounts = lolAccountRepository.findUsableAccounts(userid, region, pageable);
-		//set as IN_USE here so others don't grab the same accounts
+		//set as PROCESSING here so others don't grab the same accounts
 		for (LolAccount lolAccount : lolAccounts){
-			lolAccount.setAccountStatus(AccountStatus.IN_USE);
+			lolAccount.setAccountStatus(AccountStatus.PROCESSING);
 			lolAccountRepository.save(lolAccount);
 		}
 		return lolAccounts;
@@ -134,9 +134,9 @@ public class LolAccountServiceImpl implements LolAccountService{
 		// limit using a Pageable
 		Pageable pageable = new PageRequest(0,amount);
 		List<LolAccount> lolAccounts = lolAccountRepository.findBufferAccounts(userid, region, pageable);
-		//set as IN_BUFFER here so others don't grab the same accounts
+		//set as PROCESSING here so others don't grab the same accounts
 		for (LolAccount lolAccount : lolAccounts){
-			lolAccount.setAccountStatus(AccountStatus.IN_BUFFER);
+			lolAccount.setAccountStatus(AccountStatus.PROCESSING);
 			lolAccountRepository.save(lolAccount);
 		}
 		return lolAccounts;

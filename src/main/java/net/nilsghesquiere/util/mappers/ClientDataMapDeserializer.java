@@ -45,6 +45,7 @@ public class ClientDataMapDeserializer extends JsonDeserializer<ClientDataMap>{
 				final Integer queuerWinGames = queuerNode.get("winGames").asInt();
 				final Integer queuerDefeatGames = queuerNode.get("defeatGames").asInt();
 				final String queuerState = queuerNode.get("state").asText();
+				final Boolean queuerLpq = queuerNode.get("lpq").asBoolean();
 				JsonNode queuerAccountNodes = queuerNode.get("queuerLolAccounts");
 				List<QueuerLolAccount> lolAccounts = new ArrayList<>();
 				for (JsonNode queuerAccountNode : queuerAccountNodes){
@@ -61,7 +62,7 @@ public class ClientDataMapDeserializer extends JsonDeserializer<ClientDataMap>{
 					QueuerLolAccount lolAccount = new QueuerLolAccount(queuerAccountId,queuerAccountAccount, queuerAccountLevel,queuerAccountMaxLevel,queuerAccountXp,queuerAccountXpCap, queuerAccountBe, queuerAccountChamp, Lane.valueOf(queuerAccountLaneString), queuerAccountLpq);
 					lolAccounts.add(lolAccount);
 				}
-				Queuer queuer = new Queuer(queuerId,queuerQueuer,queuerSoftEnd,queuerAfterGame,queuerPlayedGames,queuerWinGames,queuerDefeatGames, queuerState,lolAccounts);
+				Queuer queuer = new Queuer(queuerId,queuerQueuer,queuerSoftEnd,queuerAfterGame,queuerPlayedGames,queuerWinGames,queuerDefeatGames, queuerState,lolAccounts,queuerLpq);
 				queuers.add(queuer);
 			}
 			final String clientDateString = clientNode.get("date").asText();

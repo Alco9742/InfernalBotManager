@@ -308,15 +308,6 @@ public class LolAccountRestController {
 		//RETURN
 		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
 	}
-	private void validateUserByUserId(Long userId) {
-		userService.findOptionalByUserId(userId).orElseThrow(
-			() -> new UserNotFoundException(userId));
-	}
-
-	private void validateAccountById(Long accountId) {
-		lolAccountService.findOptionalById(accountId).orElseThrow(
-			() -> new AccountNotFoundException(accountId));
-	}
 	
 	@RequestMapping(path = "/user/{userid}/infernalImport",method = RequestMethod.PUT)
 	public ResponseEntity<StringResponseMap> infernalImport(@PathVariable Long userid,@RequestBody LolMixedAccountMap lolMixedAccountMap) {
@@ -390,6 +381,17 @@ public class LolAccountRestController {
 		}
 		wrapper.add("data",returnAccounts);
 		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
+	}
+	
+	//todo nut van deze bekijken
+	private void validateUserByUserId(Long userId) {
+		userService.findOptionalByUserId(userId).orElseThrow(
+			() -> new UserNotFoundException(userId));
+	}
+
+	private void validateAccountById(Long accountId) {
+		lolAccountService.findOptionalById(accountId).orElseThrow(
+			() -> new AccountNotFoundException(accountId));
 	}
 	
 }

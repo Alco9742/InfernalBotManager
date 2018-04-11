@@ -54,10 +54,53 @@
 					<button type="submit" id="ng-submitbut" class="col-12 offset-sm-2 col-sm-8 btn btn-primary btn-block">Change Password</button>
 				</div>
 			</form>
+			<div class="row">
+				<h1 class = "col-12 offset-sm-2 col-sm-8" >Account actions</h1>
+			</div>
+			<div class="row">				
+				<div id="resetAllAccountStatus" class = "col-12 offset-sm-2 col-sm-8 btn btn-primary btn-block">Reset All AccountStatus</div>
+			</div>
+			<div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					 <div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="warningModalLabel">Warning</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body" id="warningModalMessage">
+							<p>Unspecified warning!</p>
+						</div>
+						<div class="modal-footer">
+							<button id="resetAccountStatusConfirm" type="button" class="btn btn-primary">Reset all accounts status</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					 <div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="successModalLabel">Success</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body" id="successModalMessage">
+							<p>Unspecified success!</p>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<script th:inline="javascript">
 		/*<![CDATA[*/
+			var serverContext = [[@{/}]];
+		
 			$(document).ready(function () {
+				//Password strength
 				options = {
 						common: {minChar:8},
 						ui: {
@@ -74,7 +117,19 @@
 							}
 						}
 					};
-					$('#password').pwstrength(options);
+				$('#password').pwstrength(options);
+				
+				//resetAllAccounts 
+				$('#resetAllAccountStatus').click(function(event) {
+					$('#warningModalMessage p').html("Pressing this button will reset the status of all your accounts <br /> Do NOT do this when you still have clients running!");
+					$('#warningModal').modal('show');
+				});
+				
+				//resetAllAccountsConfirm
+				$('#resetAccountStatusConfirm').click(function(event) {
+					$('#warningModal').modal('hide');
+					$.post(serverContext + "/user/resetAllStatus");
+				});
 			});
 			
 		/*]]>*/
