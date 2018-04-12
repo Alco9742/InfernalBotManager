@@ -398,16 +398,41 @@ public class LolAccountRestController {
 		
 		//PROCESSING
 		for (LolAccount lolAccount : lolAccountService.findByUser(user)){
-			lolAccount.setAccountStatus(AccountStatus.READY_FOR_USE);
-			lolAccount.setAssignedTo("");
-			lolAccountService.update(lolAccount);
-			aantalAccounts += 1;
+			if (!lolAccount.getAccountStatus().equals(AccountStatus.BANNED)){
+				lolAccount.setAccountStatus(AccountStatus.READY_FOR_USE);
+				lolAccount.setAssignedTo("");
+				lolAccountService.update(lolAccount);
+				aantalAccounts += 1;
+			}
 		}
 		
 		//RESPONSE
 		return new GenericResponse("Succesfully reset the status of " + aantalAccounts + " accounts.");
 	}
 	
+	@RequestMapping(path = "/user/{userid}/deleteAllBanned",method = RequestMethod.POST)
+	public GenericResponse deleteAllBanned(@PathVariable Long userid) {
+		//VARS
+		int aantalAccounts = 0;
+	
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		
+		//PROCESSING
+		for (LolAccount lolAccount : lolAccountService.findByUser(user)){
+			if (!lolAccount.getAccountStatus().equals(AccountStatus.BANNED)){
+				lolAccountService.delete(lolAccount);
+				aantalAccounts += 1;
+			}
+		}
+		
+		//RESPONSE
+		return new GenericResponse("Succesfully deleted " + aantalAccounts + " banned accounts.");
+	}
 	//todo nut van deze bekijken
 	private void validateUserByUserId(Long userId) {
 		userService.findOptionalByUserId(userId).orElseThrow(
