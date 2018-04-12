@@ -187,8 +187,6 @@ public class LolAccountRestController {
 	
 	@RequestMapping(path = "/user/{userid}",method = RequestMethod.PUT)
 	public ResponseEntity<LolAccountWrapper> update(@PathVariable Long userid,@RequestBody LolAccountMap lolAccountMap) {
-		LOGGER.info("userid: " +  userid);
-		LOGGER.info("lolAccountMap: " +  lolAccountMap);
 		//USER CHECK
 		User user = userService.findUserByUserId(userid);
 		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
@@ -199,13 +197,11 @@ public class LolAccountRestController {
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		List<LolAccount> returnAccounts = new ArrayList<>();
 		for (LolAccount lolAccount : lolAccountMap.getMap().values()){
-			LOGGER.info("lolAccounts: " + lolAccount);
 			Preconditions.checkNotNull(lolAccount);
 			validateAccountById(lolAccount.getId());
 			validateUserByUserId(userid);
 			lolAccount.setUser(userService.read(userid));
 			LolAccount updatedLolAccount = lolAccountService.update(lolAccount);
-			LOGGER.info("updatedLolAccount: " + updatedLolAccount);
 			//returns null if the account changed server but there is already an account with that name on the new server
 			if (updatedLolAccount != null){
 				returnAccounts.add(updatedLolAccount);
@@ -424,7 +420,7 @@ public class LolAccountRestController {
 		
 		//PROCESSING
 		for (LolAccount lolAccount : lolAccountService.findByUser(user)){
-			if (!lolAccount.getAccountStatus().equals(AccountStatus.BANNED)){
+			if (lolAccount.getAccountStatus().equals(AccountStatus.BANNED)){
 				lolAccountService.delete(lolAccount);
 				aantalAccounts += 1;
 			}
