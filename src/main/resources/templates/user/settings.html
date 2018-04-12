@@ -52,14 +52,11 @@
 				<h2 class = "col-12 offset-sm-2 col-sm-8" >User actions</h2>
 			</div>
 			<div class="row">				
-				<div class="container">
-					<div id="resetAllAccountStatus" class = "col-12 offset-sm-2 col-sm-8 btn btn-primary btn-block">Reset all accounts status</div>
-				</div>
+				<div id="resetAllAccountStatus" class = "col-12 offset-sm-2 col-sm-8 btn btn-primary btn-block">Reset all accounts status</div>
 			</div>
+			<br />
 			<div class="row">				
-				<div class="container">
-					<div id="deleteAllBannedAccounts" class = "col-12 offset-sm-2 col-sm-8 btn btn-primary btn-block">Delete all banned accounts</div>
-				</div>
+				<div id="deleteAllBannedAccounts" class = "col-12 offset-sm-2 col-sm-8 btn btn-primary btn-block">Delete all banned accounts</div>
 			</div>
 			<div class="modal fade" id="warningResetAccountStatusModal" tabindex="-1" role="dialog" aria-labelledby="warningResetAccountStatusModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered" role="document">
@@ -133,8 +130,7 @@
 		<script th:inline="javascript">
 		/*<![CDATA[*/
 
-			//var serverContext = [[@{/}]]; 
-			var serverContext = "http://localhost:8080/" //testing
+			var serverContext = [[@{/}]]; 
 			var restBase = serverContext + "api/accounts/user/" + /*[[${currentUser.id}]]*/
 			
 			$(document).ready(function () {
