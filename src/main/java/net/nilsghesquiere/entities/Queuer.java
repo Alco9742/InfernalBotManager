@@ -86,5 +86,15 @@ public class Queuer implements Serializable{
 			queuerLolAccount.setQueuer(null);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Queuer [id=" + id + ", client=" + client.getTag() + ", queuer=" + queuer
+				+ ", softEnd=" + softEnd + ", afterGame=" + afterGame
+				+ ", playedGames=" + playedGames + ", winGames=" + winGames
+				+ ", defeatGames=" + defeatGames + ", state=" + state
+				+ ", queuerLolAccounts=" + queuerLolAccounts + ", lpq=" + lpq
+				+ "]";
+	}
 	
 }

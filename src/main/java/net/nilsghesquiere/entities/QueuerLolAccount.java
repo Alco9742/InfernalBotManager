@@ -65,5 +65,14 @@ public class QueuerLolAccount implements Serializable{
 		this.lane = lane;
 		this.lpq = lpq;
 	}
+
+
+	@Override
+	public String toString() {
+		return "QueuerLolAccount [id=" + id + ", queuer=" + queuer.getQueuer()
+				+ ", account=" + account + ", level=" + level + ", maxLevel="
+				+ maxLevel + ", xp=" + xp + ", xpCap=" + xpCap + ", be=" + be
+				+ ", champ=" + champ + ", lane=" + lane + ", lpq=" + lpq + "]";
+	}
 	
 }

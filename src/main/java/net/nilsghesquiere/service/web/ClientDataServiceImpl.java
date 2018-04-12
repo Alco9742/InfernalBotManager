@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class ClientDataServiceImpl implements ClientDataService{
 	private final ClientDataRepository clientDataRepository;
-	@SuppressWarnings("unused")
 	private final QueuerRepository queuerRepository;
 	@SuppressWarnings("unused")
 	private final QueuerLolAccountRepository queuerLolAccountRepository;
@@ -56,9 +55,10 @@ public class ClientDataServiceImpl implements ClientDataService{
 	@ModifyingTransactionalServiceMethod
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ClientData update(ClientData clientData) {
-		// Deleting the current data
-		ClientData dataToDelete = clientDataRepository.findByTagAndUserId(clientData.getTag(), clientData.getUser().getId());
-		clientDataRepository.delete(dataToDelete);
+		// Currently have to do this customly
+		// Deleting the current data --> delete the queuers containing the lolAccounts, keep the ClientData 
+		ClientData oldData = clientDataRepository.findByTagAndUserId(clientData.getTag(), clientData.getUser().getId());
+		oldData.getQueuers().stream().forEach(queuer -> queuerRepository.delete(queuer));
 		// Setting the relationships
 		for(Queuer queuer: clientData.getQueuers()){
 			queuer.setClient(clientData);
@@ -66,7 +66,6 @@ public class ClientDataServiceImpl implements ClientDataService{
 				lolacc.setQueuer(queuer);
 			}
 		}
-		
 		// Saving the data
 		return clientDataRepository.save(clientData);
 	}
