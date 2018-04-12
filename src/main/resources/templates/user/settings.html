@@ -51,11 +51,13 @@
 			<div class="row">
 				<h2 class = "col-12 offset-sm-2 col-sm-8" >User actions</h2>
 			</div>
-			<div class="container">
-				<div class="row">				
+			<div class="row">				
+				<div class="container">
 					<div id="resetAllAccountStatus" class = "col-12 offset-sm-2 col-sm-8 btn btn-primary btn-block">Reset all accounts status</div>
 				</div>
-				<div class="row">				
+			</div>
+			<div class="row">				
+				<div class="container">
 					<div id="deleteAllBannedAccounts" class = "col-12 offset-sm-2 col-sm-8 btn btn-primary btn-block">Delete all banned accounts</div>
 				</div>
 			</div>
@@ -175,7 +177,7 @@
 				});
 				
 				//deleteBannedAccounts 
-				$('#resetAllAccountStatus').click(function(event) {
+				$('#deleteAllBannedAccounts').click(function(event) {
 					$('#warningDeleteAllBannedAccountsModalMessage p').html("Pressing this button will delete all banned accounts. <br />This can not be undone.");
 					$('#warningDeleteAllBannedAccountsModal').modal('show');
 				});
