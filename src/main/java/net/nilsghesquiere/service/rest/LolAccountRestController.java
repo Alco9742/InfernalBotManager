@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -301,6 +302,14 @@ public class LolAccountRestController {
 		wrapper = new LolAccountWrapper();
 		wrapper.setError(error);
 		wrapper.add("data",createdAccounts);
+		
+		
+		//Wait a second so modals are fine 
+		try {
+			TimeUnit.SECONDS.sleep(1);
+		} catch (InterruptedException e) {
+			//Do nothing
+		}
 		
 		//RETURN
 		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
