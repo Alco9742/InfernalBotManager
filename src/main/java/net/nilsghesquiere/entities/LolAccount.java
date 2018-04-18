@@ -128,4 +128,22 @@ public class LolAccount implements Serializable{
 			}
 		}
 	}
+	
+	public static LolAccount buildFromStringWithRegion(User user, String line, Region region){
+		String input[] = line.split(":");
+		if (input.length == 2){
+			String account = input[0];
+			String password = input[1];
+			return new LolAccount(user,account,password, region);		
+		} else {
+			if (input.length == 3){
+				String account = input[0];
+				String password = input[1];
+				Integer level = Integer.parseInt(input[2]);
+				return new LolAccount(user,account,password, region, level);		
+			} else {
+				throw new UploadedFileMalformedException();
+			}
+		}
+	}
 }

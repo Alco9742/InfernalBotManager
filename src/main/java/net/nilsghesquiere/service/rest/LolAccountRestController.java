@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -240,6 +239,7 @@ public class LolAccountRestController {
 		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
 	}
 	
+	//import with region in file
 	@RequestMapping(value="/user/{userid}/import", method=RequestMethod.POST)
 	public ResponseEntity<LolAccountWrapper> processUpload(@PathVariable Long userid, @RequestParam MultipartFile file) throws IOException {
 		//VARS
@@ -287,29 +287,83 @@ public class LolAccountRestController {
 				createdAccounts.add(createdAccount);
 			} else {
 				if (errorBuilder.toString().equals("")){
-					errorBuilder.append("The following combinations already exist: <ul><li>" + importedAccount.getAccount() + "/" + importedAccount.getRegion() + "</li>");
+					errorBuilder.append("The following combinations already exist: \n" + importedAccount.getAccount() + "/" + importedAccount.getRegion());
 				} else {
-					errorBuilder.append("<li>" + importedAccount.getAccount() + "/" + importedAccount.getRegion() + "</li>");
+					errorBuilder.append("\n" + importedAccount.getAccount() + "/" + importedAccount.getRegion());
 				}
 			}
 		}
-		if (!errorBuilder.toString().equals("")){
-			errorBuilder.append("</ul>");
-			error = errorBuilder.toString();
-		}
+		error = errorBuilder.toString();
 		
 		//RESPONSE
 		wrapper = new LolAccountWrapper();
 		wrapper.setError(error);
 		wrapper.add("data",createdAccounts);
 		
+		//RETURN
+		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
+	}
+
+	//import with selected region
+	@RequestMapping(value="/user/{userid}/import/{region}", method=RequestMethod.POST)
+	public ResponseEntity<LolAccountWrapper> processUploadRegion(@PathVariable Long userid,@PathVariable Region region, @RequestParam MultipartFile file) throws IOException {
+		//VARS
+		String error = "";
+		StringBuilder errorBuilder = new StringBuilder("");
+		LolAccountWrapper wrapper = new LolAccountWrapper();
+		List<LolAccount> importedAccounts = new ArrayList<>();
+		List<LolAccount> createdAccounts = new ArrayList<>();
 		
-		//Wait a second so modals are fine 
-		try {
-			TimeUnit.SECONDS.sleep(1);
-		} catch (InterruptedException e) {
-			//Do nothing
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
 		}
+		
+		//SIZE CHECK: geen bestanden groter dan 1 MB
+		if(file.getSize() > 1048576){
+			LOGGER.info("User " + userid + " attempted to upload a file of " + file.getSize() + " bytes");
+			throw new UploadedFileSizeException();
+		}
+		
+		//TYPE CHECK
+		if(!file.getContentType().equals("text/plain")){
+			LOGGER.info("User " + userid + " attempted to upload a file of type " + file.getContentType());
+			throw new UploadedFileContentTypeException();
+		}
+		
+		//MAP THE INPUT TO LOLACCOUNTS & FILE FORM CHECK
+		try(Stream<String> stream = new BufferedReader(new InputStreamReader(file.getInputStream(), Charset.forName("UTF-8"))).lines()){
+			importedAccounts = stream
+								.map(line -> LolAccount.buildFromStringWithRegion(user,line,region))
+								.collect(Collectors.toList());
+		} catch (IllegalArgumentException | IllegalStateException | ArrayIndexOutOfBoundsException | UploadedFileMalformedException e) {
+			throw new UploadedFileMalformedException();
+		}
+		
+		//EMPTY ACCOUNTLISTCHECK
+		if(importedAccounts.isEmpty()){
+			throw new UploadedFileEmptyException();
+		}
+		
+		for (LolAccount importedAccount : importedAccounts){
+			LolAccount createdAccount = lolAccountService.create(importedAccount);
+			if (createdAccount != null){
+				createdAccounts.add(createdAccount);
+			} else {
+				if (errorBuilder.toString().equals("")){
+					errorBuilder.append("The following combinations already exist: \n" + importedAccount.getAccount() + "/" + importedAccount.getRegion());
+				} else {
+					errorBuilder.append("\n" + importedAccount.getAccount() + "/" + importedAccount.getRegion());
+				}
+			}
+		}
+		error = errorBuilder.toString();
+		
+		//RESPONSE
+		wrapper = new LolAccountWrapper();
+		wrapper.setError(error);
+		wrapper.add("data",createdAccounts);
 		
 		//RETURN
 		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);

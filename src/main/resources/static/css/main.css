@@ -11,3 +11,13 @@ tr.details td.details-control {
     padding-right:0;
     padding-left:0;
 }
+
+.disabledTextArea {
+	font-family:monospace;
+	resize: none;
+	
+}
+
+.disabledTextArea:first-line { 
+	font-weight: bold;
+}

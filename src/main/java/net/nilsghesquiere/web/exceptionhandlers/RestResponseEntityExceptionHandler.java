@@ -57,7 +57,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@ExceptionHandler({ UploadedFileSizeException.class })
 	public ResponseEntity<Object> handleFileSizeException(RuntimeException ex, WebRequest request) {
 		LOGGER.error("500 Status Code", ex);
-		GenericResponse bodyOfResponse = new GenericResponse("Maximum upload file size is 1MB!", "UploadSizeError");
+		GenericResponse bodyOfResponse = new GenericResponse("Uploaded file size > 1MB!", "UploadSizeError");
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
@@ -71,21 +71,21 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@ExceptionHandler({ UploadedFileNullException.class })
 	public ResponseEntity<Object> handleFileNullException(RuntimeException ex, WebRequest request) {
 		LOGGER.error("500 Status Code", ex);
-		GenericResponse bodyOfResponse = new GenericResponse("Select a file before importing!", "NullFileError");
+		GenericResponse bodyOfResponse = new GenericResponse("Uploaded file is null!", "NullFileError");
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
 	@ExceptionHandler({ UploadedFileMalformedException.class })
 	public ResponseEntity<Object> handleFileMallformedException(RuntimeException ex, WebRequest request) {
 		LOGGER.error("500 Status Code", ex);
-		GenericResponse bodyOfResponse = new GenericResponse("Uploaded file is malformed, accepted syntax: <br /> ACCOUNT:PASSWORD:REGION <br />  ACCOUNT:PASSWORD:REGION:LEVEL", "MalformedFileError");
+		GenericResponse bodyOfResponse = new GenericResponse("Uploaded file is malformed, check the syntax", "MalformedFileError");
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
 	@ExceptionHandler({ UploadedFileEmptyException.class })
 	public ResponseEntity<Object> handleFileEmptyException(RuntimeException ex, WebRequest request) {
 		LOGGER.error("500 Status Code", ex);
-		GenericResponse bodyOfResponse = new GenericResponse("The uploaded file is empty!", "EmptysFileError");
+		GenericResponse bodyOfResponse = new GenericResponse("Uploaded file is empty!", "EmptyFileError");
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	

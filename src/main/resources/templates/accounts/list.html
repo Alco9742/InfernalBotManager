@@ -8,7 +8,7 @@
 		$(document).on('change', ':file', function() {
  			var input = $(this),
 			numFiles = input.get(0).files ? input.get(0).files.length : 1,
-			label = input.val().replace('/\\/g', '/').replace('/.*\//', '');
+			label = input.val().match(/[^\\/]*$/)[0];
 			input.trigger('fileselect', [numFiles, label]);
 		});
 		
@@ -69,14 +69,14 @@
 						name: "region",
 						type: "select",
 						options: [
-							{ label: "NA", value: "NA" },
 							{ label: "EUW", value: "EUW" },
+							{ label: "NA", value: "NA" },
 							{ label: "EUNE", value: "EUNE"},
 							{ label: "BR", value: "BR" },
 							{ label: "LAN", value: "LAN" },
 							{ label: "LAS", value: "LAS" },
 							{ label: "OCE", value: "OCE" },
-							{ label: "RU", value: "EUW" },
+							{ label: "RU", value: "RU" },
 							{ label: "TR", value: "TR" }
 						],
 						def: "NA"
@@ -201,7 +201,20 @@
 					className: 'col-lg-2 d-none d-lg-block'
 				},
 				{ 	text: 'Import',
-					action: function () {$('#importModal').modal('show');},
+					action: function () {
+						$("#importFile").val(''); 
+						$("#importFileInfo").val('Select .txt file'); 
+						$('#importResponse').val('OUTPUT\n');
+						$('#importModal').modal('show');
+						$('#importRegionUsage').prop( "checked", false );
+						$("#importRegion").prop( "disabled", true );
+						$('#importRegion option[selected="selected"]').each(
+							function() {
+								$(this).removeAttr('selected');
+							}
+						);
+						$("#importRegion option:first").attr('selected','selected');
+					},
 					className: 'col-lg-2 d-none d-lg-block'
 				},
 				{	text: 'Reset Status',
@@ -260,23 +273,57 @@
 				}
 			});
 			
+			//handle importRegionUsage checkbox change
+			$('#importRegionUsage').change(function() {
+				if($(this).is(":checked")) {
+					$( "#importRegion" ).prop( "disabled", false );
+					$( "#importSyntax" ).val("SYNTAX\naccount:password\naccount:password:level");
+				} else {
+					$( "#importRegion" ).prop( "disabled", true );
+					$( "#importSyntax" ).val("SYNTAX\naccount:password:region\naccount:password:region:level");
+					// remove "selected" from any options that might already be selected
+					$('#importRegion option[selected="selected"]').each(
+						function() {
+							$(this).removeAttr('selected');
+						}
+					);
+					// mark the first option as selected
+					$("#importRegion option:first").attr('selected','selected');
+				}
+			});
+			
 			//import file
 			$('#importButton').click(function(event) {
-				var file_data = $("#importFile").prop("files")[0];
+				var $importButton = $(this);
+				var $importFile = $('#importFile');
+				var $importReponse = $('#importResponse');
+				var $importRegionUsage  = $('#importRegionUsage');
+				var $importRegion = $('#importRegion');
+				var file_data = $importFile.prop("files")[0];
+				var importlink = restlnk + "/import";
+				if ($importRegionUsage.is(":checked")){
+					importlink = importlink + "/" + $importRegion.val()
+				}
+				$importReponse.val("OUTPUT\n")
+				$importButton.html('Importing...');
+				$importButton.disabled=true;
 				if(file_data === undefined){
-					$('#errorModalMessage p').html("Select a file first!");
-					$('#errorModal').modal('show');
+					$importReponse.val($importReponse.val() + "No file selected");
+					$importButton.html('Import');
+					$importButton.disabled=false;
 				} else if (file_data.size > 1000000 ){
-					$('#errorModalMessage p').html("Maximum upload file size is 1MB!");
-					$('#errorModal').modal('show');
+					$importReponse.val($importReponse.val() + "Maximum upload file size is 1MB!");
+					$importButton.html('Import');
+					$importButton.disabled=false;
+				} else if ($importRegionUsage.is(":checked") && $importRegion.val() === null){
+					$importReponse.val($importReponse.val() + "No region selected");
+					$importButton.html('Import');
+					$importButton.disabled=false;
 				} else {
 					var form_data = new FormData();
 					form_data.append("file", file_data);
-					$('#importModal').modal('hide');
-					$('#infoModalMessage p').html("Importing, please wait...");
-					$('#infoModal').modal('show');
 					$.ajax({
-						url: restlnk + "/import",
+						url: importlink,
 						dataType: "json",
 						cache: false,
 						contentType: false,
@@ -284,25 +331,30 @@
 						data:form_data,
 						type: 'POST',
 						success: function(returnedData){
-							$('#infoModal').modal('hide');
 							if (returnedData.error != ""){
 								if(returnedData.data.length > 0){
-									$('#warningModalMessage p').html(returnedData.error + "Succesfully uploaded " + returnedData.data.length + " remaining accounts");
-									$('#warningModal').modal('show');
+									$importReponse.val($importReponse.val() + returnedData.error + "\nSuccesfully uploaded " + returnedData.data.length + " remaining accounts");
 								} else {
-									$('#errorModalMessage p').html(returnedData.error + "No accounts were uploaded");
-									$('#errorModal').modal('show');
+									$importReponse.val($importReponse.val() + returnedData.error + "\nNo accounts were uploaded");
 								}
 							} else {
-								$('#successModalMessage p').html("Succesfully uploaded " + returnedData.data.length + " accounts");
-								$('#successModal').modal('show');
+								$importReponse.val($importReponse.val() + "Succesfully uploaded " + returnedData.data.length + " accounts");
 							}
+							$importButton.html('Import');
+							$importButton.disabled=false;
 							table.ajax.reload();
+							var psconsole = $('#one');
+							if($importReponse.length){
+								$importReponse.scrollTop($importReponse[0].scrollHeight - $importReponse.height());
+							}
 						},
 						error:function(returnedData){
-							$('#infoModal').modal('hide');
-							$('#errorModalMessage p').html(returnedData.responseJSON.message);
-							$('#errorModal').modal('show');
+							$('#importResponse').val($importReponse.val() + returnedData.responseJSON.message);
+							$importButton.html('Import');
+							$importButton.disabled=false;
+							if($importReponse.length){
+								$importReponse.scrollTop($importReponse[0].scrollHeight - $importReponse.height());
+							}
 						}
 					});
 				}
@@ -314,91 +366,6 @@
 		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
 		<div class="container-fluid">
 			<br/>
-			<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered" role="document">
-					 <div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="errorModalLabel">Error</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						</div>
-						<div class="modal-body" id="errorModalMessage">
-							<p>Unspecified error!</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered" role="document">
-					 <div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="warningModalLabel">Warning</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						</div>
-						<div class="modal-body" id="warningModalMessage">
-							<p>Unspecified warning!</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered" role="document">
-					 <div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="successModalLabel">Success</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						</div>
-						<div class="modal-body" id="successModalMessage">
-							<p>Unspecified success!</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered" role="document">
-					 <div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="infoModalLabel">Info</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						</div>
-						<div class="modal-body" id="infoModalMessage">
-							<p>Unspecified info!</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered" role="document">
-					 <div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="importModalLabel">Import</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						</div>
-						<div class="modal-body" id="importModalMessage">
-							<div class="input-group mb-3">
-								<div class="input-group-prepend">
-									<button class="btn btn-outline-primary" id="browseImportButton">Browse&hellip;</button>
-								</div>
-								<input type="text" class="form-control form-control-sm" readonly="readonly" placeholder="Select .txt file"/>
-								<input type="file" id="importFile" style="display: none;" />
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-							<button type="submit" class="btn btn-primary" id="importButton">Import</button>
-						</div>
-					</div>
-				</div>
-			</div>
 			<table id="infernalbotmanager-datatable-accounts" class="table table-striped table-bordered" style="width:100%">
 				<thead>
 					<tr>
@@ -422,6 +389,48 @@
 					</tr>
 				</thead>
 			</table>
+			<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					 <div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="importModalLabel">Import</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body" id="importModalMessage">
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<button class="btn btn-outline-primary" id="browseImportButton">Browse&hellip;</button>
+								</div>
+								<input type="text" id="importFileInfo" class="form-control form-control-sm" readonly="readonly" placeholder="Select .txt file"/>
+								<input type="file" id="importFile" style="display: none;" />
+							</div>
+							<div class="input-group  mb-3">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<input type="checkbox" id="importRegionUsage" aria-label="Region select" />
+									</div>
+								</div>
+								<select class="custom-select" id="importRegion" disabled="disabled">
+									<option value="" disabled="disabled" selected="selected">Use region import</option>
+									<option th:each="region : ${T(net.nilsghesquiere.util.enums.Region).values()}" th:value="${region}" th:text="${region}"></option>
+								</select>
+							</div>
+							<div class="form-group">
+								<textarea class="form-control disabledTextArea" id="importSyntax" rows="3" disabled="disabled">SYNTAX&#13;&#10;account:password:region &#13;&#10;account:password:region:level</textarea>
+							</div>
+							<div class="form-group">
+								<textarea class="form-control disabledTextArea" id="importResponse" rows="5" disabled="disabled">OUTPUT</textarea>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary" id="importButton">Import</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
