@@ -3,60 +3,20 @@
 		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
 		<script th:inline="javascript">
 		/*<![CDATA[*/
+		
+		//change function for file inputs
+		$(document).on('change', ':file', function() {
+ 			var input = $(this),
+			numFiles = input.get(0).files ? input.get(0).files.length : 1,
+			label = input.val().replace('/\\/g', '/').replace('/.*\//', '');
+			input.trigger('fileselect', [numFiles, label]);
+		});
+		
 		$(document).ready(function() {
 			var editor; 
 			var restlnk = "/api/accounts/user/" + /*[[${currentUser.id}]]*/
 			
 			$( "#navAccounts" ).addClass( "active" );
-			
-			$.fn.dataTable.ext.buttons.uploadfile = {
-					text: 'Import',
-					action: function ( e, dt, node, config ) {
-						var file_data = $("#filedialog").prop("files")[0];
-						if(file_data === undefined){
-							$('#errorModalMessage p').html("Select a file first!");
-							$('#errorModal').modal('show');
-						} else if (file_data.size > 1000000 ){
-							$('#errorModalMessage p').html("Maximum upload file size is 1MB!");
-							$('#errorModal').modal('show');
-						} else {
-							var form_data = new FormData();
-							form_data.append("file", file_data);
-							$('#infoModalMessage p').html("Importing, please wait...");
-							$('#infoModal').modal('show');
-							 $.ajax({
-								url: restlnk + "/import",
-								dataType: "json",
-								cache: false,
-								contentType: false,
-								processData: false,
-								data:form_data,
-								type: 'POST',
-								success: function(returnedData){
-									$('#infoModal').modal('hide');
-									if (returnedData.error != ""){
-										if(returnedData.data.length > 0){
-											$('#warningModalMessage p').html(returnedData.error + "Succesfully uploaded " + returnedData.data.length + " remaining accounts");
-											$('#warningModal').modal('show');
-										} else {
-											$('#errorModalMessage p').html(returnedData.error + "No accounts were uploaded");
-											$('#errorModal').modal('show');
-										}
-									} else {
-										$('#successModalMessage p').html("Succesfully uploaded " + returnedData.data.length + " accounts");
-										$('#successModal').modal('show');
-									}
-									table.ajax.reload();
-								},
-								error:function(returnedData){
-									$('#infoModal').modal('hide');
-									$('#errorModalMessage p').html(returnedData.responseJSON.message);
-									$('#errorModal').modal('show');
-								}
-							});
-						}
-					}
-				};
 			
 			editor = new $.fn.dataTable.Editor( {
 					ajax: {
@@ -240,12 +200,8 @@
 					],
 					className: 'col-lg-2 d-none d-lg-block'
 				},
-				{ 	extend: 'collection',
-					text: 'Import',
-					buttons: [
-						{ text: 'Select File',   action: function () {$("#filedialog").click();} },
-						{ extend: "uploadfile", editor: editor }
-					],
+				{ 	text: 'Import',
+					action: function () {$('#importModal').modal('show');},
 					className: 'col-lg-2 d-none d-lg-block'
 				},
 				{	text: 'Reset Status',
@@ -287,6 +243,70 @@
 			
 			//add cols class to the filter input
 			$('div.dataTables_filter label input').addClass("col-12").removeClass("form-control-sm");
+			
+			//browser file 
+			$('#browseImportButton').click(function(event) {
+				$("#importFile").click();
+			});
+			
+			//update textbox on file select
+			$(':file').on('fileselect', function(event, numFiles, label) {
+				var input = $(this).parents('.input-group').find(':text'),
+				log = numFiles > 1 ? numFiles + ' files selected' : label;
+				if( input.length ) {
+					input.val(log);
+				} else {
+					if( log ) alert(log);
+				}
+			});
+			
+			//import file
+			$('#importButton').click(function(event) {
+				var file_data = $("#importFile").prop("files")[0];
+				if(file_data === undefined){
+					$('#errorModalMessage p').html("Select a file first!");
+					$('#errorModal').modal('show');
+				} else if (file_data.size > 1000000 ){
+					$('#errorModalMessage p').html("Maximum upload file size is 1MB!");
+					$('#errorModal').modal('show');
+				} else {
+					var form_data = new FormData();
+					form_data.append("file", file_data);
+					$('#importModal').modal('hide');
+					$('#infoModalMessage p').html("Importing, please wait...");
+					$('#infoModal').modal('show');
+					$.ajax({
+						url: restlnk + "/import",
+						dataType: "json",
+						cache: false,
+						contentType: false,
+						processData: false,
+						data:form_data,
+						type: 'POST',
+						success: function(returnedData){
+							$('#infoModal').modal('hide');
+							if (returnedData.error != ""){
+								if(returnedData.data.length > 0){
+									$('#warningModalMessage p').html(returnedData.error + "Succesfully uploaded " + returnedData.data.length + " remaining accounts");
+									$('#warningModal').modal('show');
+								} else {
+									$('#errorModalMessage p').html(returnedData.error + "No accounts were uploaded");
+									$('#errorModal').modal('show');
+								}
+							} else {
+								$('#successModalMessage p').html("Succesfully uploaded " + returnedData.data.length + " accounts");
+								$('#successModal').modal('show');
+							}
+							table.ajax.reload();
+						},
+						error:function(returnedData){
+							$('#infoModal').modal('hide');
+							$('#errorModalMessage p').html(returnedData.responseJSON.message);
+							$('#errorModal').modal('show');
+						}
+					});
+				}
+			});
 		} );/*]]>*/
 		</script>
 	</head>
@@ -354,6 +374,31 @@
 					</div>
 				</div>
 			</div>
+			<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					 <div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="importModalLabel">Import</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body" id="importModalMessage">
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<button class="btn btn-outline-primary" id="browseImportButton">Browse&hellip;</button>
+								</div>
+								<input type="text" class="form-control form-control-sm" readonly="readonly" placeholder="Select .txt file"/>
+								<input type="file" id="importFile" style="display: none;" />
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary" id="importButton">Import</button>
+						</div>
+					</div>
+				</div>
+			</div>
 			<table id="infernalbotmanager-datatable-accounts" class="table table-striped table-bordered" style="width:100%">
 				<thead>
 					<tr>
@@ -377,7 +422,6 @@
 					</tr>
 				</thead>
 			</table>
-			<input id="filedialog" type="file" name ="filedialog" accept="text/plain" style="display:none"/>
 		</div>
 	</body>
 </html>
