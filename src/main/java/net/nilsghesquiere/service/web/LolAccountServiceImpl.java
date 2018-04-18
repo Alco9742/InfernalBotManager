@@ -95,6 +95,12 @@ public class LolAccountServiceImpl implements LolAccountService{
 				}
 			}
 		}
+		//If account is done: check if maxlevel > level, if so, set on ready
+		if(lolAccount.getAccount().equals(AccountStatus.DONE)){
+			if (lolAccount.getMaxLevel() > lolAccount.getLevel()){
+				lolAccount.setAccountStatus(AccountStatus.READY_FOR_USE);
+			}
+		}
 		if (!accountAlreadyExistsOnRegion){
 			return lolAccountRepository.save(lolAccount);
 		}

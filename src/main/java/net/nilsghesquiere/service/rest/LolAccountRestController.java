@@ -457,7 +457,7 @@ public class LolAccountRestController {
 		
 		//PROCESSING
 		for (LolAccount lolAccount : lolAccountService.findByUser(user)){
-			if (!lolAccount.getAccountStatus().equals(AccountStatus.BANNED)){
+			if (!lolAccount.getAccountStatus().equals(AccountStatus.BANNED) && !lolAccount.getAccountStatus().equals(AccountStatus.DONE)){
 				lolAccount.setAccountStatus(AccountStatus.READY_FOR_USE);
 				lolAccount.setAssignedTo("");
 				lolAccountService.update(lolAccount);

@@ -68,7 +68,10 @@
 						</button>
 						</div>
 						<div class="modal-body" id="warningResetAccountStatusModalMessage">
-							<p>Unspecified warning!</p>
+							<p>Pressing this button will reset the status of all your accounts. <br />Do NOT do this when you still have clients running. <br />Excludes banned and done accounts.</p>
+							<div class="form-group">
+								<textarea class="form-control disabledTextArea" id="resetAccountStatusResponse" rows="3" disabled="disabled">OUTPUT</textarea>
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button id="resetAccountStatusConfirm" type="button" class="btn btn-primary">Reset</button>
@@ -87,41 +90,14 @@
 						</button>
 						</div>
 						<div class="modal-body" id="warningDeleteAllBannedAccountsModalMessage">
-							<p>Unspecified warning!</p>
+							<p>Pressing this button will delete all banned accounts. <br />This cannot be undone.</p>
+							<div class="form-group">
+								<textarea class="form-control disabledTextArea" id="deleteAllBannedAccountsResponse" rows="3" disabled="disabled">OUTPUT</textarea>
+							</div>
 						</div>
 						<div class="modal-footer">
-							<button id="deleteAllBannedAccountsModalConfirm" type="button" class="btn btn-primary">Delete</button>
+							<button id="deleteAllBannedAccountsConfirm" type="button" class="btn btn-primary">Delete</button>
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered" role="document">
-					 <div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="successModalLabel">Success</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						</div>
-						<div class="modal-body" id="successModalMessage">
-							<p>Unspecified success!</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered" role="document">
-					 <div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="errorModalLabel">Error</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						</div>
-						<div class="modal-body" id="errorModalMessage">
-							<p>Unspecified error!</p>
 						</div>
 					</div>
 				</div>
@@ -155,39 +131,49 @@
 				
 				//resetAllAccounts 
 				$('#resetAllAccountStatus').click(function(event) {
-					$('#warningResetAccountStatusModalMessage p').html("Pressing this button will reset the status of all your accounts. <br />Do NOT do this when you still have clients running. <br />Excludes banned accounts.");
+					$('#resetAccountStatusResponse').val("OUTPUT\n");
 					$('#warningResetAccountStatusModal').modal('show');
 				});
 				
 				//resetAllAccountsConfirm
 				$('#resetAccountStatusConfirm').click(function(event) {
-					$('#warningResetAccountStatusModal').modal('hide');
+					$('#resetAccountStatusResponse').val("OUTPUT\n");
+					$resetAccountStatusConfirmButton = $("#resetAccountStatusConfirm");
+					$resetAccountStatusConfirmButton.html('Resetting...');
+					$resetAccountStatusConfirmButton.disabled=true;
 					$.post( restBase + "/resetAllStatus",function(data){
-						$('#successModalMessage p').html(data.message);
-						$('#successModal').modal('show');
+						$('#resetAccountStatusResponse').val($('#resetAccountStatusResponse').val() + data.message);
+						$resetAccountStatusConfirmButton.html('Reset');
+						$resetAccountStatusConfirmButton.disabled=false;
 					})
 					.fail(function(data) {
-						$('#errorModalMessage p').html(data.message);
-						$('#errorModal').modal('show');
+						$('#resetAccountStatusResponse').val($('#resetAccountStatusResponse').val() + data.message);
+						$resetAccountStatusConfirmButton.html('Reset');
+						$resetAccountStatusConfirmButton.disabled=false;
 					});
 				});
 				
 				//deleteBannedAccounts 
 				$('#deleteAllBannedAccounts').click(function(event) {
-					$('#warningDeleteAllBannedAccountsModalMessage p').html("Pressing this button will delete all banned accounts. <br />This cannot be undone.");
+					$('#deleteAllBannedAccountsResponse').val("OUTPUT\n");
 					$('#warningDeleteAllBannedAccountsModal').modal('show');
 				});
 				
 				//deleteBannedAccountsConfirm
-				$('#deleteAllBannedAccountsModalConfirm').click(function(event) {
-					$('#warningDeleteAllBannedAccountsModal').modal('hide');
+				$('#deleteAllBannedAccountsConfirm').click(function(event) {
+					$('#deleteAllBannedAccountsResponse').val("OUTPUT\n");
+					$deleteAllAccountsConfirmButton = $("#deleteAllBannedAccountsConfirm");
+					$deleteAllAccountsConfirmButton.html('Deleting...');
+					$deleteAllAccountsConfirmButton.disabled=true;
 					$.post( restBase + "/deleteAllBanned",function(data){
-						$('#successModalMessage p').html(data.message);
-						$('#successModal').modal('show');
+						$('#deleteAllBannedAccountsResponse').val($('#deleteAllBannedAccountsResponse').val() + data.message);
+						$deleteAllAccountsConfirmButton.html('Delete');
+						$deleteAllAccountsConfirmButton.disabled=false;
 					})
 					.fail(function(data) {
-						$('#errorModalMessage p').html(data.message);
-						$('#errorModal').modal('show');
+						$('#deleteAllBannedAccountsResponse').val($('#deleteAllBannedAccountsResponse').val() + data.message);
+						$deleteAllAccountsConfirmButton.html('Delete');
+						$deleteAllAccountsConfirmButton.disabled=false;
 					});
 				});
 			});
