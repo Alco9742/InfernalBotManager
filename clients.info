@@ -1,0 +1,20 @@
+Stappenplan client systeem:
+
+Client: werking behouden zoals die nu is
+
+Server:
+Entity ClientSettings
+ -Alle client settings van de ini file overzetten naar clientsettings entity (enkel username en password blijven in de ini + de tag gaat naar de client entity).
+Entity client 
+ -Many to one met User
+ -Client REST service maken met register client (indien al bestaat bestaan indien nog niet, onbestaande), naam moet niet uniek zijn in het geheel maar wel voor huidige gebruiker
+ -One to one met ClientData --> ClientData weg van bij user
+ -Many to one met ClientSettings
+
+Client:
+ -Settings niet langer uit ini halen maar van webserver (mss kijken om ini om te zetten voor bestaande????)
+ -Upload clientdata aanpassen
+ -Client restclient aanmaken -> Pingen naar webserver
+ -Enum voor tasks die uitgevoer moeten worden door client (1 te gelijk) -->Met ping ook tasks checken
+ 
+ laatste:  -InfernalSettings one to many make voor user & laten kiezen welke editen

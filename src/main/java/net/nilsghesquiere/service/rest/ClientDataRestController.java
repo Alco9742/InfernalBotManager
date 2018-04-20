@@ -82,8 +82,9 @@ public class ClientDataRestController {
 				error = "Client data is empty";
 			}
 			//PROCESSING
-			clientData.setUser(user);
-			ClientData clientDataFromDB = clientDataService.findByTagAndUserId(clientData.getTag(), userid);
+			//TODO going to have to rework this
+			//clientData.setUser(user);
+			ClientData clientDataFromDB = clientDataService.findByTagAndUserId(clientData.getClient().getTag(), userid);
 			ClientData newClientData = null;
 			if (clientDataFromDB != null){
 				clientData.setId(clientDataFromDB.getId());

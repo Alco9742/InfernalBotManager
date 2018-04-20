@@ -27,9 +27,9 @@ public class Queuer implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "clientid")
+	@JoinColumn(name = "clientdataid")
 	@JsonIgnore
-	private ClientData client;
+	private ClientData clientData;
 	private String queuer;
 	//This is backwards: False is softEnd enabled
 	private Boolean softEnd;
@@ -63,13 +63,13 @@ public class Queuer implements Serializable{
 		this.lpq = lpq;
 	}
 	
-	public void setClient(ClientData client) {
-		if (this.client != null && this.client.getQueuers().contains(this)){
-			this.client.removeQueuer(this);
+	public void setClientData(ClientData clientData) {
+		if (this.clientData != null && this.clientData.getQueuers().contains(this)){
+			this.clientData.removeQueuer(this);
 		}
-		this.client = client;
-		if (client != null && !client.getQueuers().contains(this)){
-			client.addQueuer(this);
+		this.clientData = clientData;
+		if (clientData != null && !clientData.getQueuers().contains(this)){
+			clientData.addQueuer(this);
 		}
 	}
 	
@@ -89,7 +89,7 @@ public class Queuer implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Queuer [id=" + id + ", client=" + client.getTag() + ", queuer=" + queuer
+		return "Queuer [id=" + id + ", client=" + clientData.getClient().getTag() + ", queuer=" + queuer
 				+ ", softEnd=" + softEnd + ", afterGame=" + afterGame
 				+ ", playedGames=" + playedGames + ", winGames=" + winGames
 				+ ", defeatGames=" + defeatGames + ", state=" + state

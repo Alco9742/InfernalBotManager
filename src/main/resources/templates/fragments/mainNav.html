@@ -16,8 +16,8 @@
 				<li id="navClients" class="nav-item">
 					<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/clients}">Clients</a>
 				</li>
-				<li id="navInfernalSettings" class="nav-item">
-					<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/infernalsettings}">IB Settings</a>
+				<li id="navSettings" class="nav-item">
+					<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/settings/clients}">Settings</a>
 				</li>
 				<li id="navAdmin" class="nav-item">
 					<a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">Admin</a>

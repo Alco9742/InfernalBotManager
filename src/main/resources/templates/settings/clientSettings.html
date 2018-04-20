@@ -1,0 +1,28 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+		<script th:inline="javascript">
+			$(document).ready(function() {
+				$( "#navSettings" ).addClass( "active" );
+				$( "#settingsNavClientSettings" ).addClass( "active" );
+				$( "#selectedClientSettings" ).change(function() {
+					$("#selectClientSettingsForm").submit();
+				});
+			});
+			
+		</script>
+	</head>
+	<body>
+		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+		<br />
+		<div class="container">
+			<!--/*/ <th:block th:include="fragments/settingsNav :: settingsNav"/> /*/-->
+			<br />
+			<form id="selectClientSettingsForm" method="get">
+				<select class="custom-select col-12 offset-sm-1 col-sm-10" id="selectedClientSettings">
+					<option th:each="clientSettings : ${clientSettingsList}" th:value="clientSettings" th:text="${clientSettings.name}">settings</option>
+				</select>
+			</form>
+		</div>
+	</body>
+</html>

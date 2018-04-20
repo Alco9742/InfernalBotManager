@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="settingsNav">
+	<div class="row">
+		<ul class="col-12 offset-sm-1 col-sm-10 nav nav-tabs">
+			<li class="nav-item">
+				<a id="settingsNavClients" class="nav-link" th:href="@{/settings/clients}">Clients</a>
+			</li>
+			<li class="nav-item">
+				<a id="settingsNavClientSettings" class="nav-link" th:href="@{/settings/clientSettings}">ClientSettings</a>
+			</li>
+			<li class="nav-item">
+				<a id="settingsNavInfernalSettings" class="nav-link" th:href="@{/settings/infernal}">InfernalSettings</a>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>

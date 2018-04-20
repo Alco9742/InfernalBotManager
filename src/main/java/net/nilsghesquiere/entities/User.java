@@ -44,18 +44,22 @@ public class User implements Serializable{
 			joinColumns=@JoinColumn(name="userid", referencedColumnName="id"),
 			inverseJoinColumns=@JoinColumn(name="roleid", referencedColumnName="id"))
 	private Collection<Role> roles;
-	@OneToMany(mappedBy="user",cascade=CascadeType.REMOVE,fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@OrderBy("id")
 	@JsonIgnore
 	private List<LolAccount>lolAccounts;
-	@OneToOne(cascade=CascadeType.REMOVE)
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="infernalsettingsid")
 	@JsonIgnore
 	private InfernalSettings infernalSettings;
-	@OneToMany(mappedBy="user",cascade=CascadeType.REMOVE,fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@OrderBy("id")
 	@JsonIgnore
-	private List<ClientData>clients;
+	private List<Client>clients;
+	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+	@OrderBy("id")
+	@JsonIgnore
+	private List<ClientSettings>clientSettingsList;
 	
 	public User() {
 		super();
@@ -63,12 +67,14 @@ public class User implements Serializable{
 	}
 	
 	public User(String email, String password, Collection<Role> roles, boolean enabled) {
+		
 		super();
 		this.email = email;
 		this.password = password;
 		this.roles = roles;
 		this.enabled = enabled;
 		this.lolAccounts = new ArrayList<>();
+		this.clientSettingsList= new ArrayList<>();
 	}
 	
 	public User(String email,String username, String password, Collection<Role> roles) {
@@ -78,6 +84,7 @@ public class User implements Serializable{
 		this.roles = roles;
 		this.enabled =false;
 		this.lolAccounts = new ArrayList<>();
+		this.clientSettingsList= new ArrayList<>();
 	}
 	
 	public void addLolAccount(LolAccount lolAccount){
@@ -93,20 +100,35 @@ public class User implements Serializable{
 			lolAccount.setUser(null);
 		}
 	}
-
-	public void addClientData(ClientData clientData){
-		clients.add(clientData);
-		if(clientData.getUser() != this){
-			clientData.setUser(this);
+	
+	public void addClientSettings(ClientSettings clientSettings){
+		clientSettingsList.add(clientSettings);
+		if(clientSettings.getUser() != this){
+			clientSettings.setUser(this);
 		}
 	}
 	
-	public void removeClientData(ClientData clientData){
-		clients.remove(clientData);
-		if(clientData.getUser() == this){
-			clientData.setUser(null);
+	public void removeClientSettings(ClientSettings clientSettings){
+		clientSettingsList.remove(clientSettings);
+		if(clientSettings.getUser() == this){
+			clientSettings.setUser(null);
 		}
 	}
+	
+	public void addClient(Client client){
+		clients.add(client);
+		if(client.getUser() != this){
+			client.setUser(this);
+		}
+	}
+	
+	public void removeClient(Client client){
+		clients.remove(client);
+		if(client.getUser() == this){
+			client.setUser(null);
+		}
+	}
+	
 	@Override
 	public String toString() {
 		String roleList = "[";

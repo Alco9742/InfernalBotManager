@@ -30,11 +30,10 @@ public class ClientDataMapDeserializer extends JsonDeserializer<ClientDataMap>{
 		Iterator<Map.Entry<String, JsonNode>> fieldsIterator = node.fields();
 		while (fieldsIterator.hasNext()){
 			Map.Entry<String, JsonNode> field = fieldsIterator.next();
-			JsonNode clientNode = field.getValue();
+			JsonNode clientDataNode = field.getValue();
 			final String key =  field.getKey();
-			final Long clientId = clientNode.get("id").asLong();
-			final String clientTag = clientNode.get("tag").asText();
-			JsonNode queuerNodes = clientNode.get("queuers");
+			final Long clientDataId = clientDataNode.get("id").asLong();
+			JsonNode queuerNodes = clientDataNode.get("queuers");
 			List<Queuer> queuers = new ArrayList<>();
 			for (JsonNode queuerNode : queuerNodes){
 				final Long queuerId = queuerNode.get("id").asLong();
@@ -65,12 +64,12 @@ public class ClientDataMapDeserializer extends JsonDeserializer<ClientDataMap>{
 				Queuer queuer = new Queuer(queuerId,queuerQueuer,queuerSoftEnd,queuerAfterGame,queuerPlayedGames,queuerWinGames,queuerDefeatGames, queuerState,lolAccounts,queuerLpq);
 				queuers.add(queuer);
 			}
-			final String clientDateString = clientNode.get("date").asText();
-			final LocalDateTime clientDate = LocalDateTime.parse(clientDateString);
-			final String clientStatus = clientNode.get("status").asText();
-			final String clientRamInfo = clientNode.get("ramInfo").asText();
-			final String clientCpuInfo = clientNode.get("cpuInfo").asText();
-			ClientData clientData = new ClientData(clientId,clientTag,queuers,clientDate,clientStatus,clientRamInfo,clientCpuInfo);
+			final String clientDataDateString = clientDataNode.get("date").asText();
+			final LocalDateTime clientDataDate = LocalDateTime.parse(clientDataDateString);
+			final String clientDataStatus = clientDataNode.get("status").asText();
+			final String clientDataRamInfo = clientDataNode.get("ramInfo").asText();
+			final String clientDataCpuInfo = clientDataNode.get("cpuInfo").asText();
+			ClientData clientData = new ClientData(clientDataId,queuers,clientDataDate,clientDataStatus,clientDataRamInfo,clientDataCpuInfo);
 			map.add(key, clientData);
 		}
 		return map;

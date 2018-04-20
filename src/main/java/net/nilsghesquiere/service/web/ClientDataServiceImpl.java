@@ -42,7 +42,7 @@ public class ClientDataServiceImpl implements ClientDataService{
 	public ClientData create(ClientData clientData) {
 		// Setting the relationships
 		for(Queuer queuer: clientData.getQueuers()){
-			queuer.setClient(clientData);
+			queuer.setClientData(clientData);
 			for(QueuerLolAccount lolacc : queuer.getQueuerLolAccounts()){
 				lolacc.setQueuer(queuer);
 			}
@@ -57,11 +57,12 @@ public class ClientDataServiceImpl implements ClientDataService{
 	public ClientData update(ClientData clientData) {
 		// Currently have to do this customly
 		// Deleting the current data --> delete the queuers containing the lolAccounts, keep the ClientData 
-		ClientData oldData = clientDataRepository.findByTagAndUserId(clientData.getTag(), clientData.getUser().getId());
-		oldData.getQueuers().stream().forEach(queuer -> queuerRepository.delete(queuer));
+		//TODO rework 
+	//	ClientData oldData = clientDataRepository.findByTagAndUserId(clientData.getTag(), clientData.getUser().getId());
+	//	oldData.getQueuers().stream().forEach(queuer -> queuerRepository.delete(queuer));
 		// Setting the relationships
 		for(Queuer queuer: clientData.getQueuers()){
-			queuer.setClient(clientData);
+			queuer.setClientData(clientData);
 			for(QueuerLolAccount lolacc : queuer.getQueuerLolAccounts()){
 				lolacc.setQueuer(queuer);
 			}
@@ -85,13 +86,13 @@ public class ClientDataServiceImpl implements ClientDataService{
 	@Override
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public List<ClientData> findByUserId(Long userid) {
-		return clientDataRepository.findByUserId(userid);
+		return clientDataRepository.findByClientUserId(userid);
 	}
 
 	@Override
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ClientData findByTagAndUserId(String tag, Long userid) {
-		return clientDataRepository.findByTagAndUserId(tag,userid);
+		return clientDataRepository.findByClientTagAndClientUserId(tag,userid);
 	}
 
 	@Override
