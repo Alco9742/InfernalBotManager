@@ -21,3 +21,11 @@ tr.details td.details-control {
 .disabledTextArea:first-line { 
 	font-weight: bold;
 }
+
+.btn-margin-r{
+    margin-right: 5px;
+}
+
+.btn-margin-l{
+    margin-left: 5px;
+}

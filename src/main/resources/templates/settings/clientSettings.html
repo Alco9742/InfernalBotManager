@@ -6,8 +6,15 @@
 				$( "#navSettings" ).addClass( "active" );
 				$( "#settingsNavClientSettings" ).addClass( "active" );
 				$( "#selectedClientSettings" ).change(function() {
-					$("#selectClientSettingsForm").submit();
+					//request
 				});
+				$( "#newClientSettings" ).click(function() {
+					//request
+				});
+				$( "#copyClientSettings" ).click(function() {
+					//request
+				});
+			
 			});
 			
 		</script>
@@ -18,11 +25,13 @@
 		<div class="container">
 			<!--/*/ <th:block th:include="fragments/settingsNav :: settingsNav"/> /*/-->
 			<br />
-			<form id="selectClientSettingsForm" method="get">
-				<select class="custom-select col-12 offset-sm-1 col-sm-10" id="selectedClientSettings">
+			<div class="row" >
+				<select class="custom-select col-10 offset-sm-1 col-sm-8" id="selectedClientSettings">
 					<option th:each="clientSettings : ${clientSettingsList}" th:value="clientSettings" th:text="${clientSettings.name}">settings</option>
 				</select>
-			</form>
-		</div>
+				<button type="button" class="col-1 btn btn-secondary btn-margin-l" id="newClientSettings"><span class="fa fa-plus"></span></button>
+				<button type="button" class="col-1 btn btn-secondary btn-margin-l" id="copyClientSettings"><span class="fa fa-copy"></span></button>
+			</div>
+			</div>
 	</body>
 </html>
