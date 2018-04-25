@@ -13,4 +13,5 @@ public interface ClientSettingsService {
 	List<ClientSettings> findByUser(User user);
 	List<ClientSettings> findByUserId(Long userId);
 	void deleteById(Long id);
+	ClientSettings findByUserIdAndName(Long userid, String name);
 }

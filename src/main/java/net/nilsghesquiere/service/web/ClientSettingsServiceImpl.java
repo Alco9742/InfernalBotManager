@@ -25,51 +25,51 @@ public class ClientSettingsServiceImpl implements ClientSettingsService{
 
 	@Override
 	public ClientSettings read(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return clientSettingsRepository.findOne(id);
 	}
 
 	@Override
 	@ModifyingTransactionalServiceMethod
 	public ClientSettings create(ClientSettings clientSettings) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	@ModifyingTransactionalServiceMethod
-	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-	public void delete(ClientSettings clientSettings) {
-		// TODO Auto-generated method stub
-		
+		return clientSettingsRepository.save(clientSettings);
 	}
 
 	@Override
 	@ModifyingTransactionalServiceMethod
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ClientSettings update(ClientSettings clientSettings) {
-		// TODO Auto-generated method stub
-		return null;
+		return clientSettingsRepository.save(clientSettings);
 	}
+	
+	@Override
+	@ModifyingTransactionalServiceMethod
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	public void delete(ClientSettings clientSettings) {
+		clientSettingsRepository.delete(clientSettings);
+	}
+
+
 
 	@Override
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public List<ClientSettings> findByUser(User user) {
-		// TODO Auto-generated method stub
-		return null;
+		return clientSettingsRepository.findByUser(user);
 	}
 
 	@Override
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public List<ClientSettings> findByUserId(Long userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return clientSettingsRepository.findByUserId(userId);
 	}
 
 	@Override
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
-		
+		clientSettingsRepository.deleteById(id);
+	}
+
+	@Override
+	public ClientSettings findByUserIdAndName(Long userid, String name) {
+		return clientSettingsRepository.findByUserIdAndName(userid, name);
 	}
 }

@@ -12,6 +12,7 @@ import net.nilsghesquiere.service.web.ClientSettingsService;
 import net.nilsghesquiere.service.web.InfernalSettingsService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.web.annotations.ViewController;
+import net.nilsghesquiere.web.dto.ClientSettingsDTO;
 import net.nilsghesquiere.web.dto.InfernalSettingsDTO;
 
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class SettingsController {
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(SettingsController.class);
 	private static final String CLIENTS_VIEW = "settings/clients";
-	private static final String CLIENTSETTINGS_VIEW = "settings/clientSettings";
+	private static final String CLIENTSETTINGS_VIEW = "settings/clientsettings";
 	private static final String INFERNAL_VIEW = "settings/infernal";
 	
 	@Autowired
@@ -46,14 +47,53 @@ public class SettingsController {
 
 	@RequestMapping(value = "/clients", method = RequestMethod.GET)
 	public ModelAndView viewClients(HttpServletRequest request){
-		User user = authenticationFacade.getAuthenticatedUser();
-		List<ClientSettings> clientSettingsList = clientSettingsService.findByUser(user);
-		return new ModelAndView(CLIENTS_VIEW).addObject("clientSettingsList",clientSettingsList);
+		return new ModelAndView(CLIENTS_VIEW);
 	}
 	
-	@RequestMapping(value = "/clientSettings", method = RequestMethod.GET)
+	@RequestMapping(value = "/clientsettings", method = RequestMethod.GET)
 	public ModelAndView viewClientSettings(HttpServletRequest request){
-		return new ModelAndView(CLIENTSETTINGS_VIEW);
+		User user = authenticationFacade.getAuthenticatedUser();
+		List<ClientSettings> clientSettingsList = clientSettingsService.findByUser(user);
+		return new ModelAndView(CLIENTSETTINGS_VIEW).addObject("clientSettingsList",clientSettingsList);
+	}
+	
+	@RequestMapping(value = "/clientsettings/new", method = RequestMethod.GET)
+	public ModelAndView newClientSettingsForm(HttpServletRequest request){
+		//The authenticated user
+		User user = authenticationFacade.getAuthenticatedUser();
+		//List of client settings for the authenticated user
+		List<ClientSettings> clientSettingsList = clientSettingsService.findByUser(user);
+		//new ClientSettingsDTO
+		ClientSettingsDTO dto = new ClientSettingsDTO();
+		return new ModelAndView(CLIENTSETTINGS_VIEW).addObject("clientSettingsList",clientSettingsList).addObject("settings",dto);
+	}
+	
+	@RequestMapping(value = "/clientsettings/new", method = RequestMethod.POST)
+	public String newClientSettings(@ModelAttribute("settings") @Valid ClientSettingsDTO settingsDTO,BindingResult bindingResult, Model model, HttpServletRequest request) {
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("failM", "Failure creating Client settings");
+			return CLIENTSETTINGS_VIEW;
+		}
+		//The authenticated user
+		User user = authenticationFacade.getAuthenticatedUser();
+		
+		//Check if name exists already for that user
+		ClientSettings alreadyExistingSettings = clientSettingsService.findByUserIdAndName(user.getId(), settingsDTO.getName());
+		if(alreadyExistingSettings != null){
+			model.addAttribute("failM", "Client settings with the name '"+ settingsDTO.getName() +"' already exist for this user!");
+			return CLIENTSETTINGS_VIEW;
+		}
+		//build clientSettings from the dto
+		ClientSettings newClientSettings = new ClientSettings(settingsDTO);
+		
+		//set user
+		newClientSettings.setUser(user);
+		
+		//create the settings in the database
+		clientSettingsService.create(newClientSettings);
+		
+		request.getSession().setAttribute("resultM","Succesfully created Client settings '" + settingsDTO.getName() + "'");
+		return "redirect:/settings/clientsettings";
 	}
 	
 	@RequestMapping(value = "/infernal", method = RequestMethod.GET)
@@ -88,7 +128,7 @@ public class SettingsController {
 		newSettings.setLolWidth(oldSettings.getLolWidth());
 		infernalSettingsService.update(newSettings);
 		request.getSession().setAttribute("resultM","Succesfully changed InfernalBot settings!");
-		return "redirect:/infernalsettings";
+		return "redirect:/settings/infernal";
 	}
 
 }

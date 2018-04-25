@@ -42,14 +42,14 @@
 					<label for="settingsClientVersion" class="col-12 offset-sm-1 col-sm-4 col-form-label">Client Version</label>
 					<div class="col-12  col-sm-6">
 						<input type="text" class="form-control" th:errorclass="is-invalid" id="settingsClientVersion" th:field="*{clientVersion}"/>
-						<div th:if="${#fields.hasErrors('clientVersion')}" class="invalid-feedback" th:errors="*{clientVersion}">Incorrect Client Version</div>
+						<div th:if="${#fields.hasErrors('*{clientVersion}')}" class="invalid-feedback" th:errors="*{clientVersion}">Incorrect Client Version</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsTimeSpan" class="col-12 offset-sm-1 col-sm-4 col-form-label">Time Between Queuers</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="999" class="form-control" th:errorclass="is-invalid" id="settingsTimeSpan" th:field="*{timeSpan}"/>
-						<div th:if="${#fields.hasErrors('timeSpan')}" class="invalid-feedback" th:errors="*{timeSpan}">Incorrect Time Between Queuers</div>
+						<div th:if="${#fields.hasErrors('*{timeSpan}')}" class="invalid-feedback" th:errors="*{timeSpan}">Incorrect Time Between Queuers</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -59,7 +59,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('autoLogin')}" class="invalid-feedback" th:errors="*{autoLogin}">Incorrect Auto Login</div>
+						<div th:if="${#fields.hasErrors('*{autoLogin}')}" class="invalid-feedback" th:errors="*{autoLogin}">Incorrect Auto Login</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -69,21 +69,21 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('autoBotStart')}" class="invalid-feedback" th:errors="*{autoBotStart}">Incorrect Auto Bot Start</div>
+						<div th:if="${#fields.hasErrors('*{autoBotStart}')}" class="invalid-feedback" th:errors="*{autoBotStart}">Incorrect Auto Bot Start</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsWildcard" class="col-12 offset-sm-1 col-sm-4 col-form-label">Wildcard</label>
 					<div class="col-12  col-sm-6">
 						<input type="text" class="form-control" th:errorclass="is-invalid" id="settingsWildcard" th:field="*{wildcard}"/>
-						<div th:if="${#fields.hasErrors('wildcard')}" class="invalid-feedback" th:errors="*{wildcard}">Incorrect Wildcard</div>
+						<div th:if="${#fields.hasErrors('*{wildcard}')}" class="invalid-feedback" th:errors="*{wildcard}">Incorrect Wildcard</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsMaxLevel" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Max Level</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="0" max="99" class="form-control" th:errorclass="is-invalid" id="settingsMaxLevel" th:field="*{maxLevel}"/>
-						<div th:if="${#fields.hasErrors('maxLevel')}" class="invalid-feedback" th:errors="*{maxLevel}">Incorrect Max Level</div>
+						<div th:if="${#fields.hasErrors('*{maxLevel}')}" class="invalid-feedback" th:errors="*{maxLevel}">Incorrect Max Level</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -97,18 +97,18 @@
 					<label for="settingsPlayTime" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Play Time</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="0" max="24" class="form-control" th:errorclass="is-invalid" id="settingsPlayTime" th:field="*{playTime}"/>
-						<div th:if="${#fields.hasErrors('playTime')}" class="invalid-feedback" th:errors="*{playTime}">Incorrect Play Time</div>
+						<div th:if="${#fields.hasErrors('*{playTime}')}" class="invalid-feedback" th:errors="*{playTime}">Incorrect Play Time</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsMaxBe" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Max BE</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="0" max="999999" class="form-control" th:errorclass="is-invalid" id="settingsMaxBe" th:field="*{maxBe}"/>
-						<div th:if="${#fields.hasErrors('maxBe')}" class="invalid-feedback" th:errors="*{maxBe}">Incorrect Max Be</div>
+						<div th:if="${#fields.hasErrors('*{maxBe}')}" class="invalid-feedback" th:errors="*{maxBe}">Incorrect Max Be</div>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="settingsRegione" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Region</label>
+					<label for="settingsRegion" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Region</label>
 					<div class="col-12  col-sm-6">
 						<select class="form-control" th:errorclass="is-invalid" id="settingsRegion" th:field="*{region}">
 							<option value="EUW">EUW</option>
@@ -121,7 +121,7 @@
 							<option value="RU">RU</option>
 							<option value="TR">TR</option>
 						</select>
-						<div th:if="${#fields.hasErrors('region')}" class="invalid-feedback" th:errors="*{region}">Incorrect Region</div>
+						<div th:if="${#fields.hasErrors('*{region}')}" class="invalid-feedback" th:errors="*{region}">Incorrect Region</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -141,7 +141,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-					<div th:if="${#fields.hasErrors('surrender')}" class="invalid-feedback" th:errors="*{surrender}">Incorrect Surrender</div>
+					<div th:if="${#fields.hasErrors('*{surrender}')}" class="invalid-feedback" th:errors="*{surrender}">Incorrect Surrender</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -149,7 +149,7 @@
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="99" class="form-control" th:errorclass="is-invalid"  id="settingsLevelToBeginnerBot" th:field="*{levelToBeginnerBot}"/>
 					</div>
-					<div th:if="${#fields.hasErrors('levelToBeginnerBot')}" class="invalid-feedback" th:errors="*{levelToBeginnerBot}">Incorrect Medium Bots From Level</div>
+					<div th:if="${#fields.hasErrors('*{levelToBeginnerBot}')}" class="invalid-feedback" th:errors="*{levelToBeginnerBot}">Incorrect Medium Bots From Level</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsClientHide" class="col-12 offset-sm-1 col-sm-4 col-form-label">Client Hide</label>
@@ -168,7 +168,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('leaderHide')}" class="invalid-feedback" th:errors="*{leaderHide}">Incorrect Leader Hide</div>
+						<div th:if="${#fields.hasErrors('*{leaderHide}')}" class="invalid-feedback" th:errors="*{leaderHide}">Incorrect Leader Hide</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -178,7 +178,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('consoleHide')}" class="invalid-feedback" th:errors="*{consoleHide}">Incorrect Console Hide</div>
+						<div th:if="${#fields.hasErrors('*{consoleHide}')}" class="invalid-feedback" th:errors="*{consoleHide}">Incorrect Console Hide</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -188,14 +188,14 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('softEndDefault')}" class="invalid-feedback" th:errors="*{softEndDefault}">Incorrect Queuer Safestop</div>
+						<div th:if="${#fields.hasErrors('*{softEndDefault}')}" class="invalid-feedback" th:errors="*{softEndDefault}">Incorrect Queuer Safestop</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsSoftEndValue" class="col-12 offset-sm-1 col-sm-4 col-form-label">Safestop After x Games</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="999" class="form-control" th:errorclass="is-invalid" id="settingsSoftEndValue" th:field="*{softEndValue}"/>
-						<div th:if="${#fields.hasErrors('softEndValue')}" class="invalid-feedback" th:errors="*{softEndValue}">Incorrect Safestop After x Games</div>
+						<div th:if="${#fields.hasErrors('*{softEndValue}')}" class="invalid-feedback" th:errors="*{softEndValue}">Incorrect Safestop After x Games</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -205,14 +205,14 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('queuerAutoClose')}" class="invalid-feedback" th:errors="*{queuerAutoClose}">Incorrect Queuer Autorestart</div>
+						<div th:if="${#fields.hasErrors('*{queuerAutoClose}')}" class="invalid-feedback" th:errors="*{queuerAutoClose}">Incorrect Queuer Autorestart</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsQueueCloseValue" class="col-12 offset-sm-1 col-sm-4 col-form-label">Autorestart After x Games</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="999" class="form-control" th:errorclass="is-invalid" id="settingsQueueCloseValue" th:field="*{queueCloseValue}"/>
-						<div th:if="${#fields.hasErrors('queueCloseValue')}" class="invalid-feedback" th:errors="*{queueCloseValue}">Incorrect Autorestart After x Games</div>
+						<div th:if="${#fields.hasErrors('*{queueCloseValue}')}" class="invalid-feedback" th:errors="*{queueCloseValue}">Incorrect Autorestart After x Games</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -222,7 +222,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('winReboot')}" class="invalid-feedback" th:errors="*{winReboot}">Incorrect Windows Reboot After Safestop</div>
+						<div th:if="${#fields.hasErrors('*{winReboot}')}" class="invalid-feedback" th:errors="*{winReboot}">Incorrect Windows Reboot After Safestop</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -232,7 +232,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('winShutdown')}" class="invalid-feedback" th:errors="*{winShutdown}">Incorrect Windows Shutdown After Safestop</div>
+						<div th:if="${#fields.hasErrors('*{winShutdown}')}" class="invalid-feedback" th:errors="*{winShutdown}">Incorrect Windows Shutdown After Safestop</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -242,14 +242,14 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('timeUntilCheck')}" class="invalid-feedback" th:errors="*{timeUntilCheck}">Incorrect Windows Reboot After Time</div>
+						<div th:if="${#fields.hasErrors('*{timeUntilCheck}')}" class="invalid-feedback" th:errors="*{timeUntilCheck}">Incorrect Windows Reboot After Time</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsTimeUntilReboot" class="col-12 offset-sm-1 col-sm-4 col-form-label">Windows Reboot Timer</label>
 					<div class="col-12  col-sm-6">
 						<input type="text" class="form-control" th:errorclass="is-invalid" id="settingsTimeUntilReboot" th:field="*{timeUntilReboot}"/>
-						<div th:if="${#fields.hasErrors('timeUntilReboot')}" class="invalid-feedback" th:errors="*{timeUntilReboot}">Incorrect Windows Reboot Timer</div>
+						<div th:if="${#fields.hasErrors('*{timeUntilReboot}')}" class="invalid-feedback" th:errors="*{timeUntilReboot}">Incorrect Windows Reboot Timer</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -259,7 +259,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('renderDisable')}" class="invalid-feedback" th:errors="*{renderDisable}">Incorrect Render Disable</div>
+						<div th:if="${#fields.hasErrors('*{renderDisable}')}" class="invalid-feedback" th:errors="*{renderDisable}">Incorrect Render Disable</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -269,7 +269,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('leaderRenderDisable')}" class="invalid-feedback" th:errors="*{leaderRenderDisable}">Incorrect Leader Render Disable</div>
+						<div th:if="${#fields.hasErrors('*{leaderRenderDisable}')}" class="invalid-feedback" th:errors="*{leaderRenderDisable}">Incorrect Leader Render Disable</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -279,7 +279,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('cpuBoost')}" class="invalid-feedback" th:errors="*{cpuBoost}">Incorrect CPU Boost</div>
+						<div th:if="${#fields.hasErrors('*{cpuBoost}')}" class="invalid-feedback" th:errors="*{cpuBoost}">Incorrect CPU Boost</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -289,7 +289,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('leaderCpuBoost')}" class="invalid-feedback" th:errors="*{leaderCpuBoost}">Incorrect Leader CPU Boost</div>
+						<div th:if="${#fields.hasErrors('*{leaderCpuBoost}')}" class="invalid-feedback" th:errors="*{leaderCpuBoost}">Incorrect Leader CPU Boost</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -299,7 +299,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('ramManager')}" class="invalid-feedback" th:errors="*{ramManager}">Incorrect RAM Manager</div>
+						<div th:if="${#fields.hasErrors('*{ramManager}')}" class="invalid-feedback" th:errors="*{ramManager}">Incorrect RAM Manager</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -313,63 +313,63 @@
 					<label for="settingsRamMax" class="col-12 offset-sm-1 col-sm-4 col-form-label">RAM Maximum</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="1024" class="form-control" th:errorclass="is-invalid" id="settingsRamMax" th:field="*{ramMax}"/>
-						<div th:if="${#fields.hasErrors('ramMax')}" class="invalid-feedback" th:errors="*{ramMax}">Incorrect RAM Maximum</div>
+						<div th:if="${#fields.hasErrors('*{ramMax}')}" class="invalid-feedback" th:errors="*{ramMax}">Incorrect RAM Maximum</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsTimeoutLogin" class="col-12 offset-sm-1 col-sm-4 col-form-label">Login Timeout</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="99" class="form-control" th:errorclass="is-invalid"  id="settingsTimeoutLogin" th:field="*{timeoutLogin}"/>
-						<div th:if="${#fields.hasErrors('timeoutLogin')}" class="invalid-feedback" th:errors="*{timeoutLogin}">Incorrect Login Timeout</div>
+						<div th:if="${#fields.hasErrors('*{timeoutLogin}')}" class="invalid-feedback" th:errors="*{timeoutLogin}">Incorrect Login Timeout</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsTimeoutLobby" class="col-12 offset-sm-1 col-sm-4 col-form-label">Lobby Timeout</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="99" class="form-control" th:errorclass="is-invalid" id="settingsTimeoutLobby" th:field="*{timeoutLobby}"/>
-						<div th:if="${#fields.hasErrors('timeoutLobby')}" class="invalid-feedback" th:errors="*{timeoutLobby}">Incorrect Lobby Timeout</div>
+						<div th:if="${#fields.hasErrors('*{timeoutLobby}')}" class="invalid-feedback" th:errors="*{timeoutLobby}">Incorrect Lobby Timeout</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsTimeoutChamp" class="col-12 offset-sm-1 col-sm-4 col-form-label">Champion Select Timeout</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="99" class="form-control" th:errorclass="is-invalid" id="settingsTimeoutChamp" th:field="*{timeoutChamp}"/>
-						<div th:if="${#fields.hasErrors('timeoutChamp')}" class="invalid-feedback" th:errors="*{timeoutChamp}">Incorrect Champion Select Timeout</div>
+						<div th:if="${#fields.hasErrors('*{timeoutChamp}')}" class="invalid-feedback" th:errors="*{timeoutChamp}">Incorrect Champion Select Timeout</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsTimeoutMastery" class="col-12 offset-sm-1 col-sm-4 col-form-label">Mastery Select Timeout</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="99" class="form-control" th:errorclass="is-invalid" id="settingsTimeoutMastery" th:field="*{timeoutMastery}"/>
-						<div th:if="${#fields.hasErrors('timeoutMastery')}" class="invalid-feedback" th:errors="*{timeoutMastery}">Incorrect Mastery Select Timeout</div>
+						<div th:if="${#fields.hasErrors('*{timeoutMastery}')}" class="invalid-feedback" th:errors="*{timeoutMastery}">Incorrect Mastery Select Timeout</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsTimeoutLoadGame" class="col-12 offset-sm-1 col-sm-4 col-form-label">Load Game Timeout</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="99" class="form-control" th:errorclass="is-invalid" id="settingsTimeoutLoadGame" th:field="*{timeoutLoadGame}"/>
-						<div th:if="${#fields.hasErrors('timeoutLoadGame')}" class="invalid-feedback" th:errors="*{timeoutLoadGame}">Incorrect Load Game Timeout</div>
+						<div th:if="${#fields.hasErrors('*{timeoutLoadGame}')}" class="invalid-feedback" th:errors="*{timeoutLoadGame}">Incorrect Load Game Timeout</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsTimeoutInGame" class="col-12 offset-sm-1 col-sm-4 col-form-label">In Game Timeout</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="99" class="form-control" th:errorclass="is-invalid" id="settingsTimeoutInGame" th:field="*{timeoutInGame}"/>
-						<div th:if="${#fields.hasErrors('timeoutInGame')}" class="invalid-feedback" th:errors="*{timeoutInGame}">Incorrect In Game Timeout</div>
+						<div th:if="${#fields.hasErrors('*{timeoutInGame}')}" class="invalid-feedback" th:errors="*{timeoutInGame}">Incorrect In Game Timeout</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsTimeoutInGameFF" class="col-12 offset-sm-1 col-sm-4 col-form-label">In Game Timeout (FF)</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="99" class="form-control" th:errorclass="is-invalid" id="settingsTimeoutInGameFF" th:field="*{timeoutInGameFF}"/>
-						<div th:if="${#fields.hasErrors('timeoutInGameFF')}" class="invalid-feedback" th:errors="*{timeoutInGameFF}">Incorrect In Game Timeout (FF)</div>
+						<div th:if="${#fields.hasErrors('*{timeoutInGameFF}')}" class="invalid-feedback" th:errors="*{timeoutInGameFF}">Incorrect In Game Timeout (FF)</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsTimeoutEndOfGame" class="col-12 offset-sm-1 col-sm-4 col-form-label">End Of Game Timeout</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="99" class="form-control" th:errorclass="is-invalid" id="settingsTimeoutEndOfGame" th:field="*{timeoutEndOfGame}"/>
-						<div th:if="${#fields.hasErrors('timeoutEndOfGame')}" class="invalid-feedback" th:errors="*{timeoutEndOfGame}">Incorrect End Of Game Timeout</div>
+						<div th:if="${#fields.hasErrors('*{timeoutEndOfGame}')}" class="invalid-feedback" th:errors="*{timeoutEndOfGame}">Incorrect End Of Game Timeout</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -379,7 +379,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('openChest')}" class="invalid-feedback" th:errors="*{openChest}">Incorrect Open Chest</div>
+						<div th:if="${#fields.hasErrors('*{openChest}')}" class="invalid-feedback" th:errors="*{openChest}">Incorrect Open Chest</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -389,7 +389,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('openHexTech')}" class="invalid-feedback" th:errors="*{openHexTech}">Incorrect Open Hextech</div>
+						<div th:if="${#fields.hasErrors('*{openHexTech}')}" class="invalid-feedback" th:errors="*{openHexTech}">Incorrect Open Hextech</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -399,14 +399,14 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('disChest')}" class="invalid-feedback" th:errors="*{disChest}">Incorrect Disenchant</div>
+						<div th:if="${#fields.hasErrors('*{disChest}')}" class="invalid-feedback" th:errors="*{disChest}">Incorrect Disenchant</div>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="settingsPrio" class="col-12 offset-sm-1 col-sm-4 col-form-label">Priority</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="9" class="form-control" th:errorclass="is-invalid" id="settingsPrio" th:field="*{prio}"/>
-						<div th:if="${#fields.hasErrors('prio')}" class="invalid-feedback" th:errors="*{prio}">Incorrect Priority</div>
+						<div th:if="${#fields.hasErrors('*{prio}')}" class="invalid-feedback" th:errors="*{prio}">Incorrect Priority</div>
 					</div>
 				</div>
 					<div class ="form-group row">
@@ -416,7 +416,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('enableAutoExport')}" class="invalid-feedback" th:errors="*{enableAutoExport}">Incorrect Enable Auto Export</div>
+						<div th:if="${#fields.hasErrors('*{enableAutoExport}')}" class="invalid-feedback" th:errors="*{enableAutoExport}">Incorrect Enable Auto Export</div>
 					</div>
 				</div>
 				<div class ="form-group row" >
@@ -440,7 +440,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('exportRegion')}" class="invalid-feedback" th:errors="*{exportRegion}">Incorrect Export Region</div>
+						<div th:if="${#fields.hasErrors('*{exportRegion}')}" class="invalid-feedback" th:errors="*{exportRegion}">Incorrect Export Region</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -450,7 +450,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('exportLevel')}" class="invalid-feedback" th:errors="*{exportLevel}">Incorrect Export Level</div>
+						<div th:if="${#fields.hasErrors('*{exportLevel}')}" class="invalid-feedback" th:errors="*{exportLevel}">Incorrect Export Level</div>
 					</div>
 				</div>
 				<div class ="form-group row">
@@ -460,7 +460,7 @@
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('exportBE')}" class="invalid-feedback" th:errors="*{exportBE}">Incorrect Export BE</div>
+						<div th:if="${#fields.hasErrors('*{exportBE}')}" class="invalid-feedback" th:errors="*{exportBE}">Incorrect Export BE</div>
 					</div>
 				</div>
 				<div class ="form-group row">

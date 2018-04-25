@@ -1,0 +1,151 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+			
+			$(document).ready(function() {
+				$( "#navSettings" ).addClass( "active" );
+				$( "#settingsNavClientSettings" ).addClass( "active" );
+				$( "#selectedClientSettings" ).change(function() {
+					var id = $(this).val();
+					window.location.href = /*[[@{/settings/clientsettings/edit/}]]*/ + id ;
+				});
+				$( "#newClientSettings" ).click(function() {
+					window.location.href = /*[[@{/settings/clientsettings/new}]]*/;
+				});
+				$( "#copyClientSettings" ).click(function() {
+					//request
+				});
+			
+			});
+		/*]]>*/
+		</script>
+	</head>
+	<body>
+		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+		<br />
+		<div class="container">
+			<!--/*/ <th:block th:include="fragments/settingsNav :: settingsNav"/> /*/-->
+			<br />
+			<div class="row">
+				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-success" th:if="${resultM != null}" th:text="${resultM}">Success!</div>
+			</div>
+			<div class="row">
+				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-success" th:if="${successM != null}" th:text="${successM}">Success!</div>
+			</div>
+			<div class="row">
+				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-danger" th:if="${failM != null}" th:text="${failM}">Failure!</div>
+			</div>
+			<div class="row" >
+				<select class="custom-select col-12 offset-sm-1 col-sm-8" id="selectedClientSettings">
+					<option value="" disabled="disabled" selected="selected">Select client settings</option>
+					<option th:each="clientSettings : ${clientSettingsList}" th:value="${clientSettings.id}" th:text="${clientSettings.name}">settings</option>
+				</select>
+				<button type="button" class="col-6 col-sm-1 btn btn-secondary" id="newClientSettings" href=""><span class="fa fa-plus"></span></button>
+				<button type="button" class="col-6 col-sm-1 btn btn-secondary" id="copyClientSettings"><span class="fa fa-copy"></span></button>
+			</div>
+			<br />
+			<form th:action="@{/settings/clientsettings/new}" th:object="${settings}" th:if="${settings != null}" method="POST" enctype="utf8">
+				<div class ="form-group row">
+					<label for="settingsName" class="col-12 offset-sm-1 col-sm-4 col-form-label">Name</label>
+					<div class="col-12  col-sm-6">
+						<input type="text" class="form-control" th:errorclass="is-invalid"  id="settingsName" th:field="*{name}"/>
+						<div th:if="${#fields.hasErrors('*{name}')}" class="invalid-feedback" th:errors="*{name}">Incorrect Name</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsRegion" class="col-12 offset-sm-1 col-sm-4 col-form-label">Region</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" th:errorclass="is-invalid" id="settingsRegion" th:field="*{clientRegion}">
+							<option th:each="region : ${T(net.nilsghesquiere.util.enums.Region).values()}" th:value="${region}" th:text="${region}"></option>
+						</select>
+						<div th:if="${#fields.hasErrors('*{clientRegion}')}" class="invalid-feedback" th:errors="*{clientRegion}">Incorrect Region</div>
+					</div>
+				</div>
+				<div class ="form-group row" >
+					<label for="settingsInfernalPath" class="col-12 offset-sm-1 col-sm-4 col-form-label">Infernal Path</label>
+					<div class="col-12  col-sm-6">
+						<input type="text" class="form-control" th:errorclass="is-invalid" id="settingsInfernalPath" th:field="*{infernalPath}"/>
+						<div th:if="${#fields.hasErrors('*{infernalPath}')}" class="invalid-feedback" th:errors="*{infernalPath}">Incorrect Infernal Path</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsQueuerAmount" class="col-12 offset-sm-1 col-sm-4 col-form-label">Queuers</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" class="form-control" th:errorclass="is-invalid" id="settingsQueuerAmount" th:field="*{queuerAmount}"/>
+						<div th:if="${#fields.hasErrors('*{queuerAmount}')}" class="invalid-feedback" th:errors="*{queuerAmount}">Incorrect Queuer Amount</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsAccountBufferAmount" class="col-12 offset-sm-1 col-sm-4 col-form-label">Account Buffer</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" class="form-control" th:errorclass="is-invalid" id="settingsAccountBufferAmount" th:field="*{queuerAmount}"/>
+						<div th:if="${#fields.hasErrors('*{accountBufferAmount}')}" class="invalid-feedback" th:errors="*{accountBufferAmount}">Incorrect Queuer Amount</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsUploadNewAccounts" class="col-12 offset-sm-1 col-sm-4 col-form-label">Upload new accounts</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" th:errorclass="is-invalid" id="settingsUploadNewAccounts" th:field="*{uploadNewAccounts}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<div th:if="${#fields.hasErrors('*{uploadNewAccounts}')}" class="invalid-feedback" th:errors="*{uploadNewAccounts}">Incorrect Upload New Accounts</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsReboot" class="col-12 offset-sm-1 col-sm-4 col-form-label">Reboot</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" th:errorclass="is-invalid" id="settingsReboot" th:field="*{reboot}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<div th:if="${#fields.hasErrors('*{reboot}')}" class="invalid-feedback" th:errors="*{reboot}">Incorrect Reboot</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsRebootTime" class="col-12 offset-sm-1 col-sm-4 col-form-label">Reboot time (in seconds)</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" class="form-control" th:errorclass="is-invalid" id="settingsRebootTime" th:field="*{rebootTime}"/>
+						<div th:if="${#fields.hasErrors('*{rebootTime}')}" class="invalid-feedback" th:errors="*{rebootTime}">Incorrect Reboot Time</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsFetchInfernalSettings" class="col-12 offset-sm-1 col-sm-4 col-form-label">Fetch Infernal Settings</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" th:errorclass="is-invalid" id="settingsFetchInfernalSettings" th:field="*{fetchInfernalSettings}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<div th:if="${#fields.hasErrors('*{fetchInfernalSettings}')}" class="invalid-feedback" th:errors="*{fetchInfernalSettings}">Incorrect Fetch Infernal Settings</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsActionOnNoQueuers" class="col-12 offset-sm-1 col-sm-4 col-form-label">Action No Queuers:</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" th:errorclass="is-invalid" id="settingsActionOnNoQueuers" th:field="*{actionOnNoQueuers}">
+							<option th:each="action : ${T(net.nilsghesquiere.util.enums.ActionOnNoQueuers).values()}" th:value="${action}" th:text="${action}"></option>
+						</select>
+						<div th:if="${#fields.hasErrors('*{actionOnNoQueuers}')}" class="invalid-feedback" th:errors="*{actionOnNoQueuers}">Incorrect Action On No Queuers</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="settingsDebug" class="col-12 offset-sm-1 col-sm-4 col-form-label">Debug Mode</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" th:errorclass="is-invalid" id="settingsDebug" th:field="*{debug}">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<div th:if="${#fields.hasErrors('*{debug}')}" class="invalid-feedback" th:errors="*{debug}">Incorrect Fetch Infernal Settings</div>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<div class="col-12 offset-sm-1 col-sm-10">
+						<button type="submit" class ="btn btn-primary btn-lg btn-block">Submit</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>
