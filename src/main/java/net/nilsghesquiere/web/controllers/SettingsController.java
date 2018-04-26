@@ -52,9 +52,9 @@ public class SettingsController {
 	
 	@RequestMapping(value = "/clientsettings", method = RequestMethod.GET)
 	public ModelAndView viewClientSettings(HttpServletRequest request){
-		User user = authenticationFacade.getAuthenticatedUser();
-		List<ClientSettings> clientSettingsList = clientSettingsService.findByUser(user);
-		return new ModelAndView(CLIENTSETTINGS_VIEW).addObject("clientSettingsList",clientSettingsList);
+		User currentUser = authenticationFacade.getAuthenticatedUser();
+		List<ClientSettings> clientSettingsList = clientSettingsService.findByUser(currentUser);
+		return new ModelAndView(CLIENTSETTINGS_VIEW).addObject("clientSettingsList",clientSettingsList).addObject("currentUser", currentUser);
 	}
 	
 	@RequestMapping(value = "/clientsettings/new", method = RequestMethod.GET)

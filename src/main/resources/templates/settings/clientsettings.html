@@ -3,21 +3,99 @@
 		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
 		<script th:inline="javascript">
 		/*<![CDATA[*/
+			var restlnk = "/api/settings/user/" + /*[[${currentUser.id}]]*/
+			var settingid;
 			
+			//TODO: add th:errorclass="is-invalid" on invalid fields?
+		
 			$(document).ready(function() {
 				$( "#navSettings" ).addClass( "active" );
 				$( "#settingsNavClientSettings" ).addClass( "active" );
+				
+				//User selected settings from the list
 				$( "#selectedClientSettings" ).change(function() {
-					var id = $(this).val();
-					window.location.href = /*[[@{/settings/clientsettings/edit/}]]*/ + id ;
+					//Vars
+					var selectedSettingsId = $(this).val();
+					var selectRestlnk = restlnk + "/clientsettings/" + selectedSettingsId;
+					
+					//Reset error and succes alerts
+					$( "#errorMsg div span" ).text("");
+					$(" #errorMsg" ).hide();
+					$( "#successMsg div span" ).text("");
+					$(" #successMsg" ).hide();
+					
+					//AJAX Request
+					$.get(selectRestlnk ,function(data){
+						//Fill fields on success
+						var clientSettings = data.data;
+						Object.keys(data.data).forEach(function(k){
+							console.log(k + ' - ' + clientSettings[k]);
+							$element = $("#"+k+"Field");
+							if( $element.is('select') ) {
+								$("#"+k+"Field option[value="+ clientSettings[k] +"]").prop('selected', true);
+							} else {
+								$element.val(clientSettings[k]);
+							}
+						});
+						$('#submitCreate').hide()
+						$('#submitSave').show()
+						$("#clientsettings").show();
+					})
+					.fail(function(data) {
+						//Show error on fail
+						$("#errorMsg div span").text(data.responseJSON.message);
+						$("#errorMsg").show();
+						$('#clientsettings').trigger("reset");
+						$("#clientsettings").hide();
+					})
 				});
+				
+				//user wants to create new settings
 				$( "#newClientSettings" ).click(function() {
-					window.location.href = /*[[@{/settings/clientsettings/new}]]*/;
+					$('#clientsettings').trigger("reset");
+					$('#submitSave').hide()
+					$('#submitCreate').show()
+					$("#clientsettings").show();
 				});
+				
+				//user wants to copy current selected settings
 				$( "#copyClientSettings" ).click(function() {
-					//request
+					$("#idField").val("0");
+					$('#submitSave').hide()
+					$('#submitCreate').show()
+					$("#clientsettings").show();
 				});
 			
+				//post request to create the new settings
+				$( "#submitCreate" ).click(function() {
+					//vars
+					var creatRestlnk = restlnk + "/clientsettings";
+					var formData= $('clientsettings').serialize();
+					
+					//Reset error and succes alerts
+					$( "#errorMsg div span" ).text("");
+					$(" #errorMsg" ).hide();
+					$( "#successMsg div span" ).text("");
+					$(" #successMsg" ).hide();
+					
+					//AJAX Request
+					$.post(creatRestlnk, formData ,function(data){
+						//created data
+						var newClientSettingsData = data.data;
+						
+						//Add to select
+						$('#clientSettingsList').append($("<option></option>").attr("value",newClientSettingsData.id).text(newClientSettingsData.name).prop('selected', true));
+						
+						//Show alert on success
+						$("#successMsg div span").text("Succesfully created new Client settings");
+						$("#successMsg").show();
+					})
+					.fail(function(data) {
+						$("#errorMsg div span").text(data.responseJSON.message);
+						$("#errorMsg").show();
+					})
+					
+				});
 			});
 		/*]]>*/
 		</script>
@@ -28,121 +106,124 @@
 		<div class="container">
 			<!--/*/ <th:block th:include="fragments/settingsNav :: settingsNav"/> /*/-->
 			<br />
-			<div class="row">
-				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-success" th:if="${resultM != null}" th:text="${resultM}">Success!</div>
+			<div class="row" id="successMsg" style="display:none">
+				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-success"><span></span></div>
 			</div>
-			<div class="row">
-				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-success" th:if="${successM != null}" th:text="${successM}">Success!</div>
-			</div>
-			<div class="row">
-				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-danger" th:if="${failM != null}" th:text="${failM}">Failure!</div>
+			<div class="row" id="errorMsg" style="display:none">
+				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-danger"><span></span></div>
 			</div>
 			<div class="row" >
 				<select class="custom-select col-12 offset-sm-1 col-sm-8" id="selectedClientSettings">
 					<option value="" disabled="disabled" selected="selected">Select client settings</option>
 					<option th:each="clientSettings : ${clientSettingsList}" th:value="${clientSettings.id}" th:text="${clientSettings.name}">settings</option>
 				</select>
-				<button type="button" class="col-6 col-sm-1 btn btn-secondary" id="newClientSettings" href=""><span class="fa fa-plus"></span></button>
+				<button type="button" class="col-6 col-sm-1 btn btn-secondary" id="newClientSettings"><span class="fa fa-plus"></span></button>
 				<button type="button" class="col-6 col-sm-1 btn btn-secondary" id="copyClientSettings"><span class="fa fa-copy"></span></button>
 			</div>
 			<br />
-			<form th:action="@{/settings/clientsettings/new}" th:object="${settings}" th:if="${settings != null}" method="POST" enctype="utf8">
+			<form name="clientsettings" id="clientsettings" action="/" method="post" enctype="utf8" style="display:none">
+				<input type="hidden" name="name" id="idField" value="0" />
 				<div class ="form-group row">
-					<label for="settingsName" class="col-12 offset-sm-1 col-sm-4 col-form-label">Name</label>
+					<label for="nameField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Name</label>
 					<div class="col-12  col-sm-6">
-						<input type="text" class="form-control" th:errorclass="is-invalid"  id="settingsName" th:field="*{name}"/>
-						<div th:if="${#fields.hasErrors('*{name}')}" class="invalid-feedback" th:errors="*{name}">Incorrect Name</div>
+						<input type="text" class="form-control" id="nameField"/>
+						<span id="nameError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="settingsRegion" class="col-12 offset-sm-1 col-sm-4 col-form-label">Region</label>
+					<label for="clientRegionField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Region</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control" th:errorclass="is-invalid" id="settingsRegion" th:field="*{clientRegion}">
+						<select class="form-control" id="clientRegionField">
 							<option th:each="region : ${T(net.nilsghesquiere.util.enums.Region).values()}" th:value="${region}" th:text="${region}"></option>
 						</select>
-						<div th:if="${#fields.hasErrors('*{clientRegion}')}" class="invalid-feedback" th:errors="*{clientRegion}">Incorrect Region</div>
+						<span id="regionError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row" >
-					<label for="settingsInfernalPath" class="col-12 offset-sm-1 col-sm-4 col-form-label">Infernal Path</label>
+					<label for="infernalPathField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Infernal Path</label>
 					<div class="col-12  col-sm-6">
-						<input type="text" class="form-control" th:errorclass="is-invalid" id="settingsInfernalPath" th:field="*{infernalPath}"/>
-						<div th:if="${#fields.hasErrors('*{infernalPath}')}" class="invalid-feedback" th:errors="*{infernalPath}">Incorrect Infernal Path</div>
+						<input type="text" class="form-control"  id="infernalPathField"/>
+						<span id="infernalPathError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="settingsQueuerAmount" class="col-12 offset-sm-1 col-sm-4 col-form-label">Queuers</label>
+					<label for="queuerAmountField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Queuers</label>
 					<div class="col-12  col-sm-6">
-						<input type="number" class="form-control" th:errorclass="is-invalid" id="settingsQueuerAmount" th:field="*{queuerAmount}"/>
-						<div th:if="${#fields.hasErrors('*{queuerAmount}')}" class="invalid-feedback" th:errors="*{queuerAmount}">Incorrect Queuer Amount</div>
+						<input type="number" class="form-control"  id="queuerAmountField"/>
+						<span id="queuerAmountError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="settingsAccountBufferAmount" class="col-12 offset-sm-1 col-sm-4 col-form-label">Account Buffer</label>
+					<label for="accountBufferAmountField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Account Buffer</label>
 					<div class="col-12  col-sm-6">
-						<input type="number" class="form-control" th:errorclass="is-invalid" id="settingsAccountBufferAmount" th:field="*{queuerAmount}"/>
-						<div th:if="${#fields.hasErrors('*{accountBufferAmount}')}" class="invalid-feedback" th:errors="*{accountBufferAmount}">Incorrect Queuer Amount</div>
+						<input type="number" class="form-control"  id="accountBufferAmountField"/>
+						<span id="accountBufferAmountError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="settingsUploadNewAccounts" class="col-12 offset-sm-1 col-sm-4 col-form-label">Upload new accounts</label>
+					<label for="uploadNewAccountsField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Upload new accounts</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control" th:errorclass="is-invalid" id="settingsUploadNewAccounts" th:field="*{uploadNewAccounts}">
+						<select class="form-control"  id="uploadNewAccountsField">
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('*{uploadNewAccounts}')}" class="invalid-feedback" th:errors="*{uploadNewAccounts}">Incorrect Upload New Accounts</div>
+						<span id="uploadNewAccountsError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="settingsReboot" class="col-12 offset-sm-1 col-sm-4 col-form-label">Reboot</label>
+					<label for="rebootField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Reboot</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control" th:errorclass="is-invalid" id="settingsReboot" th:field="*{reboot}">
+						<select class="form-control"  id="rebootField">
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('*{reboot}')}" class="invalid-feedback" th:errors="*{reboot}">Incorrect Reboot</div>
+						<span id="rebootError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="settingsRebootTime" class="col-12 offset-sm-1 col-sm-4 col-form-label">Reboot time (in seconds)</label>
+					<label for="rebootTimeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Reboot time (in seconds)</label>
 					<div class="col-12  col-sm-6">
-						<input type="number" class="form-control" th:errorclass="is-invalid" id="settingsRebootTime" th:field="*{rebootTime}"/>
-						<div th:if="${#fields.hasErrors('*{rebootTime}')}" class="invalid-feedback" th:errors="*{rebootTime}">Incorrect Reboot Time</div>
+						<input type="number" class="form-control" id="rebootTimeField"/>
+						<span id="rebootTimeError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="settingsFetchInfernalSettings" class="col-12 offset-sm-1 col-sm-4 col-form-label">Fetch Infernal Settings</label>
+					<label for="fetchInfernalSettingsField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Fetch Infernal Settings</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control" th:errorclass="is-invalid" id="settingsFetchInfernalSettings" th:field="*{fetchInfernalSettings}">
+						<select class="form-control" id="fetchInfernalSettingsField">
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('*{fetchInfernalSettings}')}" class="invalid-feedback" th:errors="*{fetchInfernalSettings}">Incorrect Fetch Infernal Settings</div>
+						<span id="fetchInfernalSettingsError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="settingsActionOnNoQueuers" class="col-12 offset-sm-1 col-sm-4 col-form-label">Action No Queuers:</label>
+					<label for="actionOnNoQueuersField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Action No Queuers:</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control" th:errorclass="is-invalid" id="settingsActionOnNoQueuers" th:field="*{actionOnNoQueuers}">
+						<select class="form-control"  id="actionOnNoQueuersField">
 							<option th:each="action : ${T(net.nilsghesquiere.util.enums.ActionOnNoQueuers).values()}" th:value="${action}" th:text="${action}"></option>
 						</select>
-						<div th:if="${#fields.hasErrors('*{actionOnNoQueuers}')}" class="invalid-feedback" th:errors="*{actionOnNoQueuers}">Incorrect Action On No Queuers</div>
+						<span id="actionOnNoQueuersError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="settingsDebug" class="col-12 offset-sm-1 col-sm-4 col-form-label">Debug Mode</label>
+					<label for="debugField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Debug Mode</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control" th:errorclass="is-invalid" id="settingsDebug" th:field="*{debug}">
+						<select class="form-control"  id="debugField">
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<div th:if="${#fields.hasErrors('*{debug}')}" class="invalid-feedback" th:errors="*{debug}">Incorrect Fetch Infernal Settings</div>
+						<span id="debugError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<div class="col-12 offset-sm-1 col-sm-10">
-						<button type="submit" class ="btn btn-primary btn-lg btn-block">Submit</button>
+						<button type="button" class ="btn btn-primary btn-lg btn-block" id="submitCreate" style="display:none">Create</button>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<div class="col-12 offset-sm-1 col-sm-10">
+						<button type="button" class ="btn btn-primary btn-lg btn-block" id="submitSave" style="display:none">Save</button>
 					</div>
 				</div>
 			</form>

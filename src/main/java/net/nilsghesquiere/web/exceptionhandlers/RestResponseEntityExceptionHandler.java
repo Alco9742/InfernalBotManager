@@ -1,5 +1,7 @@
 package net.nilsghesquiere.web.exceptionhandlers;
 
+import net.nilsghesquiere.web.error.SettingsAlreadyExistException;
+import net.nilsghesquiere.web.error.SettingsNotFoundException;
 import net.nilsghesquiere.web.error.UploadedFileContentTypeException;
 import net.nilsghesquiere.web.error.UploadedFileEmptyException;
 import net.nilsghesquiere.web.error.UploadedFileMalformedException;
@@ -45,6 +47,20 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		LOGGER.error("500 Status Code", ex);
 		GenericResponse bodyOfResponse = new GenericResponse("User is not the owner of the requested resource", "AccessError");
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+	}
+	
+	@ExceptionHandler({ SettingsNotFoundException.class })
+	public ResponseEntity<Object> handleSettingsNotFound(RuntimeException ex, WebRequest request) {
+		LOGGER.error("404 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("Could not find the requested settings", "SettingsNotFound");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler({ SettingsAlreadyExistException.class })
+	public ResponseEntity<Object> handleSettingsAlreadyExist(RuntimeException ex, WebRequest request) {
+		LOGGER.error("404 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("Settings with that name already exist, choose a unique name", "SettingsAlreadyExistError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
 	}
 	
 	@ExceptionHandler({ MailAuthenticationException.class })
