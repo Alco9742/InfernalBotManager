@@ -19,10 +19,7 @@
 					var selectRestlnk = restlnk + "/clientsettings/" + selectedSettingsId;
 					
 					//Reset error and succes alerts
-					$( "#errorMsg div span" ).text("");
-					$(" #errorMsg" ).hide();
-					$( "#successMsg div span" ).text("");
-					$(" #successMsg" ).hide();
+					resetMessages();
 					
 					//AJAX Request
 					$.get(selectRestlnk ,function(data){
@@ -37,46 +34,45 @@
 								$element.val(clientSettings[k]);
 							}
 						});
-						$('#submitCreate').hide()
-						$('#submitSave').show()
-						$("#clientsettings").show();
+						resetButtons("Save");
+						$("#clientsettingsForm").show();
 					})
 					.fail(function(data) {
 						//Show error on fail
 						$("#errorMsg div span").text(data.responseJSON.message);
 						$("#errorMsg").show();
-						$('#clientsettings').trigger("reset");
-						$("#clientsettings").hide();
+						$('#clientsettingsForm').trigger("reset");
+						$("#clientsettingsForm").hide();
 					})
 				});
 				
 				//user wants to create new settings
 				$( "#newClientSettings" ).click(function() {
-					$('#clientsettings').trigger("reset");
-					$('#submitSave').hide()
-					$('#submitCreate').show()
-					$("#clientsettings").show();
+					$('#clientsettingsForm').trigger("reset");
+					resetMessages();
+					resetButtons("Create");
+					$("#clientsettingsForm").show();
 				});
 				
 				//user wants to copy current selected settings
 				$( "#copyClientSettings" ).click(function() {
 					$("#idField").val("0");
-					$('#submitSave').hide()
-					$('#submitCreate').show()
-					$("#clientsettings").show();
+					resetMessages();
+					resetButtons("Create");
+					$("#clientsettingsForm").show();
 				});
 			
 				//post request to create the new settings
 				$( "#submitCreate" ).click(function() {
 					//vars
 					var creatRestlnk = restlnk + "/clientsettings";
-					var formData= $('clientsettings').serialize();
+					var formData= $("#clientsettingsForm").serialize();
 					
 					//Reset error and succes alerts
-					$( "#errorMsg div span" ).text("");
-					$(" #errorMsg" ).hide();
-					$( "#successMsg div span" ).text("");
-					$(" #successMsg" ).hide();
+					resetMessages();
+					
+					//Button change
+					$('#submitCreate').html("Creating...").attr('disabled','disabled');
 					
 					//AJAX Request
 					$.post(creatRestlnk, formData ,function(data){
@@ -89,14 +85,63 @@
 						//Show alert on success
 						$("#successMsg div span").text("Succesfully created new Client settings");
 						$("#successMsg").show();
+						
+						//reset Buttons
+						resetButtons("Save");
 					})
 					.fail(function(data) {
-						$("#errorMsg div span").text(data.responseJSON.message);
-						$("#errorMsg").show();
+						console.log(data);
+						if(data.responseJSON.error.indexOf("SettingsAlreadyExistError") > -1){
+							$("#errorMsg div span").append(data.responseJSON.defaultMessage);
+						} else {
+							//fieldErrors
+							var errors = $.parseJSON(data.responseJSON.message);
+							$.each( errors, function( index,item ){
+								$("#"+item.field+"Error").show().html(item.defaultMessage);
+								$("#"+item.field+"Field").addClass("is-invalid");
+							});
+							
+							//globalErrors
+							errors = $.parseJSON(data.responseJSON.error);
+							$.each( errors, function( index,item ){
+								$("#errorMsg div span").append(item.defaultMessage+"<br/>");
+							});
+							$("#errorMsg").show();
+							
+							//reset Buttons
+							resetButtons("Create");
+						}
 					})
 					
 				});
 			});
+			
+			function resetMessages(){
+				$( "#errorMsg div span" ).text("");
+				$(" #errorMsg" ).hide();
+				$( "#successMsg div span" ).text("");
+				$(" #successMsg" ).hide();
+				resetInputClasses();
+			}
+			
+			function resetInputClasses(){
+				$('input').removeClass('is-invalid');
+				$('.invalid-feedback').hide().html("");
+			}
+			
+			function resetButtons(buttonType){
+				if (buttonType == "Create"){
+					$("#createDiv").show();
+					$('#submitCreate').html("Create").removeAttr('disabled');
+					$("#saveDiv").hide();
+					$('#submitSave').html("Save").attr('disabled','disabled');
+				} else {
+					$("#saveDiv").show();
+					$('#submitSave').html("Save").removeAttr('disabled');
+					$("#createDiv").hide();
+					$('#submitCreate').html("Create").attr('disabled','disabled');
+				}
+			}
 		/*]]>*/
 		</script>
 	</head>
@@ -121,19 +166,19 @@
 				<button type="button" class="col-6 col-sm-1 btn btn-secondary" id="copyClientSettings"><span class="fa fa-copy"></span></button>
 			</div>
 			<br />
-			<form name="clientsettings" id="clientsettings" action="/" method="post" enctype="utf8" style="display:none">
-				<input type="hidden" name="name" id="idField" value="0" />
+			<form name="clientsettingsForm" id="clientsettingsForm" action="/" method="post" enctype="utf8" style="display:none">
+				<input type="hidden" name="id" id="idField" value="0" />
 				<div class ="form-group row">
 					<label for="nameField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Name</label>
 					<div class="col-12  col-sm-6">
-						<input type="text" class="form-control" id="nameField"/>
+						<input type="text" name="name" class="form-control" id="nameField"/>
 						<span id="nameError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="clientRegionField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Region</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control" id="clientRegionField">
+						<select class="form-control" name="clientRegion" id="clientRegionField">
 							<option th:each="region : ${T(net.nilsghesquiere.util.enums.Region).values()}" th:value="${region}" th:text="${region}"></option>
 						</select>
 						<span id="regionError" class="invalid-feedback" style="display:none"></span>
@@ -142,7 +187,7 @@
 				<div class ="form-group row" >
 					<label for="infernalPathField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Infernal Path</label>
 					<div class="col-12  col-sm-6">
-						<input type="text" class="form-control"  id="infernalPathField"/>
+						<input type="text" class="form-control" name="infernalPath" id="infernalPathField"/>
 						<span id="infernalPathError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
@@ -156,14 +201,14 @@
 				<div class ="form-group row">
 					<label for="accountBufferAmountField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Account Buffer</label>
 					<div class="col-12  col-sm-6">
-						<input type="number" class="form-control"  id="accountBufferAmountField"/>
+						<input type="number" class="form-control" name="accountBufferAmount" id="accountBufferAmountField"/>
 						<span id="accountBufferAmountError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="uploadNewAccountsField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Upload new accounts</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control"  id="uploadNewAccountsField">
+						<select class="form-control" name="uploadAccounts" id="uploadNewAccountsField">
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
@@ -173,7 +218,7 @@
 				<div class ="form-group row">
 					<label for="rebootField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Reboot</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control"  id="rebootField">
+						<select class="form-control" name="reboot" id="rebootField">
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
@@ -183,14 +228,14 @@
 				<div class ="form-group row">
 					<label for="rebootTimeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Reboot time (in seconds)</label>
 					<div class="col-12  col-sm-6">
-						<input type="number" class="form-control" id="rebootTimeField"/>
+						<input type="number" class="form-control" name="rebootTime" id="rebootTimeField"/>
 						<span id="rebootTimeError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
 					<label for="fetchInfernalSettingsField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Fetch Infernal Settings</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control" id="fetchInfernalSettingsField">
+						<select class="form-control" name="fetchInfernalSettings" id="fetchInfernalSettingsField">
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
@@ -200,7 +245,7 @@
 				<div class ="form-group row">
 					<label for="actionOnNoQueuersField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Action No Queuers:</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control"  id="actionOnNoQueuersField">
+						<select class="form-control" name="actionOnNoQueuers" id="actionOnNoQueuersField">
 							<option th:each="action : ${T(net.nilsghesquiere.util.enums.ActionOnNoQueuers).values()}" th:value="${action}" th:text="${action}"></option>
 						</select>
 						<span id="actionOnNoQueuersError" class="invalid-feedback" style="display:none"></span>
@@ -209,21 +254,21 @@
 				<div class ="form-group row">
 					<label for="debugField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Debug Mode</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control"  id="debugField">
+						<select class="form-control" name="debug" id="debugField">
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
 						<span id="debugError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
-				<div class ="form-group row">
+				<div class ="form-group row" id="createDiv" style="display:none">
 					<div class="col-12 offset-sm-1 col-sm-10">
-						<button type="button" class ="btn btn-primary btn-lg btn-block" id="submitCreate" style="display:none">Create</button>
+						<button type="button" class ="btn btn-primary btn-lg btn-block" id="submitCreate">Create</button>
 					</div>
 				</div>
-				<div class ="form-group row">
+				<div class ="form-group row" id="saveDiv" style="display:none">
 					<div class="col-12 offset-sm-1 col-sm-10">
-						<button type="button" class ="btn btn-primary btn-lg btn-block" id="submitSave" style="display:none">Save</button>
+						<button type="button" class ="btn btn-primary btn-lg btn-block" id="submitSave">Save</button>
 					</div>
 				</div>
 			</form>
