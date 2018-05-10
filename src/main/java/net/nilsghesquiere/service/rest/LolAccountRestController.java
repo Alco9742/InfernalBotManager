@@ -138,7 +138,6 @@ public class LolAccountRestController {
 		}
 		
 		//PROCESSING
-		LOGGER.info("userid=" + userid +", account=" + account);
 		LolAccount lolAccount = lolAccountService.findByUserIdAndRegionAndAccount(userid, region, account);
 		//RESPONSE
 		
