@@ -6,6 +6,7 @@
 			var baselnk = "/api/settings/user/" + /*[[${currentUser.id}]]*/;
 			var restlnk = baselnk + "/clientsettings/";
 			var settingid;
+			var deleteConfirmation = false;
 			//TODO: add th:errorclass="is-invalid" on invalid fields?
 		
 			//Shortcuts for put and delete
@@ -95,7 +96,23 @@
 						$(" #errorMsg" ).show();
 					}
 				});
-			
+
+				//user wants to delete existign settings
+				$( "#deleteClientSettings" ).click(function() {
+					console.log("Delete");
+					var deleteConfirmation = false;
+					//TODO: dialog for confirmation
+					if(deleteConfirmation){
+						resetMessages();
+						//Delete the entry from the list
+						$("#selectedClientSettings option[value='0']").text("Creating new client settings").prop('selected', true);
+						//Hide the form
+						$('#clientsettingsForm').trigger("reset");
+						$("#clientsettingsForm").hide();
+						resetButtons("Create");
+					}
+				});
+				
 				//post request to create the new settings
 				$( "#submitCreate" ).click(function() {
 					//vars
@@ -264,12 +281,13 @@
 				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-danger"><span></span></div>
 			</div>
 			<div class="row" >
-				<select class="custom-select col-12 offset-sm-1 col-sm-8" id="selectedClientSettings">
+				<select class="custom-select col-12 offset-sm-1 col-sm-7" id="selectedClientSettings">
 					<option value="0" disabled="disabled" selected="selected">Select client settings</option>
 					<option th:each="clientSettings : ${clientSettingsList}" th:value="${clientSettings.id}" th:text="${clientSettings.name}">settings</option>
 				</select>
-				<button type="button" class="col-6 col-sm-1 btn btn-secondary" id="newClientSettings"><span class="fa fa-plus"></span></button>
-				<button type="button" class="col-6 col-sm-1 btn btn-secondary" id="copyClientSettings"><span class="fa fa-copy"></span></button>
+				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="newClientSettings"><span class="fa fa-plus"></span></button>
+				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="copyClientSettings"><span class="fa fa-copy"></span></button>
+				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="deleteClientSettings"><span class="fa fa-thrash-o"></span></button>
 			</div>
 			<br />
 			<form name="clientsettingsForm" id="clientsettingsForm" action="/" method="post" enctype="utf8" style="display:none">
