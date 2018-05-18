@@ -58,6 +58,9 @@ public class ClientSettings implements Serializable{
 	}
 	
 	public ClientSettings(ClientSettingsDTO dto){
+		if (dto.getId() != 0){
+			this.id = dto.getId(); 
+		}
 		this.name=dto.getName();
 		this.infernalPath = dto.getInfernalPath();
 		this.queuerAmount = dto.getQueuerAmount();

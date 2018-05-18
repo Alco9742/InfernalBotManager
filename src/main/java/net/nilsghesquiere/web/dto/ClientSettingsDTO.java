@@ -15,6 +15,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class ClientSettingsDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@NotNull
+	private long id;
+	@NotNull
 	@NotEmpty
 	private String name;
 	@NotNull
@@ -39,10 +41,11 @@ public class ClientSettingsDTO implements Serializable{
 	
 	public ClientSettingsDTO() {
 		super();
+		this.id = 0L;
 		this.name="";
 		this.clientRegion = Region.EUW;
 		this.infernalPath = "";
-		this.queuerAmount = 1;
+		this.queuerAmount = 0;
 		this.accountBufferAmount = 0;
 		this.uploadNewAccounts = false;
 		this.reboot = false;
@@ -58,6 +61,26 @@ public class ClientSettingsDTO implements Serializable{
 			Boolean reboot, Integer rebootTime, Boolean fetchInfernalSettings,
 			ActionOnNoQueuers actionOnNoQueuers, Boolean debug) {
 		super();
+		this.id = 0L;
+		this.name = name;
+		this.clientRegion = clientRegion;
+		this.infernalPath = infernalPath;
+		this.queuerAmount = queuerAmount;
+		this.accountBufferAmount = accountBufferAmount;
+		this.uploadNewAccounts = uploadNewAccounts;
+		this.reboot = reboot;
+		this.rebootTime = rebootTime;
+		this.fetchInfernalSettings = fetchInfernalSettings;
+		this.actionOnNoQueuers = actionOnNoQueuers;
+		this.debug = debug;
+	}
+	public ClientSettingsDTO(Long id, String name, Region clientRegion,
+			String infernalPath, Integer queuerAmount,
+			Integer accountBufferAmount, Boolean uploadNewAccounts,
+			Boolean reboot, Integer rebootTime, Boolean fetchInfernalSettings,
+			ActionOnNoQueuers actionOnNoQueuers, Boolean debug) {
+		super();
+		this.id = id;
 		this.name = name;
 		this.clientRegion = clientRegion;
 		this.infernalPath = infernalPath;
@@ -72,6 +95,7 @@ public class ClientSettingsDTO implements Serializable{
 	}
 	
 	public ClientSettingsDTO(ClientSettings settings){
+		this.id = settings.getId();
 		this.name = settings.getName();
 		this.clientRegion = settings.getClientRegion();
 		this.infernalPath = settings.getInfernalPath();

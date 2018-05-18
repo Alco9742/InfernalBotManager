@@ -3,11 +3,30 @@
 		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
 		<script th:inline="javascript">
 		/*<![CDATA[*/
-			var restlnk = "/api/settings/user/" + /*[[${currentUser.id}]]*/
+			var baselnk = "/api/settings/user/" + /*[[${currentUser.id}]]*/;
+			var restlnk = baselnk + "/clientsettings/";
 			var settingid;
-			
 			//TODO: add th:errorclass="is-invalid" on invalid fields?
 		
+			//Shortcuts for put and delete
+			jQuery.each( [ "put", "delete" ], function( i, method ) {
+				jQuery[ method ] = function( url, data, callback, type ) {
+					if ( jQuery.isFunction( data ) ) {
+						type = type || callback;
+						callback = data;
+						data = undefined;
+					}
+ 
+					return jQuery.ajax({
+						url: url,
+						type: method,
+						dataType: type,
+						data: data,
+						success: callback
+					});
+				};
+			});
+			
 			$(document).ready(function() {
 				$( "#navSettings" ).addClass( "active" );
 				$( "#settingsNavClientSettings" ).addClass( "active" );
@@ -16,7 +35,7 @@
 				$( "#selectedClientSettings" ).change(function() {
 					//Vars
 					var selectedSettingsId = $(this).val();
-					var selectRestlnk = restlnk + "/clientsettings/" + selectedSettingsId;
+					var selectRestlnk = restlnk + selectedSettingsId;
 					
 					//Reset error and succes alerts
 					resetMessages();
@@ -26,7 +45,6 @@
 						//Fill fields on success
 						var clientSettings = data.data;
 						Object.keys(data.data).forEach(function(k){
-							console.log(k + ' - ' + clientSettings[k]);
 							$element = $("#"+k+"Field");
 							if( $element.is('select') ) {
 								$("#"+k+"Field option[value="+ clientSettings[k] +"]").prop('selected', true);
@@ -34,6 +52,7 @@
 								$element.val(clientSettings[k]);
 							}
 						});
+						checkRebootField();
 						resetButtons("Save");
 						$("#clientsettingsForm").show();
 					})
@@ -46,26 +65,40 @@
 					})
 				});
 				
+				//User changed the reboot field
+				$( "#rebootField" ).change(function() {
+					checkRebootField();
+				});
+				
 				//user wants to create new settings
 				$( "#newClientSettings" ).click(function() {
 					$('#clientsettingsForm').trigger("reset");
 					resetMessages();
 					resetButtons("Create");
+					$("#selectedClientSettings option[value='0']").text("Creating new client settings").prop('selected', true);
+					$("#rebootField").val("false").change();
 					$("#clientsettingsForm").show();
 				});
 				
 				//user wants to copy current selected settings
 				$( "#copyClientSettings" ).click(function() {
-					$("#idField").val("0");
 					resetMessages();
-					resetButtons("Create");
-					$("#clientsettingsForm").show();
+					var selectedS = $('#selectedClientSettings').find(":selected").val();
+					if(selectedS != 0){
+						$("#selectedClientSettings option[value='0']").text("Creating new client settings").prop('selected', true);
+						$("#idField").val("0");
+						$("#nameField").val("");
+						resetButtons("Create");
+						$("#clientsettingsForm").show();
+					} else {
+						$( "#errorMsg div span" ).text("No client settings selected");
+						$(" #errorMsg" ).show();
+					}
 				});
 			
 				//post request to create the new settings
 				$( "#submitCreate" ).click(function() {
 					//vars
-					var creatRestlnk = restlnk + "/clientsettings";
 					var formData= $("#clientsettingsForm").serialize();
 					
 					//Reset error and succes alerts
@@ -75,15 +108,18 @@
 					$('#submitCreate').html("Creating...").attr('disabled','disabled');
 					
 					//AJAX Request
-					$.post(creatRestlnk, formData ,function(data){
-						//created data
+					$.post(restlnk, formData ,function(data){
+						//Created data
 						var newClientSettingsData = data.data;
 						
+						//Set the ID
+						$('#idField').val(newClientSettingsData.id);
+						
 						//Add to select
-						$('#clientSettingsList').append($("<option></option>").attr("value",newClientSettingsData.id).text(newClientSettingsData.name).prop('selected', true));
+						$('#selectedClientSettings').append($("<option></option>").attr("value",newClientSettingsData.id).text(newClientSettingsData.name).prop('selected', true));
 						
 						//Show alert on success
-						$("#successMsg div span").text("Succesfully created new Client settings");
+						$("#successMsg div span").text("Succesfully created new client settings");
 						$("#successMsg").show();
 						
 						//reset Buttons
@@ -91,8 +127,9 @@
 					})
 					.fail(function(data) {
 						console.log(data);
-						if(data.responseJSON.error.indexOf("SettingsAlreadyExistError") > -1){
-							$("#errorMsg div span").append(data.responseJSON.defaultMessage);
+						if(data.responseJSON.error == "SettingsAlreadyExistError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+							$("#nameField").addClass("is-invalid");
 						} else {
 							//fieldErrors
 							var errors = $.parseJSON(data.responseJSON.message);
@@ -106,11 +143,69 @@
 							$.each( errors, function( index,item ){
 								$("#errorMsg div span").append(item.defaultMessage+"<br/>");
 							});
-							$("#errorMsg").show();
-							
-							//reset Buttons
-							resetButtons("Create");
 						}
+						//Show the errorMessage
+						$("#errorMsg").show();
+						//reset Buttons
+						resetButtons("Create");
+					})
+					
+				});
+				
+				
+				//put request to save the settings
+				$( "#submitSave" ).click(function() {
+					//vars
+					var formData= $("#clientsettingsForm").serialize();
+					
+					//Reset error and succes alerts
+					resetMessages();
+					
+					//Button change
+					$('#submitSave').html("Saving...").attr('disabled','disabled');
+					
+					//AJAX Request
+					$.put(restlnk, formData ,function(data){
+						//updated data
+						var updatedClientSettingsData = data.data;
+						
+						//change the select option (may have changed name)
+						$("#selectedClientSettings option[value='"+ updatedClientSettingsData.id +"']").text(updatedClientSettingsData.name).prop('selected', true);
+						
+						//Show alert on success
+						$("#successMsg div span").text("Succesfully saved client settings");
+						$("#successMsg").show();
+						
+						//reset Buttons
+						resetButtons("Save");
+					})
+					.fail(function(data) {
+						console.log(data);
+						if(data.responseJSON.error == "SettingsAlreadyExistError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+							$("#nameField").addClass("is-invalid");
+						} else if(data.responseJSON.error == "SettingsNotFoundError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+						} else if(data.responseJSON.error == "AccessError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+						} else {
+							//fieldErrors
+							var errors = $.parseJSON(data.responseJSON.message);
+							$.each( errors, function( index,item ){
+								$("#"+item.field+"Error").show().html(item.defaultMessage);
+								$("#"+item.field+"Field").addClass("is-invalid");
+							});
+							
+							//globalErrors
+							errors = $.parseJSON(data.responseJSON.error);
+							$.each( errors, function( index,item ){
+								$("#errorMsg div span").append(item.defaultMessage+"<br/>");
+							});
+						}
+						//Show the errorMessage
+						$("#errorMsg").show();
+						//reset Buttons
+						resetButtons("Save");
 					})
 					
 				});
@@ -122,6 +217,7 @@
 				$( "#successMsg div span" ).text("");
 				$(" #successMsg" ).hide();
 				resetInputClasses();
+				$("#selectedClientSettings option[value='0']").text("Select client settings");
 			}
 			
 			function resetInputClasses(){
@@ -142,6 +238,16 @@
 					$('#submitCreate').html("Create").attr('disabled','disabled');
 				}
 			}
+			
+			function checkRebootField(){
+				var selectedRebootValue = $('#rebootField').val();
+				if(selectedRebootValue === "true"){
+					$('#rowRebootTime').show();
+				} else {
+					$('#rowRebootTime').hide();
+					$('#rebootTimeField').val(0);
+				}
+			}
 		/*]]>*/
 		</script>
 	</head>
@@ -159,7 +265,7 @@
 			</div>
 			<div class="row" >
 				<select class="custom-select col-12 offset-sm-1 col-sm-8" id="selectedClientSettings">
-					<option value="" disabled="disabled" selected="selected">Select client settings</option>
+					<option value="0" disabled="disabled" selected="selected">Select client settings</option>
 					<option th:each="clientSettings : ${clientSettingsList}" th:value="${clientSettings.id}" th:text="${clientSettings.name}">settings</option>
 				</select>
 				<button type="button" class="col-6 col-sm-1 btn btn-secondary" id="newClientSettings"><span class="fa fa-plus"></span></button>
@@ -225,7 +331,7 @@
 						<span id="rebootError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
-				<div class ="form-group row">
+				<div class ="form-group row" id="rowRebootTime">
 					<label for="rebootTimeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Reboot time (in seconds)</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" class="form-control" name="rebootTime" id="rebootTimeField"/>

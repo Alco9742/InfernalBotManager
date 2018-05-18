@@ -1,8 +1,5 @@
 package net.nilsghesquiere.web.exceptionhandlers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.nilsghesquiere.web.error.SettingsAlreadyExistException;
 import net.nilsghesquiere.web.error.SettingsNotFoundException;
 import net.nilsghesquiere.web.error.UploadedFileContentTypeException;
@@ -23,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,7 +54,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@ExceptionHandler({ SettingsNotFoundException.class })
 	public ResponseEntity<Object> handleSettingsNotFound(RuntimeException ex, WebRequest request) {
 		LOGGER.error("404 Status Code", ex);
-		GenericResponse bodyOfResponse = new GenericResponse("Could not find the requested settings", "SettingsNotFound");
+		GenericResponse bodyOfResponse = new GenericResponse("Could not find the requested settings", "SettingsNotFoundError");
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 	
