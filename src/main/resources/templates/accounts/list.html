@@ -306,19 +306,19 @@
 				}
 				$importReponse.val("OUTPUT\n")
 				$importButton.html('Importing...');
-				$importButton.disabled=true;
+				$importButton.prop("disabled",true);
 				if(file_data === undefined){
 					$importReponse.val($importReponse.val() + "No file selected");
 					$importButton.html('Import');
-					$importButton.disabled=false;
+					$importButton.prop("disabled",false);
 				} else if (file_data.size > 1000000 ){
 					$importReponse.val($importReponse.val() + "Maximum upload file size is 1MB!");
 					$importButton.html('Import');
-					$importButton.disabled=false;
+					$importButton.prop("disabled",false);
 				} else if ($importRegionUsage.is(":checked") && $importRegion.val() === null){
 					$importReponse.val($importReponse.val() + "No region selected");
 					$importButton.html('Import');
-					$importButton.disabled=false;
+					$importButton.prop("disabled",false);
 				} else {
 					var form_data = new FormData();
 					form_data.append("file", file_data);
@@ -341,7 +341,7 @@
 								$importReponse.val($importReponse.val() + "Succesfully uploaded " + returnedData.data.length + " accounts");
 							}
 							$importButton.html('Import');
-							$importButton.disabled=false;
+							$importButton.prop("disabled",false);
 							table.ajax.reload();
 							var psconsole = $('#one');
 							if($importReponse.length){
@@ -351,7 +351,7 @@
 						error:function(returnedData){
 							$('#importResponse').val($importReponse.val() + returnedData.responseJSON.message);
 							$importButton.html('Import');
-							$importButton.disabled=false;
+							$importButton.prop("disabled",false);
 							if($importReponse.length){
 								$importReponse.scrollTop($importReponse[0].scrollHeight - $importReponse.height());
 							}

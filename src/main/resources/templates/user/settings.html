@@ -82,12 +82,12 @@
 			</div>
 			<div class="modal fade" id="warningDeleteAllBannedAccountsModal" tabindex="-1" role="dialog" aria-labelledby="warningDeleteAllBannedAccountsModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered" role="document">
-					 <div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="warningDeleteAllBannedAccountsModalLabel">Warning</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="warningDeleteAllBannedAccountsModalLabel">Warning</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
 						</div>
 						<div class="modal-body" id="warningDeleteAllBannedAccountsModalMessage">
 							<p>Pressing this button will delete all banned accounts. <br />This cannot be undone.</p>
@@ -140,16 +140,16 @@
 					$('#resetAccountStatusResponse').val("OUTPUT\n");
 					$resetAccountStatusConfirmButton = $("#resetAccountStatusConfirm");
 					$resetAccountStatusConfirmButton.html('Resetting...');
-					$resetAccountStatusConfirmButton.disabled=true;
+					$resetAccountStatusConfirmButton.prop("disabled",true);
 					$.post( restBase + "/resetAllStatus",function(data){
 						$('#resetAccountStatusResponse').val($('#resetAccountStatusResponse').val() + data.message);
 						$resetAccountStatusConfirmButton.html('Reset');
-						$resetAccountStatusConfirmButton.disabled=false;
+						$resetAccountStatusConfirmButton.prop("disabled",false);
 					})
 					.fail(function(data) {
 						$('#resetAccountStatusResponse').val($('#resetAccountStatusResponse').val() + data.message);
 						$resetAccountStatusConfirmButton.html('Reset');
-						$resetAccountStatusConfirmButton.disabled=false;
+						$resetAccountStatusConfirmButton.prop("disabled",false);
 					});
 				});
 				
@@ -164,16 +164,16 @@
 					$('#deleteAllBannedAccountsResponse').val("OUTPUT\n");
 					$deleteAllAccountsConfirmButton = $("#deleteAllBannedAccountsConfirm");
 					$deleteAllAccountsConfirmButton.html('Deleting...');
-					$deleteAllAccountsConfirmButton.disabled=true;
+					$deleteAllAccountsConfirmButton.prop("disabled",true);
 					$.post( restBase + "/deleteAllBanned",function(data){
 						$('#deleteAllBannedAccountsResponse').val($('#deleteAllBannedAccountsResponse').val() + data.message);
 						$deleteAllAccountsConfirmButton.html('Delete');
-						$deleteAllAccountsConfirmButton.disabled=false;
+						$deleteAllAccountsConfirmButton.prop("disabled",false);
 					})
 					.fail(function(data) {
 						$('#deleteAllBannedAccountsResponse').val($('#deleteAllBannedAccountsResponse').val() + data.message);
 						$deleteAllAccountsConfirmButton.html('Delete');
-						$deleteAllAccountsConfirmButton.disabled=false;
+						$deleteAllAccountsConfirmButton.prop("disabled",false);
 					});
 				});
 			});

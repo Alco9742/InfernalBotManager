@@ -6,8 +6,6 @@
 			var baselnk = "/api/settings/user/" + /*[[${currentUser.id}]]*/;
 			var restlnk = baselnk + "/clientsettings/";
 			var settingid;
-			var deleteConfirmation = false;
-			//TODO: add th:errorclass="is-invalid" on invalid fields?
 		
 			//Shortcuts for put and delete
 			jQuery.each( [ "put", "delete" ], function( i, method ) {
@@ -97,20 +95,9 @@
 					}
 				});
 
-				//user wants to delete existign settings
+				//user wants to delete existing settings
 				$( "#deleteClientSettings" ).click(function() {
-					console.log("Delete");
-					var deleteConfirmation = false;
-					//TODO: dialog for confirmation
-					if(deleteConfirmation){
-						resetMessages();
-						//Delete the entry from the list
-						$("#selectedClientSettings option[value='0']").text("Creating new client settings").prop('selected', true);
-						//Hide the form
-						$('#clientsettingsForm').trigger("reset");
-						$("#clientsettingsForm").hide();
-						resetButtons("Create");
-					}
+					$('#warningDeleteClientSettingsModal').modal('show');
 				});
 				
 				//post request to create the new settings
@@ -226,6 +213,67 @@
 					})
 					
 				});
+				
+				$( "#submiteDelete" ).click(function() {
+					//vars
+					$deleteClientSettingsConfirmButton = $("#submiteDelete");
+					var formData= $("#idField").serialize();
+					console.log(formData);
+
+					//reset the current messages
+					resetMessages();
+					
+					//disable confirm button
+					$deleteClientSettingsConfirmButton.html('Deleting...');
+					$deleteClientSettingsConfirmButton.prop("disabled",true);
+					
+					//REST call
+					$.delete( restlnk,formData,function(data){
+						//Delete the entry from the list
+						$("#selectedClientSettings :selected").remove();
+						
+						//Set the selected entry back to the message to select
+						$("#selectedClientSettings option[value='0']").text("Select client settings").prop('selected', true);
+						
+						//Hide the form
+						$('#clientsettingsForm').trigger("reset");
+						$("#clientsettingsForm").hide();
+						
+						//reset the button on the form
+						resetButtons("Create");
+						
+						//reset modal and hide it
+						$('#warningDeleteClientSettingsModal').modal('hide');
+						$deleteClientSettingsConfirmButton.html('Delete');
+						$deleteClientSettingsConfirmButton.prop("disabled",false);
+						
+						//Show alert on success
+						var deletedname = data.data.name;
+						$("#successMsg div span").text("Succesfully deleted client settings '" + deletedname + "'" );
+						$("#successMsg").show();
+					})
+					.fail(function(data) {
+						console.log("Fail delete")
+						console.log(data);
+						
+						$('#warningDeleteClientSettingsModal').modal('hide');
+						$deleteClientSettingsConfirmButton.html('Delete');
+						$deleteClientSettingsConfirmButton.prop("disabled",false);
+						console.log(data);
+						
+						if(data.responseJSON.error == "SettingsNotFoundError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+						} else if(data.responseJSON.error == "AccessError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+						} else {
+							$("#errorMsg div span").text(data.responseJSON.message);
+						}
+						//Show the errorMessage
+						$("#errorMsg").show();
+						//reset Buttons
+						resetButtons("Save");
+					});
+				});
 			});
 			
 			function resetMessages(){
@@ -287,7 +335,7 @@
 				</select>
 				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="newClientSettings"><span class="fa fa-plus"></span></button>
 				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="copyClientSettings"><span class="fa fa-copy"></span></button>
-				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="deleteClientSettings"><span class="fa fa-thrash-o"></span></button>
+				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="deleteClientSettings"><span class="fa fa-times"></span></button>
 			</div>
 			<br />
 			<form name="clientsettingsForm" id="clientsettingsForm" action="/" method="post" enctype="utf8" style="display:none">
@@ -396,6 +444,25 @@
 					</div>
 				</div>
 			</form>
+			<div class="modal fade" id="warningDeleteClientSettingsModal" tabindex="-1" role="dialog" aria-labelledby="warningDeleteClientSettingsModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="warningDeleteClientSettingsModalLabel">Warning</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body" id="warningDeleteClientSettingsModalMessage">
+							<p>Pressing this button will delete these client settings. <br />This cannot be undone.</p>
+						</div>
+						<div class="modal-footer">
+							<button id="submiteDelete" type="button" class="btn btn-primary">Delete</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
