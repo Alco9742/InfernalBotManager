@@ -214,12 +214,12 @@
 					
 				});
 				
-				$( "#submiteDelete" ).click(function() {
+				$( "#submitDelete" ).click(function() {
 					//vars
 					$deleteClientSettingsConfirmButton = $("#submiteDelete");
-					var formData= $("#idField").serialize();
-					console.log(formData);
-
+					var selectedSettingsId = $("#selectedClientSettings").val();
+					var deleteRestlnk = restlnk + selectedSettingsId;
+					
 					//reset the current messages
 					resetMessages();
 					
@@ -228,7 +228,7 @@
 					$deleteClientSettingsConfirmButton.prop("disabled",true);
 					
 					//REST call
-					$.delete( restlnk,formData,function(data){
+					$.delete(deleteRestlnk,function(data){
 						//Delete the entry from the list
 						$("#selectedClientSettings :selected").remove();
 						
@@ -457,7 +457,7 @@
 							<p>Pressing this button will delete these client settings. <br />This cannot be undone.</p>
 						</div>
 						<div class="modal-footer">
-							<button id="submiteDelete" type="button" class="btn btn-primary">Delete</button>
+							<button id="submitDelete" type="button" class="btn btn-primary">Delete</button>
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 						</div>
 					</div>

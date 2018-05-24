@@ -9,6 +9,7 @@ import net.nilsghesquiere.entities.ClientSettings;
 import net.nilsghesquiere.util.enums.ActionOnNoQueuers;
 import net.nilsghesquiere.util.enums.Region;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Data
@@ -18,11 +19,13 @@ public class ClientSettingsDTO implements Serializable{
 	private long id;
 	@NotNull
 	@NotEmpty
+	@NotBlank
 	private String name;
 	@NotNull
 	private Region clientRegion;
 	@NotNull
 	@NotEmpty
+	@NotBlank
 	private String infernalPath;
 	@NotNull
 	private Integer queuerAmount;

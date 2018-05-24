@@ -43,7 +43,7 @@ public class SettingsRestController {
 	
 	//clientSettings
 	@RequestMapping(path = "/user/{userid}/clientsettings/{clientsettingsid}", method = RequestMethod.GET)
-	public ResponseEntity<ClientSettingsWrapper> findInfernalSettingsByUserId(@PathVariable Long userid, @PathVariable Long clientsettingsid) {
+	public ResponseEntity<ClientSettingsWrapper> findClientsSettingsById(@PathVariable Long userid, @PathVariable Long clientsettingsid) {
 		//VARS
 		ClientSettingsWrapper wrapper;
 		String error = "";
@@ -73,6 +73,48 @@ public class SettingsRestController {
 		wrapper.setError(error);
 		
 		//RETURN
+		return new ResponseEntity<ClientSettingsWrapper>(wrapper, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/user/{userid}/clientsettings/{clientsettingsid}", method = RequestMethod.DELETE, produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<ClientSettingsWrapper> deleteClientSettingsById(@PathVariable Long userid, @PathVariable Long clientsettingsid){
+		//VARS
+		ClientSettingsWrapper wrapper;
+		String error = "";
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//ID should not be null or 0 cause its a delete
+		if(clientsettingsid == null || clientsettingsid == 0L){
+			throw new SettingsNotFoundException(clientsettingsid);
+		}
+		
+		//search settings by ID
+		ClientSettings clientSettingsById = clientSettingsService.read(clientsettingsid);
+		
+		//settings with that ID should exist cause its a delete
+		if (clientSettingsById == null){
+			throw new SettingsNotFoundException(clientsettingsid);
+		}
+		
+		//USER CHECK 2 
+		if(!clientSettingsById.getUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//delete the settings
+		clientSettingsService.delete(clientSettingsById);
+		
+		//RESPONSE
+		wrapper = new ClientSettingsWrapper();
+		wrapper.add("data",clientSettingsById);
+		wrapper.setError(error);
+		
 		return new ResponseEntity<ClientSettingsWrapper>(wrapper, HttpStatus.OK);
 	}
 
@@ -122,7 +164,7 @@ public class SettingsRestController {
 		//VARS
 		ClientSettingsWrapper wrapper;
 		String error = "";
-		
+			
 		//USER CHECK
 		User user = userService.findUserByUserId(userid);
 		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
@@ -162,48 +204,6 @@ public class SettingsRestController {
 		//RESPONSE
 		wrapper = new ClientSettingsWrapper();
 		wrapper.add("data",updatedClientSettings);
-		wrapper.setError(error);
-		
-		return new ResponseEntity<ClientSettingsWrapper>(wrapper, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/user/{userid}/clientsettings", method = RequestMethod.DELETE, produces = "application/json")
-	@ResponseBody
-	public ResponseEntity<ClientSettingsWrapper> deleteClientSettings(@PathVariable Long userid, @ModelAttribute("id") Long id) throws BindException {
-		//VARS
-		ClientSettingsWrapper wrapper;
-		String error = "";
-		
-		//USER CHECK
-		User user = userService.findUserByUserId(userid);
-		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
-			throw new UserIsNotOwnerOfResourceException();
-		}
-		
-		//ID should not be 0 cause its a delete
-		if(id == 0L){
-			throw new SettingsNotFoundException(id);
-		}
-		
-		//search settings by ID
-		ClientSettings clientSettingsById = clientSettingsService.read(id);
-		
-		//settings with that ID should exist cause its a delete
-		if (clientSettingsById == null){
-			throw new SettingsNotFoundException(id);
-		}
-		
-		//USER CHECK 2 
-		if(!clientSettingsById.getUser().equals(user)){
-			throw new UserIsNotOwnerOfResourceException();
-		}
-		
-		//delete the settings
-		clientSettingsService.delete(clientSettingsById);
-		
-		//RESPONSE
-		wrapper = new ClientSettingsWrapper();
-		wrapper.add("data",clientSettingsById);
 		wrapper.setError(error);
 		
 		return new ResponseEntity<ClientSettingsWrapper>(wrapper, HttpStatus.OK);
