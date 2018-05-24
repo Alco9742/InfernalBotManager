@@ -2,6 +2,7 @@ package net.nilsghesquiere.web.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
@@ -10,24 +11,22 @@ import net.nilsghesquiere.util.enums.ActionOnNoQueuers;
 import net.nilsghesquiere.util.enums.Region;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Data
 public class ClientSettingsDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@NotNull
-	private long id;
+	private Long id;
 	@NotNull
-	@NotEmpty
 	@NotBlank
 	private String name;
 	@NotNull
 	private Region clientRegion;
 	@NotNull
-	@NotEmpty
 	@NotBlank
 	private String infernalPath;
 	@NotNull
+	@Min(1)
 	private Integer queuerAmount;
 	@NotNull
 	private Integer accountBufferAmount;
@@ -35,6 +34,7 @@ public class ClientSettingsDTO implements Serializable{
 	private Boolean uploadNewAccounts;
 	@NotNull
 	private Boolean reboot;
+	@NotNull
 	private Integer rebootTime;
 	@NotNull
 	private Boolean fetchInfernalSettings;
