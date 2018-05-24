@@ -87,7 +87,6 @@ public class ClientSettings implements Serializable{
 		this.actionOnNoQueuers = dto.getActionOnNoQueuers();
 		this.debug = dto.getDebug();
 	}
-	
 	public static ClientSettings updateFromDTO(ClientSettings clientSettings, ClientSettingsDTO dto){
 		clientSettings.setName(dto.getName());
 		clientSettings.setInfernalPath(dto.getInfernalPath());

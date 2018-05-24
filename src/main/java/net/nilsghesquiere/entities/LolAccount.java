@@ -55,6 +55,9 @@ public class LolAccount implements Serializable{
 	
 	public LolAccount() {}
 	
+	//this used to be initialized with settings from the infernalsettings, should take a look at with what we should initialize now
+	//Force the user to have a default set of infernalsettings perhaps
+	//TODO: check if this always returns default
 	public LolAccount(User user, String account, String password, Region region) {
 		super();
 		this.user = user;
@@ -63,14 +66,14 @@ public class LolAccount implements Serializable{
 		this.summoner = "";
 		this.region = region;
 		this.level = 0;
-		this.maxLevel = user.getInfernalSettings().getMaxLevel();
+		this.maxLevel = user.getInfernalSettingsList().get(0).getMaxLevel();
 		this.xp = 0;
 		this.be = 0;
-		this.maxBe = user.getInfernalSettings().getMaxBe();
-		this.priority = user.getInfernalSettings().getPrio();
-		this.playTime = user.getInfernalSettings().getPlayTime();
-		this.sleepTime = user.getInfernalSettings().getSleepTime();
-		this.active = user.getInfernalSettings().getAktive();
+		this.maxBe = user.getInfernalSettingsList().get(0).getMaxBe();
+		this.priority = user.getInfernalSettingsList().get(0).getPrio();
+		this.playTime = user.getInfernalSettingsList().get(0).getPlayTime();
+		this.sleepTime = user.getInfernalSettingsList().get(0).getSleepTime();
+		this.active = user.getInfernalSettingsList().get(0).getAktive();
 		this.accountStatus = AccountStatus.NEW;
 		this.assignedTo = "";
 		this.info = "";
@@ -84,14 +87,14 @@ public class LolAccount implements Serializable{
 		this.summoner = "";
 		this.region = region;
 		this.level = level;
-		this.maxLevel = user.getInfernalSettings().getMaxLevel();
+		this.maxLevel = user.getInfernalSettingsList().get(0).getMaxLevel();
 		this.xp = 0;
 		this.be = 0;
-		this.maxBe = user.getInfernalSettings().getMaxBe();
-		this.priority = user.getInfernalSettings().getPrio();
-		this.playTime = user.getInfernalSettings().getPlayTime();
-		this.sleepTime = user.getInfernalSettings().getSleepTime();
-		this.active = user.getInfernalSettings().getAktive();
+		this.maxBe = user.getInfernalSettingsList().get(0).getMaxBe();
+		this.priority = user.getInfernalSettingsList().get(0).getPrio();
+		this.playTime = user.getInfernalSettingsList().get(0).getPlayTime();
+		this.sleepTime = user.getInfernalSettingsList().get(0).getSleepTime();
+		this.active = user.getInfernalSettingsList().get(0).getAktive();
 		this.accountStatus = AccountStatus.NEW;
 		this.assignedTo = "";
 		this.info = "";

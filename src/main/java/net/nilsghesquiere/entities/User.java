@@ -16,7 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
@@ -29,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Data
 @Entity
 @Table(name ="users")
-@EqualsAndHashCode(exclude={"infernalSettings", "lolAccounts"})
+@EqualsAndHashCode(exclude={"infernalSettingsList","clientSettingsList", "lolAccounts", "clients"})
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
@@ -48,10 +47,10 @@ public class User implements Serializable{
 	@OrderBy("id")
 	@JsonIgnore
 	private List<LolAccount>lolAccounts;
-	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="infernalsettingsid")
+	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+	@OrderBy("id")
 	@JsonIgnore
-	private InfernalSettings infernalSettings;
+	private List<InfernalSettings> infernalSettingsList;
 	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@OrderBy("id")
 	@JsonIgnore
@@ -98,6 +97,19 @@ public class User implements Serializable{
 		lolAccounts.remove(lolAccount);
 		if(lolAccount.getUser() == this){
 			lolAccount.setUser(null);
+		}
+	}
+	public void addInfernalSettings(InfernalSettings infernalSettings){
+		infernalSettingsList.add(infernalSettings);
+		if(infernalSettings.getUser() != this){
+			infernalSettings.setUser(this);
+		}
+	}
+	
+	public void removeInfernalSettings(InfernalSettings infernalSettings){
+		infernalSettingsList.remove(infernalSettings);
+		if(infernalSettings.getUser() == this){
+			infernalSettings.setUser(null);
 		}
 	}
 	

@@ -8,12 +8,19 @@ import lombok.Data;
 import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.util.enums.Region;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Data
 public class InfernalSettingsDTO implements Serializable{
 	static final long serialVersionUID = 1L;
+	//manager settings
+	@NotNull
+	private Long id;
 	//SystemSettings 
+	@NotNull
+	@NotBlank
+	private String sets;
 	@NotNull
 	private Integer groups;
 	@NotNull
@@ -126,15 +133,17 @@ public class InfernalSettingsDTO implements Serializable{
 	@NotNull
 	private Boolean exportBE;
 	
-	public InfernalSettingsDTO(){super();}
-
-	public InfernalSettingsDTO(Integer groups, String clientPath,
-			String clientVersion, Integer timeSpan, Boolean autoLogin,
-			Boolean autoBotStart, String wildcard, Integer maxLevel,
-			Integer sleepTime, Integer playTime, Integer maxBe, Region region,
-			Boolean aktive, Boolean surrender, Integer levelToBeginnerBot,
-			Boolean clientHide, Boolean leaderHide, Boolean consoleHide,
-			Boolean softEndDefault, Integer softEndValue,
+	public InfernalSettingsDTO(){
+		super();
+	}
+	
+	public InfernalSettingsDTO(Long id, String sets, Integer groups,
+			String clientPath, String clientVersion, Integer timeSpan,
+			Boolean autoLogin, Boolean autoBotStart, String wildcard,
+			Integer maxLevel, Integer sleepTime, Integer playTime,
+			Integer maxBe, Region region, Boolean aktive, Boolean surrender,
+			Integer levelToBeginnerBot, Boolean clientHide, Boolean leaderHide,
+			Boolean consoleHide, Boolean softEndDefault, Integer softEndValue,
 			Boolean queuerAutoClose, Integer queueCloseValue,
 			Boolean winReboot, Boolean winShutdown, Boolean timeUntilCheck,
 			String timeUntilReboot, Boolean renderDisable,
@@ -149,6 +158,8 @@ public class InfernalSettingsDTO implements Serializable{
 			String exportWildCard, Boolean exportRegion, Boolean exportLevel,
 			Boolean exportBE) {
 		super();
+		this.id = id;
+		this.sets = sets;
 		this.groups = groups;
 		this.clientPath = clientPath;
 		this.clientVersion = clientVersion;
@@ -197,11 +208,11 @@ public class InfernalSettingsDTO implements Serializable{
 		this.enableAutoExport = enableAutoExport;
 		this.exportPath = exportPath;
 		this.exportWildCard = exportWildCard;
-		this. exportRegion= exportRegion;
+		this.exportRegion = exportRegion;
 		this.exportLevel = exportLevel;
 		this.exportBE = exportBE;
 	}
-	
+
 	public InfernalSettingsDTO(InfernalSettings settings){
 		this.groups = settings.getGroups();
 		this.clientPath = settings.getClientPath();

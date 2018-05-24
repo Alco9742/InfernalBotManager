@@ -4,7 +4,7 @@
 		<script th:inline="javascript">
 		/*<![CDATA[*/
 			var baselnk = "/api/settings/user/" + /*[[${currentUser.id}]]*/;
-			var restlnk = baselnk + "/clientsettings/";
+			var restlnk = baselnk + "/infernalsettings/";
 			var settingid;
 		
 			//Shortcuts for put and delete
@@ -28,10 +28,10 @@
 			
 			$(document).ready(function() {
 				$( "#navSettings" ).addClass( "active" );
-				$( "#settingsNavClientSettings" ).addClass( "active" );
+				$( "#settingsNavInfernalSettings" ).addClass( "active" );
 				
 				//User selected settings from the list
-				$( "#selectedClientSettings" ).change(function() {
+				$( "#selectedInfernalSettings" ).change(function() {
 					//Vars
 					var selectedSettingsId = $(this).val();
 					var selectRestlnk = restlnk + selectedSettingsId;
@@ -42,25 +42,25 @@
 					//AJAX Request
 					$.get(selectRestlnk ,function(data){
 						//Fill fields on success
-						var clientSettings = data.data;
+						var infernalSettings = data.data;
 						Object.keys(data.data).forEach(function(k){
 							$element = $("#"+k+"Field");
 							if( $element.is('select') ) {
-								$("#"+k+"Field option[value="+ clientSettings[k] +"]").prop('selected', true);
+								$("#"+k+"Field option[value="+ infernalSettings[k] +"]").prop('selected', true);
 							} else {
-								$element.val(clientSettings[k]);
+								$element.val(infernalSettings[k]);
 							}
 						});
 						checkRebootField();
 						resetButtons("Save");
-						$("#clientsettingsForm").show();
+						$("#infernalsettingsForm").show();
 					})
 					.fail(function(data) {
 						//Show error on fail
 						$("#errorMsg div span").text(data.responseJSON.message);
 						$("#errorMsg").show();
-						$('#clientsettingsForm').trigger("reset");
-						$("#clientsettingsForm").hide();
+						$('#infernalsettingsForm').trigger("reset");
+						$("#infernalsettingsForm").hide();
 					})
 				});
 				
@@ -70,39 +70,39 @@
 				});
 				
 				//user wants to create new settings
-				$( "#newClientSettings" ).click(function() {
-					$('#clientsettingsForm').trigger("reset");
+				$( "#newInfernalSettings" ).click(function() {
+					$('#infernalsettingsForm').trigger("reset");
 					resetMessages();
 					resetButtons("Create");
-					$("#selectedClientSettings option[value='0']").text("Creating new client settings").prop('selected', true);
+					$("#selectedInfernalSettings option[value='0']").text("Creating new infernal settings").prop('selected', true);
 					$("#rebootField").val("false").change();
-					$("#clientsettingsForm").show();
+					$("#infernalsettingsForm").show();
 				});
 				
 				//user wants to copy current selected settings
-				$( "#copyClientSettings" ).click(function() {
+				$( "#copyInfernalSettings" ).click(function() {
 					resetMessages();
-					var selectedS = $('#selectedClientSettings').find(":selected").val();
+					var selectedS = $('#selectedInfernalSettings').find(":selected").val();
 					if(selectedS != 0){
-						$("#selectedClientSettings option[value='0']").text("Creating new client settings").prop('selected', true);
+						$("#selectedInfernalSettings option[value='0']").text("Creating new infernal settings").prop('selected', true);
 						$("#idField").val("0");
-						$("#nameField").val("");
+						$("#setsField").val("");
 						resetButtons("Create");
-						$("#clientsettingsForm").show();
+						$("#infernalsettingsForm").show();
 					} else {
-						$( "#errorMsg div span" ).text("No client settings selected");
+						$( "#errorMsg div span" ).text("No infernal settings selected");
 						$(" #errorMsg" ).show();
 					}
 				});
 
 				//user wants to delete existing settings
-				$( "#deleteClientSettings" ).click(function() {
+				$( "#deleteInfernalSettings" ).click(function() {
 					resetMessages();
-					var selectedS = $('#selectedClientSettings').find(":selected").val();
+					var selectedS = $('#selectedInfernalSettings').find(":selected").val();
 					if(selectedS != 0){
-						$('#warningDeleteClientSettingsModal').modal('show');
+						$('#warningDeleteInfernalSettingsModal').modal('show');
 					} else {
-						$( "#errorMsg div span" ).text("No client settings selected");
+						$( "#errorMsg div span" ).text("No infernal settings selected");
 						$(" #errorMsg" ).show();
 					}
 				});
@@ -110,7 +110,7 @@
 				//post request to create the new settings
 				$( "#submitCreate" ).click(function() {
 					//vars
-					var formData= $("#clientsettingsForm").serialize();
+					var formData= $("#infernalsettingsForm").serialize();
 					
 					//Reset error and succes alerts
 					resetMessages();
@@ -121,16 +121,16 @@
 					//AJAX Request
 					$.post(restlnk, formData ,function(data){
 						//Created data
-						var newClientSettingsData = data.data;
+						var newInfernalSettingsData = data.data;
 						
 						//Set the ID
-						$('#idField').val(newClientSettingsData.id);
+						$('#idField').val(newInfernalSettingsData.id);
 						
 						//Add to select
-						$('#selectedClientSettings').append($("<option></option>").attr("value",newClientSettingsData.id).text(newClientSettingsData.name).prop('selected', true));
+						$('#selectedInfernalSettings').append($("<option></option>").attr("value",newInfernalSettingsData.id).text(newInfernalSettingsData.sets).prop('selected', true));
 						
 						//Show alert on success
-						$("#successMsg div span").text("Succesfully created new client settings");
+						$("#successMsg div span").text("Succesfully created new infernal settings");
 						$("#successMsg").show();
 						
 						//reset Buttons
@@ -140,7 +140,7 @@
 						console.log(data);
 						if(data.responseJSON.error == "SettingsAlreadyExistError"){
 							$("#errorMsg div span").text(data.responseJSON.message);
-							$("#nameField").addClass("is-invalid");
+							$("#setsField").addClass("is-invalid");
 						} else {
 							//fieldErrors
 							var errors = $.parseJSON(data.responseJSON.message);
@@ -167,7 +167,7 @@
 				//put request to save the settings
 				$( "#submitSave" ).click(function() {
 					//vars
-					var formData= $("#clientsettingsForm").serialize();
+					var formData= $("#infernalsettingsForm").serialize();
 					
 					//Reset error and succes alerts
 					resetMessages();
@@ -178,13 +178,13 @@
 					//AJAX Request
 					$.put(restlnk, formData ,function(data){
 						//updated data
-						var updatedClientSettingsData = data.data;
+						var updatedInfernalSettingsData = data.data;
 						
 						//change the select option (may have changed name)
-						$("#selectedClientSettings option[value='"+ updatedClientSettingsData.id +"']").text(updatedClientSettingsData.name).prop('selected', true);
+						$("#selectedInfernalSettings option[value='"+ updatedInfernalSettingsData.id +"']").text(updatedInfernalSettingsData.sets).prop('selected', true);
 						
 						//Show alert on success
-						$("#successMsg div span").text("Succesfully saved client settings");
+						$("#successMsg div span").text("Succesfully saved infernal settings");
 						$("#successMsg").show();
 						
 						//reset Buttons
@@ -194,7 +194,7 @@
 						console.log(data);
 						if(data.responseJSON.error == "SettingsAlreadyExistError"){
 							$("#errorMsg div span").text(data.responseJSON.message);
-							$("#nameField").addClass("is-invalid");
+							$("#setsField").addClass("is-invalid");
 						} else if(data.responseJSON.error == "SettingsNotFoundError"){
 							$("#errorMsg div span").text(data.responseJSON.message);
 						} else if(data.responseJSON.error == "AccessError"){
@@ -223,49 +223,49 @@
 				
 				$( "#submitDelete" ).click(function() {
 					//vars
-					$deleteClientSettingsConfirmButton = $("#submiteDelete");
-					var selectedSettingsId = $("#selectedClientSettings").val();
+					$deleteInfernalSettingsConfirmButton = $("#submiteDelete");
+					var selectedSettingsId = $("#selectedInfernalSettings").val();
 					var deleteRestlnk = restlnk + selectedSettingsId;
 					
 					//reset the current messages
 					resetMessages();
 					
 					//disable confirm button
-					$deleteClientSettingsConfirmButton.html('Deleting...');
-					$deleteClientSettingsConfirmButton.prop("disabled",true);
+					$deleteInfernalSettingsConfirmButton.html('Deleting...');
+					$deleteInfernalSettingsConfirmButton.prop("disabled",true);
 					
 					//REST call
 					$.delete(deleteRestlnk,function(data){
 						//Delete the entry from the list
-						$("#selectedClientSettings :selected").remove();
+						$("#selectedInfernalSettings :selected").remove();
 						
 						//Set the selected entry back to the message to select
-						$("#selectedClientSettings option[value='0']").text("Select client settings").prop('selected', true);
+						$("#selectedInfernalSettings option[value='0']").text("Select infernal settings").prop('selected', true);
 						
 						//Hide the form
-						$('#clientsettingsForm').trigger("reset");
-						$("#clientsettingsForm").hide();
+						$('#infernalsettingsForm').trigger("reset");
+						$("#infernalsettingsForm").hide();
 						
 						//reset the button on the form
 						resetButtons("Create");
 						
 						//reset modal and hide it
-						$('#warningDeleteClientSettingsModal').modal('hide');
-						$deleteClientSettingsConfirmButton.html('Delete');
-						$deleteClientSettingsConfirmButton.prop("disabled",false);
+						$('#warningDeleteInfernalSettingsModal').modal('hide');
+						$deleteInfernalSettingsConfirmButton.html('Delete');
+						$deleteInfernalSettingsConfirmButton.prop("disabled",false);
 						
 						//Show alert on success
-						var deletedname = data.data.name;
-						$("#successMsg div span").text("Succesfully deleted client settings '" + deletedname + "'" );
+						var deletedname = data.data.sets;
+						$("#successMsg div span").text("Succesfully deleted infernal settings '" + deletedname + "'" );
 						$("#successMsg").show();
 					})
 					.fail(function(data) {
 						console.log("Fail delete")
 						console.log(data);
 						
-						$('#warningDeleteClientSettingsModal').modal('hide');
-						$deleteClientSettingsConfirmButton.html('Delete');
-						$deleteClientSettingsConfirmButton.prop("disabled",false);
+						$('#warningDeleteInfernalSettingsModal').modal('hide');
+						$deleteInfernalSettingsConfirmButton.html('Delete');
+						$deleteInfernalSettingsConfirmButton.prop("disabled",false);
 						console.log(data);
 						
 						if(data.responseJSON.error == "SettingsNotFoundError"){
@@ -289,7 +289,7 @@
 				$( "#successMsg div span" ).text("");
 				$(" #successMsg" ).hide();
 				resetInputClasses();
-				$("#selectedClientSettings option[value='0']").text("Select client settings");
+				$("#selectedInfernalSettings option[value='0']").text("Select infernal settings");
 			}
 			
 			function resetInputClasses(){
@@ -336,108 +336,453 @@
 				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-danger"><span></span></div>
 			</div>
 			<div class="row" >
-				<select class="custom-select col-12 offset-sm-1 col-sm-7" id="selectedClientSettings">
-					<option value="0" disabled="disabled" selected="selected">Select client settings</option>
-					<option th:each="clientSettings : ${clientSettingsList}" th:value="${clientSettings.id}" th:text="${clientSettings.name}">settings</option>
+				<select class="custom-select col-12 offset-sm-1 col-sm-7" id="selectedInfernalSettings">
+					<option value="0" disabled="disabled" selected="selected">Select infernal settings</option>
+					<option th:each="infernalSettings : ${infernalSettingsList}" th:value="${infernalSettings.id}" th:text="${infernalSettings.sets}">settings</option>
 				</select>
-				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="newClientSettings"><span class="fa fa-plus"></span></button>
-				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="copyClientSettings"><span class="fa fa-copy"></span></button>
-				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="deleteClientSettings"><span class="fa fa-times"></span></button>
+				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="newInfernalSettings"><span class="fa fa-plus"></span></button>
+				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="copyInfernalSettings"><span class="fa fa-copy"></span></button>
+				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="deleteInfernalSettings"><span class="fa fa-times"></span></button>
 			</div>
 			<br />
-			<form name="clientsettingsForm" id="clientsettingsForm" action="/" method="post" enctype="utf8" style="display:none">
+			<form name="infernalsettingsForm" id="infernalsettingsForm" action="/" method="post" enctype="utf8" style="display:none">
 				<input type="hidden" name="id" id="idField" value="0" />
 				<div class ="form-group row">
-					<label for="nameField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Name</label>
+					<label for="setsField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Name</label>
 					<div class="col-12  col-sm-6">
-						<input type="text" name="name" class="form-control" id="nameField"/>
-						<span id="nameError" class="invalid-feedback" style="display:none"></span>
+						<input type="text" class="form-control" name="sets" id="setsField"/>
+						<span id="setsError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="clientRegionField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Region</label>
+					<label for="groupsField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Groups</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control" name="clientRegion" id="clientRegionField">
+						<input type="number" min="1" max="99" class="form-control" name="groups" id="groupsField"/>
+						<span id="groupsError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row" >
+					<label for="clientPathField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Client Path</label>
+					<div class="col-12  col-sm-6">
+						<input type="text" class="form-control" name="clientPath" id="clientPathField"/>
+						<span id="clientPathError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="clientVersionField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Client Version</label>
+					<div class="col-12  col-sm-6">
+						<input type="text" class="form-control" name="clientVersion" id="clientVersionField"/>
+						<span id="clientVersionError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="timeSpanField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Time Between Queuers</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="999" class="form-control" name="timeSpan" id="timeSpanField"/>
+						<span id="timeSpanError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="autoLoginField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Auto Login</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="autoLogin" id="autoLoginField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="autoLoginError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="autoBotStartField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Auto Bot Start</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="autoBotStart" id="autoBotStartField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="autoBotStartError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="wildcardField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Wildcard</label>
+					<div class="col-12  col-sm-6">
+						<input type="text" class="form-control" name="wildcard" id="wildcardField"/>
+						<span id="wildcardError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="maxLevelField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Max Level</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="0" max="99" class="form-control" name="maxLevel" id="maxLevelField"/>
+						<span id="maxLevelError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="sleepTimeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Sleep Time</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="0" max="24" class="form-control" name="sleepTime" id="sleepTimeField"/>
+						<span id="sleepTimeError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="playTimeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Play Time</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="0" max="24" class="form-control" name="playTime" id="playTimeField"/>
+						<span id="playTimeError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="maxBeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Max BE</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="0" max="999999" class="form-control" name="maxBe" id="maxBeField"/>
+						<span id="maxBeError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="regionField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Region</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="region" id="regionField">
 							<option th:each="region : ${T(net.nilsghesquiere.util.enums.Region).values()}" th:value="${region}" th:text="${region}"></option>
 						</select>
 						<span id="regionError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
+				<div class ="form-group row">
+					<label for="aktiveField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Active</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="aktive" id="aktiveField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="aktiveError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="surrenderField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Surrender</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="surrender" id="surrenderField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="surrenderError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="levelToBeginnerBotField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Medium Bots From Level</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="99" class="form-control" name="levelToBeginnerBot"  id="levelToBeginnerBotField"/>
+					</div>
+					<span id="levelToBeginnerBotError" class="invalid-feedback" style="display:none"></span>
+				</div>
+				<div class ="form-group row">
+					<label for="clientHideField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Client Hide</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="clientHide" id="clientHideField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="clientHideError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="leaderHideField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Leader Client Hide</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="leaderHide" id="leaderHideField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="leaderHideError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="consoleHideField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Console hide</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="consoleHide" id="consoleHideField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="consoleHideError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="softEndDefaultField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Queuer Safestop</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="softEndDefault" id="softEndDefaultField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="softEndDefaultError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="softEndValueField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Safestop After x Games</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="999" class="form-control" name="softEndValue" id="softEndValueField"/>
+						<span id="softEndValueError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="queuerAutoCloseField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Queuer Autorestart</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="queuerAutoClose" id="queuerAutoCloseField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="queuerAutoCloseError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="queueCloseValueField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Autorestart After x Games</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="999" class="form-control" name="queueCloseValue" id="queueCloseValueField"/>
+						<span id="queueCloseValueError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="winRebootField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Windows Reboot After Safestop</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="winReboot" id="winRebootField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="winRebootError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="winShutdownField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Windows Shutdown After Safestop</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="winShutdown" id="winShutdownField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="winShutdownError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="timeUntilCheckField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Windows Reboot After Time</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="timeUntilCheck" id="timeUntilCheckField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="timeUntilCheckError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="timeUntilRebootField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Windows Reboot Timer</label>
+					<div class="col-12  col-sm-6">
+						<input type="text" class="form-control" name="timeUntilReboot" id="timeUntilRebootField"/>
+						<span id="timeUntilRebootError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="renderDisableField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Render Disable</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="renderDisable" id="renderDisableField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="renderDisableError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="leaderRenderDisableField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Leader Render Disable</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="leaderRenderDisable" id="leaderRenderDisableField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="leaderRenderDisableError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="cpuBoostField" class="col-12 offset-sm-1 col-sm-4 col-form-label">CPU Boost</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="cpuBoost" id="cpuBoostField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="cpuBoostError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="leaderCpuBoostField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Leader CPU Boost</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="leaderCpuBoost" id="leaderCpuBoostField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="leaderCpuBoostError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="ramManagerField" class="col-12 offset-sm-1 col-sm-4 col-form-label">RAM Manager</label>
+					<div class="col-12  col-sm-6">	
+						<select class="form-control" name="ramManager" id="ramManagerField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="ramManagerError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="ramMinField" class="col-12 offset-sm-1 col-sm-4 col-form-label">RAM Minimum</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="1024" class="form-control" name="ramMin" id="ramMinField"/>
+						<span id="ramMinError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="ramMaxField" class="col-12 offset-sm-1 col-sm-4 col-form-label">RAM Maximum</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="1024" class="form-control" name="ramMax" id="ramMaxField"/>
+						<span id="ramMaxError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="timeoutLoginField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Login Timeout</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="99" class="form-control" name="timeoutLogin" id="timeoutLoginField"/>
+						<span id="timeoutLoginError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="timeoutLobbyField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Lobby Timeout</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="99" class="form-control" name="timeoutLobby" id="timeoutLobbyField"/>
+						<span id="timeoutLobbyError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="timeoutChampField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Champion Select Timeout</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="99" class="form-control" name="timeoutChamp" id="timeoutChampField"/>
+						<span id="timeoutChampError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="timeoutMasteryField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Mastery Select Timeout</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="99" class="form-control" name="timeoutMastery" id="timeoutMasteryField"/>
+						<span id="timeoutMasteryError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="timeoutLoadGameField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Load Game Timeout</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="99" class="form-control" name="timeoutLoadGame" id="timeoutLoadGameField"/>
+						<span id="timeoutLoadGameError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="timeoutInGameField" class="col-12 offset-sm-1 col-sm-4 col-form-label">In Game Timeout</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="99" class="form-control" name="timeoutInGame" id="timeoutInGameField"/>
+						<span id="timeoutInGameError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="timeoutInGameFFField" class="col-12 offset-sm-1 col-sm-4 col-form-label">In Game Timeout (FF)</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="99" class="form-control" name="timeoutInGameFF" id="timeoutInGameFFField"/>
+						<span id="timeoutInGameFFError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="timeoutEndOfGameField" class="col-12 offset-sm-1 col-sm-4 col-form-label">End Of Game Timeout</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="99" class="form-control" name="timeoutEndOfGame" id="timeoutEndOfGameField"/>
+						<span id="timeoutEndOfGameError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="openChestField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Open Chest</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="openChest" id="openChestField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="openChestError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="openHexTechField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Open Hextech</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="openHexTech" id="openHexTechField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="openHexTechError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="disChestField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Disenchant</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="disChest" id="disChestField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="disChestError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="prioField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Priority</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="9" class="form-control" name="prio" id="prioField"/>
+						<span id="prioError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+					<div class ="form-group row">
+					<label for="enableAutoExportField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Enable Auto Export</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="enableAutoExport" id="enableAutoExportField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="enableAutoExportError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
 				<div class ="form-group row" >
-					<label for="infernalPathField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Infernal Path</label>
+					<label for="exportPathField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Export Path</label>
 					<div class="col-12  col-sm-6">
-						<input type="text" class="form-control" name="infernalPath" id="infernalPathField"/>
-						<span id="infernalPathError" class="invalid-feedback" style="display:none"></span>
+						<input type="text" class="form-control" name="exportPath" id="exportPathField"/>
+						<span id="exportPathError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row" >
+					<label for="exportWildCardField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Export Wildcard</label>
+					<div class="col-12  col-sm-6">
+						<input type="text" class="form-control" name="exportWildCard" id="exportWildCardField"/>
+						<span id="todoError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="queuerAmountField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Queuers</label>
+					<label for="exportRegionField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Export Region</label>
 					<div class="col-12  col-sm-6">
-						<input type="number" class="form-control" name="queuerAmount" id="queuerAmountField"/>
-						<span id="queuerAmountError" class="invalid-feedback" style="display:none"></span>
-					</div>
-				</div>
-				<div class ="form-group row">
-					<label for="accountBufferAmountField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Account Buffer</label>
-					<div class="col-12  col-sm-6">
-						<input type="number" class="form-control" name="accountBufferAmount" id="accountBufferAmountField"/>
-						<span id="accountBufferAmountError" class="invalid-feedback" style="display:none"></span>
-					</div>
-				</div>
-				<div class ="form-group row">
-					<label for="uploadNewAccountsField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Upload new accounts</label>
-					<div class="col-12  col-sm-6">
-						<select class="form-control" name="uploadAccounts" id="uploadNewAccountsField">
+						<select class="form-control" name="exportRegion" id="exportRegionField">
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<span id="uploadNewAccountsError" class="invalid-feedback" style="display:none"></span>
+						<span id="exportRegionError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="rebootField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Reboot</label>
+					<label for="exportLevelField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Export Level</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control" name="reboot" id="rebootField">
+						<select class="form-control" name="exportLevel" id="exportLevelField">
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<span id="rebootError" class="invalid-feedback" style="display:none"></span>
-					</div>
-				</div>
-				<div class ="form-group row" id="rowRebootTime">
-					<label for="rebootTimeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Reboot time (in seconds)</label>
-					<div class="col-12  col-sm-6">
-						<input type="number" class="form-control" name="rebootTime" id="rebootTimeField"/>
-						<span id="rebootTimeError" class="invalid-feedback" style="display:none"></span>
+						<span id="exportLevelError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="fetchInfernalSettingsField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Fetch Infernal Settings</label>
+					<label for="exportBEField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Export BE</label>
 					<div class="col-12  col-sm-6">
-						<select class="form-control" name="fetchInfernalSettings" id="fetchInfernalSettingsField">
+						<select class="form-control" name="exportBE" id="exportBEField">
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
-						<span id="fetchInfernalSettingsError" class="invalid-feedback" style="display:none"></span>
-					</div>
-				</div>
-				<div class ="form-group row">
-					<label for="actionOnNoQueuersField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Action No Queuers:</label>
-					<div class="col-12  col-sm-6">
-						<select class="form-control" name="actionOnNoQueuers" id="actionOnNoQueuersField">
-							<option th:each="action : ${T(net.nilsghesquiere.util.enums.ActionOnNoQueuers).values()}" th:value="${action}" th:text="${action}"></option>
-						</select>
-						<span id="actionOnNoQueuersError" class="invalid-feedback" style="display:none"></span>
-					</div>
-				</div>
-				<div class ="form-group row">
-					<label for="debugField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Debug Mode</label>
-					<div class="col-12  col-sm-6">
-						<select class="form-control" name="debug" id="debugField">
-							<option value="true">Yes</option>
-							<option value="false">No</option>
-						</select>
-						<span id="debugError" class="invalid-feedback" style="display:none"></span>
+						<span id="exportBEError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row" id="createDiv" style="display:none">
@@ -451,17 +796,17 @@
 					</div>
 				</div>
 			</form>
-			<div class="modal fade" id="warningDeleteClientSettingsModal" tabindex="-1" role="dialog" aria-labelledby="warningDeleteClientSettingsModalLabel" aria-hidden="true">
+			<div class="modal fade" id="warningDeleteInfernalSettingsModal" tabindex="-1" role="dialog" aria-labelledby="warningDeleteInfernalSettingsModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="warningDeleteClientSettingsModalLabel">Warning</h5>
+							<h5 class="modal-title" id="warningDeleteInfernalSettingsModalLabel">Warning</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
-						<div class="modal-body" id="warningDeleteClientSettingsModalMessage">
-							<p>Pressing this button will delete these client settings. <br />This cannot be undone.</p>
+						<div class="modal-body" id="warningDeleteInfernalSettingsModalMessage">
+							<p>Pressing this button will delete these infernal settings. <br />This cannot be undone.</p>
 						</div>
 						<div class="modal-footer">
 							<button id="submitDelete" type="button" class="btn btn-primary">Delete</button>

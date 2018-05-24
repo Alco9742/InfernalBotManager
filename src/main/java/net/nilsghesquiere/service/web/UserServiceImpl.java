@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService{
 		User returnUser = userRepository.save(user);
 		
 		InfernalSettings inferalSettings = infernalSettingsService.create(new InfernalSettings(returnUser));
-		user.setInfernalSettings(inferalSettings);
+		user.addInfernalSettings(inferalSettings);
 		return returnUser;
 	}
 	

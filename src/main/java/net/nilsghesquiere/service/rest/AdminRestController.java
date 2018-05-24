@@ -283,7 +283,7 @@ public class AdminRestController {
 			userService.create(user);
 			User createdUser = userService.findUserByEmail(dto.getEmail());
 			InfernalSettings inferalSettings = infernalSettingsService.create(new InfernalSettings(createdUser));
-			user.setInfernalSettings(inferalSettings);
+			user.addInfernalSettings(inferalSettings);
 			user = createdUser;
 		} else {
 			user.setEmail(dto.getEmail());

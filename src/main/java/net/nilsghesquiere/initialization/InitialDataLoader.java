@@ -116,7 +116,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			userService.create(user);
 			User createdUser = userService.findUserByEmail(email);
 			InfernalSettings inferalSettings = infernalSettingsService.create(new InfernalSettings(createdUser));
-			user.setInfernalSettings(inferalSettings);
+			user.addInfernalSettings(inferalSettings);
 			user = createdUser;
 		}
 		return user;

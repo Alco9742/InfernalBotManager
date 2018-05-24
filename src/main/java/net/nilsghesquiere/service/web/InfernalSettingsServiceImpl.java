@@ -1,8 +1,11 @@
 package net.nilsghesquiere.service.web;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import net.nilsghesquiere.entities.InfernalSettings;
+import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.persistence.dao.InfernalSettingsRepository;
 import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
 
@@ -47,5 +50,23 @@ public class InfernalSettingsServiceImpl implements InfernalSettingsService{
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public InfernalSettings getByUserId(Long userid) {
 		return infernalSettingsRepository.getByUserId(userid);
+	}
+	
+	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	public List<InfernalSettings> findByUser(User user) {
+		return infernalSettingsRepository.findByUser(user);
+	}
+	
+	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	public InfernalSettings findByUserIdAndSets(Long userid, String sets) {
+		return infernalSettingsRepository.findByUserIdAndSets(userid, sets);
+	}
+
+	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	public void delete(InfernalSettings infernalSettings) {
+		infernalSettingsRepository.delete(infernalSettings);
 	}
 }

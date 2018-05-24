@@ -69,6 +69,7 @@ public class ClientSettingsServiceImpl implements ClientSettingsService{
 	}
 
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ClientSettings findByUserIdAndName(Long userid, String name) {
 		return clientSettingsRepository.findByUserIdAndName(userid, name);
 	}

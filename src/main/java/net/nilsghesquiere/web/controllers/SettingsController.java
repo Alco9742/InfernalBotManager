@@ -36,6 +36,8 @@ public class SettingsController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SettingsController.class);
 	private static final String CLIENTS_VIEW = "settings/clients";
 	private static final String CLIENTSETTINGS_VIEW = "settings/clientsettings";
+	private static final String INFERNALSETTINGS_VIEW = "settings/infernalsettings";
+	//TODO:DELETE
 	private static final String INFERNAL_VIEW = "settings/infernal";
 	
 	@Autowired
@@ -51,53 +53,21 @@ public class SettingsController {
 	}
 	
 	@RequestMapping(value = "/clientsettings", method = RequestMethod.GET)
-	public ModelAndView viewClientSettings(HttpServletRequest request){
+	public ModelAndView viewClientSettings(){
 		User currentUser = authenticationFacade.getAuthenticatedUser();
 		List<ClientSettings> clientSettingsList = clientSettingsService.findByUser(currentUser);
 		return new ModelAndView(CLIENTSETTINGS_VIEW).addObject("clientSettingsList",clientSettingsList).addObject("currentUser", currentUser);
 	}
 	
-	@RequestMapping(value = "/clientsettings/new", method = RequestMethod.GET)
-	public ModelAndView newClientSettingsForm(HttpServletRequest request){
-		//The authenticated user
-		User user = authenticationFacade.getAuthenticatedUser();
-		//List of client settings for the authenticated user
-		List<ClientSettings> clientSettingsList = clientSettingsService.findByUser(user);
-		//new ClientSettingsDTO
-		ClientSettingsDTO dto = new ClientSettingsDTO();
-		return new ModelAndView(CLIENTSETTINGS_VIEW).addObject("clientSettingsList",clientSettingsList).addObject("settings",dto);
-	}
-	
-	@RequestMapping(value = "/clientsettings/new", method = RequestMethod.POST)
-	public String newClientSettings(@ModelAttribute("settings") @Valid ClientSettingsDTO settingsDTO,BindingResult bindingResult, Model model, HttpServletRequest request) {
-		if(bindingResult.hasErrors()) {
-			model.addAttribute("failM", "Failure creating Client settings");
-			return CLIENTSETTINGS_VIEW;
-		}
-		//The authenticated user
-		User user = authenticationFacade.getAuthenticatedUser();
-		
-		//Check if name exists already for that user
-		ClientSettings alreadyExistingSettings = clientSettingsService.findByUserIdAndName(user.getId(), settingsDTO.getName());
-		if(alreadyExistingSettings != null){
-			model.addAttribute("failM", "Client settings with the name '"+ settingsDTO.getName() +"' already exist for this user!");
-			return CLIENTSETTINGS_VIEW;
-		}
-		//build clientSettings from the dto
-		ClientSettings newClientSettings = new ClientSettings(settingsDTO);
-		
-		//set user
-		newClientSettings.setUser(user);
-		
-		//create the settings in the database
-		clientSettingsService.create(newClientSettings);
-		
-		request.getSession().setAttribute("resultM","Succesfully created Client settings '" + settingsDTO.getName() + "'");
-		return "redirect:/settings/clientsettings";
+	@RequestMapping(value = "/infernalsettings", method = RequestMethod.GET)
+	public ModelAndView viewInfernalSettings(){
+		User currentUser = authenticationFacade.getAuthenticatedUser();
+		List<InfernalSettings> infernalSettingsList = infernalSettingsService.findByUser(currentUser);
+		return new ModelAndView(INFERNALSETTINGS_VIEW).addObject("infernalSettingsList",infernalSettingsList).addObject("currentUser", currentUser);
 	}
 	
 	@RequestMapping(value = "/infernal", method = RequestMethod.GET)
-	public ModelAndView viewInfernalSettings(HttpServletRequest request){
+	public ModelAndView viewInfernal(HttpServletRequest request){
 		InfernalSettings settings = infernalSettingsService.getByUserId(authenticationFacade.getAuthenticatedUser().getId());
 		InfernalSettingsDTO dto = new InfernalSettingsDTO(settings);
 		String result = (String) request.getSession().getAttribute("resultM");

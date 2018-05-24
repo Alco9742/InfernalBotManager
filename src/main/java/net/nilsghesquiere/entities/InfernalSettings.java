@@ -2,20 +2,19 @@ package net.nilsghesquiere.entities;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import net.nilsghesquiere.util.enums.Region;
-import net.nilsghesquiere.web.dto.InfernalSettingsDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.nilsghesquiere.util.enums.Region;
+import net.nilsghesquiere.web.dto.InfernalSettingsDTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,10 +26,11 @@ public class InfernalSettings implements Serializable{
 	private static final long serialVersionUID = 1L;
 	//Manager VARS
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
-	@OneToOne(fetch = FetchType.LAZY, cascade =CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "userid")
 	@JsonIgnore
 	private User user;
+	//this is basicly the name of the settings, in infernalbot this will always have to be Default but here we will give it different names
 	private String sets;
 	//SystemSettings 
 	private Integer groups;
@@ -236,6 +236,10 @@ public class InfernalSettings implements Serializable{
 	}
 	
 	public InfernalSettings(InfernalSettingsDTO dto){
+		if (dto.getId() != 0){
+			this.id = dto.getId(); 
+		}
+		this.sets = dto.getSets();
 		this.groups = dto.getGroups();
 		this.clientPath = dto.getClientPath();
 		this.clientVersion = dto.getClientVersion();
@@ -287,5 +291,70 @@ public class InfernalSettings implements Serializable{
 		this.exportRegion= dto.getExportRegion();
 		this.exportLevel = dto.getExportLevel();
 		this.exportBE = dto.getExportBE();
+	}
+	
+	public void updateFromDTO(InfernalSettingsDTO dto){
+		this.sets = dto.getSets();
+		this.groups = dto.getGroups();
+		this.clientPath = dto.getClientPath();
+		this.clientVersion = dto.getClientVersion();
+		this.timeSpan = dto.getTimeSpan();
+		this.autoLogin = dto.getAutoLogin();
+		this.autoBotStart = dto.getAutoBotStart();
+		this.wildcard = dto.getWildcard();
+		this.maxLevel = dto.getMaxLevel();
+		this.sleepTime = dto.getSleepTime();
+		this.playTime = dto.getPlayTime();
+		this.maxBe = dto.getMaxBe();
+		this.region = dto.getRegion();
+		this.aktive = dto.getAktive();
+		this.surrender = dto.getSurrender();
+		this.levelToBeginnerBot = dto.getLevelToBeginnerBot();
+		this.clientHide = dto.getClientHide();
+		this.leaderHide = dto.getLeaderHide();
+		this.consoleHide = dto.getConsoleHide();
+		this.softEndDefault = dto.getSoftEndDefault();
+		this.softEndValue = dto.getSoftEndValue();
+		this.queuerAutoClose = dto.getQueuerAutoClose();
+		this.queueCloseValue = dto.getQueueCloseValue();
+		this.winReboot = dto.getWinReboot();
+		this.winShutdown = dto.getWinShutdown();
+		this.timeUntilCheck = dto.getTimeUntilCheck();
+		this.timeUntilReboot = dto.getTimeUntilReboot();
+		this.renderDisable = dto.getRenderDisable();
+		this.leaderRenderDisable = dto.getLeaderRenderDisable();
+		this.cpuBoost = dto.getCpuBoost();
+		this.leaderCpuBoost = dto.getLeaderCpuBoost();
+		this.ramManager = dto.getRamManager();
+		this.ramMin = dto.getRamMin();
+		this.ramMax = dto.getRamMax();
+		this.timeoutLogin = dto.getTimeoutLogin();
+		this.timeoutLobby = dto.getTimeoutLobby();
+		this.timeoutChamp = dto.getTimeoutChamp();
+		this.timeoutMastery = dto.getTimeoutMastery();
+		this.timeoutLoadGame = dto.getTimeoutLoadGame();
+		this.timeoutInGame = dto.getTimeoutInGame();
+		this.timeoutInGameFF = dto.getTimeoutInGameFF();
+		this.timeoutEndOfGame = dto.getTimeoutEndOfGame();
+		this.openChest = dto.getOpenChest();
+		this.openHexTech = dto.getOpenHexTech();
+		this.disChest = dto.getDisChest();
+		this.prio = dto.getPrio();
+		this.enableAutoExport = dto.getEnableAutoExport();
+		this.exportPath = dto.getExportPath();
+		this.exportWildCard = dto.getExportWildCard();
+		this.exportRegion= dto.getExportRegion();
+		this.exportLevel = dto.getExportLevel();
+		this.exportBE = dto.getExportBE();
+	}
+	
+	public void setUser(User user) {
+		if (this.user != null && this.user.getInfernalSettingsList().contains(this)){
+			this.user.removeInfernalSettings(this);
+		}
+		this.user = user;
+		if (user != null && !user.getInfernalSettingsList().contains(this)){
+			user.addInfernalSettings(this);
+		}
 	}
 }
