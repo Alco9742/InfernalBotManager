@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 import net.nilsghesquiere.entities.InfernalSettings;
-import net.nilsghesquiere.util.enums.Region;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -37,18 +36,6 @@ public class InfernalSettingsDTO implements Serializable{
 	@NotNull
 	@NotEmpty
 	private String wildcard;
-	@NotNull
-	private Integer maxLevel;
-	@NotNull
-	private Integer sleepTime;
-	@NotNull
-	private Integer playTime;
-	@NotNull
-	private Integer maxBe;
-	@NotNull
-	private Region region;
-	@NotNull
-	private Boolean aktive;
 	//AutoqueuerSettings VARS
 	@NotNull
 	private Boolean surrender;
@@ -116,9 +103,6 @@ public class InfernalSettingsDTO implements Serializable{
 	private Boolean openHexTech;
 	@NotNull
 	private Boolean disChest;
-	//OTHER VARS (Not in API)
-	@NotNull
-	private Integer prio;
 	//new 29/03/2018
 	@NotNull
 	private Boolean enableAutoExport;
@@ -139,9 +123,7 @@ public class InfernalSettingsDTO implements Serializable{
 	
 	public InfernalSettingsDTO(Long id, String sets, Integer groups,
 			String clientPath, String clientVersion, Integer timeSpan,
-			Boolean autoLogin, Boolean autoBotStart, String wildcard,
-			Integer maxLevel, Integer sleepTime, Integer playTime,
-			Integer maxBe, Region region, Boolean aktive, Boolean surrender,
+			Boolean autoLogin, Boolean autoBotStart, String wildcard, Boolean surrender,
 			Integer levelToBeginnerBot, Boolean clientHide, Boolean leaderHide,
 			Boolean consoleHide, Boolean softEndDefault, Integer softEndValue,
 			Boolean queuerAutoClose, Integer queueCloseValue,
@@ -154,7 +136,7 @@ public class InfernalSettingsDTO implements Serializable{
 			Integer timeoutLoadGame, Integer timeoutInGame,
 			Integer timeoutInGameFF, Integer timeoutEndOfGame,
 			Boolean openChest, Boolean openHexTech, Boolean disChest,
-			Integer prio, Boolean enableAutoExport, String exportPath,
+			Boolean enableAutoExport, String exportPath,
 			String exportWildCard, Boolean exportRegion, Boolean exportLevel,
 			Boolean exportBE) {
 		super();
@@ -167,12 +149,6 @@ public class InfernalSettingsDTO implements Serializable{
 		this.autoLogin = autoLogin;
 		this.autoBotStart = autoBotStart;
 		this.wildcard = wildcard;
-		this.maxLevel = maxLevel;
-		this.sleepTime = sleepTime;
-		this.playTime = playTime;
-		this.maxBe = maxBe;
-		this.region = region;
-		this.aktive = aktive;
 		this.surrender = surrender;
 		this.levelToBeginnerBot = levelToBeginnerBot;
 		this.clientHide = clientHide;
@@ -204,7 +180,6 @@ public class InfernalSettingsDTO implements Serializable{
 		this.openChest = openChest;
 		this.openHexTech = openHexTech;
 		this.disChest = disChest;
-		this.prio = prio;
 		this.enableAutoExport = enableAutoExport;
 		this.exportPath = exportPath;
 		this.exportWildCard = exportWildCard;
@@ -221,12 +196,6 @@ public class InfernalSettingsDTO implements Serializable{
 		this.autoLogin = settings.getAutoLogin();
 		this.autoBotStart = settings.getAutoBotStart();
 		this.wildcard = settings.getWildcard();
-		this.maxLevel = settings.getMaxLevel();
-		this.sleepTime = settings.getSleepTime();
-		this.playTime = settings.getPlayTime();
-		this.maxBe = settings.getMaxBe();
-		this.region = settings.getRegion();
-		this.aktive = settings.getAktive();
 		this.surrender = settings.getSurrender();
 		this.levelToBeginnerBot = settings.getLevelToBeginnerBot();
 		this.clientHide = settings.getClientHide();
@@ -258,11 +227,10 @@ public class InfernalSettingsDTO implements Serializable{
 		this.openChest = settings.getOpenChest();
 		this.openHexTech = settings.getOpenHexTech();
 		this.disChest = settings.getDisChest();
-		this.prio = settings.getPrio();
 		this.enableAutoExport = settings.getEnableAutoExport();
 		this.exportPath = settings.getExportPath();
 		this.exportWildCard = settings.getExportWildCard();
-		this. exportRegion= settings.getExportRegion();
+		this.exportRegion= settings.getExportRegion();
 		this.exportLevel = settings.getExportLevel();
 		this.exportBE = settings.getExportBE();
 	}

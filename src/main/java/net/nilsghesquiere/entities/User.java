@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
@@ -28,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Data
 @Entity
 @Table(name ="users")
-@EqualsAndHashCode(exclude={"infernalSettingsList","clientSettingsList", "lolAccounts", "clients"})
+@EqualsAndHashCode(exclude={"infernalSettingsList","clientSettingsList", "lolAccounts", "clients", "importSettingsList"})
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
@@ -50,15 +51,23 @@ public class User implements Serializable{
 	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@OrderBy("id")
 	@JsonIgnore
-	private List<InfernalSettings> infernalSettingsList;
-	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
-	@OrderBy("id")
-	@JsonIgnore
 	private List<Client>clients;
 	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@OrderBy("id")
 	@JsonIgnore
+	private List<InfernalSettings> infernalSettingsList;
+	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+	@OrderBy("id")
+	@JsonIgnore
 	private List<ClientSettings>clientSettingsList;
+	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+	@OrderBy("id")
+	@JsonIgnore
+	private List<ImportSettings>importSettingsList;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OrderBy("id")
+	@JsonIgnore
+	private UserSettings userSettings;
 	
 	public User() {
 		super();
@@ -66,14 +75,17 @@ public class User implements Serializable{
 	}
 	
 	public User(String email, String password, Collection<Role> roles, boolean enabled) {
-		
 		super();
 		this.email = email;
 		this.password = password;
 		this.roles = roles;
 		this.enabled = enabled;
 		this.lolAccounts = new ArrayList<>();
+		this.clients= new ArrayList<>();
 		this.clientSettingsList= new ArrayList<>();
+		this.infernalSettingsList= new ArrayList<>();
+		this.clientSettingsList= new ArrayList<>();
+		this.importSettingsList= new ArrayList<>();
 	}
 	
 	public User(String email,String username, String password, Collection<Role> roles) {
@@ -83,7 +95,11 @@ public class User implements Serializable{
 		this.roles = roles;
 		this.enabled =false;
 		this.lolAccounts = new ArrayList<>();
+		this.clients= new ArrayList<>();
 		this.clientSettingsList= new ArrayList<>();
+		this.infernalSettingsList= new ArrayList<>();
+		this.clientSettingsList= new ArrayList<>();
+		this.importSettingsList= new ArrayList<>();
 	}
 	
 	public void addLolAccount(LolAccount lolAccount){
@@ -141,6 +157,20 @@ public class User implements Serializable{
 		}
 	}
 	
+	public void addImportSettings(ImportSettings importSettings){
+		importSettingsList.add(importSettings);
+		if(importSettings.getUser() != this){
+			importSettings.setUser(this);
+		}
+	}
+	
+	public void removeImportSettings(ImportSettings importSettings){
+		importSettingsList.remove(importSettings);
+		if(importSettings.getUser() == this){
+			importSettings.setUser(null);
+		}
+	}
+	
 	@Override
 	public String toString() {
 		String roleList = "[";
@@ -154,6 +184,11 @@ public class User implements Serializable{
 		return "User [id=" + id + ", email=" + email 
 				+ ", password=" + password + ", enabled=" + enabled
 				+ ", roles=" + roleList + " + #LolAccounts=" + lolAccounts.size() + "]";
+	}
+	
+	public void setUserSettings(UserSettings userSettings){
+		this.userSettings = userSettings;
+		userSettings.setUser(this);
 	}
 
 }

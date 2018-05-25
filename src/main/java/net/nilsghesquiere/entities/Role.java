@@ -18,6 +18,8 @@ import lombok.Data;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Data
 @Entity
 @Table(name ="roles")
@@ -28,17 +30,19 @@ public class Role implements Serializable{
 	@NotBlank
 	private String name;
 	@ManyToMany(mappedBy = "roles")
+	@JsonIgnore
 	private List<User> users;
 	@ManyToMany
 	@JoinTable(
 			name = "roles_privileges", 
 			joinColumns = @JoinColumn(name = "roleid", referencedColumnName = "id"), 
 			inverseJoinColumns = @JoinColumn(name = "privilegeid", referencedColumnName = "id"))
+	@JsonIgnore
 	private Collection<Privilege> privileges; 
 	public Role() {
 
 	}
-
+  
 	public Role(String name) {
 		this.name = name;
 	}

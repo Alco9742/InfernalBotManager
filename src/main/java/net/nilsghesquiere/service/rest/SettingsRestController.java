@@ -3,16 +3,25 @@ package net.nilsghesquiere.service.rest;
 import javax.validation.Valid;
 
 import net.nilsghesquiere.entities.ClientSettings;
+import net.nilsghesquiere.entities.ImportSettings;
 import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.entities.UserSettings;
 import net.nilsghesquiere.service.web.ClientSettingsService;
+import net.nilsghesquiere.service.web.ImportSettingsService;
 import net.nilsghesquiere.service.web.InfernalSettingsService;
 import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.service.web.UserSettingsService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.ClientSettingsWrapper;
+import net.nilsghesquiere.util.wrappers.ImportSettingsWrapper;
 import net.nilsghesquiere.util.wrappers.InfernalSettingsWrapper;
+import net.nilsghesquiere.util.wrappers.UserSettingsWrapper;
 import net.nilsghesquiere.web.dto.ClientSettingsDTO;
+import net.nilsghesquiere.web.dto.ImportSettingsDTO;
 import net.nilsghesquiere.web.dto.InfernalSettingsDTO;
+import net.nilsghesquiere.web.dto.UserSettingsDTO;
+import net.nilsghesquiere.web.error.ImportSettingsInUseException;
 import net.nilsghesquiere.web.error.SettingsAlreadyExistException;
 import net.nilsghesquiere.web.error.SettingsNotFoundException;
 import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
@@ -44,6 +53,12 @@ public class SettingsRestController {
 	
 	@Autowired
 	private InfernalSettingsService infernalSettingsService;
+	
+	@Autowired
+	private ImportSettingsService importSettingsService;
+	
+	@Autowired
+	private UserSettingsService userSettingsService;
 	
 	@Autowired
 	private AuthenticationFacade authenticationFacade;	
@@ -383,5 +398,209 @@ public class SettingsRestController {
 		wrapper.setError(error);
 		
 		return new ResponseEntity<InfernalSettingsWrapper>(wrapper, HttpStatus.OK);
+	}
+	
+	//importSettings
+	@RequestMapping(path = "/user/{userid}/importsettings/{importsettingsid}", method = RequestMethod.GET)
+	public ResponseEntity<ImportSettingsWrapper> findImportSettingsById(@PathVariable Long userid, @PathVariable Long importsettingsid) {
+		//VARS
+		ImportSettingsWrapper wrapper;
+		String error = "";
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//PROCESSING
+		ImportSettings importSettings = importSettingsService.read(importsettingsid);
+		
+		//NULL CHECK
+		if(importSettings == null){
+			throw new SettingsNotFoundException(importsettingsid);
+		}
+		
+		//USER CLIENTSETTINGS CHECK
+		if(!importSettings.getUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//RESPONSE
+		wrapper = new ImportSettingsWrapper();
+		wrapper.add("data",importSettings);
+		wrapper.setError(error);
+		
+		//RETURN
+		return new ResponseEntity<ImportSettingsWrapper>(wrapper, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/user/{userid}/importsettings/{importsettingsid}", method = RequestMethod.DELETE, produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<ImportSettingsWrapper> deleteImportSettingsById(@PathVariable Long userid, @PathVariable Long importsettingsid){
+		//VARS
+		ImportSettingsWrapper wrapper;
+		String error = "";
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//ID should not be null or 0 cause its a delete
+		if(importsettingsid == null || importsettingsid == 0L){
+			throw new SettingsNotFoundException(importsettingsid);
+		}
+		
+		//search settings by ID
+		ImportSettings importSettingsById = importSettingsService.read(importsettingsid);
+		
+		//settings with that ID should exist cause its a delete
+		if (importSettingsById == null){
+			throw new SettingsNotFoundException(importsettingsid);
+		}
+		
+		//USER CHECK 2 
+		if(!importSettingsById.getUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//ID should not be the currently active import settings
+		if(importsettingsid == user.getUserSettings().getActiveImportSettings()){
+			throw new ImportSettingsInUseException(importSettingsById.getName());
+		}
+		
+		//delete the settings
+		importSettingsService.delete(importSettingsById);
+		
+		//RESPONSE
+		wrapper = new ImportSettingsWrapper();
+		wrapper.add("data",importSettingsById);
+		wrapper.setError(error);
+		
+		return new ResponseEntity<ImportSettingsWrapper>(wrapper, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/user/{userid}/importsettings", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<ImportSettingsWrapper> newImportSettings(@PathVariable Long userid, @ModelAttribute("importsettings") @Valid ImportSettingsDTO dto) throws BindException {
+		//VARS
+		ImportSettingsWrapper wrapper;
+		String error = "";
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//If for some reason the ID of the dto is not equal to 0, set it to 0 (this would mean people are trying to do funny business)
+		if(dto.getId() != 0){
+			dto.setId(0L);
+		}
+		
+		//Check if name exists already for that user
+		ImportSettings alreadyExistingSettings = importSettingsService.findByUserIdAndName(user.getId(), dto.getName());
+		if(alreadyExistingSettings != null){
+			throw new SettingsAlreadyExistException(dto.getName());
+		}
+		//build clientSettings from the dto
+		ImportSettings newImportSettings = new ImportSettings(dto);
+		
+		//set user
+		newImportSettings.setUser(user);
+		
+		//create the settings in the database
+		ImportSettings createdImportSettings = importSettingsService.create(newImportSettings);
+		
+		//RESPONSE
+		wrapper = new ImportSettingsWrapper();
+		wrapper.add("data",createdImportSettings);
+		wrapper.setError(error);
+		
+		return new ResponseEntity<ImportSettingsWrapper>(wrapper, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/user/{userid}/importsettings", method = RequestMethod.PUT, produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<ImportSettingsWrapper> updateImportSettings(@PathVariable Long userid, @ModelAttribute("importsettings") @Valid ImportSettingsDTO dto) throws BindException {
+		//VARS
+		ImportSettingsWrapper wrapper;
+		String error = "";
+			
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//search settings by ID
+		ImportSettings importSettingsById = importSettingsService.read(dto.getId());
+		
+		//settings with that ID should exist cause its an update
+		if (importSettingsById == null){
+			throw new SettingsNotFoundException(dto.getId());
+		}
+		
+		//USER CHECK 2 
+		if(!importSettingsById.getUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//search settings by Name
+		ImportSettings importSettingsByName = importSettingsService.findByUserIdAndName(user.getId(), dto.getName());
+		
+		//if clientSettingsByName null = OK; name got changed and doesn't exist yet
+		if(importSettingsByName != null){
+			//check if the settings by name are the same settings, if not we can't update (name needs to be unique for user)
+			if(!importSettingsByName.equals(importSettingsById)){
+				throw new SettingsAlreadyExistException(dto.getName());
+			}
+		}
+		
+		//update existing settings from the dto
+		importSettingsById.updateFromDTO(dto);
+		
+		//update the settigns in the database
+		ImportSettings updatedImportSettings = importSettingsService.update(importSettingsById);
+		
+		//RESPONSE
+		wrapper = new ImportSettingsWrapper();
+		wrapper.add("data",updatedImportSettings);
+		wrapper.setError(error);
+		
+		return new ResponseEntity<ImportSettingsWrapper>(wrapper, HttpStatus.OK);
+	}
+	
+	//userSettings
+	@RequestMapping(value = "/user/{userid}/usersettings", method = RequestMethod.PUT, produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<UserSettingsWrapper> updateUserSettings(@PathVariable Long userid, @ModelAttribute("usersettings") @Valid UserSettingsDTO dto) throws BindException {
+		//VARS
+		UserSettingsWrapper wrapper;
+		String error = "";
+			
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//get the current users settings
+		UserSettings userSettings = userSettingsService.getByUser(user);
+		
+		//update existing settings from the dto
+		userSettings.updateFromDTO(dto);
+		
+		//update the settigns in the database
+		UserSettings updatedUserSettings = userSettingsService.update(userSettings);
+		
+		//RESPONSE
+		wrapper = new UserSettingsWrapper();
+		wrapper.add("data",updatedUserSettings);
+		wrapper.setError(error);
+		
+		return new ResponseEntity<UserSettingsWrapper>(wrapper, HttpStatus.OK);
 	}
 }

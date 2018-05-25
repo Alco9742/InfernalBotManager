@@ -1,0 +1,418 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+			var baselnk = "/api/settings/user/" + /*[[${currentUser.id}]]*/;
+			var restlnk = baselnk + "/importsettings/";
+			var settingid;
+		
+			//Shortcuts for put and delete
+			jQuery.each( [ "put", "delete" ], function( i, method ) {
+				jQuery[ method ] = function( url, data, callback, type ) {
+					if ( jQuery.isFunction( data ) ) {
+						type = type || callback;
+						callback = data;
+						data = undefined;
+					}
+ 
+					return jQuery.ajax({
+						url: url,
+						type: method,
+						dataType: type,
+						data: data,
+						success: callback
+					});
+				};
+			});
+			
+			$(document).ready(function() {
+				$( "#navSettings" ).addClass( "active" );
+				$( "#settingsNavImportSettings" ).addClass( "active" );
+				
+				//User selected settings from the list
+				$( "#selectedImportSettings" ).change(function() {
+					//Vars
+					var selectedSettingsId = $(this).val();
+					var selectRestlnk = restlnk + selectedSettingsId;
+					
+					//Reset error and succes alerts
+					resetMessages();
+					
+					//AJAX Request
+					$.get(selectRestlnk ,function(data){
+						//Fill fields on success
+						var importSettings = data.data;
+						Object.keys(data.data).forEach(function(k){
+							$element = $("#"+k+"Field");
+							if( $element.is('select') ) {
+								$("#"+k+"Field option[value="+ importSettings[k] +"]").prop('selected', true);
+							} else {
+								$element.val(importSettings[k]);
+							}
+						});
+						resetButtons("Save");
+						$("#importsettingsForm").show();
+					})
+					.fail(function(data) {
+						//Show error on fail
+						$("#errorMsg div span").text(data.responseJSON.message);
+						$("#errorMsg").show();
+						$('#importsettingsForm').trigger("reset");
+						$("#importsettingsForm").hide();
+					})
+				});
+				
+				//user wants to create new settings
+				$( "#newImportSettings" ).click(function() {
+					$('#importsettingsForm').trigger("reset");
+					resetMessages();
+					resetButtons("Create");
+					$("#selectedImportSettings option[value='0']").text("Creating new import settings").prop('selected', true);
+					$("#rebootField").val("false").change();
+					$("#importsettingsForm").show();
+				});
+				
+				//user wants to copy current selected settings
+				$( "#copyImportSettings" ).click(function() {
+					resetMessages();
+					var selectedS = $('#selectedImportSettings').find(":selected").val();
+					if(selectedS != 0){
+						$("#selectedImportSettings option[value='0']").text("Creating new import settings").prop('selected', true);
+						$("#idField").val("0");
+						$("#nameField").val("");
+						resetButtons("Create");
+						$("#importsettingsForm").show();
+					} else {
+						$( "#errorMsg div span" ).text("No import settings selected");
+						$(" #errorMsg" ).show();
+					}
+				});
+
+				//user wants to delete existing settings
+				$( "#deleteImportSettings" ).click(function() {
+					resetMessages();
+					var selectedS = $('#selectedImportSettings').find(":selected").val();
+					if(selectedS != 0){
+						$('#warningDeleteImportSettingsModal').modal('show');
+					} else {
+						$( "#errorMsg div span" ).text("No import settings selected");
+						$(" #errorMsg" ).show();
+					}
+				});
+				
+				//post request to create the new settings
+				$( "#submitCreate" ).click(function() {
+					//vars
+					var formData= $("#importsettingsForm").serialize();
+					
+					//Reset error and succes alerts
+					resetMessages();
+					
+					//Button change
+					$('#submitCreate').html("Creating...").attr('disabled','disabled');
+					
+					//AJAX Request
+					$.post(restlnk, formData ,function(data){
+						//Created data
+						var newImportSettingsData = data.data;
+						
+						//Set the ID
+						$('#idField').val(newImportSettingsData.id);
+						
+						//Add to select
+						$('#selectedImportSettings').append($("<option></option>").attr("value",newImportSettingsData.id).text(newImportSettingsData.name).prop('selected', true));
+						
+						//Show alert on success
+						$("#successMsg div span").text("Succesfully created new import settings");
+						$("#successMsg").show();
+						
+						//reset Buttons
+						resetButtons("Save");
+					})
+					.fail(function(data) {
+						console.log(data);
+						if(data.responseJSON.error == "SettingsAlreadyExistError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+							$("#nameField").addClass("is-invalid");
+						} else {
+							//fieldErrors
+							var errors = $.parseJSON(data.responseJSON.message);
+							$.each( errors, function( index,item ){
+								$("#"+item.field+"Error").show().html(item.defaultMessage);
+								$("#"+item.field+"Field").addClass("is-invalid");
+							});
+							
+							//globalErrors
+							errors = $.parseJSON(data.responseJSON.error);
+							$.each( errors, function( index,item ){
+								$("#errorMsg div span").append(item.defaultMessage+"<br/>");
+							});
+						}
+						//Show the errorMessage
+						$("#errorMsg").show();
+						//reset Buttons
+						resetButtons("Create");
+					})
+					
+				});
+				
+				
+				//put request to save the settings
+				$( "#submitSave" ).click(function() {
+					//vars
+					var formData= $("#importsettingsForm").serialize();
+					
+					//Reset error and succes alerts
+					resetMessages();
+					
+					//Button change
+					$('#submitSave').html("Saving...").attr('disabled','disabled');
+					
+					//AJAX Request
+					$.put(restlnk, formData ,function(data){
+						//updated data
+						var updatedImportSettingsData = data.data;
+						
+						//change the select option (may have changed name)
+						$("#selectedImportSettings option[value='"+ updatedImportSettingsData.id +"']").text(updatedImportSettingsData.name).prop('selected', true);
+						
+						//Show alert on success
+						$("#successMsg div span").text("Succesfully saved import settings");
+						$("#successMsg").show();
+						
+						//reset Buttons
+						resetButtons("Save");
+					})
+					.fail(function(data) {
+						console.log(data);
+						if(data.responseJSON.error == "SettingsAlreadyExistError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+							$("#nameField").addClass("is-invalid");
+						} else if(data.responseJSON.error == "SettingsNotFoundError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+						} else if(data.responseJSON.error == "AccessError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+						} else {
+							//fieldErrors
+							var errors = $.parseJSON(data.responseJSON.message);
+							$.each( errors, function( index,item ){
+								$("#"+item.field+"Error").show().html(item.defaultMessage);
+								$("#"+item.field+"Field").addClass("is-invalid");
+							});
+							
+							//globalErrors
+							errors = $.parseJSON(data.responseJSON.error);
+							$.each( errors, function( index,item ){
+								$("#errorMsg div span").append(item.defaultMessage+"<br/>");
+							});
+						}
+						//Show the errorMessage
+						$("#errorMsg").show();
+						//reset Buttons
+						resetButtons("Save");
+					})
+					
+				});
+				
+				$( "#submitDelete" ).click(function() {
+					//vars
+					$deleteImportSettingsConfirmButton = $("#submiteDelete");
+					var selectedSettingsId = $("#selectedImportSettings").val();
+					var deleteRestlnk = restlnk + selectedSettingsId;
+					
+					//reset the current messages
+					resetMessages();
+					
+					//disable confirm button
+					$deleteImportSettingsConfirmButton.html('Deleting...');
+					$deleteImportSettingsConfirmButton.prop("disabled",true);
+					
+					//REST call
+					$.delete(deleteRestlnk,function(data){
+						//Delete the entry from the list
+						$("#selectedImportSettings :selected").remove();
+						
+						//Set the selected entry back to the message to select
+						$("#selectedImportSettings option[value='0']").text("Select import settings").prop('selected', true);
+						
+						//Hide the form
+						$('#importsettingsForm').trigger("reset");
+						$("#importsettingsForm").hide();
+						
+						//reset the button on the form
+						resetButtons("Create");
+						
+						//reset modal and hide it
+						$('#warningDeleteImportSettingsModal').modal('hide');
+						$deleteImportSettingsConfirmButton.html('Delete');
+						$deleteImportSettingsConfirmButton.prop("disabled",false);
+						
+						//Show alert on success
+						var deletedname = data.data.name;
+						$("#successMsg div span").text("Succesfully deleted import settings '" + deletedname + "'" );
+						$("#successMsg").show();
+					})
+					.fail(function(data) {
+						console.log("Fail delete")
+						console.log(data);
+						
+						$('#warningDeleteImportSettingsModal').modal('hide');
+						$deleteImportSettingsConfirmButton.html('Delete');
+						$deleteImportSettingsConfirmButton.prop("disabled",false);
+						console.log(data);
+						
+						if(data.responseJSON.error == "SettingsNotFoundError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+						} else if(data.responseJSON.error == "AccessError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+						} else {
+							$("#errorMsg div span").text(data.responseJSON.message);
+						}
+						//Show the errorMessage
+						$("#errorMsg").show();
+						//reset Buttons
+						resetButtons("Save");
+					});
+				});
+			});
+			
+			function resetMessages(){
+				$( "#errorMsg div span" ).text("");
+				$(" #errorMsg" ).hide();
+				$( "#successMsg div span" ).text("");
+				$(" #successMsg" ).hide();
+				resetInputClasses();
+				$("#selectedImportSettings option[value='0']").text("Select import settings");
+			}
+			
+			function resetInputClasses(){
+				$('input').removeClass('is-invalid');
+				$('.invalid-feedback').hide().html("");
+			}
+			
+			function resetButtons(buttonType){
+				if (buttonType == "Create"){
+					$("#createDiv").show();
+					$('#submitCreate').html("Create").removeAttr('disabled');
+					$("#saveDiv").hide();
+					$('#submitSave').html("Save").attr('disabled','disabled');
+				} else {
+					$("#saveDiv").show();
+					$('#submitSave').html("Save").removeAttr('disabled');
+					$("#createDiv").hide();
+					$('#submitCreate').html("Create").attr('disabled','disabled');
+				}
+			}
+		/*]]>*/
+		</script>
+	</head>
+	<body>
+		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+		<br />
+		<div class="container">
+			<!--/*/ <th:block th:include="fragments/settingsNav :: settingsNav"/> /*/-->
+			<br />
+			<div class="row" id="successMsg" style="display:none">
+				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-success"><span></span></div>
+			</div>
+			<div class="row" id="errorMsg" style="display:none">
+				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-danger"><span></span></div>
+			</div>
+			<div class="row" >
+				<select class="custom-select col-12 offset-sm-1 col-sm-7" id="selectedImportSettings">
+					<option value="0" disabled="disabled" selected="selected">Select import settings</option>
+					<option th:each="importSettings : ${importSettingsList}" th:value="${importSettings.id}" th:text="${importSettings.name}">settings</option>
+				</select>
+				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="newImportSettings"><span class="fa fa-plus"></span></button>
+				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="copyImportSettings"><span class="fa fa-copy"></span></button>
+				<button type="button" class="col-4 col-sm-1 btn btn-secondary" id="deleteImportSettings"><span class="fa fa-times"></span></button>
+			</div>
+			<br />
+			<form name="importsettingsForm" id="importsettingsForm" action="/" method="post" enctype="utf8" style="display:none">
+				<input type="hidden" name="id" id="idField" value="0" />
+				<div class ="form-group row">
+					<label for="nameField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Name</label>
+					<div class="col-12  col-sm-6">
+						<input type="text" class="form-control" name="name" id="nameField"/>
+						<span id="nameError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="maxLevelField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Max Level</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="0" max="99" class="form-control" name="maxLevel" id="maxLevelField"/>
+						<span id="maxLevelError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="sleepTimeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Sleep Time</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="0" max="24" class="form-control" name="sleepTime" id="sleepTimeField"/>
+						<span id="sleepTimeError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="playTimeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Play Time</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="0" max="24" class="form-control" name="playTime" id="playTimeField"/>
+						<span id="playTimeError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="maxBeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Max BE</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="0" max="999999" class="form-control" name="maxBe" id="maxBeField"/>
+						<span id="maxBeError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="aktiveField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Active</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="aktive" id="aktiveField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="aktiveError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="prioField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Priority</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="9" class="form-control" name="prio" id="prioField"/>
+						<span id="prioError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row" id="createDiv" style="display:none">
+					<div class="col-12 offset-sm-1 col-sm-10">
+						<button type="button" class ="btn btn-primary btn-lg btn-block" id="submitCreate">Create</button>
+					</div>
+				</div>
+				<div class ="form-group row" id="saveDiv" style="display:none">
+					<div class="col-12 offset-sm-1 col-sm-10">
+						<button type="button" class ="btn btn-primary btn-lg btn-block" id="submitSave">Save</button>
+					</div>
+				</div>
+			</form>
+			<div class="modal fade" id="warningDeleteImportSettingsModal" tabindex="-1" role="dialog" aria-labelledby="warningDeleteImportSettingsModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="warningDeleteImportSettingsModalLabel">Warning</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body" id="warningDeleteImportSettingsModalMessage">
+							<p>Pressing this button will delete these import settings. <br />This cannot be undone.</p>
+						</div>
+						<div class="modal-footer">
+							<button id="submitDelete" type="button" class="btn btn-primary">Delete</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

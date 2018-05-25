@@ -8,15 +8,16 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import net.nilsghesquiere.entities.GlobalVariable;
-import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.Privilege;
 import net.nilsghesquiere.entities.Role;
 import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.entities.UserSettings;
 import net.nilsghesquiere.service.web.GlobalVariableService;
 import net.nilsghesquiere.service.web.InfernalSettingsService;
 import net.nilsghesquiere.service.web.PrivilegeService;
 import net.nilsghesquiere.service.web.RoleService;
 import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.service.web.UserSettingsService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,9 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserSettingsService userSettingsService;
 
 	@Autowired
 	private RoleService roleService;
@@ -113,10 +117,12 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			user.setEmail(email);
 			user.setEnabled(true);
 			user.setRoles(roles);
+			user.setUserSettings(new UserSettings());
 			userService.create(user);
 			User createdUser = userService.findUserByEmail(email);
-			InfernalSettings inferalSettings = infernalSettingsService.create(new InfernalSettings(createdUser));
-			user.addInfernalSettings(inferalSettings);
+		//	UserSettings userSettings = new UserSettings();
+		//	userSettings.setUser(createdUser);
+		//	userSettingsService.create(userSettings);
 			user = createdUser;
 		}
 		return user;

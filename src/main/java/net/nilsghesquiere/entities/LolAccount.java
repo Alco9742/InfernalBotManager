@@ -58,7 +58,7 @@ public class LolAccount implements Serializable{
 	//this used to be initialized with settings from the infernalsettings, should take a look at with what we should initialize now
 	//Force the user to have a default set of infernalsettings perhaps
 	//TODO: check if this always returns default
-	public LolAccount(User user, String account, String password, Region region) {
+	public LolAccount(User user, String account, String password, Region region, ImportSettings importSettings) {
 		super();
 		this.user = user;
 		this.account = account;
@@ -66,20 +66,20 @@ public class LolAccount implements Serializable{
 		this.summoner = "";
 		this.region = region;
 		this.level = 0;
-		this.maxLevel = user.getInfernalSettingsList().get(0).getMaxLevel();
+		this.maxLevel = importSettings.getMaxLevel();
 		this.xp = 0;
 		this.be = 0;
-		this.maxBe = user.getInfernalSettingsList().get(0).getMaxBe();
-		this.priority = user.getInfernalSettingsList().get(0).getPrio();
-		this.playTime = user.getInfernalSettingsList().get(0).getPlayTime();
-		this.sleepTime = user.getInfernalSettingsList().get(0).getSleepTime();
-		this.active = user.getInfernalSettingsList().get(0).getAktive();
+		this.maxBe = importSettings.getMaxBe();
+		this.priority = importSettings.getPrio();
+		this.playTime = importSettings.getPlayTime();
+		this.sleepTime = importSettings.getSleepTime();
+		this.active = importSettings.getAktive();
 		this.accountStatus = AccountStatus.NEW;
 		this.assignedTo = "";
 		this.info = "";
 	}
 	
-	public LolAccount(User user, String account, String password, Region region, Integer level) {
+	public LolAccount(User user, String account, String password, Region region, Integer level, ImportSettings importSettings) {
 		super();
 		this.user = user;
 		this.account = account;
@@ -87,14 +87,14 @@ public class LolAccount implements Serializable{
 		this.summoner = "";
 		this.region = region;
 		this.level = level;
-		this.maxLevel = user.getInfernalSettingsList().get(0).getMaxLevel();
+		this.maxLevel = importSettings.getMaxLevel();
 		this.xp = 0;
 		this.be = 0;
-		this.maxBe = user.getInfernalSettingsList().get(0).getMaxBe();
-		this.priority = user.getInfernalSettingsList().get(0).getPrio();
-		this.playTime = user.getInfernalSettingsList().get(0).getPlayTime();
-		this.sleepTime = user.getInfernalSettingsList().get(0).getSleepTime();
-		this.active = user.getInfernalSettingsList().get(0).getAktive();
+		this.maxBe = importSettings.getMaxBe();
+		this.priority = importSettings.getPrio();
+		this.playTime = importSettings.getPlayTime();
+		this.sleepTime = importSettings.getSleepTime();
+		this.active = importSettings.getAktive();
 		this.accountStatus = AccountStatus.NEW;
 		this.assignedTo = "";
 		this.info = "";
@@ -110,14 +110,14 @@ public class LolAccount implements Serializable{
 		}
 	}
 	
-	public static LolAccount buildFromString(User user, String line){
+	public static LolAccount buildFromString(User user, String line, ImportSettings importSettings){
 		String input[] = line.split(":");
 		if (input.length == 3){
 			String account = input[0];
 			String password = input[1];
 			String regionString = input[2].toUpperCase();
 			Region region = Region.valueOf(regionString);
-			return new LolAccount(user,account,password, region);		
+			return new LolAccount(user,account,password, region, importSettings);		
 		} else {
 			if (input.length == 4){
 				String account = input[0];
@@ -125,25 +125,25 @@ public class LolAccount implements Serializable{
 				String regionString = input[2].toUpperCase();
 				Region region = Region.valueOf(regionString);
 				Integer level = Integer.parseInt(input[3]);
-				return new LolAccount(user,account,password, region, level);		
+				return new LolAccount(user,account,password, region, level, importSettings);		
 			} else {
 				throw new UploadedFileMalformedException();
 			}
 		}
 	}
 	
-	public static LolAccount buildFromStringWithRegion(User user, String line, Region region){
+	public static LolAccount buildFromStringWithRegion(User user, String line, Region region, ImportSettings importSettings){
 		String input[] = line.split(":");
 		if (input.length == 2){
 			String account = input[0];
 			String password = input[1];
-			return new LolAccount(user,account,password, region);		
+			return new LolAccount(user,account,password, region, importSettings);		
 		} else {
 			if (input.length == 3){
 				String account = input[0];
 				String password = input[1];
 				Integer level = Integer.parseInt(input[2]);
-				return new LolAccount(user,account,password, region, level);		
+				return new LolAccount(user,account,password, region, level, importSettings);		
 			} else {
 				throw new UploadedFileMalformedException();
 			}

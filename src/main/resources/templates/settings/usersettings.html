@@ -1,0 +1,158 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+			var baselnk = "/api/settings/user/" + /*[[${currentUser.id}]]*/;
+			var restlnk = baselnk + "/usersettings/";
+			var activeImportSettings = /*[[${userSettings.activeImportSettings}]]*/;
+		
+			//Shortcuts for put and delete
+			jQuery.each( [ "put", "delete" ], function( i, method ) {
+				jQuery[ method ] = function( url, data, callback, type ) {
+					if ( jQuery.isFunction( data ) ) {
+						type = type || callback;
+						callback = data;
+						data = undefined;
+					}
+ 
+					return jQuery.ajax({
+						url: url,
+						type: method,
+						dataType: type,
+						data: data,
+						success: callback
+					});
+				};
+			});
+			
+			$(document).ready(function() {
+				$( "#navSettings" ).addClass( "active" );
+				$( "#settingsNavUserSettings" ).addClass( "active" );
+				initialize();
+				
+				//put request to save the settings
+				$( "#submitSave" ).click(function() {
+					//vars
+					var formData= $("#usersettingsForm").serialize();
+					
+					//Reset error and succes alerts
+					resetMessages();
+					
+					//Button change
+					$('#submitSave').html("Saving...").attr('disabled','disabled');
+					
+					//AJAX Request
+					$.put(restlnk, formData ,function(data){
+						//updated data
+						var updatedUserSettingsData = data.data;
+						
+						//Show alert on success
+						$("#successMsg div span").text("Succesfully saved user settings");
+						$("#successMsg").show();
+						
+						//reset Buttons
+						resetButtons();
+					})
+					.fail(function(data) {
+						console.log(data);
+						if(data.responseJSON.error == "AccessError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+						} else if(data.responseJSON.error == "SettingsInUseError"){
+							$("#errorMsg div span").text(data.responseJSON.message);
+						} else {
+							//fieldErrors
+							var errors = $.parseJSON(data.responseJSON.message);
+							$.each( errors, function( index,item ){
+								$("#"+item.field+"Error").show().html(item.defaultMessage);
+								$("#"+item.field+"Field").addClass("is-invalid");
+							});
+							
+							//globalErrors
+							errors = $.parseJSON(data.responseJSON.error);
+							$.each( errors, function( index,item ){
+								$("#errorMsg div span").append(item.defaultMessage+"<br/>");
+							});
+						}
+						//Show the errorMessage
+						$("#errorMsg").show();
+						//reset Buttons
+						resetButtons();
+					})
+					
+				});
+				
+				$('#activeImportSettingsField').change(function() {
+					//remove the select import setting field if it exists
+					$("#activeImportSettingsField option[value='0']").remove();
+				});
+			});
+				
+			function resetMessages(){
+				$( "#errorMsg div span" ).text("");
+				$(" #errorMsg" ).hide();
+				$( "#successMsg div span" ).text("");
+				$(" #successMsg" ).hide();
+				resetInputClasses();
+			}
+			
+			function resetInputClasses(){
+				$('input').removeClass('is-invalid');
+				$('.invalid-feedback').hide().html("");
+			}
+			
+			function resetButtons(buttonType){
+				$('#submitSave').html("Save").removeAttr('disabled');
+			}
+			
+			function initialize(){
+				initializeImportSettingsList();
+			}
+			
+			function initializeImportSettingsList(){
+				if (activeImportSettings != 0){
+					$("#activeImportSettingsField option[value='" + activeImportSettings + "']").prop('selected', true);
+				} else {
+					if($('#activeImportSettingsField option').length > 0){
+						$('#activeImportSettingsField').prepend($("<option></option>").attr("value",0).text("Select import settings").prop('selected', true).attr('disabled','disabled'));
+					} else {
+						$('#activeImportSettingsField').append($("<option></option>").attr("value",0).text("Create import settings first").prop('selected', true).attr('disabled','disabled'));
+					}
+				}
+			}
+			
+		/*]]>*/
+		</script>
+	</head>
+	<body>
+		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+		<br />
+		<div class="container">
+			<!--/*/ <th:block th:include="fragments/settingsNav :: settingsNav"/> /*/-->
+			<br />
+			<div class="row" id="successMsg" style="display:none">
+				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-success"><span></span></div>
+			</div>
+			<div class="row" id="errorMsg" style="display:none">
+				<div class = "col-12 offset-sm-1 col-sm-10 alert alert-danger"><span></span></div>
+			</div>
+			<br />
+			<form name="usersettingsForm" id="usersettingsForm" action="/" method="post" enctype="utf8">
+				<div class ="form-group row">
+					<label for="activeImportSettingsField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Import Settings</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="activeImportSettings" id="activeImportSettingsField">
+							<option th:each="importSettings : ${importSettingsList}" th:value="${importSettings.id}" th:text="${importSettings.name}">settings</option>
+						</select>
+						<span id="activeImportSettingsError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row" id="saveDiv">
+					<div class="col-12 offset-sm-1 col-sm-10">
+						<button type="button" class ="btn btn-primary btn-lg btn-block" id="submitSave">Save</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

@@ -1,5 +1,6 @@
 package net.nilsghesquiere.web.exceptionhandlers;
 
+import net.nilsghesquiere.web.error.ImportSettingsInUseException;
 import net.nilsghesquiere.web.error.SettingsAlreadyExistException;
 import net.nilsghesquiere.web.error.SettingsNotFoundException;
 import net.nilsghesquiere.web.error.UploadedFileContentTypeException;
@@ -63,6 +64,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		LOGGER.error("404 Status Code", ex);
 		GenericResponse bodyOfResponse = new GenericResponse("Settings with that name already exist, choose a unique name", "SettingsAlreadyExistError");
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
+	}
+	
+	@ExceptionHandler({ ImportSettingsInUseException.class })
+	public ResponseEntity<Object> handleImportSettingsInUse(RuntimeException ex, WebRequest request) {
+		LOGGER.error("404 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse(ex.getMessage(), "SettingsInUseError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 	
 	@ExceptionHandler({ MailAuthenticationException.class })

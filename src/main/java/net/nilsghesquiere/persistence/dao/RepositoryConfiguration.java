@@ -3,12 +3,14 @@ package net.nilsghesquiere.persistence.dao;
 import net.nilsghesquiere.entities.ClientData;
 import net.nilsghesquiere.entities.ClientSettings;
 import net.nilsghesquiere.entities.GlobalVariable;
+import net.nilsghesquiere.entities.ImportSettings;
 import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.Metric;
 import net.nilsghesquiere.entities.Queuer;
 import net.nilsghesquiere.entities.QueuerLolAccount;
 import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.entities.UserSettings;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.rest.RepositoryRestMvcAutoConfiguration;
@@ -37,7 +39,7 @@ public class RepositoryConfiguration {
 		return new RepositoryRestConfigurerAdapter() {
 			@Override
 			public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-				config.exposeIdsFor(User.class,LolAccount.class,InfernalSettings.class, GlobalVariable.class, ClientData.class, Queuer.class, QueuerLolAccount.class, Metric.class,ClientSettings.class);
+				config.exposeIdsFor(User.class,LolAccount.class,InfernalSettings.class, GlobalVariable.class, ClientData.class, Queuer.class, QueuerLolAccount.class, Metric.class,ClientSettings.class, ImportSettings.class, UserSettings.class);
 			}
 			
 			@Override 

@@ -13,7 +13,6 @@ import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import net.nilsghesquiere.util.enums.Region;
 import net.nilsghesquiere.web.dto.InfernalSettingsDTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,12 +40,6 @@ public class InfernalSettings implements Serializable{
 	private Boolean autoBotStart;
 	//ImExPortSettings VARS
 	private String wildcard;
-	private Integer maxLevel;
-	private Integer sleepTime;
-	private Integer playTime;
-	private Integer maxBe;
-	private Region region;
-	private Boolean aktive;
 	//AutoqueuerSettings VARS
 	private Boolean surrender;
 	private Integer levelToBeginnerBot;
@@ -83,7 +76,6 @@ public class InfernalSettings implements Serializable{
 	private Boolean openHexTech;
 	private Boolean disChest;
 	//OTHER VARS (Not in API)
-	private Integer prio;
 	private Boolean replaceConfig;
 	private Integer lolHeight;
 	private Integer lolWidth;
@@ -105,15 +97,9 @@ public class InfernalSettings implements Serializable{
 		this.groups = 1;
 		this.clientPath = "C:\\Riot Games\\League of Legends";
 		this.wildcard = ":";
-		this.maxLevel = 30;
-		this.sleepTime = 0;
-		this.playTime = 24;
-		this.prio = 9;
 		this.replaceConfig = false;
 		this.lolHeight = 240;
 		this.lolWidth = 320;
-		this.maxBe = 30000;
-		this.aktive = true;
 		this.clientHide = true;
 		this.consoleHide = true;
 		this.ramManager = true;
@@ -156,9 +142,7 @@ public class InfernalSettings implements Serializable{
 	
 	public InfernalSettings(Long id, User user, String sets, Integer groups,
 			String clientPath, String clientVersion, Integer timeSpan,
-			Boolean autoLogin, Boolean autoBotStart, String wildcard,
-			Integer maxLevel, Integer sleepTime, Integer playTime,
-			Integer maxBe, Region region, Boolean aktive, Boolean surrender,
+			Boolean autoLogin, Boolean autoBotStart, String wildcard, Boolean surrender,
 			Integer levelToBeginnerBot, Boolean clientHide, Boolean leaderHide,
 			Boolean consoleHide, Boolean softEndDefault, Integer softEndValue,
 			Boolean queuerAutoClose, Integer queueCloseValue,
@@ -171,7 +155,7 @@ public class InfernalSettings implements Serializable{
 			Integer timeoutLoadGame, Integer timeoutInGame,
 			Integer timeoutInGameFF, Integer timeoutEndOfGame,
 			Boolean openChest, Boolean openHexTech, Boolean disChest,
-			Integer prio, Boolean replaceConfig, Integer lolHeight,
+			Boolean replaceConfig, Integer lolHeight,
 			Integer lolWidth, Boolean enableAutoExport, String exportPath,
 			String exportWildCard, Boolean exportRegion, Boolean exportLevel,
 			Boolean exportBE) {
@@ -186,12 +170,6 @@ public class InfernalSettings implements Serializable{
 		this.autoLogin = autoLogin;
 		this.autoBotStart = autoBotStart;
 		this.wildcard = wildcard;
-		this.maxLevel = maxLevel;
-		this.sleepTime = sleepTime;
-		this.playTime = playTime;
-		this.maxBe = maxBe;
-		this.region = region;
-		this.aktive = aktive;
 		this.surrender = surrender;
 		this.levelToBeginnerBot = levelToBeginnerBot;
 		this.clientHide = clientHide;
@@ -223,7 +201,6 @@ public class InfernalSettings implements Serializable{
 		this.openChest = openChest;
 		this.openHexTech = openHexTech;
 		this.disChest = disChest;
-		this.prio = prio;
 		this.replaceConfig = replaceConfig;
 		this.lolHeight = lolHeight;
 		this.lolWidth = lolWidth;
@@ -247,12 +224,6 @@ public class InfernalSettings implements Serializable{
 		this.autoLogin = dto.getAutoLogin();
 		this.autoBotStart = dto.getAutoBotStart();
 		this.wildcard = dto.getWildcard();
-		this.maxLevel = dto.getMaxLevel();
-		this.sleepTime = dto.getSleepTime();
-		this.playTime = dto.getPlayTime();
-		this.maxBe = dto.getMaxBe();
-		this.region = dto.getRegion();
-		this.aktive = dto.getAktive();
 		this.surrender = dto.getSurrender();
 		this.levelToBeginnerBot = dto.getLevelToBeginnerBot();
 		this.clientHide = dto.getClientHide();
@@ -284,7 +255,6 @@ public class InfernalSettings implements Serializable{
 		this.openChest = dto.getOpenChest();
 		this.openHexTech = dto.getOpenHexTech();
 		this.disChest = dto.getDisChest();
-		this.prio = dto.getPrio();
 		this.enableAutoExport = dto.getEnableAutoExport();
 		this.exportPath = dto.getExportPath();
 		this.exportWildCard = dto.getExportWildCard();
@@ -302,12 +272,6 @@ public class InfernalSettings implements Serializable{
 		this.autoLogin = dto.getAutoLogin();
 		this.autoBotStart = dto.getAutoBotStart();
 		this.wildcard = dto.getWildcard();
-		this.maxLevel = dto.getMaxLevel();
-		this.sleepTime = dto.getSleepTime();
-		this.playTime = dto.getPlayTime();
-		this.maxBe = dto.getMaxBe();
-		this.region = dto.getRegion();
-		this.aktive = dto.getAktive();
 		this.surrender = dto.getSurrender();
 		this.levelToBeginnerBot = dto.getLevelToBeginnerBot();
 		this.clientHide = dto.getClientHide();
@@ -339,7 +303,6 @@ public class InfernalSettings implements Serializable{
 		this.openChest = dto.getOpenChest();
 		this.openHexTech = dto.getOpenHexTech();
 		this.disChest = dto.getDisChest();
-		this.prio = dto.getPrio();
 		this.enableAutoExport = dto.getEnableAutoExport();
 		this.exportPath = dto.getExportPath();
 		this.exportWildCard = dto.getExportWildCard();

@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import net.nilsghesquiere.entities.ImportSettings;
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.service.web.ImportSettingsService;
 import net.nilsghesquiere.service.web.LolAccountService;
 import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.enums.AccountStatus;
@@ -55,6 +57,9 @@ public class LolAccountRestController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ImportSettingsService importSettingsService;
 	
 	@Autowired
 	private AuthenticationFacade authenticationFacade;	
@@ -145,6 +150,8 @@ public class LolAccountRestController {
 		return new ResponseEntity<LolAccount>(lolAccount, HttpStatus.OK);
 	}
 	
+	//TODO add check for importSettings
+	
 	@RequestMapping(path = "/user/{userid}", method = RequestMethod.POST)
 	public ResponseEntity<LolAccountWrapper> create(@PathVariable Long userid, @RequestBody LolAccountMap lolAccountMap) {
 		
@@ -153,6 +160,9 @@ public class LolAccountRestController {
 		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
 			throw new UserIsNotOwnerOfResourceException();
 		}
+		
+		//IMPORTSETTINGS
+		ImportSettings importSettings = importSettingsService.read(user.getUserSettings().getActiveImportSettings());
 		
 		//VARS
 		LolAccountWrapper wrapper = new LolAccountWrapper();
@@ -167,7 +177,7 @@ public class LolAccountRestController {
 				error = "Account is empty";
 			}
 			//PROCESSING
-			LolAccount newAccount = new LolAccount(user,lolAccount.getAccount(),lolAccount.getPassword(),lolAccount.getRegion());	
+			LolAccount newAccount = new LolAccount(user,lolAccount.getAccount(),lolAccount.getPassword(),lolAccount.getRegion(), importSettings);	
 			LolAccount createdAccount = lolAccountService.create(newAccount);
 			if(createdAccount != null){
 				returnAccounts.add(createdAccount);
@@ -238,15 +248,20 @@ public class LolAccountRestController {
 		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
 	}
 	
+	//TODO add checks for importsettings
+	
 	//import with region in file
-	@RequestMapping(value="/user/{userid}/import", method=RequestMethod.POST)
-	public ResponseEntity<LolAccountWrapper> processUpload(@PathVariable Long userid, @RequestParam MultipartFile file) throws IOException {
+	@RequestMapping(value="/user/{userid}/import/{importsettingsid)", method=RequestMethod.POST)
+	public ResponseEntity<LolAccountWrapper> processUpload(@PathVariable Long userid, @PathVariable Long importsettingsid, @RequestParam MultipartFile file) throws IOException {
 		//VARS
 		String error = "";
 		StringBuilder errorBuilder = new StringBuilder("");
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		List<LolAccount> importedAccounts = new ArrayList<>();
 		List<LolAccount> createdAccounts = new ArrayList<>();
+		
+		//IMPORTSETTING
+		ImportSettings importSettings = importSettingsService.read(importsettingsid);
 		
 		//USER CHECK
 		User user = userService.findUserByUserId(userid);
@@ -269,7 +284,7 @@ public class LolAccountRestController {
 		//MAP THE INPUT TO LOLACCOUNTS & FILE FORM CHECK
 		try(Stream<String> stream = new BufferedReader(new InputStreamReader(file.getInputStream(), Charset.forName("UTF-8"))).lines()){
 			importedAccounts = stream
-								.map(line -> LolAccount.buildFromString(user,line))
+								.map(line -> LolAccount.buildFromString(user,line,importSettings))
 								.collect(Collectors.toList());
 		} catch (IllegalArgumentException | IllegalStateException | ArrayIndexOutOfBoundsException | UploadedFileMalformedException e) {
 			throw new UploadedFileMalformedException();
@@ -304,14 +319,17 @@ public class LolAccountRestController {
 	}
 
 	//import with selected region
-	@RequestMapping(value="/user/{userid}/import/{region}", method=RequestMethod.POST)
-	public ResponseEntity<LolAccountWrapper> processUploadRegion(@PathVariable Long userid,@PathVariable Region region, @RequestParam MultipartFile file) throws IOException {
+	@RequestMapping(value="/user/{userid}/import/{importsettingsid}/region/{region}", method=RequestMethod.POST)
+	public ResponseEntity<LolAccountWrapper> processUploadRegion(@PathVariable Long userid,@PathVariable Long importsettingsid, @PathVariable Region region, @RequestParam MultipartFile file) throws IOException {
 		//VARS
 		String error = "";
 		StringBuilder errorBuilder = new StringBuilder("");
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		List<LolAccount> importedAccounts = new ArrayList<>();
 		List<LolAccount> createdAccounts = new ArrayList<>();
+		
+		//IMPORTSETTING
+		ImportSettings importSettings = importSettingsService.read(importsettingsid);
 		
 		//USER CHECK
 		User user = userService.findUserByUserId(userid);
@@ -334,7 +352,7 @@ public class LolAccountRestController {
 		//MAP THE INPUT TO LOLACCOUNTS & FILE FORM CHECK
 		try(Stream<String> stream = new BufferedReader(new InputStreamReader(file.getInputStream(), Charset.forName("UTF-8"))).lines()){
 			importedAccounts = stream
-								.map(line -> LolAccount.buildFromStringWithRegion(user,line,region))
+								.map(line -> LolAccount.buildFromStringWithRegion(user,line,region,importSettings))
 								.collect(Collectors.toList());
 		} catch (IllegalArgumentException | IllegalStateException | ArrayIndexOutOfBoundsException | UploadedFileMalformedException e) {
 			throw new UploadedFileMalformedException();

@@ -7,9 +7,9 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
-import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.PasswordResetToken;
 import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.entities.UserSettings;
 import net.nilsghesquiere.entities.VerificationToken;
 import net.nilsghesquiere.persistence.dao.PasswordResetTokenRepository;
 import net.nilsghesquiere.persistence.dao.RoleRepository;
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService{
 	private PasswordResetTokenRepository passwordTokenRepository;
 	
 	@Autowired
-	private InfernalSettingsService infernalSettingsService;
+	private UserSettingsService userSettingsService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -116,10 +116,8 @@ public class UserServiceImpl implements UserService{
 		user.setEmail(userDTO.getEmail());
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+		user.setUserSettings(new UserSettings());
 		User returnUser = userRepository.save(user);
-		
-		InfernalSettings inferalSettings = infernalSettingsService.create(new InfernalSettings(returnUser));
-		user.addInfernalSettings(inferalSettings);
 		return returnUser;
 	}
 	

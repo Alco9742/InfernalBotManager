@@ -5,7 +5,6 @@
 		/*<![CDATA[*/
 			var baselnk = "/api/settings/user/" + /*[[${currentUser.id}]]*/;
 			var restlnk = baselnk + "/infernalsettings/";
-			var settingid;
 		
 			//Shortcuts for put and delete
 			jQuery.each( [ "put", "delete" ], function( i, method ) {
@@ -51,7 +50,6 @@
 								$element.val(infernalSettings[k]);
 							}
 						});
-						checkRebootField();
 						resetButtons("Save");
 						$("#infernalsettingsForm").show();
 					})
@@ -62,11 +60,6 @@
 						$('#infernalsettingsForm').trigger("reset");
 						$("#infernalsettingsForm").hide();
 					})
-				});
-				
-				//User changed the reboot field
-				$( "#rebootField" ).change(function() {
-					checkRebootField();
 				});
 				
 				//user wants to create new settings
@@ -311,15 +304,6 @@
 				}
 			}
 			
-			function checkRebootField(){
-				var selectedRebootValue = $('#rebootField').val();
-				if(selectedRebootValue === "true"){
-					$('#rowRebootTime').show();
-				} else {
-					$('#rowRebootTime').hide();
-					$('#rebootTimeField').val(0);
-				}
-			}
 		/*]]>*/
 		</script>
 	</head>
@@ -410,53 +394,6 @@
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="maxLevelField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Max Level</label>
-					<div class="col-12  col-sm-6">
-						<input type="number" min="0" max="99" class="form-control" name="maxLevel" id="maxLevelField"/>
-						<span id="maxLevelError" class="invalid-feedback" style="display:none"></span>
-					</div>
-				</div>
-				<div class ="form-group row">
-					<label for="sleepTimeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Sleep Time</label>
-					<div class="col-12  col-sm-6">
-						<input type="number" min="0" max="24" class="form-control" name="sleepTime" id="sleepTimeField"/>
-						<span id="sleepTimeError" class="invalid-feedback" style="display:none"></span>
-					</div>
-				</div>
-				<div class ="form-group row">
-					<label for="playTimeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Play Time</label>
-					<div class="col-12  col-sm-6">
-						<input type="number" min="0" max="24" class="form-control" name="playTime" id="playTimeField"/>
-						<span id="playTimeError" class="invalid-feedback" style="display:none"></span>
-					</div>
-				</div>
-				<div class ="form-group row">
-					<label for="maxBeField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Max BE</label>
-					<div class="col-12  col-sm-6">
-						<input type="number" min="0" max="999999" class="form-control" name="maxBe" id="maxBeField"/>
-						<span id="maxBeError" class="invalid-feedback" style="display:none"></span>
-					</div>
-				</div>
-				<div class ="form-group row">
-					<label for="regionField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Region</label>
-					<div class="col-12  col-sm-6">
-						<select class="form-control" name="region" id="regionField">
-							<option th:each="region : ${T(net.nilsghesquiere.util.enums.Region).values()}" th:value="${region}" th:text="${region}"></option>
-						</select>
-						<span id="regionError" class="invalid-feedback" style="display:none"></span>
-					</div>
-				</div>
-				<div class ="form-group row">
-					<label for="aktiveField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Active</label>
-					<div class="col-12  col-sm-6">
-						<select class="form-control" name="aktive" id="aktiveField">
-							<option value="true">Yes</option>
-							<option value="false">No</option>
-						</select>
-						<span id="aktiveError" class="invalid-feedback" style="display:none"></span>
-					</div>
-				</div>
-				<div class ="form-group row">
 					<label for="surrenderField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Surrender</label>
 					<div class="col-12  col-sm-6">
 						<select class="form-control" name="surrender" id="surrenderField">
@@ -470,8 +407,8 @@
 					<label for="levelToBeginnerBotField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Medium Bots From Level</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="99" class="form-control" name="levelToBeginnerBot"  id="levelToBeginnerBotField"/>
+						<span id="levelToBeginnerBotError" class="invalid-feedback" style="display:none"></span>
 					</div>
-					<span id="levelToBeginnerBotError" class="invalid-feedback" style="display:none"></span>
 				</div>
 				<div class ="form-group row">
 					<label for="clientHideField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Client Hide</label>
@@ -725,13 +662,6 @@
 					</div>
 				</div>
 				<div class ="form-group row">
-					<label for="prioField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Priority</label>
-					<div class="col-12  col-sm-6">
-						<input type="number" min="1" max="9" class="form-control" name="prio" id="prioField"/>
-						<span id="prioError" class="invalid-feedback" style="display:none"></span>
-					</div>
-				</div>
-					<div class ="form-group row">
 					<label for="enableAutoExportField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Enable Auto Export</label>
 					<div class="col-12  col-sm-6">
 						<select class="form-control" name="enableAutoExport" id="enableAutoExportField">
