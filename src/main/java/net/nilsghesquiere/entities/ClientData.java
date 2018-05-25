@@ -12,14 +12,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import lombok.Data;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @Entity
@@ -27,9 +25,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class ClientData implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "clientid")
-	@JsonIgnore
 	private Client client;
 	@OneToMany(mappedBy="clientData",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@OrderBy("id")

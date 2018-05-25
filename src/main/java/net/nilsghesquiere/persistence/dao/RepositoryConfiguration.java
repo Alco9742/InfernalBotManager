@@ -1,5 +1,6 @@
 package net.nilsghesquiere.persistence.dao;
 
+import net.nilsghesquiere.entities.Client;
 import net.nilsghesquiere.entities.ClientData;
 import net.nilsghesquiere.entities.ClientSettings;
 import net.nilsghesquiere.entities.GlobalVariable;
@@ -39,7 +40,7 @@ public class RepositoryConfiguration {
 		return new RepositoryRestConfigurerAdapter() {
 			@Override
 			public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-				config.exposeIdsFor(User.class,LolAccount.class,InfernalSettings.class, GlobalVariable.class, ClientData.class, Queuer.class, QueuerLolAccount.class, Metric.class,ClientSettings.class, ImportSettings.class, UserSettings.class);
+				config.exposeIdsFor(User.class,LolAccount.class,InfernalSettings.class, GlobalVariable.class, Client.class, ClientData.class, Queuer.class, QueuerLolAccount.class, Metric.class, ClientSettings.class, ImportSettings.class, UserSettings.class);
 			}
 			
 			@Override 

@@ -164,6 +164,10 @@ public class LolAccountRestController {
 		//IMPORTSETTINGS
 		ImportSettings importSettings = importSettingsService.read(user.getUserSettings().getActiveImportSettings());
 		
+		if (importSettings == null){
+			//throw exception TODO
+		}
+		
 		//VARS
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		List<LolAccount> returnAccounts = new ArrayList<>();
@@ -260,13 +264,17 @@ public class LolAccountRestController {
 		List<LolAccount> importedAccounts = new ArrayList<>();
 		List<LolAccount> createdAccounts = new ArrayList<>();
 		
-		//IMPORTSETTING
-		ImportSettings importSettings = importSettingsService.read(importsettingsid);
-		
 		//USER CHECK
 		User user = userService.findUserByUserId(userid);
 		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
 			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//IMPORTSETTING
+		ImportSettings importSettings = importSettingsService.read(importsettingsid);
+		
+		if (importSettings == null){
+			//throw exception TODO
 		}
 		
 		//SIZE CHECK: geen bestanden groter dan 1 MB
@@ -328,13 +336,17 @@ public class LolAccountRestController {
 		List<LolAccount> importedAccounts = new ArrayList<>();
 		List<LolAccount> createdAccounts = new ArrayList<>();
 		
-		//IMPORTSETTING
-		ImportSettings importSettings = importSettingsService.read(importsettingsid);
-		
 		//USER CHECK
 		User user = userService.findUserByUserId(userid);
 		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
 			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//IMPORTSETTING
+		ImportSettings importSettings = importSettingsService.read(importsettingsid);
+		
+		if (importSettings == null){
+			//throw exception TODO
 		}
 		
 		//SIZE CHECK: geen bestanden groter dan 1 MB

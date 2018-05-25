@@ -132,6 +132,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					.antMatchers("/admin/**").hasRole(RoleEnum.ADMIN.getName())
 					.antMatchers("/user/**").hasAnyRole(RoleEnum.ADMIN.getName(),RoleEnum.USER.getName(),RoleEnum.PAID_USER.getName())
 					.antMatchers("/accounts/**").hasAnyRole(RoleEnum.ADMIN.getName(),RoleEnum.USER.getName(),RoleEnum.PAID_USER.getName())
+					.antMatchers("/queuers/**").hasAnyRole(RoleEnum.ADMIN.getName(),RoleEnum.USER.getName(),RoleEnum.PAID_USER.getName())
 					.antMatchers("/clients/**").hasAnyRole(RoleEnum.ADMIN.getName(),RoleEnum.USER.getName(),RoleEnum.PAID_USER.getName())
 					.antMatchers("/settings/**").hasAnyRole(RoleEnum.ADMIN.getName(),RoleEnum.USER.getName(),RoleEnum.PAID_USER.getName())
 					.antMatchers("/user/updatePassword*", "/user/savePassword*","/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")

@@ -1,6 +1,5 @@
 package net.nilsghesquiere.entities;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -27,15 +26,11 @@ public class Client {
 	private User user;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "infernalsettingsid")
-	@JsonIgnore
 	private InfernalSettings infernalSettings;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "clientsettingsid")
-	@JsonIgnore
 	private ClientSettings clientSettings;
-	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="clientdataid")
-	@JsonIgnore
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "client")
 	private ClientData clientData;
 	
 	public void setUser(User user) {

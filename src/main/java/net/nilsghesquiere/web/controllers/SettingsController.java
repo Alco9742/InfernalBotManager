@@ -28,7 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/settings")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
 public class SettingsController {
-	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(SettingsController.class);
 	private static final String CLIENTSETTINGS_VIEW = "settings/clientsettings";
 	private static final String INFERNALSETTINGS_VIEW = "settings/infernalsettings";
@@ -55,6 +54,7 @@ public class SettingsController {
 	public ModelAndView viewClientSettings(){
 		User currentUser = authenticationFacade.getAuthenticatedUser();
 		List<ClientSettings> clientSettingsList = clientSettingsService.findByUser(currentUser);
+		LOGGER.info("Loading Settings page for user [" + currentUser.getEmail() + "].");
 		return new ModelAndView(CLIENTSETTINGS_VIEW).addObject("clientSettingsList",clientSettingsList).addObject("currentUser", currentUser);
 	}
 	

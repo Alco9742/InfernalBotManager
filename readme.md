@@ -9,3 +9,5 @@
 <li>Better frontend (Angular?)</li>
 <li>OAuth2 authentication</li>
 </ul>
+
+--> Make client on server -> generate api key -> lock with hwid

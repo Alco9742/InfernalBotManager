@@ -64,7 +64,7 @@ public class AdminController {
 	@RequestMapping(method = RequestMethod.GET)
 	ModelAndView panel() {
 		Optional<User> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
-		LOGGER.info("Loading admin panel for " + currentUser.get().getEmail());
+		LOGGER.info("Loading admin page for " + currentUser.get().getEmail());
 		return new ModelAndView(PANEL_VIEW).addObject("currentUser");
 	}
 

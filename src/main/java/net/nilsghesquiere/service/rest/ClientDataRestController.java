@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/clients")
+@RequestMapping("/api/clientdata")
 public class ClientDataRestController {
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientDataRestController.class);

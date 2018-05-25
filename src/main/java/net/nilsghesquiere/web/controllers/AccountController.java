@@ -33,7 +33,7 @@ public class AccountController{
 	@RequestMapping(method = RequestMethod.GET)
 	ModelAndView list() {
 		Optional<User> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
-		LOGGER.info("Loading Accounts list for user [" + currentUser.get().getEmail() + "].");
+		LOGGER.info("Loading Accounts page for user [" + currentUser.get().getEmail() + "].");
 		return new ModelAndView(LIST_VIEW).addObject("currentUser", currentUser.get());
 		}
 }

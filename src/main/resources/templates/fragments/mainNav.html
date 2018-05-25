@@ -16,6 +16,9 @@
 				<li id="navClients" class="nav-item">
 					<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/clients}">Clients</a>
 				</li>
+				<li id="navQueuers" class="nav-item">
+					<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/queuers}">Queuers</a>
+				</li>
 				<li id="navSettings" class="nav-item">
 					<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/settings/clientsettings}">Settings</a>
 				</li>
