@@ -54,6 +54,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@SuppressWarnings("unused")
 	@Override
 	@Transactional
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -67,10 +68,13 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		
 		// == create initial roles
 		final List<Privilege> adminPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
+		final List<Privilege> moderatorPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
 		final List<Privilege> userPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, passwordPrivilege));
 		
 		final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
 		final Role userRole = createRoleIfNotFound("ROLE_USER", userPrivileges);
+		final Role moderatorRole = createRoleIfNotFound("ROLE_PAID_USER", userPrivileges);
+		final Role paidUserRole = createRoleIfNotFound("ROLE_PAID_USER", userPrivileges);
 		
 		// == create initial users
 		createUserIfNotFound("ghesquiere.nils@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(adminRole)));

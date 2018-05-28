@@ -255,8 +255,10 @@ public class LolAccountRestController {
 	//TODO add checks for importsettings
 	
 	//import with region in file
+	//TODO krijg hier een 404
 	@RequestMapping(value="/user/{userid}/import/{importsettingsid)", method=RequestMethod.POST)
 	public ResponseEntity<LolAccountWrapper> processUpload(@PathVariable Long userid, @PathVariable Long importsettingsid, @RequestParam MultipartFile file) throws IOException {
+		LOGGER.info("test");
 		//VARS
 		String error = "";
 		StringBuilder errorBuilder = new StringBuilder("");
@@ -270,13 +272,6 @@ public class LolAccountRestController {
 			throw new UserIsNotOwnerOfResourceException();
 		}
 		
-		//IMPORTSETTING
-		ImportSettings importSettings = importSettingsService.read(importsettingsid);
-		
-		if (importSettings == null){
-			//throw exception TODO
-		}
-		
 		//SIZE CHECK: geen bestanden groter dan 1 MB
 		if(file.getSize() > 1048576){
 			LOGGER.info("User " + userid + " attempted to upload a file of " + file.getSize() + " bytes");
@@ -287,6 +282,13 @@ public class LolAccountRestController {
 		if(!file.getContentType().equals("text/plain")){
 			LOGGER.info("User " + userid + " attempted to upload a file of type " + file.getContentType());
 			throw new UploadedFileContentTypeException();
+		}
+		
+		//IMPORTSETTING
+		ImportSettings importSettings = importSettingsService.read(importsettingsid);
+		
+		if (importSettings == null){
+			LOGGER.info("Importsettings null");
 		}
 		
 		//MAP THE INPUT TO LOLACCOUNTS & FILE FORM CHECK
@@ -326,7 +328,7 @@ public class LolAccountRestController {
 		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
 	}
 
-	//import with selected region
+	//import with selected region 
 	@RequestMapping(value="/user/{userid}/import/{importsettingsid}/region/{region}", method=RequestMethod.POST)
 	public ResponseEntity<LolAccountWrapper> processUploadRegion(@PathVariable Long userid,@PathVariable Long importsettingsid, @PathVariable Region region, @RequestParam MultipartFile file) throws IOException {
 		//VARS
@@ -342,13 +344,6 @@ public class LolAccountRestController {
 			throw new UserIsNotOwnerOfResourceException();
 		}
 		
-		//IMPORTSETTING
-		ImportSettings importSettings = importSettingsService.read(importsettingsid);
-		
-		if (importSettings == null){
-			//throw exception TODO
-		}
-		
 		//SIZE CHECK: geen bestanden groter dan 1 MB
 		if(file.getSize() > 1048576){
 			LOGGER.info("User " + userid + " attempted to upload a file of " + file.getSize() + " bytes");
@@ -359,6 +354,13 @@ public class LolAccountRestController {
 		if(!file.getContentType().equals("text/plain")){
 			LOGGER.info("User " + userid + " attempted to upload a file of type " + file.getContentType());
 			throw new UploadedFileContentTypeException();
+		}
+		
+		//IMPORTSETTING
+		ImportSettings importSettings = importSettingsService.read(importsettingsid);
+		
+		if (importSettings == null){
+			LOGGER.info("Importsettings null");
 		}
 		
 		//MAP THE INPUT TO LOLACCOUNTS & FILE FORM CHECK

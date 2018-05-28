@@ -21,14 +21,18 @@ import net.nilsghesquiere.web.dto.ClientSettingsDTO;
 import net.nilsghesquiere.web.dto.ImportSettingsDTO;
 import net.nilsghesquiere.web.dto.InfernalSettingsDTO;
 import net.nilsghesquiere.web.dto.UserSettingsDTO;
+import net.nilsghesquiere.web.error.ClientSettingsInUseException;
 import net.nilsghesquiere.web.error.ImportSettingsInUseException;
+import net.nilsghesquiere.web.error.InfernalSettingsInUseException;
 import net.nilsghesquiere.web.error.SettingsAlreadyExistException;
 import net.nilsghesquiere.web.error.SettingsNotFoundException;
 import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -130,7 +134,11 @@ public class SettingsRestController {
 		}
 		
 		//delete the settings
-		clientSettingsService.delete(clientSettingsById);
+		try{
+			clientSettingsService.delete(clientSettingsById);
+		} catch (DataIntegrityViolationException e){
+			throw new ClientSettingsInUseException(clientSettingsById.getName());
+		}
 		
 		//RESPONSE
 		wrapper = new ClientSettingsWrapper();
@@ -299,7 +307,11 @@ public class SettingsRestController {
 		}
 		
 		//delete the settings
-		infernalSettingsService.delete(infernalSettingsById);
+		try{
+			infernalSettingsService.delete(infernalSettingsById);
+		} catch (DataIntegrityViolationException e){
+			throw new InfernalSettingsInUseException(infernalSettingsById.getSets());
+		}
 		
 		//RESPONSE
 		wrapper = new InfernalSettingsWrapper();

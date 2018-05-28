@@ -14,7 +14,8 @@
 		
 		$(document).ready(function() {
 			var editor; 
-			var restlnk = "/api/accounts/user/" + /*[[${currentUser.id}]]*/
+			var restlnk = "/api/accounts/user/" + /*[[${currentUser.id}]]*/;
+			var activeImportSettings = /*[[${activeImportSettings}]]*/;
 			
 			$( "#navAccounts" ).addClass( "active" );
 			
@@ -292,6 +293,23 @@
 				}
 			});
 			
+			//handle importSettingsUsage checkbox change
+			$('#importSettingsUsage').change(function() {
+				if($(this).is(":checked")) {
+					$( "#importSettings" ).prop( "disabled", false );
+				} else {
+					$( "#importSettings" ).prop( "disabled", true );
+					// remove "selected" from any options that might already be selected
+					$('#importSettings option[selected="selected"]').each(
+						function() {
+							$(this).removeAttr('selected');
+						}
+					);
+					// mark the first option as selected
+					$("#importSettings option:first").attr('selected','selected');
+				}
+			});
+			
 			//import file
 			$('#importButton').click(function(event) {
 				var $importButton = $(this);
@@ -299,10 +317,17 @@
 				var $importReponse = $('#importResponse');
 				var $importRegionUsage  = $('#importRegionUsage');
 				var $importRegion = $('#importRegion');
+				var $importSettingsUsage  = $('#importSettingsUsage');
+				var $importSettings = $('#importSettings');
 				var file_data = $importFile.prop("files")[0];
 				var importlink = restlnk + "/import";
+				if ($importSettingsUsage.is(":checked")){
+					importlink = importlink + "/" + $importSettings.val();
+				} else {
+					importlink = importlink + "/" + activeImportSettings;
+				}
 				if ($importRegionUsage.is(":checked")){
-					importlink = importlink + "/" + $importRegion.val()
+					importlink = importlink + "/region/" + $importRegion.val();
 				}
 				$importReponse.val("OUTPUT\n")
 				$importButton.html('Importing...');
@@ -406,7 +431,7 @@
 								<input type="text" id="importFileInfo" class="form-control form-control-sm" readonly="readonly" placeholder="Select .txt file"/>
 								<input type="file" id="importFile" style="display: none;" />
 							</div>
-							<div class="input-group  mb-3">
+							<div class="input-group mb-3">
 								<div class="input-group-prepend">
 									<div class="input-group-text">
 										<input type="checkbox" id="importRegionUsage" aria-label="Region select" />
@@ -415,6 +440,17 @@
 								<select class="custom-select" id="importRegion" disabled="disabled">
 									<option value="" disabled="disabled" selected="selected">Use region import</option>
 									<option th:each="region : ${T(net.nilsghesquiere.util.enums.Region).values()}" th:value="${region}" th:text="${region}"></option>
+								</select>
+							</div>
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<input type="checkbox" id="importSettingsUsage" aria-label="Import settings select" />
+									</div>
+								</div>
+								<select class="custom-select" id="importSettings" disabled="disabled">
+									<option value="" disabled="disabled" selected="selected">Choose import setting</option>
+									<option th:each="instance : ${importSettingsMap}" th:value="${instance.key}" th:text="${instance.value}"></option>
 								</select>
 							</div>
 							<div class="form-group">

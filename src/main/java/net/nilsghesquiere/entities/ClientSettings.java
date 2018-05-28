@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.ToString;
 import net.nilsghesquiere.util.enums.ActionOnNoQueuers;
 import net.nilsghesquiere.util.enums.Region;
 import net.nilsghesquiere.web.dto.ClientSettingsDTO;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Data
 @Entity
 @Table(name ="clientsettings")
+@ToString(exclude="user")
 public class ClientSettings implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;

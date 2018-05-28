@@ -15,4 +15,5 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 	Client getByTag(@Param("tag")String tag);
 	void deleteById(Long id);
 	List<Client> findByUserId(Long userId);
+	Client getByUserIdAndTag(Long userId, String tag);
 }

@@ -69,4 +69,9 @@ public class ClientServiceImpl implements ClientService{
 	public List<Client> findByUserId(Long userId) {
 		return clientRepository.findByUserId(userId);
 	}
+
+	@Override
+	public Client getByUserIdAndTag(Long userid, String tag) {
+		return clientRepository.getByUserIdAndTag(userid, tag);
+	}
 }

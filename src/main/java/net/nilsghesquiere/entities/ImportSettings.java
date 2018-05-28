@@ -13,9 +13,7 @@ import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import net.nilsghesquiere.util.enums.Region;
 import net.nilsghesquiere.web.dto.ImportSettingsDTO;
-import net.nilsghesquiere.web.dto.InfernalSettingsDTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

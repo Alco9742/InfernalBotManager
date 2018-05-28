@@ -30,15 +30,18 @@ public class UserSettings implements Serializable{
 	@JsonIgnore
 	private User user;
 	private Long activeImportSettings;
+	private Integer maxQueuers;
 	
 	public UserSettings(){
 		this.activeImportSettings = 0L;
+		this.maxQueuers = 100000;
 	} 
 	
 	public UserSettings(Long id, Long activeImportSettings) {
 		super();
 		this.id = id;
 		this.activeImportSettings = activeImportSettings;
+		this.maxQueuers = 100000;
 	}
 	
 	public void updateFromDTO(UserSettingsDTO dto){

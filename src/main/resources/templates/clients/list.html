@@ -5,11 +5,12 @@
 		<script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
 		<script th:inline="javascript">
 		/*<![CDATA[*/
-		$(document).ready(function() {
-			var editor; 
-			
-			var restlnk = "/api/clients/user/" + /*[[${currentUser.id}]]*/
-			
+		var editor; 
+		var restlnk = "/api/clients/user/" + /*[[${currentUser.id}]]*/;
+		var clientSettingsMap = /*[[${clientSettingsMap}]]*/;
+		var infernalSettingsMap = /*[[${infernalSettingsMap}]]*/;
+		
+		$(document).ready(function() {			
 			editor = new $.fn.dataTable.Editor( {
 					ajax: {
 						create: {
@@ -34,7 +35,7 @@
 							type: 'POST',
 							contentType: "application/json; charset=utf-8",
 							dataType: "json",
-							url: restlnk + "delete",
+							url: restlnk + "/delete",
 							data: function ( d ) {
 								return JSON.stringify( d['data'] );
 							}
@@ -45,10 +46,18 @@
 						label: "ID",
 						name: "id",
 						def: "0",
-						type: 'readonly'
+						type: "hidden",
 					},{
 						label: "Tag",
 						name: "tag"
+					},{
+						label: "ClientSettings",
+						name: "clientSettings",
+						type: "select"
+					},{
+						label: "InfernalSettings",
+						name: "infernalSettings",
+						type: "select"
 					}],
 					idSrc:'id'
 			} );
@@ -67,27 +76,55 @@
 				},
 				columns: [
 				{ data: "id" },
-				{ data: "name"}
+				{ data: "tag"},
+				{ data: "clientSettings",
+					render: function ( data, type, row ) {
+						return clientSettingsMap[data];
+					}
+				},
+				{ data: "infernalSettings",
+					render: function ( data, type, row ) {
+						return infernalSettingsMap[data];
+					}
+				}
 				],
 				select: true,
 				buttons: [
 				{ extend: "create", editor: editor },
-				{ extend: "edit",   editor: editor },
-				{ extend: "remove", editor: editor },
-				{
-					extend: 'collection',
-					text: 'Export',
-					buttons: [
-						'copy',
-						'excel',
-						'csv',
-						'pdf',
-						'print'
-					]
-				}
+				{ extend: "editSingle",   editor: editor },
+				{ extend: "remove", editor: editor }
 				]
 			} );
+			fillClientSettingsOptions();
+			fillInfernalSettingsOptions();
 		} );
+		
+		//Select fields opvullen
+
+		var fillClientSettingsOptions = function(){
+			var clientSettingsOptions = [];
+			var option = {};
+			$.each(clientSettingsMap, function(i, e) {
+				option.value = i;
+				option.label = e;
+			 	clientSettingsOptions.push(option);
+			 	option = {};
+			});
+			editor.field('clientSettings').update(clientSettingsOptions);
+		};
+		
+		var fillInfernalSettingsOptions = function(){
+			var infernalSettingsOptions = [];
+			var option = {};
+			$.each(infernalSettingsMap, function(i, e) {
+				option.value = i;
+				option.label = e;
+				infernalSettingsOptions.push(option);
+			 	option = {};
+			});
+			editor.field('infernalSettings').update(infernalSettingsOptions);
+		};
+		
 		/*]]>*/
 		</script>
 	</head>
@@ -100,6 +137,8 @@
 				<tr>
 					<th>ID</th>
 					<th>Tag</th>
+					<th>ClientSettings</th>
+					<th>InfernalSettings</th>
 				</tr>
 			</thead>
 		</table>

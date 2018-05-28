@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Data
 @Entity
 @Table(name ="users")
-@EqualsAndHashCode(exclude={"infernalSettingsList","clientSettingsList", "lolAccounts", "clients", "importSettingsList"})
+@EqualsAndHashCode(exclude={"infernalSettingsList","clientSettingsList", "lolAccounts", "clients", "importSettingsList", "userSettings"})
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
@@ -171,6 +171,11 @@ public class User implements Serializable{
 		}
 	}
 	
+	public void setUserSettings(UserSettings userSettings){
+		this.userSettings = userSettings;
+		userSettings.setUser(this);
+	}
+
 	@Override
 	public String toString() {
 		String roleList = "[";
@@ -183,12 +188,7 @@ public class User implements Serializable{
 		roleList = roleList + "]";
 		return "User [id=" + id + ", email=" + email 
 				+ ", password=" + password + ", enabled=" + enabled
-				+ ", roles=" + roleList + " + #LolAccounts=" + lolAccounts.size() + "]";
+				+ ", roles=" + roleList + " + #LolAccounts=" + lolAccounts.size() + "#Clients=" + clients.size() + "]";
 	}
 	
-	public void setUserSettings(UserSettings userSettings){
-		this.userSettings = userSettings;
-		userSettings.setUser(this);
-	}
-
 }

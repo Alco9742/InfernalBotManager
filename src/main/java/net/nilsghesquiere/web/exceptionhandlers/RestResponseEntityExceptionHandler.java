@@ -1,6 +1,8 @@
 package net.nilsghesquiere.web.exceptionhandlers;
 
+import net.nilsghesquiere.web.error.ClientSettingsInUseException;
 import net.nilsghesquiere.web.error.ImportSettingsInUseException;
+import net.nilsghesquiere.web.error.InfernalSettingsInUseException;
 import net.nilsghesquiere.web.error.SettingsAlreadyExistException;
 import net.nilsghesquiere.web.error.SettingsNotFoundException;
 import net.nilsghesquiere.web.error.UploadedFileContentTypeException;
@@ -68,6 +70,20 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	
 	@ExceptionHandler({ ImportSettingsInUseException.class })
 	public ResponseEntity<Object> handleImportSettingsInUse(RuntimeException ex, WebRequest request) {
+		LOGGER.error("404 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse(ex.getMessage(), "SettingsInUseError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler({ InfernalSettingsInUseException.class })
+	public ResponseEntity<Object> handleInfernalSettingsInUse(RuntimeException ex, WebRequest request) {
+		LOGGER.error("404 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse(ex.getMessage(), "SettingsInUseError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler({ ClientSettingsInUseException.class })
+	public ResponseEntity<Object> handleClientSettingsInUse(RuntimeException ex, WebRequest request) {
 		LOGGER.error("404 Status Code", ex);
 		GenericResponse bodyOfResponse = new GenericResponse(ex.getMessage(), "SettingsInUseError");
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);

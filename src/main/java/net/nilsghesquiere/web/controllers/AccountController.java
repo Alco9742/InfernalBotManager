@@ -1,7 +1,10 @@
 package net.nilsghesquiere.web.controllers;
 
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import net.nilsghesquiere.entities.ImportSettings;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.web.annotations.ViewController;
@@ -23,17 +26,19 @@ public class AccountController{
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 	private static final String LIST_VIEW = "accounts/list";
 	
-	private final AuthenticationFacade authenticationFacade;
-
 	@Autowired
-	public AccountController(AuthenticationFacade authenticationFacade) {
-		this.authenticationFacade = authenticationFacade;
-	}
+	private AuthenticationFacade authenticationFacade;
 
 	@RequestMapping(method = RequestMethod.GET)
 	ModelAndView list() {
-		Optional<User> currentUser = authenticationFacade.getOptionalAuthenticatedUser();
-		LOGGER.info("Loading Accounts page for user [" + currentUser.get().getEmail() + "].");
-		return new ModelAndView(LIST_VIEW).addObject("currentUser", currentUser.get());
+		Map<Long,String> importSettingsMap = new HashMap<>();
+		User currentUser = authenticationFacade.getAuthenticatedUser();
+		List<ImportSettings> importSettingsList = currentUser.getImportSettingsList();
+		for(ImportSettings importSettings : importSettingsList){
+			importSettingsMap.put(importSettings.getId(), importSettings.getName());
 		}
+		Long activeImportSettings = currentUser.getUserSettings().getActiveImportSettings();
+		LOGGER.info("Loading Accounts page for user [" + currentUser.getEmail() + "].");
+		return new ModelAndView(LIST_VIEW).addObject("currentUser", currentUser).addObject("importSettingsMap",importSettingsMap).addObject("activeImportSettings",activeImportSettings);
+	}
 }

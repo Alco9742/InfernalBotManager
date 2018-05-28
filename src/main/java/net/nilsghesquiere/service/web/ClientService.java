@@ -13,4 +13,5 @@ public interface ClientService {
 	List<Client> findAll();
 	void delete(Client client);
 	List<Client> findByUserId(Long userid);
+	Client getByUserIdAndTag(Long userid, String tag);
 }

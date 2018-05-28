@@ -11,12 +11,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @Entity
 @Table(name ="clients")
+@EqualsAndHashCode(exclude={"user","clientSettings","infernalSettings","clientData"})
 public class Client {
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	private String tag;
@@ -31,7 +33,20 @@ public class Client {
 	@JoinColumn(name = "clientsettingsid")
 	private ClientSettings clientSettings;
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "client")
+	@JsonIgnore
 	private ClientData clientData;
+	
+	public Client() {}
+	
+	public Client(String tag, User user, InfernalSettings infernalSettings,
+			ClientSettings clientSettings) {
+		super();
+		this.tag = tag;
+		this.user = user;
+		this.infernalSettings = infernalSettings;
+		this.clientSettings = clientSettings;
+	}
+	
 	
 	public void setUser(User user) {
 		if (this.user != null && this.user.getClients().contains(this)){
@@ -43,4 +58,8 @@ public class Client {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return "Client [id=" + id + ", tag=" + tag + "#user=" + user.getEmail() + "]";
+	}
 }

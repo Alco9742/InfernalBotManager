@@ -13,6 +13,7 @@ import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import net.nilsghesquiere.web.dto.InfernalSettingsDTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name ="infernalsettings")
 @EqualsAndHashCode(exclude={"user"})
+@ToString(exclude="user")
 public class InfernalSettings implements Serializable{
 	private static final long serialVersionUID = 1L;
 	//Manager VARS
@@ -320,4 +322,6 @@ public class InfernalSettings implements Serializable{
 			user.addInfernalSettings(this);
 		}
 	}
+	
+	
 }
