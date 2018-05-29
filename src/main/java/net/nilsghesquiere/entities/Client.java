@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Client {
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	private String tag;
+	private String HWID;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "userid")
 	@JsonIgnore
@@ -42,6 +43,7 @@ public class Client {
 			ClientSettings clientSettings) {
 		super();
 		this.tag = tag;
+		this.HWID = "";
 		this.user = user;
 		this.infernalSettings = infernalSettings;
 		this.clientSettings = clientSettings;

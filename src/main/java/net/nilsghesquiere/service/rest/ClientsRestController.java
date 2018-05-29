@@ -65,7 +65,7 @@ public class ClientsRestController {
 		//PROCESSING
 		List<Client> clients = clientService.findByUserId(userid);
 		for (Client client: clients){
-			ClientDTO dto = new ClientDTO(client.getId(),client.getTag(),client.getClientSettings().getId(),client.getInfernalSettings().getId());
+			ClientDTO dto = new ClientDTO(client.getId(),client.getTag(),client.getHWID(),client.getClientSettings().getId(),client.getInfernalSettings().getId());
 			clientDTOList.add(dto);
 		}
 		//RESPONSE
@@ -101,6 +101,12 @@ public class ClientsRestController {
 			if(error.isEmpty() && clientDTO.getTag().trim().isEmpty()){
 				error ="Tag can't be empty";
 			}
+			
+			//check if one of the settings is null
+			if(error.isEmpty() && (clientDTO.getClientSettings() == null || clientDTO.getInfernalSettings() == null)){
+				error ="Settings can't be null";
+			}
+			
 			//Check if the client tag already exists for the user or not
 			Client existingClient = clientService.getByUserIdAndTag(userid, clientDTO.getTag());
 			if (error.isEmpty() && existingClient != null){
@@ -113,7 +119,7 @@ public class ClientsRestController {
 				InfernalSettings infernalSettings = infernalSettingsService.read(clientDTO.getInfernalSettings());
 				Client newClient = new Client(clientDTO.getTag(),user,infernalSettings,clientSettings);	
 				Client createdClient = clientService.create(newClient);
-				ClientDTO returnDTO = new ClientDTO(createdClient.getId(),createdClient.getTag(),createdClient.getClientSettings().getId(),createdClient.getInfernalSettings().getId());
+				ClientDTO returnDTO = new ClientDTO(createdClient.getId(),createdClient.getTag(),"",createdClient.getClientSettings().getId(),createdClient.getInfernalSettings().getId());
 				returnClientDTOList.add(returnDTO);
 			}
 		}
@@ -150,6 +156,12 @@ public class ClientsRestController {
 			if(error.isEmpty() && dto.getTag().trim().isEmpty()){
 				error ="Tag can't be empty";
 			}
+			
+			//check if one of the settings is null
+			if(error.isEmpty() && (dto.getClientSettings() == null || dto.getInfernalSettings() == null)){
+				error ="Settings can't be null";
+			}
+			
 			if (error.isEmpty()){
 				//Check if the client tag already exists for the user or not
 				Client existingClient = clientService.getByUserIdAndTag(userid, dto.getTag());
@@ -165,7 +177,7 @@ public class ClientsRestController {
 				oldClient.setClientSettings(clientSettings);
 				oldClient.setInfernalSettings(infernalSettings);
 				Client updatedClient = clientService.update(oldClient);
-				ClientDTO returnDTO = new ClientDTO(updatedClient.getId(),updatedClient.getTag(), updatedClient.getClientSettings().getId(), updatedClient.getInfernalSettings().getId()); 
+				ClientDTO returnDTO = new ClientDTO(updatedClient.getId(),updatedClient.getTag(),updatedClient.getHWID(), updatedClient.getClientSettings().getId(), updatedClient.getInfernalSettings().getId()); 
 				returnClientDTOList.add(returnDTO);
 			}
 		}
@@ -192,11 +204,35 @@ public class ClientsRestController {
 			//do nothing if users don't match, should not happen unless someone is trying something funky
 			if(client != null && client.getUser().equals(user)){
 				clientService.delete(client);
-				ClientDTO deletedDTO = new ClientDTO(client.getId(),client.getTag(),client.getClientSettings().getId(),client.getInfernalSettings().getId());
+				ClientDTO deletedDTO = new ClientDTO(client.getId(),client.getTag(), client.getHWID(),client.getClientSettings().getId(),client.getInfernalSettings().getId());
 				deletedClientDTOs.add(deletedDTO);
 			}
 		}
 		wrapper.add("data",deletedClientDTOs);
+		return new ResponseEntity<ClientDTOWrapper>(wrapper,HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/user/{userid}/resetHWID",method = RequestMethod.PUT)
+	public ResponseEntity<ClientDTOWrapper> resetHWID(@PathVariable Long userid,@RequestBody Long[] ids) {
+		ClientDTOWrapper wrapper = new ClientDTOWrapper();
+		List<ClientDTO> returnDtos = new ArrayList<>();
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		for (Long id : ids){
+			Client client = clientService.read(id);
+			if (client != null && client.getUser().equals(user)){
+				client.setHWID("");
+				Client updatedClient = clientService.update(client);
+				ClientDTO returnDto = new ClientDTO(updatedClient.getId(), updatedClient.getTag(),updatedClient.getHWID(),updatedClient.getClientSettings().getId(),updatedClient.getInfernalSettings().getId());
+				returnDtos.add(returnDto);
+			}
+		}
+		wrapper.add("data",returnDtos);
 		return new ResponseEntity<ClientDTOWrapper>(wrapper,HttpStatus.OK);
 	}
 	

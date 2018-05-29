@@ -1,5 +1,6 @@
 package net.nilsghesquiere.web.exceptionhandlers;
 
+import net.nilsghesquiere.web.error.ActiveImportSettingsNotSelectedException;
 import net.nilsghesquiere.web.error.ClientSettingsInUseException;
 import net.nilsghesquiere.web.error.ImportSettingsInUseException;
 import net.nilsghesquiere.web.error.InfernalSettingsInUseException;
@@ -66,6 +67,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		LOGGER.error("404 Status Code", ex);
 		GenericResponse bodyOfResponse = new GenericResponse("Settings with that name already exist, choose a unique name", "SettingsAlreadyExistError");
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
+	}
+	
+	@ExceptionHandler({ ActiveImportSettingsNotSelectedException.class })
+	public ResponseEntity<Object> handleActiveImportSettingsNotSelected(RuntimeException ex, WebRequest request) {
+		LOGGER.error("404 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("No active import settings selected, edit your user settings on the settings page.", "ActiveImportSettingsNotSelectedError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 	
 	@ExceptionHandler({ ImportSettingsInUseException.class })

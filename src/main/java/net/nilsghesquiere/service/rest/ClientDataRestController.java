@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.nilsghesquiere.entities.ClientData;
+import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.ClientDataService;
 import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.ClientDataMap;
 import net.nilsghesquiere.util.wrappers.ClientDataWrapper;
+import net.nilsghesquiere.util.wrappers.LolAccountWrapper;
 import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 
 import org.slf4j.Logger;
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.common.base.Preconditions;
 
 @RestController
 @RequestMapping("/api/clientdata")
@@ -126,4 +131,5 @@ public class ClientDataRestController {
 		wrapper.add("data",deletedClientDatas);
 		return new ResponseEntity<ClientDataWrapper>(wrapper,HttpStatus.OK);
 	}	
+	
 }

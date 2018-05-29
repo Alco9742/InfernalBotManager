@@ -344,6 +344,10 @@
 					$importReponse.val($importReponse.val() + "No region selected");
 					$importButton.html('Import');
 					$importButton.prop("disabled",false);
+				} else if ($importSettingsUsage.is(":checked") && $importSettings.val() === null){
+					$importReponse.val($importReponse.val() + "No import settings selected");
+					$importButton.html('Import');
+					$importButton.prop("disabled",false);
 				} else {
 					var form_data = new FormData();
 					form_data.append("file", file_data);

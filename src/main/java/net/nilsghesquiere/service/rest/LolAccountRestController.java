@@ -23,6 +23,8 @@ import net.nilsghesquiere.util.wrappers.LolAccountWrapper;
 import net.nilsghesquiere.util.wrappers.LolMixedAccountMap;
 import net.nilsghesquiere.util.wrappers.StringResponseMap;
 import net.nilsghesquiere.web.error.AccountNotFoundException;
+import net.nilsghesquiere.web.error.ActiveImportSettingsNotSelectedException;
+import net.nilsghesquiere.web.error.SettingsNotFoundException;
 import net.nilsghesquiere.web.error.UploadedFileContentTypeException;
 import net.nilsghesquiere.web.error.UploadedFileEmptyException;
 import net.nilsghesquiere.web.error.UploadedFileMalformedException;
@@ -162,10 +164,16 @@ public class LolAccountRestController {
 		}
 		
 		//IMPORTSETTINGS
-		ImportSettings importSettings = importSettingsService.read(user.getUserSettings().getActiveImportSettings());
+		Long activeUserSettingsId = user.getUserSettings().getActiveImportSettings();
+		if(activeUserSettingsId == 0){
+			throw new ActiveImportSettingsNotSelectedException();
+		}
+		
+		ImportSettings importSettings = importSettingsService.read(activeUserSettingsId);
 		
 		if (importSettings == null){
-			//throw exception TODO
+			//should never get here
+			throw new SettingsNotFoundException(activeUserSettingsId);
 		}
 		
 		//VARS
@@ -256,7 +264,7 @@ public class LolAccountRestController {
 	
 	//import with region in file
 	//TODO krijg hier een 404
-	@RequestMapping(value="/user/{userid}/import/{importsettingsid)", method=RequestMethod.POST)
+	@RequestMapping(value="/user/{userid}/import/{importsettingsid}", method=RequestMethod.POST)
 	public ResponseEntity<LolAccountWrapper> processUpload(@PathVariable Long userid, @PathVariable Long importsettingsid, @RequestParam MultipartFile file) throws IOException {
 		LOGGER.info("test");
 		//VARS
@@ -285,10 +293,15 @@ public class LolAccountRestController {
 		}
 		
 		//IMPORTSETTING
+		
+		if(importsettingsid == 0){
+			throw new ActiveImportSettingsNotSelectedException();
+		}
+		
 		ImportSettings importSettings = importSettingsService.read(importsettingsid);
 		
 		if (importSettings == null){
-			LOGGER.info("Importsettings null");
+			throw new SettingsNotFoundException(importsettingsid);
 		}
 		
 		//MAP THE INPUT TO LOLACCOUNTS & FILE FORM CHECK
@@ -356,11 +369,15 @@ public class LolAccountRestController {
 			throw new UploadedFileContentTypeException();
 		}
 		
+		if(importsettingsid == 0){
+			throw new ActiveImportSettingsNotSelectedException();
+		}
+		
 		//IMPORTSETTING
 		ImportSettings importSettings = importSettingsService.read(importsettingsid);
 		
 		if (importSettings == null){
-			LOGGER.info("Importsettings null");
+			throw new SettingsNotFoundException(importsettingsid);
 		}
 		
 		//MAP THE INPUT TO LOLACCOUNTS & FILE FORM CHECK
