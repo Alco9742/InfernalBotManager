@@ -1,5 +1,7 @@
 package net.nilsghesquiere.entities;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,6 +14,7 @@ import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.nilsghesquiere.util.enums.ClientStatus;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,6 +39,8 @@ public class Client {
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "client")
 	@JsonIgnore
 	private ClientData clientData;
+	private LocalDateTime lastPing;
+	private ClientStatus clientStatus;
 	
 	public Client() {}
 	
@@ -47,6 +52,8 @@ public class Client {
 		this.user = user;
 		this.infernalSettings = infernalSettings;
 		this.clientSettings = clientSettings;
+		this.clientStatus = ClientStatus.UNASSIGNED;
+		this.lastPing = null;
 	}
 	
 	

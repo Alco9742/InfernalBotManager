@@ -31,8 +31,6 @@ public class ClientSettingsDTO implements Serializable{
 	@NotNull
 	private Integer accountBufferAmount;
 	@NotNull
-	private Boolean uploadNewAccounts;
-	@NotNull
 	private Boolean reboot;
 	@NotNull
 	private Integer rebootTime;
@@ -50,7 +48,6 @@ public class ClientSettingsDTO implements Serializable{
 		this.infernalPath = "";
 		this.queuerAmount = 0;
 		this.accountBufferAmount = 0;
-		this.uploadNewAccounts = false;
 		this.reboot = false;
 		this.rebootTime = 0;
 		this.fetchInfernalSettings = false;
@@ -60,7 +57,7 @@ public class ClientSettingsDTO implements Serializable{
 
 	public ClientSettingsDTO(String name, Region clientRegion,
 			String infernalPath, Integer queuerAmount,
-			Integer accountBufferAmount, Boolean uploadNewAccounts,
+			Integer accountBufferAmount,
 			Boolean reboot, Integer rebootTime, Boolean fetchInfernalSettings,
 			ActionOnNoQueuers actionOnNoQueuers, Boolean debug) {
 		super();
@@ -70,7 +67,6 @@ public class ClientSettingsDTO implements Serializable{
 		this.infernalPath = infernalPath;
 		this.queuerAmount = queuerAmount;
 		this.accountBufferAmount = accountBufferAmount;
-		this.uploadNewAccounts = uploadNewAccounts;
 		this.reboot = reboot;
 		this.rebootTime = rebootTime;
 		this.fetchInfernalSettings = fetchInfernalSettings;
@@ -79,7 +75,7 @@ public class ClientSettingsDTO implements Serializable{
 	}
 	public ClientSettingsDTO(Long id, String name, Region clientRegion,
 			String infernalPath, Integer queuerAmount,
-			Integer accountBufferAmount, Boolean uploadNewAccounts,
+			Integer accountBufferAmount,
 			Boolean reboot, Integer rebootTime, Boolean fetchInfernalSettings,
 			ActionOnNoQueuers actionOnNoQueuers, Boolean debug) {
 		super();
@@ -89,7 +85,6 @@ public class ClientSettingsDTO implements Serializable{
 		this.infernalPath = infernalPath;
 		this.queuerAmount = queuerAmount;
 		this.accountBufferAmount = accountBufferAmount;
-		this.uploadNewAccounts = uploadNewAccounts;
 		this.reboot = reboot;
 		this.rebootTime = rebootTime;
 		this.fetchInfernalSettings = fetchInfernalSettings;
@@ -104,7 +99,6 @@ public class ClientSettingsDTO implements Serializable{
 		this.infernalPath = settings.getInfernalPath();
 		this.queuerAmount = settings.getQueuerAmount();
 		this.accountBufferAmount = settings.getAccountBufferAmount();
-		this.uploadNewAccounts = settings.getUploadNewAccounts();
 		this.reboot = settings.getReboot();
 		this.rebootTime = settings.getRebootTime();
 		this.fetchInfernalSettings = settings.getFetchInfernalSettings();

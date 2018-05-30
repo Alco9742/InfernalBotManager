@@ -11,9 +11,11 @@ import net.nilsghesquiere.service.web.ClientService;
 import net.nilsghesquiere.service.web.ClientSettingsService;
 import net.nilsghesquiere.service.web.InfernalSettingsService;
 import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.util.enums.ClientStatus;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.ClientDTOMap;
 import net.nilsghesquiere.util.wrappers.ClientDTOWrapper;
+import net.nilsghesquiere.util.wrappers.ClientSingleWrapper;
 import net.nilsghesquiere.web.dto.ClientDTO;
 import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 
@@ -65,7 +67,7 @@ public class ClientsRestController {
 		//PROCESSING
 		List<Client> clients = clientService.findByUserId(userid);
 		for (Client client: clients){
-			ClientDTO dto = new ClientDTO(client.getId(),client.getTag(),client.getHWID(),client.getClientSettings().getId(),client.getInfernalSettings().getId());
+			ClientDTO dto = new ClientDTO(client.getId(),client.getTag(),client.getHWID(),client.getClientSettings().getId(),client.getInfernalSettings().getId(),client.getClientStatus());
 			clientDTOList.add(dto);
 		}
 		//RESPONSE
@@ -119,7 +121,7 @@ public class ClientsRestController {
 				InfernalSettings infernalSettings = infernalSettingsService.read(clientDTO.getInfernalSettings());
 				Client newClient = new Client(clientDTO.getTag(),user,infernalSettings,clientSettings);	
 				Client createdClient = clientService.create(newClient);
-				ClientDTO returnDTO = new ClientDTO(createdClient.getId(),createdClient.getTag(),"",createdClient.getClientSettings().getId(),createdClient.getInfernalSettings().getId());
+				ClientDTO returnDTO = new ClientDTO(createdClient.getId(),createdClient.getTag(),"",createdClient.getClientSettings().getId(),createdClient.getInfernalSettings().getId(),createdClient.getClientStatus());
 				returnClientDTOList.add(returnDTO);
 			}
 		}
@@ -177,7 +179,7 @@ public class ClientsRestController {
 				oldClient.setClientSettings(clientSettings);
 				oldClient.setInfernalSettings(infernalSettings);
 				Client updatedClient = clientService.update(oldClient);
-				ClientDTO returnDTO = new ClientDTO(updatedClient.getId(),updatedClient.getTag(),updatedClient.getHWID(), updatedClient.getClientSettings().getId(), updatedClient.getInfernalSettings().getId()); 
+				ClientDTO returnDTO = new ClientDTO(updatedClient.getId(),updatedClient.getTag(),updatedClient.getHWID(), updatedClient.getClientSettings().getId(), updatedClient.getInfernalSettings().getId(),updatedClient.getClientStatus()); 
 				returnClientDTOList.add(returnDTO);
 			}
 		}
@@ -204,7 +206,7 @@ public class ClientsRestController {
 			//do nothing if users don't match, should not happen unless someone is trying something funky
 			if(client != null && client.getUser().equals(user)){
 				clientService.delete(client);
-				ClientDTO deletedDTO = new ClientDTO(client.getId(),client.getTag(), client.getHWID(),client.getClientSettings().getId(),client.getInfernalSettings().getId());
+				ClientDTO deletedDTO = new ClientDTO(client.getId(),client.getTag(), client.getHWID(),client.getClientSettings().getId(),client.getInfernalSettings().getId(),client.getClientStatus());
 				deletedClientDTOs.add(deletedDTO);
 			}
 		}
@@ -227,8 +229,9 @@ public class ClientsRestController {
 			Client client = clientService.read(id);
 			if (client != null && client.getUser().equals(user)){
 				client.setHWID("");
+				client.setClientStatus(ClientStatus.UNASSIGNED);
 				Client updatedClient = clientService.update(client);
-				ClientDTO returnDto = new ClientDTO(updatedClient.getId(), updatedClient.getTag(),updatedClient.getHWID(),updatedClient.getClientSettings().getId(),updatedClient.getInfernalSettings().getId());
+				ClientDTO returnDto = new ClientDTO(updatedClient.getId(), updatedClient.getTag(),updatedClient.getHWID(),updatedClient.getClientSettings().getId(),updatedClient.getInfernalSettings().getId(),updatedClient.getClientStatus());
 				returnDtos.add(returnDto);
 			}
 		}
@@ -236,4 +239,24 @@ public class ClientsRestController {
 		return new ResponseEntity<ClientDTOWrapper>(wrapper,HttpStatus.OK);
 	}
 	
+	
+	//Methods for the InfernalBotManagerClient
+	@RequestMapping(path = "/user/{userid}/tag/{tag}", method = RequestMethod.GET)
+	public ResponseEntity<ClientSingleWrapper> findByUserIdAndTag(@PathVariable Long userid, @PathVariable String tag) {
+		ClientSingleWrapper wrapper = new ClientSingleWrapper();
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//PROCESSING
+		Client client = clientService.getByUserIdAndTag(userid, tag);
+		
+		//RESPONSE
+		wrapper.add(client.getId().toString(), client);
+		
+		//RETURN
+		return new ResponseEntity<ClientSingleWrapper>(wrapper, HttpStatus.OK);
+	}
 }

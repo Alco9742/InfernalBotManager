@@ -29,11 +29,10 @@ public class ClientSettings implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	private String name;
+	private Region clientRegion;
 	private String infernalPath;
 	private Integer queuerAmount;
 	private Integer accountBufferAmount;
-	private Boolean uploadNewAccounts;
-	private Region clientRegion;
 	private Boolean reboot;
 	private Integer rebootTime;
 	private Boolean fetchInfernalSettings;
@@ -50,7 +49,6 @@ public class ClientSettings implements Serializable{
 		this.infernalPath = "";
 		this.queuerAmount = 1;
 		this.accountBufferAmount = 0;
-		this.uploadNewAccounts = false;
 		this.clientRegion = Region.EUW;
 		this.reboot = false;
 		this.rebootTime = 0;
@@ -67,7 +65,6 @@ public class ClientSettings implements Serializable{
 		this.infernalPath = dto.getInfernalPath();
 		this.queuerAmount = dto.getQueuerAmount();
 		this.accountBufferAmount = dto.getAccountBufferAmount();
-		this.uploadNewAccounts = dto.getUploadNewAccounts();
 		this.clientRegion = dto.getClientRegion();
 		this.reboot = dto.getReboot();
 		this.rebootTime = dto.getRebootTime();
@@ -81,7 +78,6 @@ public class ClientSettings implements Serializable{
 		this.infernalPath = dto.getInfernalPath();
 		this.queuerAmount = dto.getQueuerAmount();
 		this.accountBufferAmount = dto.getAccountBufferAmount();
-		this.uploadNewAccounts = dto.getUploadNewAccounts();
 		this.clientRegion = dto.getClientRegion();
 		this.reboot = dto.getReboot();
 		this.rebootTime = dto.getRebootTime();
@@ -94,7 +90,6 @@ public class ClientSettings implements Serializable{
 		clientSettings.setInfernalPath(dto.getInfernalPath());
 		clientSettings.setQueuerAmount(dto.getQueuerAmount());
 		clientSettings.setAccountBufferAmount(dto.getAccountBufferAmount());
-		clientSettings.setUploadNewAccounts(dto.getUploadNewAccounts());
 		clientSettings.setClientRegion(dto.getClientRegion());
 		clientSettings.setReboot(dto.getReboot());
 		clientSettings.setRebootTime(dto.getRebootTime());

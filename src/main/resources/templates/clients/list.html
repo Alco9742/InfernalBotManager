@@ -65,6 +65,11 @@
 						label: "InfernalSettings",
 						name: "infernalSettings",
 						type: "select"
+					},{
+						label: "Status",
+						name: "clientStatus",
+						type: "hidden",
+						def: "UNASSIGNED"
 					}],
 					idSrc:'id'
 			} );
@@ -94,7 +99,8 @@
 					render: function ( data, type, row ) {
 						return infernalSettingsMap[data];
 					}
-				}
+				},
+				{ data: "clientStatus"}
 				],
 				columnDefs: [
 					{ targets: [0,2], visible: false}
@@ -173,6 +179,7 @@
 					<th>HWID</th>
 					<th>ClientSettings</th>
 					<th>InfernalSettings</th>
+					<th>ClientStatus</th>
 				</tr>
 			</thead>
 		</table>
