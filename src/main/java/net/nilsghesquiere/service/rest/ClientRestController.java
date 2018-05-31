@@ -32,9 +32,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/clients")
-public class ClientsRestController {
+public class ClientRestController {
 	@SuppressWarnings("unused")
-	private static final Logger LOGGER = LoggerFactory.getLogger(ClientsRestController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClientRestController.class);
 	
 	@Autowired 
 	private ClientService clientService;
@@ -255,6 +255,35 @@ public class ClientsRestController {
 		
 		//RESPONSE
 		wrapper.add("data", client);
+		
+		//RETURN
+		return new ResponseEntity<ClientSingleWrapper>(wrapper, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/user/{userid}/client/{clientid}/register", method = RequestMethod.PUT)
+	public ResponseEntity<ClientSingleWrapper> registerHWID(@PathVariable Long userid, @PathVariable Long clientid, @RequestBody String hwid) {
+		ClientSingleWrapper wrapper = new ClientSingleWrapper();
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//PROCESSING
+		Client client = clientService.read(clientid);
+		
+		//USER CHECK 2;
+		if(!client.getUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		if(client.getHWID().trim().isEmpty()){
+			client.setHWID(hwid);
+			Client updatedClient = clientService.update(client);
+			wrapper.add("data", updatedClient);
+		} else {
+			wrapper.add("data", client);
+		}
 		
 		//RETURN
 		return new ResponseEntity<ClientSingleWrapper>(wrapper, HttpStatus.OK);
