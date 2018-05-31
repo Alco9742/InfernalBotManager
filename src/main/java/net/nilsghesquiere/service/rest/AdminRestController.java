@@ -5,20 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import net.nilsghesquiere.entities.GlobalVariable;
-import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.Metric;
 import net.nilsghesquiere.entities.Role;
 import net.nilsghesquiere.entities.User;
@@ -35,6 +22,18 @@ import net.nilsghesquiere.util.wrappers.MetricWrapper;
 import net.nilsghesquiere.util.wrappers.UserMap;
 import net.nilsghesquiere.util.wrappers.UserWrapper;
 import net.nilsghesquiere.web.dto.UserAdminDTO;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -282,8 +281,6 @@ public class AdminRestController {
 			user.setRoles(roles);
 			userService.create(user);
 			User createdUser = userService.findUserByEmail(dto.getEmail());
-			InfernalSettings inferalSettings = infernalSettingsService.create(new InfernalSettings(createdUser));
-			user.addInfernalSettings(inferalSettings);
 			user = createdUser;
 		} else {
 			user.setEmail(dto.getEmail());

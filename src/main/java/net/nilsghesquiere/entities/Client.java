@@ -17,6 +17,7 @@ import lombok.EqualsAndHashCode;
 import net.nilsghesquiere.util.enums.ClientStatus;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 @Data
 @Entity
@@ -32,9 +33,11 @@ public class Client {
 	private User user;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "infernalsettingsid")
+	@JsonUnwrapped
 	private InfernalSettings infernalSettings;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "clientsettingsid")
+	@JsonUnwrapped
 	private ClientSettings clientSettings;
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "client")
 	@JsonIgnore

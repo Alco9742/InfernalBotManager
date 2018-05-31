@@ -24,6 +24,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 
 @Data
@@ -34,15 +35,18 @@ public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	@Column(unique=true)
+	@JsonIgnore
 	private String email;
 	@JsonIgnore
 	private String password;
+	@JsonIgnore
 	private boolean enabled;
 	@ManyToMany
 	@JoinTable(
 			name="users_roles",
 			joinColumns=@JoinColumn(name="userid", referencedColumnName="id"),
 			inverseJoinColumns=@JoinColumn(name="roleid", referencedColumnName="id"))
+	@JsonIgnore
 	private Collection<Role> roles;
 	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@OrderBy("id")
@@ -66,7 +70,7 @@ public class User implements Serializable{
 	private List<ImportSettings>importSettingsList;
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@OrderBy("id")
-	@JsonIgnore
+	@JsonUnwrapped
 	private UserSettings userSettings;
 	
 	public User() {

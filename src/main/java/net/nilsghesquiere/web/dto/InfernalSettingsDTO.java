@@ -29,13 +29,7 @@ public class InfernalSettingsDTO implements Serializable{
 	@NotNull
 	private Integer timeSpan;
 	@NotNull
-	private Boolean autoLogin;
-	@NotNull
 	private Boolean autoBotStart;
-	//ImExPortSettings VARS
-	@NotNull
-	@NotEmpty
-	private String wildcard;
 	//AutoqueuerSettings VARS
 	@NotNull
 	private Boolean surrender;
@@ -123,7 +117,7 @@ public class InfernalSettingsDTO implements Serializable{
 	
 	public InfernalSettingsDTO(Long id, String sets, Integer groups,
 			String clientPath, String clientVersion, Integer timeSpan,
-			Boolean autoLogin, Boolean autoBotStart, String wildcard, Boolean surrender,
+			Boolean autoBotStart, Boolean surrender,
 			Integer levelToBeginnerBot, Boolean clientHide, Boolean leaderHide,
 			Boolean consoleHide, Boolean softEndDefault, Integer softEndValue,
 			Boolean queuerAutoClose, Integer queueCloseValue,
@@ -146,9 +140,7 @@ public class InfernalSettingsDTO implements Serializable{
 		this.clientPath = clientPath;
 		this.clientVersion = clientVersion;
 		this.timeSpan = timeSpan;
-		this.autoLogin = autoLogin;
 		this.autoBotStart = autoBotStart;
-		this.wildcard = wildcard;
 		this.surrender = surrender;
 		this.levelToBeginnerBot = levelToBeginnerBot;
 		this.clientHide = clientHide;
@@ -193,9 +185,7 @@ public class InfernalSettingsDTO implements Serializable{
 		this.clientPath = settings.getClientPath();
 		this.clientVersion = settings.getClientVersion();
 		this.timeSpan = settings.getTimeSpan();
-		this.autoLogin = settings.getAutoLogin();
 		this.autoBotStart = settings.getAutoBotStart();
-		this.wildcard = settings.getWildcard();
 		this.surrender = settings.getSurrender();
 		this.levelToBeginnerBot = settings.getLevelToBeginnerBot();
 		this.clientHide = settings.getClientHide();

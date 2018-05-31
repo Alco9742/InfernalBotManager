@@ -3,6 +3,7 @@ package net.nilsghesquiere.service.rest;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.UserService;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
+import net.nilsghesquiere.util.wrappers.UserSingleWrapper;
 import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 
 import org.slf4j.Logger;
@@ -27,8 +28,8 @@ public class UserRestController {
 	@Autowired 
 	private AuthenticationFacade authenticationFacade;
 	
-	@RequestMapping(path = "/username/{username:.+}", method = RequestMethod.GET)
-	public ResponseEntity<Long> findByUserName(@PathVariable String username) {
+	@RequestMapping(path = "/username/{username:.+}/id", method = RequestMethod.GET)
+	public ResponseEntity<Long> findIdByUserName(@PathVariable String username) {
 		//PROCESSING
 		User user = userService.findUserByEmail(username);
 		//Authenticated user check
@@ -37,6 +38,22 @@ public class UserRestController {
 		}
 		//RETURN
 		return new ResponseEntity<Long>(user.getId(), HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/username/{username:.+}", method = RequestMethod.GET)
+	public ResponseEntity<UserSingleWrapper> findByUserName(@PathVariable String username) {
+		//VARS
+		UserSingleWrapper wrapper = new UserSingleWrapper();
+		//PROCESSING
+		User user = userService.findUserByEmail(username);
+		//Authenticated user check
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		//RESPONSE
+		wrapper.add("data",user);
+		//RETURN
+		return new ResponseEntity<UserSingleWrapper>(wrapper, HttpStatus.OK);
 	}
 	
 }

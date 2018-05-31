@@ -254,7 +254,7 @@ public class ClientsRestController {
 		Client client = clientService.getByUserIdAndTag(userid, tag);
 		
 		//RESPONSE
-		wrapper.add(client.getId().toString(), client);
+		wrapper.add("data", client);
 		
 		//RETURN
 		return new ResponseEntity<ClientSingleWrapper>(wrapper, HttpStatus.OK);

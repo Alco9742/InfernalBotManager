@@ -38,10 +38,7 @@ public class InfernalSettings implements Serializable{
 	private String clientPath;
 	private String clientVersion;
 	private Integer timeSpan;
-	private Boolean autoLogin;
 	private Boolean autoBotStart;
-	//ImExPortSettings VARS
-	private String wildcard;
 	//AutoqueuerSettings VARS
 	private Boolean surrender;
 	private Integer levelToBeginnerBot;
@@ -92,59 +89,10 @@ public class InfernalSettings implements Serializable{
 	//TODO: API SETTINGS
 	
 	public InfernalSettings(){} 
-	public InfernalSettings(User user) {
-		super();
-		this.user= user;
-		this.sets = "Default";
-		this.groups = 1;
-		this.clientPath = "C:\\Riot Games\\League of Legends";
-		this.wildcard = ":";
-		this.replaceConfig = false;
-		this.lolHeight = 240;
-		this.lolWidth = 320;
-		this.clientHide = true;
-		this.consoleHide = true;
-		this.ramManager = true;
-		this.ramMin = 200;
-		this.ramMax = 300;
-		this.leaderHide = true;
-		this.surrender = false;
-		this.renderDisable = true;
-		this.leaderRenderDisable = true;
-		this.cpuBoost = true;
-		this.leaderCpuBoost = true;
-		this.levelToBeginnerBot = 99;
-		this.timeSpan = 30;
-		this.softEndDefault = true;
-		this.softEndValue = 5;
-		this.queuerAutoClose = false;
-		this.queueCloseValue = 1;
-		this.winReboot = true;
-		this.winShutdown = false;
-		this.timeoutLogin = 5;
-		this.timeoutLobby = 5;
-		this.timeoutChamp = 5;
-		this.timeoutMastery = 5;
-		this.timeoutLoadGame = 5;
-		this.timeoutInGame = 60;
-		this.timeoutInGameFF = 17;
-		this.timeoutEndOfGame = 5;
-		this.timeUntilCheck = false;
-		this.timeUntilReboot = "01:00";
-		this.openChest = true;
-		this.openHexTech = true;
-		this.disChest = true;
-		this.enableAutoExport = false;
-		this.exportPath = "";
-		this.exportWildCard = ";";
-		this. exportRegion= false;
-		this.exportLevel = false;
-		this.exportBE = false;
-	}
 	
 	public InfernalSettings(Long id, User user, String sets, Integer groups,
 			String clientPath, String clientVersion, Integer timeSpan,
-			Boolean autoLogin, Boolean autoBotStart, String wildcard, Boolean surrender,
+			Boolean autoBotStart, Boolean surrender,
 			Integer levelToBeginnerBot, Boolean clientHide, Boolean leaderHide,
 			Boolean consoleHide, Boolean softEndDefault, Integer softEndValue,
 			Boolean queuerAutoClose, Integer queueCloseValue,
@@ -169,9 +117,7 @@ public class InfernalSettings implements Serializable{
 		this.clientPath = clientPath;
 		this.clientVersion = clientVersion;
 		this.timeSpan = timeSpan;
-		this.autoLogin = autoLogin;
 		this.autoBotStart = autoBotStart;
-		this.wildcard = wildcard;
 		this.surrender = surrender;
 		this.levelToBeginnerBot = levelToBeginnerBot;
 		this.clientHide = clientHide;
@@ -223,9 +169,7 @@ public class InfernalSettings implements Serializable{
 		this.clientPath = dto.getClientPath();
 		this.clientVersion = dto.getClientVersion();
 		this.timeSpan = dto.getTimeSpan();
-		this.autoLogin = dto.getAutoLogin();
 		this.autoBotStart = dto.getAutoBotStart();
-		this.wildcard = dto.getWildcard();
 		this.surrender = dto.getSurrender();
 		this.levelToBeginnerBot = dto.getLevelToBeginnerBot();
 		this.clientHide = dto.getClientHide();
@@ -271,9 +215,7 @@ public class InfernalSettings implements Serializable{
 		this.clientPath = dto.getClientPath();
 		this.clientVersion = dto.getClientVersion();
 		this.timeSpan = dto.getTimeSpan();
-		this.autoLogin = dto.getAutoLogin();
 		this.autoBotStart = dto.getAutoBotStart();
-		this.wildcard = dto.getWildcard();
 		this.surrender = dto.getSurrender();
 		this.levelToBeginnerBot = dto.getLevelToBeginnerBot();
 		this.clientHide = dto.getClientHide();
