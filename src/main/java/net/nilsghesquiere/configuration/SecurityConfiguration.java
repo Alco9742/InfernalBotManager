@@ -1,5 +1,9 @@
 package net.nilsghesquiere.configuration;
 
+import javax.servlet.http.HttpServletRequest;
+
+import net.nilsghesquiere.security.MySavedRequestAwareAuthenticationSuccessHandler;
+import net.nilsghesquiere.security.RestAuthenticationEntryPoint;
 import net.nilsghesquiere.util.enums.RoleEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +27,76 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
-
+//This works with 3 filters:
+//1: requests to /api with a custom X-IBMS header - basic authentication
+//2: requests to /api - OAuth2 authentication
+//3: all other requests
 
 
 @Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableResourceServer
 @ComponentScan("net.nilsghesquiere.security")
 public class SecurityConfiguration{
 
+	//Security for the api with basic authentication (used on the webpages for datatables atm)
 	@Configuration
-	@EnableResourceServer
-	@EnableGlobalMethodSecurity(prePostEnabled = true)
+	@Order(2)
+	public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
+		@Autowired
+		private UserDetailsService userDetailsService;
+		
+		@Autowired
+		private DaoAuthenticationProvider daoAuthenticationProvider;
+		
+		@Autowired
+		private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+		
+		@Autowired
+		private MySavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler;
+	 	
+		@Override
+		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+			auth.authenticationProvider(daoAuthenticationProvider);
+		}
+		
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http
+				.antMatcher("/api/**")
+				.requestMatcher(new fromInfernalBotManagerMatcher())
+				.csrf()
+					.disable()
+				.exceptionHandling()
+				.and()
+				.authorizeRequests()
+					.anyRequest().authenticated()
+				.and()
+				.httpBasic()
+				.authenticationEntryPoint(restAuthenticationEntryPoint)
+				.and()
+				.logout();
+		}
+		
+		@Bean
+		public MySavedRequestAwareAuthenticationSuccessHandler mySuccessHandler(){
+			return new MySavedRequestAwareAuthenticationSuccessHandler();
+		}
+		@Bean
+		public SimpleUrlAuthenticationFailureHandler myFailureHandler(){
+			return new SimpleUrlAuthenticationFailureHandler();
+		}
+		
+	}
+
+	//Security for the api with OAUTH2 authentication (used for the clients)
+	@Configuration
+	@Order(3)
 	public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 		@Override
 		public  void configure(HttpSecurity http) throws Exception {
@@ -49,9 +111,7 @@ public class SecurityConfiguration{
 	
 	}
 
-
-	@EnableWebSecurity
-	@EnableGlobalMethodSecurity(prePostEnabled = true)
+	//Security for the rest of the website
 	@Configuration
 	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 	public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
@@ -145,5 +205,15 @@ public class SecurityConfiguration{
 			return new HttpSessionEventPublisher();
 		}
 	}
+	
+	private static class fromInfernalBotManagerMatcher implements RequestMatcher {
+		@Override
+		public boolean matches(HttpServletRequest request) {
+			String auth = request.getHeader("X-IBMS");
+			return (auth != null);
+		}
+	}
 }
+
+
 
