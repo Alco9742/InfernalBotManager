@@ -66,17 +66,20 @@ public class LolAccountRestController {
 	@Autowired
 	private AuthenticationFacade authenticationFacade;	
 	
+	
 	@RequestMapping(path = "/user/{userid}", method = RequestMethod.GET)
 	public ResponseEntity<LolAccountWrapper> findAccountsByUserId(@PathVariable Long userid) {
 		//VARS
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		String error = "";
 		
+
 		//USER CHECK
 		User user = userService.findUserByUserId(userid);
 		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
 			throw new UserIsNotOwnerOfResourceException();
 		}
+
 		//PROCESSING
 		List<LolAccount> lolAccounts = lolAccountService.findByUserId(userid);
 		
