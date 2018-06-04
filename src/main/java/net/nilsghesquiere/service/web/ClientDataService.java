@@ -10,7 +10,7 @@ public interface ClientDataService {
 	ClientData update(ClientData clientData);
 	void delete(ClientData clientData);
 	void deleteById(Long id);
-	List<ClientData> findByUserId(Long userid);
-	ClientData findByTagAndUserId(String tag, Long userid);
+	List<ClientData> findByClientUserId(Long userid);
 	long countActiveQueuers();
+	ClientData findByClientId(Long clientId);
 }

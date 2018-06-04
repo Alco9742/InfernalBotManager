@@ -21,7 +21,6 @@ import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.LolAccountMap;
 import net.nilsghesquiere.util.wrappers.LolAccountWrapper;
 import net.nilsghesquiere.util.wrappers.StringResponseMap;
-import net.nilsghesquiere.web.error.AccountNotFoundException;
 import net.nilsghesquiere.web.error.ActiveImportSettingsNotSelectedException;
 import net.nilsghesquiere.web.error.SettingsNotFoundException;
 import net.nilsghesquiere.web.error.UploadedFileContentTypeException;
@@ -29,7 +28,6 @@ import net.nilsghesquiere.web.error.UploadedFileEmptyException;
 import net.nilsghesquiere.web.error.UploadedFileMalformedException;
 import net.nilsghesquiere.web.error.UploadedFileSizeException;
 import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
-import net.nilsghesquiere.web.error.UserNotFoundException;
 import net.nilsghesquiere.web.util.GenericResponse;
 
 import org.slf4j.Logger;
@@ -44,8 +42,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.google.common.base.Preconditions;
 
 
 @RestController
@@ -220,19 +216,21 @@ public class LolAccountRestController {
 		LolAccountWrapper wrapper = new LolAccountWrapper();
 		List<LolAccount> returnAccounts = new ArrayList<>();
 		for (LolAccount lolAccount : lolAccountMap.getMap().values()){
-			Preconditions.checkNotNull(lolAccount);
-			validateAccountById(lolAccount.getId());
-			validateUserByUserId(userid);
-			lolAccount.setUser(userService.read(userid));
-			LolAccount updatedLolAccount = lolAccountService.update(lolAccount);
-			//returns null if the account changed server but there is already an account with that name on the new server
-			if (updatedLolAccount != null){
-				returnAccounts.add(updatedLolAccount);
-			} else {
-				if (error.equals("")){
-					error = "The following combinations are already present on the server: " + lolAccount.getAccount() + "/" + lolAccount.getRegion() ;
+			LolAccount lolAccountFromDB = lolAccountService.read(lolAccount.getId());
+			if (lolAccountFromDB != null){
+				if(!lolAccountFromDB.getUser().equals(user)){
+					throw new UserIsNotOwnerOfResourceException();
+				}
+				LolAccount updatedLolAccount = lolAccountService.update(lolAccount);
+				//returns null if the account changed server but there is already an account with that name on the new server
+				if (updatedLolAccount != null){
+					returnAccounts.add(updatedLolAccount);
 				} else {
-					error = error + ", " + lolAccount.getAccount() + "/" + lolAccount.getRegion();
+					if (error.equals("")){
+						error = "The following combinations are already present on the server: " + lolAccount.getAccount() + "/" + lolAccount.getRegion() ;
+					} else {
+						error = error + ", " + lolAccount.getAccount() + "/" + lolAccount.getRegion();
+					}
 				}
 			}
 		}
@@ -253,10 +251,14 @@ public class LolAccountRestController {
 		}
 		
 		for (LolAccount lolAccount : lolAccountMap.getMap().values()){
-			validateAccountById(lolAccount.getId());
-			validateUserByUserId(userid);
-			lolAccountService.delete(lolAccount);
-			deletedAccounts.add(lolAccount);
+			LolAccount lolAccountFromDB = lolAccountService.read(lolAccount.getId());
+			if (lolAccountFromDB != null){
+				if(!lolAccountFromDB.getUser().equals(user)){
+					throw new UserIsNotOwnerOfResourceException();
+				}
+				lolAccountService.delete(lolAccount);
+				deletedAccounts.add(lolAccount);
+			}
 		}
 		wrapper.add("data",deletedAccounts);
 		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
@@ -432,14 +434,18 @@ public class LolAccountRestController {
 		
 		//update existing accounts
 		for (LolAccount lolAccount : lolAccountMap.getMap().values()){
-			Preconditions.checkNotNull(lolAccount);
-			validateAccountById(lolAccount.getId());
-			validateUserByUserId(userid);
-			lolAccount.setUser(userService.read(userid));
-			LolAccount updatedLolAccount = lolAccountService.update(lolAccount);
-			//returns null if the account changed server but there is already an account with that name on the new server
-			if (updatedLolAccount == null){
-				responseMap.add(lolAccount.getAccount(), "Combination (" + lolAccount.getAccount() + "/" +lolAccount.getRegion() + ") already exists");
+			if(lolAccount != null){
+				LolAccount lolAccountFromDB = lolAccountService.read(lolAccount.getId());
+				if (lolAccountFromDB != null){
+					if(!lolAccountFromDB.getUser().equals(user)){
+						throw new UserIsNotOwnerOfResourceException();
+					}
+					LolAccount updatedLolAccount = lolAccountService.update(lolAccount);
+					//returns null if the account changed server but there is already an account with that name on the new server
+					if (updatedLolAccount == null){
+						responseMap.add(lolAccount.getAccount(), "Combination (" + lolAccount.getAccount() + "/" +lolAccount.getRegion() + ") already exists");
+					}
+				}
 			}
 		}
 		return new ResponseEntity<StringResponseMap>(responseMap,HttpStatus.OK);
@@ -458,13 +464,18 @@ public class LolAccountRestController {
 		
 		for (Long id : ids){
 			LolAccount lolAccount = lolAccountService.read(id);
-			Preconditions.checkNotNull(lolAccount);
-			validateAccountById(lolAccount.getId());
-			validateUserByUserId(userid);
-			lolAccount.setAccountStatus(AccountStatus.READY_FOR_USE);
-			lolAccount.setAssignedTo("");
-			LolAccount updatedLolAccount = lolAccountService.update(lolAccount);
-			returnAccounts.add(updatedLolAccount);
+			if(lolAccount != null){
+				LolAccount lolAccountFromDB = lolAccountService.read(lolAccount.getId());
+				if (lolAccountFromDB != null){
+					if(!lolAccountFromDB.getUser().equals(user)){
+						throw new UserIsNotOwnerOfResourceException();
+					}
+					lolAccount.setAccountStatus(AccountStatus.READY_FOR_USE);
+					lolAccount.setAssignedTo("");
+					LolAccount updatedLolAccount = lolAccountService.update(lolAccount);
+					returnAccounts.add(updatedLolAccount);
+				}
+			}
 		}
 		wrapper.add("data",returnAccounts);
 		return new ResponseEntity<LolAccountWrapper>(wrapper,HttpStatus.OK);
@@ -519,15 +530,4 @@ public class LolAccountRestController {
 		//RESPONSE
 		return new GenericResponse("Succesfully deleted " + aantalAccounts + " banned accounts.");
 	}
-	//todo nut van deze bekijken
-	private void validateUserByUserId(Long userId) {
-		userService.findOptionalByUserId(userId).orElseThrow(
-			() -> new UserNotFoundException(userId));
-	}
-
-	private void validateAccountById(Long accountId) {
-		lolAccountService.findOptionalById(accountId).orElseThrow(
-			() -> new AccountNotFoundException(accountId));
-	}
-	
 }

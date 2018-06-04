@@ -1,6 +1,7 @@
 package net.nilsghesquiere.web.exceptionhandlers;
 
 import net.nilsghesquiere.web.error.ActiveImportSettingsNotSelectedException;
+import net.nilsghesquiere.web.error.ClientNotFoundException;
 import net.nilsghesquiere.web.error.ClientSettingsInUseException;
 import net.nilsghesquiere.web.error.ImportSettingsInUseException;
 import net.nilsghesquiere.web.error.InfernalSettingsInUseException;
@@ -53,6 +54,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		LOGGER.error("500 Status Code", ex);
 		GenericResponse bodyOfResponse = new GenericResponse("User is not the owner of the requested resource", "AccessError");
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+	}
+
+	@ExceptionHandler({ ClientNotFoundException.class })
+	public ResponseEntity<Object> handleClientNotFound(RuntimeException ex, WebRequest request) {
+		LOGGER.error("404 Status Code", ex);
+		GenericResponse bodyOfResponse = new GenericResponse("Could not find the requested client", "ClientNotFoundError");
+		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 	
 	@ExceptionHandler({ SettingsNotFoundException.class })

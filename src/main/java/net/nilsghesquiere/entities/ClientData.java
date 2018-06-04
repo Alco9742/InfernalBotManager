@@ -17,7 +17,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
 import lombok.Data;
+
 
 @Data
 @Entity
@@ -27,6 +30,8 @@ public class ClientData implements Serializable{
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "clientid")
+	@JsonUnwrapped
+	//todo figure out how to only serialize clienttag
 	private Client client;
 	@OneToMany(mappedBy="clientData",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@OrderBy("id")

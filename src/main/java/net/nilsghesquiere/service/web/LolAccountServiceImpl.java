@@ -12,6 +12,8 @@ import net.nilsghesquiere.service.ModifyingTransactionalServiceMethod;
 import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.enums.Region;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class LolAccountServiceImpl implements LolAccountService{
 	private final LolAccountRepository lolAccountRepository;
+	private static final Logger LOGGER = LoggerFactory.getLogger(LolAccountServiceImpl.class);
 	
 	@Autowired
 	public LolAccountServiceImpl(LolAccountRepository lolAccountRepository){
@@ -81,7 +84,7 @@ public class LolAccountServiceImpl implements LolAccountService{
 	public LolAccount update(LolAccount lolAccount) {
 		Boolean accountAlreadyExistsOnRegion = false;
 		// find the account with that ID in the database
-		LolAccount currentDBAccount = lolAccountRepository.findById(lolAccount.getId());
+		LolAccount currentDBAccount = lolAccountRepository.findOne(lolAccount.getId());
 		// if the account with that ID has a different region than the update one (region has been changed)
 		//System.out.println("N: " +lolAccount.getRegion() +", DB: " + currentDBAccount.getRegion());
 		if (lolAccount.getRegion() != currentDBAccount.getRegion()){
@@ -102,7 +105,9 @@ public class LolAccountServiceImpl implements LolAccountService{
 			}
 		}
 		if (!accountAlreadyExistsOnRegion){
-			return lolAccountRepository.save(lolAccount);
+			//update the existing entity instead and save that one
+			currentDBAccount.updateFromLolAccount(lolAccount);
+			return lolAccountRepository.save(currentDBAccount);
 		}
 		return null;
 	}

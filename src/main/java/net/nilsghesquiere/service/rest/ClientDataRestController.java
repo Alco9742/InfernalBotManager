@@ -3,16 +3,16 @@ package net.nilsghesquiere.service.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.nilsghesquiere.entities.Client;
 import net.nilsghesquiere.entities.ClientData;
-import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.User;
 import net.nilsghesquiere.service.web.ClientDataService;
+import net.nilsghesquiere.service.web.ClientService;
 import net.nilsghesquiere.service.web.UserService;
-import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.ClientDataMap;
 import net.nilsghesquiere.util.wrappers.ClientDataWrapper;
-import net.nilsghesquiere.util.wrappers.LolAccountWrapper;
+import net.nilsghesquiere.web.error.ClientNotFoundException;
 import net.nilsghesquiere.web.error.UserIsNotOwnerOfResourceException;
 
 import org.slf4j.Logger;
@@ -26,8 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Preconditions;
-
 @RestController
 @RequestMapping("/api/clientdata")
 public class ClientDataRestController {
@@ -39,6 +37,9 @@ public class ClientDataRestController {
 	
 	@Autowired
 	private ClientDataService clientDataService;
+	
+	@Autowired
+	private ClientService clientService;
 	
 	@Autowired
 	private AuthenticationFacade authenticationFacade;	
@@ -56,7 +57,7 @@ public class ClientDataRestController {
 		}
 		
 		//PROCESSING
-		List<ClientData> clientDatas = clientDataService.findByUserId(userid);
+		List<ClientData> clientDatas = clientDataService.findByClientUserId(userid);
 		
 		//RESPONSE
 		wrapper.setError(error);
@@ -67,8 +68,8 @@ public class ClientDataRestController {
 		return new ResponseEntity<ClientDataWrapper>(wrapper, HttpStatus.OK);
 	}
 	
-	@RequestMapping(path = "/user/{userid}", method = RequestMethod.POST)
-	public ResponseEntity<ClientDataWrapper> createOrUpdate(@PathVariable Long userid, @RequestBody ClientDataMap clientDataMap) {
+	@RequestMapping(path = "/user/{userid}/client/{clientid}", method = RequestMethod.POST)
+	public ResponseEntity<ClientDataWrapper> createOrUpdate(@PathVariable Long userid, @PathVariable Long clientid, @RequestBody ClientDataMap clientDataMap) {
 		//VARS
 		ClientDataWrapper wrapper = new ClientDataWrapper();
 		List<ClientData> returnClientDatas = new ArrayList<>();
@@ -80,6 +81,17 @@ public class ClientDataRestController {
 			throw new UserIsNotOwnerOfResourceException();
 		}
 		
+		//CLIENT CHECK
+		Client client = clientService.read(clientid);
+		if (client == null){
+			throw new ClientNotFoundException(clientid);
+		}
+		
+		//CLIENT USER CHECK
+		if(!client.getUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
 		//LOOP (Will always be 1 clientData for now)
 		for(ClientData clientData: clientDataMap.getMap().values()){
 			//CHECKS
@@ -87,16 +99,12 @@ public class ClientDataRestController {
 				error = "Client data is empty";
 			}
 			//PROCESSING
-			//TODO going to have to rework this
-			//clientData.setUser(user);
-			ClientData clientDataFromDB = clientDataService.findByTagAndUserId(clientData.getClient().getTag(), userid);
-			ClientData newClientData = null;
+			clientData.setClient(client);
+			ClientData clientDataFromDB = clientDataService.findByClientId(clientid);
 			if (clientDataFromDB != null){
-				clientData.setId(clientDataFromDB.getId());
-				newClientData = clientDataService.update(clientData);
-			} else {
-				newClientData = clientDataService.create(clientData);
+				clientDataService.delete(clientDataFromDB);
 			}
+			ClientData newClientData = clientDataService.create(clientData);
 
 			if(newClientData != null){
 				returnClientDatas.add(newClientData);

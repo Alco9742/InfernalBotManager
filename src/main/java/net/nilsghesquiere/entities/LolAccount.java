@@ -2,6 +2,7 @@ package net.nilsghesquiere.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class LolAccount implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.PERSIST, optional = false)
 	@JoinColumn(name = "userid")
 	@JsonIgnore
 	private User user;
@@ -148,5 +151,24 @@ public class LolAccount implements Serializable{
 				throw new UploadedFileMalformedException();
 			}
 		}
+	}
+	
+	public void updateFromLolAccount(LolAccount lolAccount){
+		this.account = lolAccount.getAccount();
+		this.password = lolAccount.getPassword();
+		this.summoner = lolAccount.getSummoner();
+		this.region = lolAccount.getRegion();
+		this.level = lolAccount.getLevel();
+		this.maxLevel = lolAccount.getMaxLevel();
+		this.xp = lolAccount.getXp();
+		this.be = lolAccount.getBe();
+		this.maxBe = lolAccount.getMaxBe();
+		this.priority = lolAccount.getPriority();
+		this.playTime = lolAccount.getPlayTime();
+		this.sleepTime = lolAccount.getSleepTime();
+		this.active = lolAccount.isActive();
+		this.accountStatus = lolAccount.getAccountStatus();
+		this.assignedTo = lolAccount.getAssignedTo();
+		this.info = lolAccount.getInfo();
 	}
 }
