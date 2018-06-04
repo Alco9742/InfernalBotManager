@@ -20,7 +20,6 @@ import net.nilsghesquiere.util.enums.Region;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.LolAccountMap;
 import net.nilsghesquiere.util.wrappers.LolAccountWrapper;
-import net.nilsghesquiere.util.wrappers.LolMixedAccountMap;
 import net.nilsghesquiere.util.wrappers.StringResponseMap;
 import net.nilsghesquiere.web.error.AccountNotFoundException;
 import net.nilsghesquiere.web.error.ActiveImportSettingsNotSelectedException;
@@ -421,10 +420,9 @@ public class LolAccountRestController {
 	}
 	
 	@RequestMapping(path = "/user/{userid}/infernalImport",method = RequestMethod.PUT)
-	public ResponseEntity<StringResponseMap> infernalImport(@PathVariable Long userid,@RequestBody LolMixedAccountMap lolMixedAccountMap) {
+	public ResponseEntity<StringResponseMap> infernalImport(@PathVariable Long userid,@RequestBody LolAccountMap lolAccountMap) {
 		//VARS
 		StringResponseMap responseMap = new StringResponseMap();
-		String response = "OK";
 		
 		//USER CHECK
 		User user = userService.findUserByUserId(userid);
@@ -433,7 +431,7 @@ public class LolAccountRestController {
 		}
 		
 		//update existing accounts
-		for (LolAccount lolAccount : lolMixedAccountMap.getMap().values()){
+		for (LolAccount lolAccount : lolAccountMap.getMap().values()){
 			Preconditions.checkNotNull(lolAccount);
 			validateAccountById(lolAccount.getId());
 			validateUserByUserId(userid);
@@ -443,28 +441,6 @@ public class LolAccountRestController {
 			if (updatedLolAccount == null){
 				responseMap.add(lolAccount.getAccount(), "Combination (" + lolAccount.getAccount() + "/" +lolAccount.getRegion() + ") already exists");
 			}
-		}
-		//create new accounts
-		for(LolAccount lolAccount: lolMixedAccountMap.getNewAccs()){
-			//CHECKS
-			String error = "";
-			if (lolAccount == null){
-				error = "Account is empty";
-			}
-			//PROCESSING
-			if(error.equals("")){
-				lolAccount.setUser(userService.read(userid));
-				LolAccount returnAccount = lolAccountService.create(lolAccount);
-				if (returnAccount == null){
-					error = "Combination (" + lolAccount.getAccount() + "/" +lolAccount.getRegion() + ") already exists";
-				}
-			} 
-			
-			if(!error.equals("")){
-				response = error;
-			}
-			
-			responseMap.add(lolAccount.getAccount(), response);
 		}
 		return new ResponseEntity<StringResponseMap>(responseMap,HttpStatus.OK);
 	}
