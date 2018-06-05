@@ -98,6 +98,7 @@ public class SecurityConfiguration{
 	@Configuration
 	@Order(3)
 	public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+
 		@Override
 		public  void configure(HttpSecurity http) throws Exception {
 			http
@@ -107,8 +108,8 @@ public class SecurityConfiguration{
 				.and()
 					.sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				
 		}
-	
 	}
 
 	//Security for the rest of the website

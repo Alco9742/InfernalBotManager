@@ -1,5 +1,6 @@
 package net.nilsghesquiere.service.rest;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -241,7 +242,7 @@ public class ClientRestController {
 	
 	
 	//Methods for the InfernalBotManagerClient
-	@RequestMapping(path = "/user/{userid}/tag/{tag}", method = RequestMethod.GET)
+	@RequestMapping(path = "/user/{userid}/client/tag/{tag}", method = RequestMethod.GET)
 	public ResponseEntity<ClientSingleWrapper> findByUserIdAndTag(@PathVariable Long userid, @PathVariable String tag) {
 		ClientSingleWrapper wrapper = new ClientSingleWrapper();
 		//USER CHECK
@@ -287,5 +288,28 @@ public class ClientRestController {
 		
 		//RETURN
 		return new ResponseEntity<ClientSingleWrapper>(wrapper, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/user/{userid}/client/{clientid}/ping", method = RequestMethod.GET)
+	public ResponseEntity<Boolean> ping(@PathVariable Long userid, @PathVariable Long clientid) {
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//PROCESSING
+		Client client = clientService.read(clientid);
+		
+		//USER CHECK 2;
+		if(!client.getUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		client.setLastPing(LocalDateTime.now());
+		clientService.update(client);
+		
+		//RETURN
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 }

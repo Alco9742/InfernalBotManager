@@ -38,7 +38,6 @@ public class ClientSettingsDTO implements Serializable{
 	private Boolean fetchInfernalSettings;
 	@NotNull
 	private ActionOnNoQueuers actionOnNoQueuers; //aanpassen naar enum -> reboot, restart infernal, do nothing
-	private Boolean debug; //enkel zichtbaar maken voor admins, debug parameters uit ini halen
 	
 	public ClientSettingsDTO() {
 		super();
@@ -52,7 +51,6 @@ public class ClientSettingsDTO implements Serializable{
 		this.rebootTime = 0;
 		this.fetchInfernalSettings = false;
 		this.actionOnNoQueuers = ActionOnNoQueuers.DO_NOTHING;
-		this.debug = false;
 	}
 
 	public ClientSettingsDTO(String name, Region clientRegion,
@@ -71,7 +69,6 @@ public class ClientSettingsDTO implements Serializable{
 		this.rebootTime = rebootTime;
 		this.fetchInfernalSettings = fetchInfernalSettings;
 		this.actionOnNoQueuers = actionOnNoQueuers;
-		this.debug = debug;
 	}
 	public ClientSettingsDTO(Long id, String name, Region clientRegion,
 			String infernalPath, Integer queuerAmount,
@@ -89,7 +86,6 @@ public class ClientSettingsDTO implements Serializable{
 		this.rebootTime = rebootTime;
 		this.fetchInfernalSettings = fetchInfernalSettings;
 		this.actionOnNoQueuers = actionOnNoQueuers;
-		this.debug = debug;
 	}
 	
 	public ClientSettingsDTO(ClientSettings settings){
@@ -103,6 +99,5 @@ public class ClientSettingsDTO implements Serializable{
 		this.rebootTime = settings.getRebootTime();
 		this.fetchInfernalSettings = settings.getFetchInfernalSettings();
 		this.actionOnNoQueuers = settings.getActionOnNoQueuers();
-		this.debug = settings.getDebug();
 	}
 }

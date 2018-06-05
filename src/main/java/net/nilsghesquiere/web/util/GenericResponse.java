@@ -15,6 +15,12 @@ public class GenericResponse {
 	private String message;
 	private String error;
  
+	public GenericResponse() {
+		super();
+		this.message = "";
+		this.error = "";
+	}
+	
 	public GenericResponse(String message) {
 		super();
 		this.message = message;

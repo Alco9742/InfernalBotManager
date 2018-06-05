@@ -38,7 +38,6 @@ public class ClientSettings implements Serializable{
 	private Boolean fetchInfernalSettings;
 	@Enumerated(EnumType.STRING)
 	private ActionOnNoQueuers actionOnNoQueuers; 
-	private Boolean debug; //enkel zichtbaar maken voor admins, debug parameters uit ini halen
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "userid")
 	@JsonIgnore
@@ -54,7 +53,6 @@ public class ClientSettings implements Serializable{
 		this.rebootTime = 0;
 		this.fetchInfernalSettings = false;
 		this.actionOnNoQueuers = ActionOnNoQueuers.DO_NOTHING;
-		this.debug = false;
 	}
 	
 	public ClientSettings(ClientSettingsDTO dto){
@@ -70,7 +68,6 @@ public class ClientSettings implements Serializable{
 		this.rebootTime = dto.getRebootTime();
 		this.fetchInfernalSettings = dto.getFetchInfernalSettings();
 		this.actionOnNoQueuers = dto.getActionOnNoQueuers();
-		this.debug = dto.getDebug();
 	}
 	
 	public void updateFromDTO(ClientSettingsDTO dto){
@@ -83,7 +80,6 @@ public class ClientSettings implements Serializable{
 		this.rebootTime = dto.getRebootTime();
 		this.fetchInfernalSettings = dto.getFetchInfernalSettings();
 		this.actionOnNoQueuers = dto.getActionOnNoQueuers();
-		this.debug = dto.getDebug();
 	}
 	public static ClientSettings updateFromDTO(ClientSettings clientSettings, ClientSettingsDTO dto){
 		clientSettings.setName(dto.getName());
@@ -95,7 +91,6 @@ public class ClientSettings implements Serializable{
 		clientSettings.setRebootTime(dto.getRebootTime());
 		clientSettings.setFetchInfernalSettings(dto.getFetchInfernalSettings());
 		clientSettings.setActionOnNoQueuers(dto.getActionOnNoQueuers());
-		clientSettings.setDebug(dto.getDebug());
 		return clientSettings;
 	}
 	

@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
+@SuppressWarnings("unused")
 public class ClientDataServiceImpl implements ClientDataService{
 	private final ClientDataRepository clientDataRepository;
 	private final QueuerRepository queuerRepository;
-	@SuppressWarnings("unused")
 	private final QueuerLolAccountRepository queuerLolAccountRepository;
 	
 	@Autowired

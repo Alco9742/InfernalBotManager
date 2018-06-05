@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
+@SuppressWarnings("unused")
 public class LolAccountServiceImpl implements LolAccountService{
 	private final LolAccountRepository lolAccountRepository;
 	private static final Logger LOGGER = LoggerFactory.getLogger(LolAccountServiceImpl.class);

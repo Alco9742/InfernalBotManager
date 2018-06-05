@@ -1,8 +1,0 @@
-/**
- * 
- */
-/**
- * @author Nghesqui
- *
- */
-package serializers;
