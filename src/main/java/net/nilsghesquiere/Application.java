@@ -9,11 +9,13 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EntityScan(
 		basePackageClasses = {Application.class, Jsr310JpaConverters.class}
 )
 @SpringBootApplication
+@EnableScheduling
 @EnableConfigurationProperties(StorageProperties.class)
 public class Application extends SpringBootServletInitializer {
 	

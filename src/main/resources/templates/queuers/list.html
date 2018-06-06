@@ -171,10 +171,10 @@
 				} );
 			} );
 			
-			// reload table data every minute
+			// reload table data every 5 minutes
 			setInterval( function () {
 				table.ajax.reload( null, false ); // user paging is not reset on reload
-			}, 60000 );
+			}, 300000 );
 			
 		} );/*]]>*/
 		</script>

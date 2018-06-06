@@ -66,10 +66,20 @@
 						name: "infernalSettings",
 						type: "select"
 					},{
+						label: "Last Ping",
+						name: "timeSinceLastPing",
+						type: "hidden",
+					 	def: "-"
+					},{
 						label: "Status",
 						name: "clientStatus",
 						type: "hidden",
 						def: "UNASSIGNED"
+					},{
+						label: "Error",
+						name: "error",
+						type: "hidden",
+						def: false
 					}],
 					idSrc:'id'
 			} );
@@ -100,10 +110,13 @@
 						return infernalSettingsMap[data];
 					}
 				},
-				{ data: "clientStatus"}
+				{ data: "timeSinceLastPing"},
+				{ data: "clientStatus"},
+				{ data: "error"}
 				],
 				columnDefs: [
-					{ targets: [0,2], visible: false}
+					{ targets: [0,2,7], visible: false},
+					{ targets: [5], orderable: false }
 				],
 				select: true,
 				buttons: [
@@ -137,6 +150,12 @@
 			} );
 			fillClientSettingsOptions();
 			fillInfernalSettingsOptions();
+			
+			// reload table data every 30 seconds
+			setInterval( function () {
+				table.ajax.reload( null, false ); // user paging is not reset on reload
+			}, 30000 );
+			
 		} );
 		
 		//Select fields opvullen
@@ -179,7 +198,9 @@
 					<th>HWID</th>
 					<th>ClientSettings</th>
 					<th>InfernalSettings</th>
+					<th>Last Ping</th>
 					<th>ClientStatus</th>
+					<th>Error</th>
 				</tr>
 			</thead>
 		</table>

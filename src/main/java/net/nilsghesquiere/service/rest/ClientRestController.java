@@ -8,6 +8,7 @@ import net.nilsghesquiere.entities.Client;
 import net.nilsghesquiere.entities.ClientSettings;
 import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.service.web.ClientDataService;
 import net.nilsghesquiere.service.web.ClientService;
 import net.nilsghesquiere.service.web.ClientSettingsService;
 import net.nilsghesquiere.service.web.InfernalSettingsService;
@@ -46,6 +47,9 @@ public class ClientRestController {
 	@Autowired 
 	private ClientSettingsService clientSettingsService;
 	
+	@Autowired
+	private ClientDataService clientDataService;
+	
 	@Autowired 
 	private UserService userService;
 	
@@ -68,7 +72,7 @@ public class ClientRestController {
 		//PROCESSING
 		List<Client> clients = clientService.findByUserId(userid);
 		for (Client client: clients){
-			ClientDTO dto = new ClientDTO(client.getId(),client.getTag(),client.getHWID(),client.getClientSettings().getId(),client.getInfernalSettings().getId(),client.getClientStatus());
+			ClientDTO dto = new ClientDTO(client);
 			clientDTOList.add(dto);
 		}
 		//RESPONSE
@@ -122,7 +126,7 @@ public class ClientRestController {
 				InfernalSettings infernalSettings = infernalSettingsService.read(clientDTO.getInfernalSettings());
 				Client newClient = new Client(clientDTO.getTag(),user,infernalSettings,clientSettings);	
 				Client createdClient = clientService.create(newClient);
-				ClientDTO returnDTO = new ClientDTO(createdClient.getId(),createdClient.getTag(),"",createdClient.getClientSettings().getId(),createdClient.getInfernalSettings().getId(),createdClient.getClientStatus());
+				ClientDTO returnDTO = new ClientDTO(createdClient);
 				returnClientDTOList.add(returnDTO);
 			}
 		}
@@ -180,7 +184,7 @@ public class ClientRestController {
 				oldClient.setClientSettings(clientSettings);
 				oldClient.setInfernalSettings(infernalSettings);
 				Client updatedClient = clientService.update(oldClient);
-				ClientDTO returnDTO = new ClientDTO(updatedClient.getId(),updatedClient.getTag(),updatedClient.getHWID(), updatedClient.getClientSettings().getId(), updatedClient.getInfernalSettings().getId(),updatedClient.getClientStatus()); 
+				ClientDTO returnDTO = new ClientDTO(updatedClient); 
 				returnClientDTOList.add(returnDTO);
 			}
 		}
@@ -207,7 +211,7 @@ public class ClientRestController {
 			//do nothing if users don't match, should not happen unless someone is trying something funky
 			if(client != null && client.getUser().equals(user)){
 				clientService.delete(client);
-				ClientDTO deletedDTO = new ClientDTO(client.getId(),client.getTag(), client.getHWID(),client.getClientSettings().getId(),client.getInfernalSettings().getId(),client.getClientStatus());
+				ClientDTO deletedDTO = new ClientDTO(client);
 				deletedClientDTOs.add(deletedDTO);
 			}
 		}
@@ -231,8 +235,10 @@ public class ClientRestController {
 			if (client != null && client.getUser().equals(user)){
 				client.setHWID("");
 				client.setClientStatus(ClientStatus.UNASSIGNED);
+				client.setError(false);
+				client.setLastPing(null);
 				Client updatedClient = clientService.update(client);
-				ClientDTO returnDto = new ClientDTO(updatedClient.getId(), updatedClient.getTag(),updatedClient.getHWID(),updatedClient.getClientSettings().getId(),updatedClient.getInfernalSettings().getId(),updatedClient.getClientStatus());
+				ClientDTO returnDto = new ClientDTO(updatedClient);
 				returnDtos.add(returnDto);
 			}
 		}
@@ -280,6 +286,9 @@ public class ClientRestController {
 		
 		if(client.getHWID().trim().isEmpty()){
 			client.setHWID(hwid);
+			client.setClientStatus(ClientStatus.CONNECTED);
+			client.setLastPing(LocalDateTime.now());
+			client.setError(false);
 			Client updatedClient = clientService.update(client);
 			wrapper.add("data", updatedClient);
 		} else {
@@ -290,8 +299,8 @@ public class ClientRestController {
 		return new ResponseEntity<ClientSingleWrapper>(wrapper, HttpStatus.OK);
 	}
 	
-	@RequestMapping(path = "/user/{userid}/client/{clientid}/ping", method = RequestMethod.GET)
-	public ResponseEntity<Boolean> ping(@PathVariable Long userid, @PathVariable Long clientid) {
+	@RequestMapping(path = "/user/{userid}/client/{clientid}/ping", method = RequestMethod.PUT)
+	public ResponseEntity<Boolean> ping(@PathVariable Long userid, @PathVariable Long clientid, @RequestBody ClientStatus status) {
 		//USER CHECK
 		User user = userService.findUserByUserId(userid);
 		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
@@ -305,8 +314,19 @@ public class ClientRestController {
 		if(!client.getUser().equals(user)){
 			throw new UserIsNotOwnerOfResourceException();
 		}
+
+		client.setClientStatus(status);
 		
-		client.setLastPing(LocalDateTime.now());
+		//if status = offline && it has clientData remove the clientData
+		if (status == ClientStatus.OFFLINE && client.getClientData() != null){
+			clientDataService.deleteById(client.getClientData().getId());
+			client.setClientData(null);
+			client.setLastPing(null);
+		} else {
+			client.setLastPing(LocalDateTime.now());
+		}
+		
+		client.setError(false);
 		clientService.update(client);
 		
 		//RETURN

@@ -24,6 +24,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -54,10 +59,14 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private AuthenticationManager authManager;
+	
 	@SuppressWarnings("unused")
 	@Override
 	@Transactional
 	public void onApplicationEvent(ContextRefreshedEvent event) {
+		
 		if (alreadySetup){
 			return;
 		}
@@ -67,25 +76,37 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		final Privilege passwordPrivilege = createPrivilegeIfNotFound("CHANGE_PASSWORD_PRIVILEGE");
 		
 		// == create initial roles
+		final List<Privilege> systemPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
 		final List<Privilege> adminPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
 		final List<Privilege> moderatorPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
 		final List<Privilege> userPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, passwordPrivilege));
 		
+		final Role systemRole = createRoleIfNotFound("ROLE_SYSTEM", systemPrivileges);
 		final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
 		final Role userRole = createRoleIfNotFound("ROLE_USER", userPrivileges);
 		final Role moderatorRole = createRoleIfNotFound("ROLE_PAID_USER", userPrivileges);
 		final Role paidUserRole = createRoleIfNotFound("ROLE_PAID_USER", userPrivileges);
 		
 		// == create initial users
+		createUserIfNotFound("system", "NfAq5cKKRRgc2LvkfMPN", new ArrayList<Role>(Arrays.asList(systemRole)));
 		createUserIfNotFound("ghesquiere.nils@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(adminRole)));
-		createUserIfNotFound("ghesquiere.test@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(userRole)));
+		createUserIfNotFound("ghesquiere.moderator@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(moderatorRole)));
+		createUserIfNotFound("ghesquiere.user@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(userRole)));
+		
+		// == authenticate the system user
+		UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken("system", "NfAq5cKKRRgc2LvkfMPN");
+		Authentication auth = authManager.authenticate(authReq);
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth);
 		
 		// == create initial global vars
-		//createGlobalVariableIfNotFound("connection", "Connected");
-		//createGlobalVariableIfNotFound("killSwitch", "Off");
-		//createGlobalVariableIfNotFound("killSwitchMessage", "InfernalBotManager is currently disabled");
-		//createGlobalVariableIfNotFound("serverVersion", "x.x.x");
-		//createGlobalVariableIfNotFound("clientVersion", "x.x.x");
+		createGlobalVariableIfNotFound("connection", "Connected");
+		createGlobalVariableIfNotFound("killSwitch", "On");
+		createGlobalVariableIfNotFound("killSwitchMessage", "InfernalBotManager is currently disabled");
+		createGlobalVariableIfNotFound("serverVersion", "x.x.x");
+		createGlobalVariableIfNotFound("clientVersion", "x.x.x");
+		createGlobalVariableIfNotFound("update", "No");
+		
 		alreadySetup = true;
 
 	}

@@ -2,6 +2,7 @@ package net.nilsghesquiere.entities;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -39,11 +40,12 @@ public class Client {
 	@JoinColumn(name = "clientsettingsid")
 	@JsonUnwrapped
 	private ClientSettings clientSettings;
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "client")
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "client",cascade=CascadeType.REMOVE)
 	@JsonIgnore
 	private ClientData clientData;
 	private LocalDateTime lastPing;
 	private ClientStatus clientStatus;
+	private Boolean error;
 	
 	public Client() {}
 	
@@ -57,6 +59,7 @@ public class Client {
 		this.clientSettings = clientSettings;
 		this.clientStatus = ClientStatus.UNASSIGNED;
 		this.lastPing = null;
+		this.error = false;
 	}
 	
 	

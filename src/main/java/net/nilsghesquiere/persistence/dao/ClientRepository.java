@@ -4,6 +4,7 @@ package net.nilsghesquiere.persistence.dao;
 import java.util.List;
 
 import net.nilsghesquiere.entities.Client;
+import net.nilsghesquiere.util.enums.ClientStatus;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +17,5 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 	void deleteById(Long id);
 	List<Client> findByUserId(Long userId);
 	Client getByUserIdAndTag(Long userId, String tag);
+	List<Client> findByClientStatus(ClientStatus status);
 }

@@ -28,7 +28,7 @@ public class GlobalVariableServiceImpl implements GlobalVariableService{
 	
 	@Override
 	@ModifyingTransactionalServiceMethod
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SYSTEM','ROLE_ADMIN')")
 	public GlobalVariable create(GlobalVariable globalVariable) {
 		return globalVariableRepository.save(globalVariable);
 	}
@@ -47,7 +47,7 @@ public class GlobalVariableServiceImpl implements GlobalVariableService{
 	}
 
 	@Override
-	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_SYSTEM')")
 	public GlobalVariable findByName(String name) {
 		return globalVariableRepository.findByName(name);
 	}

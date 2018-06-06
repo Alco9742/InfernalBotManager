@@ -13,12 +13,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthenticationFacadeImpl implements AuthenticationFacade {
-	private final UserService userService;
-
+	
 	@Autowired
-	public AuthenticationFacadeImpl(UserService userService) {
-		this.userService = userService;
-	}
+	private UserService userService;
 	
 	@Override
 	public UserDetails getAuthenticatedUserDetails() {
@@ -43,5 +40,4 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
 	public Authentication getAuthentication() {
 		return SecurityContextHolder.getContext().getAuthentication();
 	}
-	
 }
