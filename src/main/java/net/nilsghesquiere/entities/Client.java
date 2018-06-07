@@ -40,7 +40,7 @@ public class Client {
 	@JoinColumn(name = "clientsettingsid")
 	@JsonUnwrapped
 	private ClientSettings clientSettings;
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "client",cascade=CascadeType.REMOVE)
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "client",cascade=CascadeType.REMOVE,optional=true)
 	@JsonIgnore
 	private ClientData clientData;
 	private LocalDateTime lastPing;

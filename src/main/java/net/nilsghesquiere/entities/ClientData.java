@@ -29,7 +29,7 @@ public class ClientData implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "clientid")
+	@JoinColumn(name = "clientid", nullable=true)
 	@JsonUnwrapped
 	//todo figure out how to only serialize clienttag
 	private Client client;
