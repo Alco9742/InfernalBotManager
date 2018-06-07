@@ -5,7 +5,6 @@
 		/*<![CDATA[*/
 			var baselnk = "/api/settings/user/" + /*[[${currentUser.id}]]*/;
 			var restlnk = baselnk + "/usersettings/";
-			var activeImportSettings = /*[[${userSettings.activeImportSettings}]]*/;
 		
 			//Shortcuts for put and delete
 			jQuery.each( [ "put", "delete" ], function( i, method ) {
@@ -106,19 +105,38 @@
 			}
 			
 			function initialize(){
-				initializeImportSettingsList();
+				getSettings();
 			}
 			
-			function initializeImportSettingsList(){
-				if (activeImportSettings != 0){
-					$("#activeImportSettingsField option[value='" + activeImportSettings + "']").prop('selected', true);
-				} else {
-					if($('#activeImportSettingsField option').length > 0){
-						$('#activeImportSettingsField').prepend($("<option></option>").attr("value",0).text("Select import settings").prop('selected', true).attr('disabled','disabled'));
-					} else {
-						$('#activeImportSettingsField').append($("<option></option>").attr("value",0).text("Create import settings first").prop('selected', true).attr('disabled','disabled'));
-					}
-				}
+			//get the settings through rest
+			function getSettings() {
+				//AJAX Request
+				$.get(restlnk ,function(data){
+					//Fill fields on success
+					var userSettings = data.data;
+					Object.keys(userSettings).forEach(function(k){
+						$element = $("#"+k+"Field");
+						if (k === "activeImportSettings"){
+							if (userSettings[k] == 0){
+								if($('#activeImportSettingsField option').length > 0){
+									$('#activeImportSettingsField').prepend($("<option></option>").attr("value",0).text("Select import settings").prop('selected', true).attr('disabled','disabled'));
+								} else {
+									$('#activeImportSettingsField').append($("<option></option>").attr("value",0).text("Create import settings first").prop('selected', true).attr('disabled','disabled'));
+								}
+							}
+						}
+						if( $element.is('select') ) {
+							$("#"+k+"Field option[value="+ userSettings[k] +"]").prop('selected', true);
+						} else {
+							$element.val(userSettings[k]);
+						}
+					});
+				})
+				.fail(function(data) {
+					//Show error on fail
+					$("#errorMsg div span").text(data.responseJSON.message);
+					$("#errorMsg").show();
+				})
 			}
 			
 		/*]]>*/
@@ -139,12 +157,22 @@
 			<br />
 			<form name="usersettingsForm" id="usersettingsForm" action="/" method="post" enctype="utf8">
 				<div class ="form-group row">
-					<label for="activeImportSettingsField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default Import Settings</label>
+					<label for="activeImportSettingsField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Default import settings</label>
 					<div class="col-12  col-sm-6">
 						<select class="form-control" name="activeImportSettings" id="activeImportSettingsField">
 							<option th:each="importSettings : ${importSettingsList}" th:value="${importSettings.id}" th:text="${importSettings.name}">settings</option>
 						</select>
 						<span id="activeImportSettingsError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row">
+					<label for="mailOnDisconnectField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Mail on client disconnect</label>
+					<div class="col-12  col-sm-6">
+						<select class="form-control" name="mailOnDisconnect" id="mailOnDisconnectField">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span id="mailOnDisconnectError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row" id="saveDiv">

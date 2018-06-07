@@ -77,35 +77,4 @@ public class ClientServiceImpl implements ClientService{
 	public Client getByUserIdAndTag(Long userid, String tag) {
 		return clientRepository.getByUserIdAndTag(userid, tag);
 	}
-
-	@Override
-	//@PreAuthorize("hasRole('ROLE_SYSTEM')")
-	public List<Client> findByClientStatus(ClientStatus status) {
-		return clientRepository.findByClientStatus(status);
-	}
-
-	@Override
-	//@PreAuthorize("hasRole('ROLE_SYSTEM')")
-	public void setClientsAsDisconnected(List<Client> clients) {
-		for(Client client : clients){
-			client.setError(true);
-			client.setClientStatus(ClientStatus.DISCONNECTED);
-			clientRepository.save(client);
-		}
-	}
-	
-	@Override
-	@PreAuthorize("hasRole('ROLE_SYSTEM')")
-	public void setAllClientsAsOffline() {
-		List<Client> clients = clientRepository.findAll();
-		for (Client client : clients){
-			if (client.getClientData() != null){
-				clientDataRepository.deleteById(client.getClientData().getId());
-			}
-			client.setClientData(null);
-			client.setLastPing(null);
-			client.setClientStatus(ClientStatus.OFFLINE);
-			clientRepository.save(client);
-		}
-	}
 }

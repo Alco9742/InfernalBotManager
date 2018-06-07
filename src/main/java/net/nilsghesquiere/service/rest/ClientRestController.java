@@ -236,6 +236,7 @@ public class ClientRestController {
 				client.setHWID("");
 				client.setClientStatus(ClientStatus.UNASSIGNED);
 				client.setError(false);
+				client.setDcMailSent(false);
 				client.setLastPing(null);
 				Client updatedClient = clientService.update(client);
 				ClientDTO returnDto = new ClientDTO(updatedClient);
@@ -289,6 +290,7 @@ public class ClientRestController {
 			client.setClientStatus(ClientStatus.CONNECTED);
 			client.setLastPing(LocalDateTime.now());
 			client.setError(false);
+			client.setDcMailSent(false);
 			Client updatedClient = clientService.update(client);
 			wrapper.add("data", updatedClient);
 		} else {
@@ -326,6 +328,7 @@ public class ClientRestController {
 			client.setLastPing(LocalDateTime.now());
 		}
 		
+		client.setDcMailSent(false);
 		client.setError(false);
 		clientService.update(client);
 		

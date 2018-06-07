@@ -585,6 +585,32 @@ public class SettingsRestController {
 	}
 	
 	//userSettings
+	@RequestMapping(path = "/user/{userid}/usersettings/", method = RequestMethod.GET)
+	public ResponseEntity<UserSettingsWrapper> findUserSettings(@PathVariable Long userid) {
+		//VARS
+		UserSettingsWrapper wrapper;
+		String error = "";
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		
+		//PROCESSING
+		UserSettings userSettings = user.getUserSettings();
+		
+		//NULL CHECK
+		if(userSettings == null){
+			throw new SettingsNotFoundException(0L);
+		}
+		
+		//RESPONSE
+		wrapper = new UserSettingsWrapper();
+		wrapper.add("data",userSettings);
+		wrapper.setError(error);
+		
+		//RETURN
+		return new ResponseEntity<UserSettingsWrapper>(wrapper, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/user/{userid}/usersettings", method = RequestMethod.PUT, produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<UserSettingsWrapper> updateUserSettings(@PathVariable Long userid, @ModelAttribute("usersettings") @Valid UserSettingsDTO dto) throws BindException {

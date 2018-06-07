@@ -46,6 +46,7 @@ public class Client {
 	private LocalDateTime lastPing;
 	private ClientStatus clientStatus;
 	private Boolean error;
+	private Boolean dcMailSent;
 	
 	public Client() {}
 	
@@ -60,6 +61,7 @@ public class Client {
 		this.clientStatus = ClientStatus.UNASSIGNED;
 		this.lastPing = null;
 		this.error = false;
+		this.dcMailSent = false;
 	}
 	
 	

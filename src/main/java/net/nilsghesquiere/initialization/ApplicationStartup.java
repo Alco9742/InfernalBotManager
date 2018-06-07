@@ -1,7 +1,8 @@
 package net.nilsghesquiere.initialization;
 
-import net.nilsghesquiere.service.web.ClientService;
+import net.nilsghesquiere.service.web.LolAccountService;
 import net.nilsghesquiere.service.web.StorageService;
+import net.nilsghesquiere.service.web.SystemTasksService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,7 +22,10 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	private StorageService storageService;
 	
 	@Autowired 
-	private ClientService clientService;
+	private SystemTasksService systemTasksService;
+	
+	@Autowired 
+	private LolAccountService accountService;
 	
 	@Override
 	public void onApplicationEvent(final ApplicationReadyEvent event) {
@@ -39,6 +39,8 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	
 	private void setAllClientsAsOffline(){
 		// Set all clients on offline and delete their clientdata
-		clientService.setAllClientsAsOffline();
+		systemTasksService.setAllClientsAsOffline();
+		//disabled this for now until the account fetching system gets reworked
+		//accountService.setAllInUseAccountsToReadyForUse();
 	}
 }

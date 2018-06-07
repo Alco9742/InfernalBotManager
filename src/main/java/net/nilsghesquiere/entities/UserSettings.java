@@ -30,11 +30,14 @@ public class UserSettings implements Serializable{
 	@JsonIgnore
 	private User user;
 	private Long activeImportSettings;
+
+	private Boolean mailOnDisconnect;
 	private Integer maxQueuers;
 	
 	public UserSettings(){
 		this.activeImportSettings = 0L;
 		this.maxQueuers = 100000;
+		this.mailOnDisconnect = false;
 	} 
 	
 	public UserSettings(Long id, Long activeImportSettings) {
@@ -42,10 +45,12 @@ public class UserSettings implements Serializable{
 		this.id = id;
 		this.activeImportSettings = activeImportSettings;
 		this.maxQueuers = 100000;
+		this.mailOnDisconnect = false;
 	}
 	
 	public void updateFromDTO(UserSettingsDTO dto){
 		this.activeImportSettings = dto.getActiveImportSettings();
+		this.mailOnDisconnect = dto.getMailOnDisconnect();
 	}
 	
 	public void setUser(User user){

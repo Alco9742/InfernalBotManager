@@ -146,7 +146,15 @@
 						});
 					},
 				}
-				]
+				],
+				rowCallback: function(row, data, index) {
+					if (data.clientStatus == "DISCONNECTED") {
+						$(row).addClass("table-danger");
+					}
+					if (data.clientStatus == "CONNECTED") {
+						$(row).addClass("table-success");
+					}
+				}
 			} );
 			fillClientSettingsOptions();
 			fillInfernalSettingsOptions();

@@ -164,4 +164,15 @@ public class LolAccountServiceImpl implements LolAccountService{
 	public long countAll() {
 		return lolAccountRepository.count();
 	}
+
+	@Override
+	public void setAllInUseAccountsToReadyForUse() {
+		for (LolAccount lolAccount : lolAccountRepository.findAll()){
+			if (lolAccount.getAccountStatus().equals(AccountStatus.IN_USE) || lolAccount.getAccountStatus().equals(AccountStatus.IN_BUFFER)){
+				lolAccount.setAccountStatus(AccountStatus.READY_FOR_USE);
+				lolAccount.setAssignedTo("");
+				lolAccountRepository.save(lolAccount);
+			}
+		}
+	}
 }

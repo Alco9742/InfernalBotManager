@@ -6,7 +6,6 @@ import net.nilsghesquiere.entities.ClientSettings;
 import net.nilsghesquiere.entities.ImportSettings;
 import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.entities.UserSettings;
 import net.nilsghesquiere.service.web.ClientSettingsService;
 import net.nilsghesquiere.service.web.ImportSettingsService;
 import net.nilsghesquiere.service.web.InfernalSettingsService;
@@ -75,9 +74,8 @@ public class SettingsController {
 	@RequestMapping(value = "/usersettings", method = RequestMethod.GET)
 	public ModelAndView viewUserSettings(){
 		User currentUser = authenticationFacade.getAuthenticatedUser();
-		UserSettings userSettings = userSettingsService.getByUser(currentUser);
 		List<ImportSettings> importSettingsList = importSettingsService.findByUser(currentUser);
-		return new ModelAndView(USERSETTINGS_VIEW).addObject("userSettings",userSettings).addObject("importSettingsList",importSettingsList).addObject("currentUser", currentUser);
+		return new ModelAndView(USERSETTINGS_VIEW).addObject("importSettingsList",importSettingsList).addObject("currentUser", currentUser);
 	}
 	
 }
