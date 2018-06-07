@@ -5,6 +5,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import net.nilsghesquiere.entities.ClientData;
+import net.nilsghesquiere.entities.Queuer;
+import net.nilsghesquiere.entities.QueuerLolAccount;
 import net.nilsghesquiere.persistence.dao.ClientDataRepository;
 import net.nilsghesquiere.persistence.dao.QueuerLolAccountRepository;
 import net.nilsghesquiere.persistence.dao.QueuerRepository;
@@ -38,17 +40,12 @@ public class ClientDataServiceImpl implements ClientDataService{
 	@ModifyingTransactionalServiceMethod
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ClientData create(ClientData clientData) {
-		/*
-		// Setting the relationships
 		for(Queuer queuer: clientData.getQueuers()){
 			queuer.setClientData(clientData);
 			for(QueuerLolAccount lolacc : queuer.getQueuerLolAccounts()){
 				lolacc.setQueuer(queuer);
 			}
 		}
-		// Saving the data
-		 * 
-		 */
 		return clientDataRepository.save(clientData);
 	}
 	
@@ -56,6 +53,7 @@ public class ClientDataServiceImpl implements ClientDataService{
 	@ModifyingTransactionalServiceMethod
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ClientData update(ClientData clientData) {
+		//UNUNSED
 		// Currently have to do this customly
 		// Deleting the current data --> delete the queuers containing the lolAccounts, keep the ClientData 
 		//TODO rework 

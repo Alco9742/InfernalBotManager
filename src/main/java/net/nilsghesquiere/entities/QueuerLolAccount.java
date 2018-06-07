@@ -2,6 +2,7 @@ package net.nilsghesquiere.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,7 +23,7 @@ import net.nilsghesquiere.util.enums.Lane;
 public class QueuerLolAccount implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.PERSIST, optional = false)
 	@JoinColumn(name = "queuerid")
 	@JsonIgnore
 	private Queuer queuer;

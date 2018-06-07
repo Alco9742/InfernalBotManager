@@ -104,6 +104,9 @@ public class ClientDataRestController {
 			if (clientDataFromDB != null){
 				clientDataService.delete(clientDataFromDB);
 			}
+			
+			//hier gaat het momenteel mis: onderliggende queuers kennen hun clientdata niet
+			//waarschijnlijk opgelost nu
 			ClientData newClientData = clientDataService.create(clientData);
 
 			if(newClientData != null){

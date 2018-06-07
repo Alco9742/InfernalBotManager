@@ -26,7 +26,7 @@ import lombok.Data;
 public class Queuer implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.PERSIST, optional = false)
 	@JoinColumn(name = "clientdataid")
 	@JsonIgnore
 	private ClientData clientData;
