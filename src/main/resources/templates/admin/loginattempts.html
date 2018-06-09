@@ -1,0 +1,68 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!--/*/ <th:block th:include="fragments/head :: head"/> /*/-->
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready(function() {
+			var editor; 
+			var restlnk = "/api/admin/loginattempts"
+			
+			$( "#navAdmin" ).addClass( "active" );
+		
+			editor = new $.fn.dataTable.Editor( {
+					ajax: {
+						remove: {
+							type: 'POST',
+							contentType: "application/json; charset=utf-8",
+							dataType: "json",
+							url: restlnk + "/delete",
+							data: function ( d ) {
+								return JSON.stringify( d['data'] );
+							}
+						}
+					},
+					table: "#infernalbotmanager-datatable-loginattempts",
+					idSrc:'ip'
+			} );
+		
+			var table = $('#infernalbotmanager-datatable-loginattempts').DataTable( {
+				responsive: true,
+				dom: "<'row'<'col-9'B><'col-3 float-right'f>>rtip",
+				scrollX : true,
+				pageLength: 50,
+				ajax:{
+					"url": restlnk,
+					"dataSrc": "data",
+					"dataType": "json",
+					"cache": false,
+					"contentType": "application/json; charset=utf-8"
+				},
+				columns: [
+				{ data: "ip" },
+				{ data: "attempts"},
+				{ data: "usernamesString" },
+				],
+				select: true,
+				buttons: [
+				{ extend: "remove", editor: editor }
+				]
+			} );
+			
+			
+		} );/*]]>*/
+		</script>
+	</head>
+	<body>
+		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
+		<br/>
+		<table id="infernalbotmanager-datatable-loginattempts" class="table table-striped table-bordered nowrap" style="width:100%" >
+			<thead>
+				<tr>
+					<th>IP</th>
+					<th>Attempts</th>
+					<th>Usernames</th>
+				</tr>
+			</thead>
+		</table>
+	</body>
+</html>
