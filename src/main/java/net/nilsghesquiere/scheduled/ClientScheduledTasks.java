@@ -56,7 +56,7 @@ public class ClientScheduledTasks {
 			if(!client.getDcMailSent()){
 				User user = systemTasksService.getUserByClient(client);
 				UserSettings userSettings = systemTasksService.getUserSettingsByUser(user);
-				if(userSettings.getMailOnDisconnect()){
+				if(userSettings != null && userSettings.getMailOnDisconnect()){
 					long secondsSinceLastPing = Duration.between(client.getLastPing(), LocalDateTime.now()).toMillis() / 1000;
 					if(secondsSinceLastPing >= 300){
 						clientsToSendMail.add(client);

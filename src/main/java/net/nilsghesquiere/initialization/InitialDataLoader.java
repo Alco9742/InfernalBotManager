@@ -7,30 +7,21 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import net.nilsghesquiere.entities.GlobalVariable;
-import net.nilsghesquiere.entities.Privilege;
-import net.nilsghesquiere.entities.Role;
-import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.entities.UserSettings;
-import net.nilsghesquiere.service.web.GlobalVariableService;
-import net.nilsghesquiere.service.web.InfernalSettingsService;
-import net.nilsghesquiere.service.web.PrivilegeService;
-import net.nilsghesquiere.service.web.RoleService;
-import net.nilsghesquiere.service.web.UserService;
-import net.nilsghesquiere.service.web.UserSettingsService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import net.nilsghesquiere.entities.GlobalVariable;
+import net.nilsghesquiere.entities.Privilege;
+import net.nilsghesquiere.entities.Role;
+import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.entities.UserSettings;
+import net.nilsghesquiere.service.web.SystemTasksService;
+import net.nilsghesquiere.service.web.UserService;
 
 @Component
 public class InitialDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -42,25 +33,10 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	private UserService userService;
 	
 	@Autowired
-	private UserSettingsService userSettingsService;
-
-	@Autowired
-	private RoleService roleService;
-	  
-	@Autowired
-	private PrivilegeService privilegeService;
-
-	@Autowired
-	private InfernalSettingsService infernalSettingsService;
-
-	@Autowired
-	private GlobalVariableService globalVariableService;
+	private SystemTasksService systemTasksService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	private AuthenticationManager authManager;
 	
 	@SuppressWarnings("unused")
 	@Override
@@ -93,15 +69,9 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		createUserIfNotFound("ghesquiere.moderator@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(moderatorRole)));
 		createUserIfNotFound("ghesquiere.user@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(userRole)));
 		
-		// == authenticate the system user
-		UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken("system", "NfAq5cKKRRgc2LvkfMPN");
-		Authentication auth = authManager.authenticate(authReq);
-		SecurityContext sc = SecurityContextHolder.getContext();
-		sc.setAuthentication(auth);
-		
 		// == create initial global vars
 		createGlobalVariableIfNotFound("connection", "Connected");
-		createGlobalVariableIfNotFound("killSwitch", "On");
+		createGlobalVariableIfNotFound("killSwitch", "on");
 		createGlobalVariableIfNotFound("killSwitchMessage", "InfernalBotManager is currently disabled");
 		createGlobalVariableIfNotFound("serverVersion", "x.x.x");
 		createGlobalVariableIfNotFound("clientVersion", "x.x.x");
@@ -113,10 +83,10 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	
 	@Transactional
 	private Privilege createPrivilegeIfNotFound(String name) {
-		Privilege privilege = privilegeService.findByName(name);
+		Privilege privilege = systemTasksService.findPrivilegeByName(name);
 		if (privilege == null) {
 			privilege = new Privilege(name);
-			privilegeService.create(privilege);
+			systemTasksService.createPrivilege(privilege);
 		}
 		return privilege;
 	}
@@ -124,11 +94,11 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	@Transactional
 	private Role createRoleIfNotFound(
 		String name, Collection<Privilege> privileges) {
-		Role role = roleService.findByName(name);
+		Role role = systemTasksService.findRoleByName(name);
 		if (role == null) {
 			role = new Role(name);
 			role.setPrivileges(privileges);
-			roleService.create(role);
+			systemTasksService.createRole(role);
 		}
 		return role;
 	}
@@ -155,10 +125,10 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 	@Transactional
 	private GlobalVariable createGlobalVariableIfNotFound(String name, String value) {
-		GlobalVariable var = globalVariableService.findByName(name);
+		GlobalVariable var = systemTasksService.findGlobalVariableByName(name);
 		if (var == null) {
 			var = new GlobalVariable(name, value);
-			globalVariableService.create(var);
+			systemTasksService.createGlobalVariable(var);
 		}
 		return var;
 	}

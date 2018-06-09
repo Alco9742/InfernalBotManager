@@ -4,24 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import net.nilsghesquiere.entities.GlobalVariable;
-import net.nilsghesquiere.entities.Metric;
-import net.nilsghesquiere.entities.Role;
-import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.service.web.ClientDataService;
-import net.nilsghesquiere.service.web.GlobalVariableService;
-import net.nilsghesquiere.service.web.InfernalSettingsService;
-import net.nilsghesquiere.service.web.LolAccountService;
-import net.nilsghesquiere.service.web.MetricService;
-import net.nilsghesquiere.service.web.RoleService;
-import net.nilsghesquiere.service.web.UserService;
-import net.nilsghesquiere.util.wrappers.GlobalVariableMap;
-import net.nilsghesquiere.util.wrappers.GlobalVariableWrapper;
-import net.nilsghesquiere.util.wrappers.MetricWrapper;
-import net.nilsghesquiere.util.wrappers.UserMap;
-import net.nilsghesquiere.util.wrappers.UserWrapper;
-import net.nilsghesquiere.web.dto.UserAdminDTO;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,11 +19,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.cache.LoadingCache;
+
+import net.nilsghesquiere.entities.GlobalVariable;
+import net.nilsghesquiere.entities.Metric;
+import net.nilsghesquiere.entities.Role;
+import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.security.LoginAttemptService;
+import net.nilsghesquiere.service.web.ClientDataService;
+import net.nilsghesquiere.service.web.GlobalVariableService;
+import net.nilsghesquiere.service.web.LolAccountService;
+import net.nilsghesquiere.service.web.MetricService;
+import net.nilsghesquiere.service.web.RoleService;
+import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.util.wrappers.GlobalVariableMap;
+import net.nilsghesquiere.util.wrappers.GlobalVariableWrapper;
+import net.nilsghesquiere.util.wrappers.LoginAttemptDTOMap;
+import net.nilsghesquiere.util.wrappers.LoginAttemptDTOWrapper;
+import net.nilsghesquiere.util.wrappers.MetricWrapper;
+import net.nilsghesquiere.util.wrappers.UserMap;
+import net.nilsghesquiere.util.wrappers.UserWrapper;
+import net.nilsghesquiere.web.dto.LoginAttemptDTO;
+import net.nilsghesquiere.web.dto.UserAdminDTO;
+
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/api/admin")
 public class AdminRestController {
-	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminRestController.class);
 	
 	@Autowired
@@ -53,9 +59,6 @@ public class AdminRestController {
 	
 	@Autowired 
 	private RoleService roleService;
-
-	@Autowired
-	private InfernalSettingsService infernalSettingsService;
 	
 	@Autowired
 	private LolAccountService accountService;
@@ -65,6 +68,9 @@ public class AdminRestController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired 
+	private LoginAttemptService loginAttemptService;
 	
 //METRICS
 
@@ -268,6 +274,40 @@ public class AdminRestController {
 		return new ResponseEntity<UserWrapper>(wrapper,HttpStatus.OK);
 	}
 
+	@RequestMapping(path = "/loginattempts", method = RequestMethod.GET)
+	public ResponseEntity<LoginAttemptDTOWrapper> findAllFailedLoginAttempts() {
+		LoginAttemptDTOWrapper wrapper = new LoginAttemptDTOWrapper();
+		List<LoginAttemptDTO> loginAttempts = new ArrayList<>();
+		LoadingCache<String, Integer> attemptsCache = loginAttemptService.findAllAttempts();
+		LoadingCache<String, Set<String>> usernamesCache = loginAttemptService.findAllUsernames();
+		//RETURN
+		for(Entry<String,Integer> entry : attemptsCache.asMap().entrySet()){
+			LoginAttemptDTO dto = new LoginAttemptDTO();
+			Set<String> usernames = usernamesCache.asMap().get(entry.getKey());
+			dto.setIp(entry.getKey());
+			dto.setAttempts(entry.getValue());
+			dto.setUsernames(usernames);
+			loginAttempts.add(dto);
+		}
+
+		wrapper.add("data",loginAttempts);
+		return new ResponseEntity<LoginAttemptDTOWrapper>(wrapper, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/loginattempts/delete",method = RequestMethod.POST)
+	public ResponseEntity<LoginAttemptDTOWrapper> deleteLoginAttempts(@RequestBody LoginAttemptDTOMap loginAttemptMap) {
+		LoginAttemptDTOWrapper wrapper = new LoginAttemptDTOWrapper();
+		List<LoginAttemptDTO> deletedLoginAttempts = new ArrayList<>();
+		for (LoginAttemptDTO dto : loginAttemptMap.getMap().values()){
+			loginAttemptService.loginSucceeded(dto.getIp());
+			deletedLoginAttempts.add(dto);
+		}
+		wrapper.add("data",deletedLoginAttempts);
+		return new ResponseEntity<LoginAttemptDTOWrapper>(wrapper,HttpStatus.OK);
+	}
+	
+	
+	
 	private UserAdminDTO creatOrUpdateUserFromDTO(UserAdminDTO dto) {
 		User user = userService.findUserByEmail(dto.getEmail());
 		if (user == null) {

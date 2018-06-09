@@ -2,10 +2,6 @@ package net.nilsghesquiere.configuration;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.nilsghesquiere.security.MySavedRequestAwareAuthenticationSuccessHandler;
-import net.nilsghesquiere.security.RestAuthenticationEntryPoint;
-import net.nilsghesquiere.util.enums.RoleEnum;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -31,6 +27,10 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import net.nilsghesquiere.security.MySavedRequestAwareAuthenticationSuccessHandler;
+import net.nilsghesquiere.security.RestAuthenticationEntryPoint;
+import net.nilsghesquiere.util.enums.RoleEnum;
+
 //This works with 3 filters:
 //1: requests to /api with a custom X-IBMS header - basic authentication
 //2: requests to /api - OAuth2 authentication
@@ -49,17 +49,15 @@ public class SecurityConfiguration{
 	@Order(2)
 	public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 		@Autowired
+		@Qualifier("userDetailsService")
 		private UserDetailsService userDetailsService;
-		
+	
 		@Autowired
 		private DaoAuthenticationProvider daoAuthenticationProvider;
 		
 		@Autowired
 		private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 		
-		@Autowired
-		private MySavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler;
-	 	
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth.authenticationProvider(daoAuthenticationProvider);
@@ -73,12 +71,12 @@ public class SecurityConfiguration{
 				.csrf()
 					.disable()
 				.exceptionHandling()
+					.authenticationEntryPoint(restAuthenticationEntryPoint)
 				.and()
 				.authorizeRequests()
 					.anyRequest().authenticated()
 				.and()
 				.httpBasic()
-				.authenticationEntryPoint(restAuthenticationEntryPoint)
 				.and()
 				.logout();
 		}
@@ -87,6 +85,7 @@ public class SecurityConfiguration{
 		public MySavedRequestAwareAuthenticationSuccessHandler mySuccessHandler(){
 			return new MySavedRequestAwareAuthenticationSuccessHandler();
 		}
+		
 		@Bean
 		public SimpleUrlAuthenticationFailureHandler myFailureHandler(){
 			return new SimpleUrlAuthenticationFailureHandler();

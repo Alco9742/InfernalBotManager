@@ -44,18 +44,10 @@ public class AdminController {
 	private static final String METRICS_VIEW = "admin/metrics";
 	private static final String USERS_VIEW = "admin/users";
 	private static final String FILES_VIEW = "admin/files";
+	private static final String LOGINATTEMPTS_VIEW = "admin/loginattempts";
 	
 	@Autowired
 	private AuthenticationFacade authenticationFacade;
-	
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private IUserSecurityService userSecurityService;
-	
-	@Autowired
-	private GlobalVariableService globalVariableService;
 	
 	@Autowired
 	private StorageService storageService;
@@ -72,19 +64,25 @@ public class AdminController {
 	@RequestMapping(value = "/metrics", method = RequestMethod.GET)
 	ModelAndView metrics() {
 		return new ModelAndView(METRICS_VIEW);
-		}
+	}
 	
 	//GLOBAL VARS
 	@RequestMapping(value = "/globalvars", method = RequestMethod.GET)
 	ModelAndView globalVars() {
 		return new ModelAndView(GLOBAL_VARS_VIEW);
-		}
+	}
 
 	//GLOBAL VARS
+	@RequestMapping(value = "/loginattempts", method = RequestMethod.GET)
+	ModelAndView loginAttempts() {
+		return new ModelAndView(LOGINATTEMPTS_VIEW);
+	}
+	
+	//LOGIN ATTEMPTS
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	ModelAndView users() {
 		return new ModelAndView(USERS_VIEW);
-		}
+	}
 	
 	//Everything below is copied straight from a spring tutorial
 	@RequestMapping(value= "/files", method = RequestMethod.GET)

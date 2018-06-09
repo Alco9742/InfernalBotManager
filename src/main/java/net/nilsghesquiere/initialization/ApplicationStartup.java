@@ -34,6 +34,8 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		storageService.init();
 		//Set all clients as offline and delete all clientdata : we just booted, clients can't be connected or we will run into issues with the scheduled tasks
 		setAllClientsAsOffline();
+		//If user has no usersettings yet, create them (needed for update)
+		systemTasksService.createUserSettingsIfNotExisting();
 		return;
 	}
 	
@@ -41,6 +43,6 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		// Set all clients on offline and delete their clientdata
 		systemTasksService.setAllClientsAsOffline();
 		//disabled this for now until the account fetching system gets reworked
-		//accountService.setAllInUseAccountsToReadyForUse();
+		systemTasksService.setAllInUseAccountsToReadyForUse();
 	}
 }

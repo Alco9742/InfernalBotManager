@@ -26,7 +26,7 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 		} else if (exception.getMessage().equalsIgnoreCase("User account has expired")) {
 			errorMessage = "User account has expired";
 		} else if (exception.getMessage().equalsIgnoreCase("blocked")) {
-			errorMessage = "User IP is currently blocked from performing login attempts, try again in 24 hours";
+			errorMessage = "User IP is currently blocked from performing login attempts, contact Alco";
 		}
 		request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, errorMessage);
 	}

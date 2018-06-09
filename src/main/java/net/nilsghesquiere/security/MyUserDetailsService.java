@@ -5,13 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-
-import net.nilsghesquiere.entities.Role;
-import net.nilsghesquiere.entities.User;
-import net.nilsghesquiere.service.web.RoleService;
-import net.nilsghesquiere.service.web.UserService;
-import net.nilsghesquiere.web.error.IPBlockedException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +18,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import net.nilsghesquiere.entities.Role;
+import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.web.error.IPBlockedException;
+
 @Service("userDetailsService")
 @Transactional
 public class MyUserDetailsService implements UserDetailsService {
@@ -33,9 +33,16 @@ public class MyUserDetailsService implements UserDetailsService {
 	private UserService userService;
 	
 	@Autowired
-	private RoleService roleService;
-	
+    private LoginAttemptService loginAttemptService;
+
+    @Autowired
+    private HttpServletRequest request;
+    
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException,IPBlockedException {
+        if (loginAttemptService.isBlocked(getClientIP())) {
+            throw new RuntimeException("blocked");
+        }
+        
 		User user = userService.findUserByEmail(email);
 		if (user == null) {
 			throw new UsernameNotFoundException("No user found with username: " + email);
@@ -55,5 +62,13 @@ public class MyUserDetailsService implements UserDetailsService {
     				.collect(Collectors.toList()));
     	}
         return authorities;
+    }
+    
+    private String getClientIP() {
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if (xfHeader == null){
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0];
     }
 }
