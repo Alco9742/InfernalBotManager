@@ -50,6 +50,8 @@
 								$element.val(infernalSettings[k]);
 							}
 						});
+						checkSoftEndField();
+						checkAutoCloseField();
 						resetButtons("Save");
 						$("#infernalsettingsForm").show();
 					})
@@ -62,13 +64,25 @@
 					})
 				});
 				
+				
+				//User changed the soft end field
+				$( "#softEndDefaultField" ).change(function() {
+					checkSoftEndField();
+				});
+				
+				//User changed the auto close field
+				$( "#queuerAutoCloseField" ).change(function() {
+					checkAutoCloseField();
+				});
+				
+				
 				//user wants to create new settings
 				$( "#newInfernalSettings" ).click(function() {
 					$('#infernalsettingsForm').trigger("reset");
 					resetMessages();
 					resetButtons("Create");
 					$("#selectedInfernalSettings option[value='0']").text("Creating new infernal settings").prop('selected', true);
-					$("#rebootField").val("false").change();
+					initializeFieldsNew();
 					$("#infernalsettingsForm").show();
 				});
 				
@@ -304,6 +318,73 @@
 				}
 			}
 			
+			function initializeFieldsNew(){
+				$("#setsField").val("");
+				$("#groupsField").val(1);
+				$("#clientPathField").val("");
+				$("#clientVersionField").val("");
+				$("#timeSpanField").val("180");
+				$("#autoBotStartField option[value='true']").prop('selected', true);
+				$("#surrenderField option[value='false']").prop('selected', true);
+				$("#levelToBeginnerBotField").val("99");
+				$("#clientHideField option[value='true']").prop('selected', true);
+				$("#leaderHideField option[value='true']").prop('selected', true);
+				$("#consoleHideField option[value='true']").prop('selected', true);
+				$("#softEndDefaultField option[value='false']").prop('selected', true).change();
+				$("#softEndValueField").val(0);
+				$("#queuerAutoCloseField option[value='false']").prop('selected', true).change();
+				$("#queueCloseValueField").val(0);
+				$("#winRebootField option[value='false']").prop('selected', true);
+				$("#winShutdownField option[value='false']").prop('selected', true);
+				$("#timeUntilCheckField option[value='false']").prop('selected', true);
+				$("#timeUntilRebootField").val("01:00:00");
+				$("#renderDisableField option[value='false']").prop('selected', true);)
+				$("#leaderRenderDisableField option[value='false']").prop('selected', true);
+				$("#cpuBoostField option[value='false']").prop('selected', true);
+				$("#leaderCpuBoostField option[value='false']").prop('selected', true);
+				$("#ramManagerField option[value='false']").prop('selected', true);
+				$("#ramMinField").val(200);
+				$("#ramMaxField").val(250);
+				$("#timeoutLoginField").val(5);
+				$("#timeoutLobbyField").val(5);
+				$("#timeoutChampField").val(5);
+				$("#timeoutMasteryField").val(5);
+				$("#timeoutLoadGameField").val(5);
+				$("#timeoutInGameField").val(60);
+				$("#timeoutInGameFFField").val(17);
+				$("#timeoutEndOfGameField").val(5);
+				$("#openChestField option[value='false']").prop('selected', true);
+				$("#openHexTechFieldoption[value='false']").prop('selected', true);
+				$("#disChestField option[value='false']").prop('selected', true);
+				$("#enableAutoExportField option[value='false']").prop('selected', true);
+				$("#exportPathField").val("");
+				$("#exportWildCardField").val(";");
+				$("#exportRegionField option[value='false']").prop('selected', true);
+				$("#exportLevelField option[value='false']").prop('selected', true);
+				$("#exportBEField option[value='false']").prop('selected', true);
+			}
+			
+			function checkSoftEndField(){
+				var selectedSoftEndValue = $('#softEndDefaultField').val();
+				if(selectedSoftEndValue === "true"){
+					$('#queueCloseValueField').val(1);
+					$('#rowSoftEndValue').show();
+				} else {
+					$('#rowSoftEndValue').hide();
+					$('#softEndValueField').val(0);
+				}
+			}
+			
+			function checkAutoCloseField(){
+				var selectedAutoCloseValue = $('#queuerAutoCloseField').val();
+				if(selectedRebootValue === "true"){
+					$('#queueCloseValueField').val(1);
+					$('#rowQueueCloseValue').show();
+				} else {
+					$('#rowQueueCloseValue').hide();
+					$('#queueCloseValueField').val(0);
+				}
+			}
 		/*]]>*/
 		</script>
 	</head>
@@ -433,7 +514,7 @@
 						<span id="softEndDefaultError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
-				<div class ="form-group row">
+				<div class ="form-group row"  id="rowSoftEndValue">
 					<label for="softEndValueField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Safestop After x Games</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="999" class="form-control" name="softEndValue" id="softEndValueField"/>
@@ -450,7 +531,7 @@
 						<span id="queuerAutoCloseError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
-				<div class ="form-group row">
+				<div class ="form-group row" id="rowQueueCloseValue">
 					<label for="queueCloseValueField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Autorestart After x Games</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="999" class="form-control" name="queueCloseValue" id="queueCloseValueField"/>

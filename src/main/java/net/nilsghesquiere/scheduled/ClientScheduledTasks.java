@@ -48,6 +48,7 @@ public class ClientScheduledTasks {
 
 	//got to de everything in a very roundabout way right now because no session = lazy loading issues
 	//TODO test at home, doesn't work here because of firewall
+	/*
 	@Scheduled(fixedRate = 120000, initialDelay = 60000) //Excecute every two minutes
 	public void checkDisconnectedClients(){
 		List<Client> clientsToSendMail = new ArrayList<Client>();
@@ -70,4 +71,5 @@ public class ClientScheduledTasks {
 			systemTasksService.setClientsDcMailSent(clientsToSendMail);
 		}
 	}
+	*/
 }

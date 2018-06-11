@@ -69,7 +69,7 @@
 					resetMessages();
 					resetButtons("Create");
 					$("#selectedImportSettings option[value='0']").text("Creating new import settings").prop('selected', true);
-					$("#rebootField").val("false").change();
+					initializeFieldsNew();
 					$("#importsettingsForm").show();
 				});
 				
@@ -303,6 +303,15 @@
 					$("#createDiv").hide();
 					$('#submitCreate').html("Create").attr('disabled','disabled');
 				}
+			}
+
+			function initializeFieldsNew(){
+				$("#maxLevelField").val(99);
+				$("#sleepTimeField").val(8);
+				$("#playTimeField").val(16);
+				$("#maxBeField").val(30000);
+				$("#aktiveField option[value='true']").prop('selected', true);
+				$("prioField").val(9);
 			}
 		/*]]>*/
 		</script>
