@@ -65,9 +65,9 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		
 		// == create initial users
 		createUserIfNotFound("system", "NfAq5cKKRRgc2LvkfMPN", new ArrayList<Role>(Arrays.asList(systemRole)));
-		createUserIfNotFound("ghesquiere.nils@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(adminRole)));
-		createUserIfNotFound("ghesquiere.moderator@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(moderatorRole)));
-		createUserIfNotFound("ghesquiere.user@gmail.com", "AvxmL8SHkZCd59pKq1bQ", new ArrayList<Role>(Arrays.asList(userRole)));
+		createUserIfNotFound("ghesquiere.nils@gmail.com", "OwAgojg2FDrpXfbtNCWQ", new ArrayList<Role>(Arrays.asList(adminRole)));
+		createUserIfNotFound("ghesquiere.moderator@gmail.com", "OwAgojg2FDrpXfbtNCWQ", new ArrayList<Role>(Arrays.asList(moderatorRole)));
+		createUserIfNotFound("ghesquiere.user@gmail.com", "OwAgojg2FDrpXfbtNCWQ", new ArrayList<Role>(Arrays.asList(userRole)));
 		
 		// == create initial global vars
 		createGlobalVariableIfNotFound("connection", "Connected");
