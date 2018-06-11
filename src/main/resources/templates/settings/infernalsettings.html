@@ -52,6 +52,7 @@
 						});
 						checkSoftEndField();
 						checkAutoCloseField();
+						checkRamManagerField();
 						resetButtons("Save");
 						$("#infernalsettingsForm").show();
 					})
@@ -75,6 +76,10 @@
 					checkAutoCloseField();
 				});
 				
+				//User changed the ramManager field
+				$( "#ramManagerField" ).change(function() {
+					checkRamManagerField();
+				});
 				
 				//user wants to create new settings
 				$( "#newInfernalSettings" ).click(function() {
@@ -338,11 +343,11 @@
 				$("#winShutdownField option[value='false']").prop('selected', true);
 				$("#timeUntilCheckField option[value='false']").prop('selected', true);
 				$("#timeUntilRebootField").val("01:00:00");
-				$("#renderDisableField option[value='false']").prop('selected', true);)
+				$("#renderDisableField option[value='false']").prop('selected', true);
 				$("#leaderRenderDisableField option[value='false']").prop('selected', true);
 				$("#cpuBoostField option[value='false']").prop('selected', true);
 				$("#leaderCpuBoostField option[value='false']").prop('selected', true);
-				$("#ramManagerField option[value='false']").prop('selected', true);
+				$("#ramManagerField option[value='false']").prop('selected', true).change();
 				$("#ramMinField").val(200);
 				$("#ramMaxField").val(250);
 				$("#timeoutLoginField").val(5);
@@ -367,7 +372,7 @@
 			function checkSoftEndField(){
 				var selectedSoftEndValue = $('#softEndDefaultField').val();
 				if(selectedSoftEndValue === "true"){
-					$('#queueCloseValueField').val(1);
+					$('#softEndValueField').val(1);
 					$('#rowSoftEndValue').show();
 				} else {
 					$('#rowSoftEndValue').hide();
@@ -377,12 +382,27 @@
 			
 			function checkAutoCloseField(){
 				var selectedAutoCloseValue = $('#queuerAutoCloseField').val();
-				if(selectedRebootValue === "true"){
+				if(selectedAutoCloseValue === "true"){
 					$('#queueCloseValueField').val(1);
 					$('#rowQueueCloseValue').show();
 				} else {
 					$('#rowQueueCloseValue').hide();
 					$('#queueCloseValueField').val(0);
+				}
+			}
+			
+			function checkRamManagerField(){
+				var selectedRamManager = $('#ramManagerField').val();
+				if(selectedRamManager === "true"){
+					$('#ramMinField').val(200);
+					$('#ramMaxField').val(250);
+					$('#rowRamMinField').show();
+					$('#rowRamMaxField').show();
+				} else {
+					$('#ramMinField').val(200);
+					$('#ramMaxField').val(250);
+					$('#rowRamMinField').hide();
+					$('#rowRamMaxField').hide();
 				}
 			}
 		/*]]>*/
@@ -625,14 +645,14 @@
 						<span id="ramManagerError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
-				<div class ="form-group row">
+				<div class ="form-group row" id="rowRamMinField">
 					<label for="ramMinField" class="col-12 offset-sm-1 col-sm-4 col-form-label">RAM Minimum</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="1024" class="form-control" name="ramMin" id="ramMinField"/>
 						<span id="ramMinError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
-				<div class ="form-group row">
+				<div class ="form-group row" id="rowRamMaxField">
 					<label for="ramMaxField" class="col-12 offset-sm-1 col-sm-4 col-form-label">RAM Maximum</label>
 					<div class="col-12  col-sm-6">
 						<input type="number" min="1" max="1024" class="form-control" name="ramMax" id="ramMaxField"/>
