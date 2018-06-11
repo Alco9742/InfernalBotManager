@@ -372,7 +372,6 @@
 			function checkSoftEndField(){
 				var selectedSoftEndValue = $('#softEndDefaultField').val();
 				if(selectedSoftEndValue === "true"){
-					$('#softEndValueField').val(1);
 					$('#rowSoftEndValue').show();
 				} else {
 					$('#rowSoftEndValue').hide();
@@ -383,7 +382,6 @@
 			function checkAutoCloseField(){
 				var selectedAutoCloseValue = $('#queuerAutoCloseField').val();
 				if(selectedAutoCloseValue === "true"){
-					$('#queueCloseValueField').val(1);
 					$('#rowQueueCloseValue').show();
 				} else {
 					$('#rowQueueCloseValue').hide();
@@ -394,8 +392,6 @@
 			function checkRamManagerField(){
 				var selectedRamManager = $('#ramManagerField').val();
 				if(selectedRamManager === "true"){
-					$('#ramMinField').val(200);
-					$('#ramMaxField').val(250);
 					$('#rowRamMinField').show();
 					$('#rowRamMaxField').show();
 				} else {
