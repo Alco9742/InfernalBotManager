@@ -52,6 +52,12 @@
 						label: "Password",
 						name: "password"
 					},{
+						label: "ActiveQueuers",
+						name: "activeQueuers"
+					},{
+						label: "Max Queuers",
+						name: "maxQueuers"
+					},{
 						label: "Enabled",
 						name: "enabled",
 						type: "checkbox",
@@ -80,6 +86,8 @@
 				{ data: "id" },
 				{ data: "email"},
 				{ data: "password" },
+				{ data: "activeQueuers" },
+				{ data: "maxQueuers" },
 				{ data: "enabled" }
 				],
 				select: true,
@@ -114,6 +122,8 @@
 					<th>ID</th>
 					<th>Email</th>
 					<th>Password</th>
+					<th>Active Queuers</th>
+					<th>Max Queuers</th>
 					<th>Enabled</th>
 				</tr>
 			</thead>

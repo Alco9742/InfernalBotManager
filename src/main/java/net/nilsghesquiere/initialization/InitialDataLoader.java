@@ -60,7 +60,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		final Role systemRole = createRoleIfNotFound("ROLE_SYSTEM", systemPrivileges);
 		final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
 		final Role userRole = createRoleIfNotFound("ROLE_USER", userPrivileges);
-		final Role moderatorRole = createRoleIfNotFound("ROLE_PAID_USER", userPrivileges);
+		final Role moderatorRole = createRoleIfNotFound("ROLE_MODERATOR", moderatorPrivileges);
 		final Role paidUserRole = createRoleIfNotFound("ROLE_PAID_USER", userPrivileges);
 		
 		// == create initial users

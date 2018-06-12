@@ -106,4 +106,15 @@ public class ClientDataServiceImpl implements ClientDataService{
 		}
 		return count;
 	}
+	
+	@Override
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public Integer countActiveQueuersByUserId(Long userid) {
+		Integer count = 0;
+		List<ClientData> userClientDatas = clientDataRepository.findByClientUserId(userid);
+		for (ClientData data : userClientDatas){
+			count += data.getQueuers().size();
+		}
+		return count;
+	}
 }

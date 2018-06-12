@@ -13,4 +13,5 @@ public interface ClientDataService {
 	List<ClientData> findByClientUserId(Long userid);
 	long countActiveQueuers();
 	ClientData findByClientId(Long clientId);
+	Integer countActiveQueuersByUserId(Long userid);
 }

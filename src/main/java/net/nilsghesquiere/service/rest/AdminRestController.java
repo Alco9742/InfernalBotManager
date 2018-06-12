@@ -7,24 +7,11 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.google.common.cache.LoadingCache;
-
 import net.nilsghesquiere.entities.GlobalVariable;
 import net.nilsghesquiere.entities.Metric;
 import net.nilsghesquiere.entities.Role;
 import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.entities.UserSettings;
 import net.nilsghesquiere.security.LoginAttemptService;
 import net.nilsghesquiere.service.web.ClientDataService;
 import net.nilsghesquiere.service.web.GlobalVariableService;
@@ -41,6 +28,20 @@ import net.nilsghesquiere.util.wrappers.UserMap;
 import net.nilsghesquiere.util.wrappers.UserWrapper;
 import net.nilsghesquiere.web.dto.LoginAttemptDTO;
 import net.nilsghesquiere.web.dto.UserAdminDTO;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.google.common.cache.LoadingCache;
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -206,7 +207,8 @@ public class AdminRestController {
 		List<User> users = userService.findAll();
 		for (User user : users){
 			//NOT PASSING PASSWORDS
-			UserAdminDTO dto = new UserAdminDTO(user.getId(),user.getEmail(),user.isEnabled());
+			Integer activeQueuers = clientDataService.countActiveQueuersByUserId(user.getId());
+			UserAdminDTO dto = new UserAdminDTO(user.getId(),user.getEmail(), activeQueuers, user.getUserSettings().getMaxQueuers(),user.isEnabled());
 			userAdminDTOList.add(dto);
 		}
 		
@@ -236,7 +238,7 @@ public class AdminRestController {
 			}
 			
 			if (error.isEmpty()){
-				returnUsers.add(creatOrUpdateUserFromDTO(dto));
+				returnUsers.add(createOrUpdateUserFromDTO(dto));
 			}
 
 		}
@@ -255,7 +257,7 @@ public class AdminRestController {
 		UserWrapper wrapper = new UserWrapper();
 		List<UserAdminDTO> returnUsers = new ArrayList<>();
 		for (UserAdminDTO dto: userMap.getMap().values()){
-			returnUsers.add(creatOrUpdateUserFromDTO(dto));
+			returnUsers.add(createOrUpdateUserFromDTO(dto));
 		}
 		wrapper.add("data",returnUsers);
 		wrapper.setError(error);
@@ -308,13 +310,18 @@ public class AdminRestController {
 	
 	
 	
-	private UserAdminDTO creatOrUpdateUserFromDTO(UserAdminDTO dto) {
-		User user = userService.findUserByEmail(dto.getEmail());
+	private UserAdminDTO createOrUpdateUserFromDTO(UserAdminDTO dto) {
+		User user = userService.findUserByUserId(dto.getId());
 		if (user == null) {
 			user = new User();
+			UserSettings userSettings = new UserSettings();
+			//set userdata
 			user.setPassword(passwordEncoder.encode(dto.getPassword()));
 			user.setEmail(dto.getEmail());
 			user.setEnabled(dto.getEnabled());
+			//set user settings
+			userSettings.setMaxQueuers(dto.getMaxQueuers());
+			user.setUserSettings(userSettings);
 			//Set User Role
 			Role userRole = roleService.findByName("ROLE_USER");
 			Collection<Role> roles = new ArrayList<Role>(Arrays.asList(userRole));
@@ -328,15 +335,18 @@ public class AdminRestController {
 				user.setPassword(passwordEncoder.encode(dto.getPassword()));
 			}
 			user.setEnabled(dto.getEnabled());
+			//set user settings
+			user.getUserSettings().setMaxQueuers(dto.getMaxQueuers());
 			User updatedUser = userService.update(user);
 			user=updatedUser;
 		}
-		return new UserAdminDTO(user.getId(),user.getEmail(),user.isEnabled());
+		Integer activeQueuers = clientDataService.countActiveQueuersByUserId(user.getId());
+		return new UserAdminDTO(user.getId(),user.getEmail(),activeQueuers,user.getUserSettings().getMaxQueuers(),user.isEnabled());
 	}
 	
 	private UserAdminDTO deleteUserFromDTO(UserAdminDTO dto) {
 		User user = userService.findUserByEmail(dto.getEmail());
 		userService.delete(user);
-		return new UserAdminDTO(user.getId(),user.getEmail(),user.isEnabled());
+		return new UserAdminDTO(user.getId(),user.getEmail(),0, user.getUserSettings().getMaxQueuers(),user.isEnabled());
 	}
 }

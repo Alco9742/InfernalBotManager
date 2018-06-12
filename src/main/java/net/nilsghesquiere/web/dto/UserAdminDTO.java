@@ -20,30 +20,38 @@ public class UserAdminDTO implements Serializable{
 	@NotNull
 	@NotEmpty
 	private String email;
-
 	@NotNull
 	@NotEmpty
 	private String password;
-	
+	@NotNull
+	@NotEmpty
+	private Integer activeQueuers;
+	@NotNull
+	@NotEmpty
+	private Integer maxQueuers;
 	@NotNull
 	private Boolean enabled;
 	
 	public UserAdminDTO(){super();}
 	
-	public UserAdminDTO(Long id, String email, Boolean enabled) {
+	public UserAdminDTO(Long id, String email,Integer activeQueuers,Integer maxQueuers, Boolean enabled) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.password=null;
 		this.enabled= enabled;
+		this.activeQueuers = activeQueuers;
+		this.maxQueuers = maxQueuers;
 	}
 
-	public UserAdminDTO(Long id, String email, String password, Boolean enabled) {
+	public UserAdminDTO(Long id, String email, String password, Integer activeQueuers,Integer maxQueuers, Boolean enabled) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.enabled= enabled;
+		this.activeQueuers = activeQueuers;
+		this.maxQueuers = maxQueuers;
 	}
 	
 }
