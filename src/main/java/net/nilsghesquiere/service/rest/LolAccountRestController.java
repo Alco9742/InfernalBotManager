@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -529,5 +530,37 @@ public class LolAccountRestController {
 		
 		//RESPONSE
 		return new GenericResponse("Succesfully deleted " + aantalAccounts + " banned accounts.");
+	}
+	
+	@RequestMapping(path = "/user/{userid}/export/selected/ir/{includeRegion}/il/{includeLevel}/",method = RequestMethod.PUT)
+	public @ResponseBody byte[] exportSimpleSelected(@PathVariable Long userid,@PathVariable Boolean includeRegion,@PathVariable Boolean includeLevel, @RequestBody Long[] ids) {
+		//USER CHECK
+		StringBuilder builder = new StringBuilder("");
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		for (Long id : ids){
+			LolAccount lolAccount = lolAccountService.read(id);
+			if(lolAccount != null){
+				if(!lolAccount.getUser().equals(user)){
+					throw new UserIsNotOwnerOfResourceException();
+				}
+				builder.append(lolAccount.getAccount());
+				builder.append(":");
+				builder.append(lolAccount.getPassword());
+				if(includeRegion){
+					builder.append(":");
+					builder.append(lolAccount.getRegion().toString());
+				}
+				if(includeLevel){
+					builder.append(":");
+					builder.append(lolAccount.getLevel());
+				}
+				builder.append(System.lineSeparator());
+			}
+		}
+		return builder.toString().getBytes();
 	}
 }

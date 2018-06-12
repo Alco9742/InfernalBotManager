@@ -193,11 +193,15 @@
 					extend: 'collection',
 					text: 'Export',
 					buttons: [
+						{ 	text: 'Simple',
+							action: function () {
+								$('#exportModal').modal('show');
+								$('#selectModeSelected').prop('checked',true).change();
+							}
+						},
 						'copy',
 						'excel',
-						'csv',
-						'pdf',
-						'print'
+						'csv'
 					],
 					className: 'col-lg-2 d-none d-lg-block'
 				},
@@ -310,6 +314,166 @@
 				}
 			});
 			
+			//handle radioButton change for selectMode
+			$('input[type=radio][name=selectMode]').change(function() {
+				//$("#exportIncludeRegionDiv").hide();
+				$("#exportRegionDiv").hide();
+				$("#exportStatusDiv").hide();
+				$('#exportRegionUsage').prop('checked', false);
+				$('#exportStatusUsage').prop('checked', false);
+				$('#exportIncludeRegionUsage').prop('checked', false);
+				$('#exportIncludeLevelUsage').prop('checked', false);
+				$( "#exportSyntax" ).val("SYNTAX\n");
+				$( "#exportIncludeRegion" ).addClass("text-muted").css({ background: ""});
+				$( "#exportIncludeLevel" ).addClass("text-muted").css({ background: ""});;
+				if (this.value == 'selected') {
+					$("#exportIncludeRegionDiv").show();
+					var selectedRows = table.rows( { selected: true }).data().toArray();
+					
+					console.log(selectedRows);
+					
+					var ids = $.map(selectedRows, function (item) {
+						return item.id
+					});
+					
+					idsJson = JSON.stringify(ids);
+					
+					console.log(idsJson);
+					$( "#exportSyntax" ).val("SYNTAX\naccount:password");
+				} else if (this.value == 'custom') {
+					$("#exportRegionDiv").show();
+					$("#exportStatusDiv").show();
+					$( "#exportSyntax" ).val("SYNTAX\naccount:password");
+				}
+			});
+		
+			
+			//handle exportRegionUsage checkbox change
+			$('#exportRegionUsage').change(function() {
+				if($(this).is(":checked")) {
+					$( "#exportRegion" ).prop( "disabled", false );
+				} else {
+					$( "#exportRegion" ).prop( "disabled", true );
+					// remove "selected" from any options that might already be selected
+					$('#exportRegion option[selected="selected"]').each(
+						function() {
+							$(this).removeAttr('selected');
+						}
+					);
+					// mark the first option as selected
+					$("#exportRegion option:first").attr('selected','selected');
+				}
+			});
+			
+			//handle exportStatusUsage checkbox change
+			$('#exportStatusUsage').change(function() {
+				if($(this).is(":checked")) {
+					$( "#exportStatus" ).prop( "disabled", false );
+				} else {
+					$( "#exportStatus" ).prop( "disabled", true );
+					// remove "selected" from any options that might already be selected
+					$('#exportStatus option[selected="selected"]').each(
+						function() {
+							$(this).removeAttr('selected');
+						}
+					);
+					// mark the first option as selected
+					$("#exportStatus option:first").attr('selected','selected');
+				}
+			});
+			
+			//handle exportIncludeLevelUsage checkbox change
+			$('#exportIncludeLevelUsage').change(function() {
+				if($(this).is(":checked")) {
+					$( "#exportIncludeLevel" ).removeClass("text-muted").css({ background: "white" });
+					if($('#exportIncludeRegionUsage').is(":checked")){
+						$( "#exportSyntax" ).val("SYNTAX\naccount:password:region:level");
+					} else {
+						$( "#exportSyntax" ).val("SYNTAX\naccount:password:level");
+					}
+				} else {
+					$( "#exportIncludeLevel" ).addClass("text-muted").css({ background: ""});;
+					if($('#exportIncludeRegionUsage').is(":checked")){
+						$( "#exportSyntax" ).val("SYNTAX\naccount:password:region");
+					} else {
+						$( "#exportSyntax" ).val("SYNTAX\naccount:password");
+					}
+				}
+			});
+			
+			//handle exportIncludeRegionUsage checkbox change
+			$('#exportIncludeRegionUsage').change(function() {
+				if($(this).is(":checked")) {
+					$( "#exportIncludeRegion" ).removeClass("text-muted").css({ background: "white" });
+					if($('#exportIncludeLevelUsage').is(":checked")){
+						$( "#exportSyntax" ).val("SYNTAX\naccount:password:region:level");
+					} else {
+						$( "#exportSyntax" ).val("SYNTAX\naccount:password:region");
+					}
+				} else {
+					$( "#exportIncludeRegion" ).addClass("text-muted").css({ background: ""});
+					if($('#exportIncludeLevelUsage').is(":checked")){
+						$( "#exportSyntax" ).val("SYNTAX\naccount:password:level");
+					} else {
+						$( "#exportSyntax" ).val("SYNTAX\naccount:password");
+					}
+				}
+			});
+			
+			//export file
+			$('#exportButton').click(function(event) {
+				var exportlink = restlnk + "/export";
+				var selectMode = $('input[name=selectMode]:checked').val();
+				var $exportIncludeRegionUsage = $('#exportIncludeRegionUsage');
+				var $exportIncludeLevelUsage = $('#exportIncludeLevelUsage');
+				if (selectMode == 'selected') {
+					exportlink = exportlink + "/selected";
+				} else if (selectMode == 'custom'){
+					var $exportRegionUsage  = $('#exportRegionUsage');
+					var $exportRegion = $('#exportRegion');
+					var $exportStatusUsage  = $('#exportStatusUsage');
+					var $exportStatus = $('#exportStatus');
+					exportlink = exportlink + "/custom/region/" +  $exportRegion.val() + "/status/" + $exportStatus.val() ;
+				} 
+				if($exportIncludeRegionUsage.is(":checked")) {
+					exportlink = exportlink + "/ir/true"
+				} else {
+					exportlink = exportlink + "/ir/false"
+				}
+				if($exportIncludeLevelUsage.is(":checked")) {
+					exportlink = exportlink + "/il/true/"
+				} else {
+					exportlink = exportlink + "/il/false/"
+				}
+				if(selectMode == 'selected'){
+					var selectedRows = table.rows( { selected: true }).data().toArray();
+					var ids = $.map(selectedRows, function (item) {
+						return item.id
+					});
+					idsJson = JSON.stringify(ids);
+					$.ajax({
+						type: 'PUT',
+						dataType: "text",
+						url: exportlink,
+						data: idsJson,
+						contentType: "application/json; charset=utf-8",
+						dataSrc: "data",
+						success: function(returnedData) {
+							var FileSaver = require('file-saver');
+							var blob = new Blob([returnedData], {type: "text/plain;charset=utf-8"});
+							FileSaver.saveAs(blob, "export.txt");
+							console.log("success");
+							console.log(returnedData);
+						}, 
+						error:function(returnedData){
+							console.log("error");
+							console.log(returnedData);
+						}
+					});
+				}
+				
+			});
+			
 			//import file
 			$('#importButton').click(function(event) {
 				var $importButton = $(this);
@@ -388,7 +552,8 @@
 					});
 				}
 			});
-		} );/*]]>*/
+		} );
+		/*]]>*/
 		</script>
 	</head>
 	<body>
@@ -467,6 +632,76 @@
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 							<button type="submit" class="btn btn-primary" id="importButton">Import</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					 <div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exportModalLabel">Export</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body" id="exportModalMessage">
+							<div class="input-group mb-3 btn-group btn-group-toggle" data-toggle="buttons">
+								<label class="btn btn-secondary active">
+									<input type="radio" name="selectMode" id="selectModeSelected" autocomplete="off" value="selected" checked="checked"/> Selected
+								</label>
+								<label class="btn btn-secondary">
+									<input type="radio" name="selectMode" id="selectModeCustom" autocomplete="off" value="custom"/>Custom
+								</label>
+							</div>
+							<div class="input-group mb-3" id="exportRegionDiv">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<input type="checkbox" id="exportRegionUsage" aria-label="Region select" />
+									</div>
+								</div>
+								<select class="custom-select" id="exportRegion" disabled="disabled">
+									<option value="" disabled="disabled" selected="selected">All regions</option>
+									<option th:each="region : ${T(net.nilsghesquiere.util.enums.Region).values()}" th:value="${region}" th:text="${region}"></option>
+								</select>
+							</div>
+							<div class="input-group mb-3" id="exportStatusDiv">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<input type="checkbox" id="exportStatusUsage" aria-label="Region select" />
+									</div>
+								</div>
+								<select class="custom-select" id="exportStatus" disabled="disabled">
+									<option value="" disabled="disabled" selected="selected">All status</option>
+									<option th:each="status : ${T(net.nilsghesquiere.util.enums.AccountStatus).values()}" th:value="${status}" th:text="${status}"></option>
+								</select>
+							</div>
+							<div class="input-group mb-3" id="exportIncludeRegionDiv">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<input type="checkbox" id="exportIncludeRegionUsage" aria-label="Region include select" />
+									</div>
+								</div>
+								<div class="form-control input-group-text text-muted" id="exportIncludeRegion">Include Region</div>
+							</div>
+							<div class="input-group mb-3" id="exportIncludeLevelDiv">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<input type="checkbox" id="exportIncludeLevelUsage" aria-label="Levels include select" />
+									</div>
+								</div>
+								<div class="form-control input-group-text text-muted" id="exportIncludeLevel">Include levels</div>
+							</div>
+							<div class="form-group">
+								<textarea class="form-control disabledTextArea" id="exportSyntax" rows="2" disabled="disabled">SYNTAX&#13;&#10;</textarea>
+							</div>
+							<div class="form-group">
+								<textarea class="form-control disabledTextArea" id="exportResponse" rows="2" disabled="disabled">OUTPUT</textarea>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary" id="exportButton">Export</button>
 						</div>
 					</div>
 				</div>
