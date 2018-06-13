@@ -1,6 +1,8 @@
-0.9.8.1
+Updated to version 0.9.8.1
 	- Account export: Removed PDF and Print
 	- Account export: Added TXT (username:password[:region][:level]) - Selected rows or custom selection (by region / status).
 	- Added auto clear Launcher and Queuer entries in infernal/configs/settings.ini before infernalbot start.
 	- Fix for '00:00:00:00:00:00:00:e0' getting registered as HWID on some servers.
-	- (Active Queuers and Max Queuers added to admin userlist)
+	- Fixed bug in autoupdater
+Because of the bug in the autoupdate this update wont go automatically in the background while infernal is running, the update will happen next time you start the manager instead,
+please restart the manager as soon as you can
