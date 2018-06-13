@@ -606,23 +606,20 @@ public class LolAccountRestController {
 		if(allRegions){
 			if (allStatus){
 				//All regions and all status = find by user
-				LOGGER.info("ALL STATUS & ALL REGION");
 				lolAccounts = lolAccountService.findByUser(user);
 			} else {
-				LOGGER.info(status.get().toString() + " & ALL REGIONS");
 				//All regions but selected status
+				lolAccounts = lolAccountService.findByUserAndAccountStatus(user,status.get());
 			}
 		} else {
 			if (allStatus){
-				LOGGER.info("ALL STATUS & " + region.get().toString());
 				//All status but selected region
+				lolAccounts = lolAccountService.findByUserAndRegion(user, region.get());
 			} else {
-				LOGGER.info(status.get().toString() + " & " + region.get().toString());
 				//Selected region and selected status
+				lolAccounts = lolAccountService.findByUserAndRegionAndAccountStatus(user, region.get(), status.get());
 			}
 		}
-		
-
 		
 		//export (can stay same as regular)
 		for (LolAccount lolAccount : lolAccounts){

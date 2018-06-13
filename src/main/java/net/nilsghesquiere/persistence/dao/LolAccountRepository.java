@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.enums.Region;
 
 import org.springframework.data.domain.Pageable;
@@ -22,10 +23,13 @@ public interface LolAccountRepository extends JpaRepository<LolAccount, Long> {
 	void deleteById(@Param("id") Long id);
 	//Methods for client below
 	List <LolAccount> findAllByAccountIgnoreCase(@Param("account") String account);
-	@Query("SELECT l FROM LolAccount l WHERE l.user.id = :userid AND l.region = :region AND (l.accountStatus = 'READY_FOR_USE' OR l.accountStatus= 'NEW') AND l.active = true ORDER BY l.priority ASC, l.level DESC")
+	@Query("SELECT l FROM LolAccount l WHERE l.user.id = :userid AND l.region = :region AND (l.accountStatus = 'READY_FOR_USE' OR l.accountStatus= 'NEW') AND l.active = true ORDER BY l.priority ASC, l.level DESC, l.id ASC")
 	List <LolAccount> findUsableAccounts(@Param("userid") Long userid, @Param("region") Region region, Pageable pageable);
 	@Query("SELECT l FROM LolAccount l WHERE l.user.id = :userid AND l.region = :region AND (l.accountStatus = 'READY_FOR_USE' OR l.accountStatus= 'NEW') AND l.active = true ORDER BY l.priority DESC, l.level ASC")
 	List <LolAccount> findBufferAccounts(@Param("userid") Long userid, @Param("region") Region region, Pageable pageable);
 	LolAccount findByAccountIgnoreCaseAndRegionAndUserId (@Param("account") String account, @Param("region") Region region, @Param("userid") Long userId);
 	LolAccount findByAccountIgnoreCaseAndRegion(@Param("account") String account, @Param("region") Region region);
+	List<LolAccount> findByUserAndAccountStatus(User user, AccountStatus accountStatus);
+	List<LolAccount> findByUserAndRegion(User user, Region region);
+	List<LolAccount> findByUserAndRegionAndAccountStatus(User user,	Region region, AccountStatus accountStatus);
 }

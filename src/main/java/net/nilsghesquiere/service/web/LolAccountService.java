@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.User;
+import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.enums.Region;
 
 public interface LolAccountService {
@@ -22,4 +23,7 @@ public interface LolAccountService {
 	List <LolAccount> findBufferAccounts(Long userid, Region region, Integer amount);
 	LolAccount findByUserIdAndRegionAndAccount(Long userid, Region region, String account);
 	long countAll();
+	List<LolAccount> findByUserAndAccountStatus(User user,AccountStatus accountStatus);
+	List<LolAccount> findByUserAndRegion(User user, Region region);
+	List<LolAccount> findByUserAndRegionAndAccountStatus(User user, Region region, AccountStatus accountStatus);
 }

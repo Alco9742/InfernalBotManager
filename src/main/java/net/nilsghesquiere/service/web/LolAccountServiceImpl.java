@@ -164,4 +164,22 @@ public class LolAccountServiceImpl implements LolAccountService{
 	public long countAll() {
 		return lolAccountRepository.count();
 	}
+
+	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	public List<LolAccount> findByUserAndAccountStatus(User user,AccountStatus accountStatus) {
+		return lolAccountRepository.findByUserAndAccountStatus(user, accountStatus);
+	}
+	
+	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	public List<LolAccount> findByUserAndRegion(User user,Region region) {
+		return lolAccountRepository.findByUserAndRegion(user, region);
+	}
+	
+	@Override
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	public List<LolAccount> findByUserAndRegionAndAccountStatus(User user,Region region,AccountStatus accountStatus) {
+		return lolAccountRepository.findByUserAndRegionAndAccountStatus(user, region, accountStatus);
+	}
 }
