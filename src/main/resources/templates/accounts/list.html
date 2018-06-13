@@ -12,6 +12,26 @@
 			input.trigger('fileselect', [numFiles, label]);
 		});
 		
+		String.prototype.replaceAll = function(search, replacement) {
+			var target = this;
+			return target.replace(new RegExp(search, 'g'), replacement);
+		};
+		
+		function SaveAsFile(t,f,m) {
+			try {
+				var b = new Blob([t],{type:m});
+				saveAs(b, f);
+			} catch (e) {
+				window.open("data:"+m+"," + encodeURIComponent(t), '_blank','');
+			}
+		}
+		
+		function convertDate(inputFormat) {
+			  function pad(s) { return (s < 10) ? '0' + s : s; }
+			  var d = new Date(inputFormat);
+			  return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('');
+			}
+		
 		$(document).ready(function() {
 			var editor; 
 			var restlnk = "/api/accounts/user/" + /*[[${currentUser.id}]]*/;
@@ -193,13 +213,13 @@
 					extend: 'collection',
 					text: 'Export',
 					buttons: [
-						{ 	text: 'Simple',
+						'copy',
+						{ 	text: 'TXT',
 							action: function () {
 								$('#exportModal').modal('show');
 								$('#selectModeSelected').prop('checked',true).change();
 							}
 						},
-						'copy',
 						'excel',
 						'csv'
 					],
@@ -319,32 +339,24 @@
 				//$("#exportIncludeRegionDiv").hide();
 				$("#exportRegionDiv").hide();
 				$("#exportStatusDiv").hide();
-				$('#exportRegionUsage').prop('checked', false);
-				$('#exportStatusUsage').prop('checked', false);
+				$('#exportRegionUsage').prop('checked', false).change();
+				$('#exportStatusUsage').prop('checked', false).change();
 				$('#exportIncludeRegionUsage').prop('checked', false);
 				$('#exportIncludeLevelUsage').prop('checked', false);
+				//$('#exportNameUsage').prop('checked', false); //may be better if this doesn't get reset
 				$( "#exportSyntax" ).val("SYNTAX\n");
 				$( "#exportIncludeRegion" ).addClass("text-muted").css({ background: ""});
-				$( "#exportIncludeLevel" ).addClass("text-muted").css({ background: ""});;
+				$( "#exportIncludeLevel" ).addClass("text-muted").css({ background: ""});
+				$('#exportResponse').val("OUTPUT");
 				if (this.value == 'selected') {
 					$("#exportIncludeRegionDiv").show();
-					var selectedRows = table.rows( { selected: true }).data().toArray();
-					
-					console.log(selectedRows);
-					
-					var ids = $.map(selectedRows, function (item) {
-						return item.id
-					});
-					
-					idsJson = JSON.stringify(ids);
-					
-					console.log(idsJson);
 					$( "#exportSyntax" ).val("SYNTAX\naccount:password");
 				} else if (this.value == 'custom') {
 					$("#exportRegionDiv").show();
 					$("#exportStatusDiv").show();
 					$( "#exportSyntax" ).val("SYNTAX\naccount:password");
 				}
+				buildExportName();
 			});
 		
 			
@@ -363,6 +375,7 @@
 					// mark the first option as selected
 					$("#exportRegion option:first").attr('selected','selected');
 				}
+				buildExportName()
 			});
 			
 			//handle exportStatusUsage checkbox change
@@ -380,6 +393,7 @@
 					// mark the first option as selected
 					$("#exportStatus option:first").attr('selected','selected');
 				}
+				buildExportName()
 			});
 			
 			//handle exportIncludeLevelUsage checkbox change
@@ -420,12 +434,28 @@
 				}
 			});
 			
+			//handle exportNameUsage checkbox change
+			$('#exportNameUsage').change(function() {
+				buildExportName();
+			});
+			
+			//rebuild name on region or status change
+			$('#exportRegion').change(function() {
+				buildExportName();
+			});
+			$('#exportStatus').change(function() {
+				buildExportName();
+			});
+			
 			//export file
 			$('#exportButton').click(function(event) {
 				var exportlink = restlnk + "/export";
 				var selectMode = $('input[name=selectMode]:checked').val();
 				var $exportIncludeRegionUsage = $('#exportIncludeRegionUsage');
 				var $exportIncludeLevelUsage = $('#exportIncludeLevelUsage');
+				var $exportButton = $('#exportButton');
+				var $exportResponse = $('#exportResponse');
+				$exportResponse.val("OUTPUT");
 				if (selectMode == 'selected') {
 					exportlink = exportlink + "/selected";
 				} else if (selectMode == 'custom'){
@@ -433,17 +463,27 @@
 					var $exportRegion = $('#exportRegion');
 					var $exportStatusUsage  = $('#exportStatusUsage');
 					var $exportStatus = $('#exportStatus');
-					exportlink = exportlink + "/custom/region/" +  $exportRegion.val() + "/status/" + $exportStatus.val() ;
+					exportlink = exportlink + "/custom";
+					if($exportRegionUsage.is(":checked")){
+						if($exportRegion.val() != null){
+							exportlink = exportlink + "/r/"  + $exportRegion.val();
+						}
+					}
+					if($exportStatusUsage.is(":checked")){
+						if($exportStatus.val() != null){
+							exportlink = exportlink + "/s/" + $exportStatus.val();
+						}
+					}
 				} 
 				if($exportIncludeRegionUsage.is(":checked")) {
-					exportlink = exportlink + "/ir/true"
+					exportlink = exportlink + "/ir/true";
 				} else {
-					exportlink = exportlink + "/ir/false"
+					exportlink = exportlink + "/ir/false";
 				}
 				if($exportIncludeLevelUsage.is(":checked")) {
-					exportlink = exportlink + "/il/true/"
+					exportlink = exportlink + "/il/true/";
 				} else {
-					exportlink = exportlink + "/il/false/"
+					exportlink = exportlink + "/il/false/";
 				}
 				if(selectMode == 'selected'){
 					var selectedRows = table.rows( { selected: true }).data().toArray();
@@ -451,6 +491,8 @@
 						return item.id
 					});
 					idsJson = JSON.stringify(ids);
+					$exportButton.html('Exporting...');
+					$exportButton.prop("disabled",true);
 					$.ajax({
 						type: 'PUT',
 						dataType: "text",
@@ -459,15 +501,36 @@
 						contentType: "application/json; charset=utf-8",
 						dataSrc: "data",
 						success: function(returnedData) {
-							var FileSaver = require('file-saver');
-							var blob = new Blob([returnedData], {type: "text/plain;charset=utf-8"});
-							FileSaver.saveAs(blob, "export.txt");
-							console.log("success");
-							console.log(returnedData);
+							exportFileName = $( "#exportName" ).val() + ".txt";
+							SaveAsFile(returnedData, exportFileName,"text/plain;charset=utf-8");
+							var amountOfLines = returnedData.split(/\r\n|\r|\n/).length - 1;
+							$exportResponse.val($exportResponse.val() +  "\nSuccesfully exported " + amountOfLines + " accounts");
+							$exportButton.html('Export');
+							$exportButton.prop("disabled",false);
 						}, 
 						error:function(returnedData){
-							console.log("error");
-							console.log(returnedData);
+							$exportResponse.val($exportResponse.val() +  "\nFailed to export accounts");
+							$exportButton.html('Export');
+							$exportButton.prop("disabled",false);
+						}
+					});
+				} else if(selectMode == 'custom'){
+					$.ajax({
+						type: 'PUT',
+						dataType: "text",
+						url: exportlink,
+						success: function(returnedData) {
+							exportFileName = $( "#exportName" ).val() + ".txt";
+							SaveAsFile(returnedData, exportFileName,"text/plain;charset=utf-8");
+							var amountOfLines = returnedData.split(/\r\n|\r|\n/).length - 1;
+							$exportResponse.val($exportResponse.val() +  "\nSuccesfully exported " + amountOfLines + " accounts");
+							$exportButton.html('Export');
+							$exportButton.prop("disabled",false);
+						}, 
+						error:function(returnedData){
+							$exportResponse.val($exportResponse.val() +  "\nFailed to export accounts");
+							$exportButton.html('Export');
+							$exportButton.prop("disabled",false);
 						}
 					});
 				}
@@ -536,7 +599,6 @@
 							$importButton.html('Import');
 							$importButton.prop("disabled",false);
 							table.ajax.reload();
-							var psconsole = $('#one');
 							if($importReponse.length){
 								$importReponse.scrollTop($importReponse[0].scrollHeight - $importReponse.height());
 							}
@@ -553,6 +615,43 @@
 				}
 			});
 		} );
+		
+		function buildExportName(){
+			if($('#exportNameUsage').is(":checked")) {
+				$("#exportName").prop( "disabled", false );
+				$( "#exportName" ).removeClass("text-muted");
+			} else {
+				$("#exportName").prop( "disabled", true );
+				$( "#exportName" ).addClass("text-muted");
+				var d = new Date();
+				var dateString = convertDate(d);
+				var exportNameText = dateString + "_accounts";
+				var selectMode = $('input[name=selectMode]:checked').val();
+				if (selectMode == 'selected') {
+					exportNameText = exportNameText + "_selected";
+				} else if (selectMode == 'custom'){
+					if($('#exportRegionUsage').is(":checked")){
+						var exportRegionText = "all";
+						if ($('#exportRegion').val() != null ){
+							exportRegionText = $('#exportRegion').val().toLowerCase();
+						}
+						exportNameText = exportNameText + "_" + exportRegionText;
+					} else {
+						exportNameText = exportNameText + "_all";
+					}
+					if($('#exportStatusUsage').is(":checked")){
+						var exportStatusText = "all";
+						if($('#exportStatus').val() != null){
+							exportStatusText = $('#exportStatus').val().toLowerCase().replaceAll('_','');
+						}
+						exportNameText = exportNameText + "_" + exportStatusText;
+					} else {
+						exportNameText = exportNameText + "_all";
+					}
+				} 
+				$( "#exportName" ).val(exportNameText);
+			}
+		}
 		/*]]>*/
 		</script>
 	</head>
@@ -691,6 +790,17 @@
 									</div>
 								</div>
 								<div class="form-control input-group-text text-muted" id="exportIncludeLevel">Include levels</div>
+							</div>
+							<div class="input-group mb-3" id="exportNameDiv">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<input type="checkbox" id="exportNameUsage" aria-label="Name select" />
+									</div>
+								</div>
+								<input type="text" class="form-control" id="exportName" aria-label="Export name" aria-describedby="exportName" disabled="disabled" />
+								<div class="input-group-append">
+									<span class="input-group-text">.txt</span>
+								</div>
 							</div>
 							<div class="form-group">
 								<textarea class="form-control disabledTextArea" id="exportSyntax" rows="2" disabled="disabled">SYNTAX&#13;&#10;</textarea>

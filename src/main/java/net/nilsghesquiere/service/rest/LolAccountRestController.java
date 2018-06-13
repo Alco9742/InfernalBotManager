@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -534,8 +535,10 @@ public class LolAccountRestController {
 	
 	@RequestMapping(path = "/user/{userid}/export/selected/ir/{includeRegion}/il/{includeLevel}/",method = RequestMethod.PUT)
 	public @ResponseBody byte[] exportSimpleSelected(@PathVariable Long userid,@PathVariable Boolean includeRegion,@PathVariable Boolean includeLevel, @RequestBody Long[] ids) {
-		//USER CHECK
+		//VARS
 		StringBuilder builder = new StringBuilder("");
+		
+		//USER CHECK
 		User user = userService.findUserByUserId(userid);
 		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
 			throw new UserIsNotOwnerOfResourceException();
@@ -543,6 +546,86 @@ public class LolAccountRestController {
 		
 		for (Long id : ids){
 			LolAccount lolAccount = lolAccountService.read(id);
+			if(lolAccount != null){
+				if(!lolAccount.getUser().equals(user)){
+					throw new UserIsNotOwnerOfResourceException();
+				}
+				builder.append(lolAccount.getAccount());
+				builder.append(":");
+				builder.append(lolAccount.getPassword());
+				if(includeRegion){
+					builder.append(":");
+					builder.append(lolAccount.getRegion().toString());
+				}
+				if(includeLevel){
+					builder.append(":");
+					builder.append(lolAccount.getLevel());
+				}
+				builder.append(System.lineSeparator());
+			}
+		}
+		
+		//remove last empty line
+		
+		int last = builder.lastIndexOf("\n");
+		if (last >= 0) {
+			builder.delete(last, builder.length());
+		}
+		
+		return builder.toString().getBytes();
+	}
+	@RequestMapping(value = {"/user/{userid}/export/custom/r/{region}/s/{status}/ir/{includeRegion}/il/{includeLevel}/",
+							"/user/{userid}/export/custom/r/{region}/ir/{includeRegion}/il/{includeLevel}/",
+							"/user/{userid}/export/custom/s/{status}/ir/{includeRegion}/il/{includeLevel}/",
+							"/user/{userid}/export/custom/ir/{includeRegion}/il/{includeLevel}/"},
+					method = RequestMethod.PUT)
+	public @ResponseBody byte[] exportSimpleCustom(@PathVariable Long userid, @PathVariable Optional<Region> region, @PathVariable Optional<AccountStatus> status, @PathVariable Boolean includeRegion,@PathVariable Boolean includeLevel) {
+		//VARS
+		StringBuilder builder = new StringBuilder("");
+		boolean allRegions = false;
+		boolean allStatus = false;
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//fill the booleans according to the input
+		if(!region.isPresent()){
+			allRegions = true;
+		}
+		if(!status.isPresent()){
+			allStatus = true;
+		}
+		
+		
+		//build the list of accounts needed for export
+		List<LolAccount> lolAccounts = new ArrayList<>();
+		
+		if(allRegions){
+			if (allStatus){
+				//All regions and all status = find by user
+				LOGGER.info("ALL STATUS & ALL REGION");
+				lolAccounts = lolAccountService.findByUser(user);
+			} else {
+				LOGGER.info(status.get().toString() + " & ALL REGIONS");
+				//All regions but selected status
+			}
+		} else {
+			if (allStatus){
+				LOGGER.info("ALL STATUS & " + region.get().toString());
+				//All status but selected region
+			} else {
+				LOGGER.info(status.get().toString() + " & " + region.get().toString());
+				//Selected region and selected status
+			}
+		}
+		
+
+		
+		//export (can stay same as regular)
+		for (LolAccount lolAccount : lolAccounts){
 			if(lolAccount != null){
 				if(!lolAccount.getUser().equals(user)){
 					throw new UserIsNotOwnerOfResourceException();

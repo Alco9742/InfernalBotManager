@@ -1,0 +1,4 @@
+0.9.8.1
+	- Export: Removed PDF and Print
+	- Export: Added TXT (username:password[:region][:level]) - Selected rows or custom selection (by region / status).
+	- (Active Queuer and Max Queuer added to admin userlist)
