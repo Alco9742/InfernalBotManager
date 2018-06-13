@@ -43,6 +43,6 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		// Set all clients on offline and delete their clientdata
 		systemTasksService.setAllClientsAsOffline();
 		//disabled this for now until the account fetching system gets reworked
-		systemTasksService.setAllInUseAccountsToReadyForUse();
+		//systemTasksService.setAllInUseAccountsToReadyForUse();
 	}
 }
