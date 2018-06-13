@@ -285,7 +285,8 @@ public class ClientRestController {
 			throw new UserIsNotOwnerOfResourceException();
 		}
 		
-		if(client.getHWID().trim().isEmpty()){
+		//Check for the 00:00:00:00:00:00:00:e0 HWID
+		if(client.getHWID().trim().isEmpty() || client.getHWID().trim() == "00:00:00:00:00:00:00:e0"){
 			client.setHWID(hwid);
 			client.setClientStatus(ClientStatus.CONNECTED);
 			client.setLastPing(LocalDateTime.now());

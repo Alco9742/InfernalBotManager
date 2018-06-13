@@ -47,10 +47,8 @@ public class ClientScheduledTasks {
 	}
 
 	//got to de everything in a very roundabout way right now because no session = lazy loading issues
-	//TODO test at home, doesn't work here because of firewall
 	@Scheduled(fixedRate = 120000, initialDelay = 60000) //Excecute every two minutes
 	public void checkDisconnectedClients(){
-		LOGGER.info("checkDisconnectedClients");
 		List<Client> clientsToSendMail = new ArrayList<Client>();
 		List<Client> disconnectedClients = systemTasksService.findClientsByClientStatus(ClientStatus.DISCONNECTED);
 		for (Client client : disconnectedClients){
@@ -62,10 +60,6 @@ public class ClientScheduledTasks {
 					if(secondsSinceLastPing >= 300){
 						clientsToSendMail.add(client);
 						SimpleMailMessage email= MailBuilders.buildClientDisconnectedMail(client.getTag(),user.getEmail(),secondsSinceLastPing);
-						LOGGER.info("sending mail");
-						LOGGER.info(client.getTag());
-						LOGGER.info(user.getEmail());
-						LOGGER.info(secondsSinceLastPing + "");
 						mailSender.send(email);
 					}
 				}
