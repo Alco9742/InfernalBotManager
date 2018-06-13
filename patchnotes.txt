@@ -1,4 +1,6 @@
 0.9.8.1
-	- Export: Removed PDF and Print
-	- Export: Added TXT (username:password[:region][:level]) - Selected rows or custom selection (by region / status).
-	- (Active Queuer and Max Queuer added to admin userlist)
+	- Account export: Removed PDF and Print
+	- Account export: Added TXT (username:password[:region][:level]) - Selected rows or custom selection (by region / status).
+	- Added auto clear Launcher and Queuer entries in infernal/configs/settings.ini before infernalbot start.
+	- Fix for '00:00:00:00:00:00:00:e0' getting registered as HWID on some servers.
+	- (Active Queuers and Max Queuers added to admin userlist)
