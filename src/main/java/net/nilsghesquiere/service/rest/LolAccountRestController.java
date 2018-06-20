@@ -533,9 +533,10 @@ public class LolAccountRestController {
 		return new GenericResponse("Succesfully deleted " + aantalAccounts + " banned accounts.");
 	}
 	
-	@RequestMapping(path = "/user/{userid}/export/selected/ir/{includeRegion}/il/{includeLevel}/",method = RequestMethod.PUT)
-	public @ResponseBody byte[] exportSimpleSelected(@PathVariable Long userid,@PathVariable Boolean includeRegion,@PathVariable Boolean includeLevel, @RequestBody Long[] ids) {
+	@RequestMapping(path = "/user/{userid}/export/selected/ir/{includeRegion}/il/{includeLevel}/de/{deleteExported}/",method = RequestMethod.PUT)
+	public @ResponseBody byte[] exportSimpleSelected(@PathVariable Long userid,@PathVariable Boolean includeRegion,@PathVariable Boolean includeLevel,@PathVariable Boolean deleteExported, @RequestBody Long[] ids) {
 		//VARS
+		List<LolAccount> accountsToDelete = new ArrayList<>();
 		StringBuilder builder = new StringBuilder("");
 		
 		//USER CHECK
@@ -562,26 +563,28 @@ public class LolAccountRestController {
 					builder.append(lolAccount.getLevel());
 				}
 				builder.append(System.lineSeparator());
+				if(deleteExported){
+					accountsToDelete.add(lolAccount);
+				}
 			}
 		}
 		
-		//remove last empty line
-		
-		int last = builder.lastIndexOf("\n");
-		if (last >= 0) {
-			builder.delete(last, builder.length());
+		//All are done without error: delete them
+		if(deleteExported){
+			accountsToDelete.stream().forEach(e -> lolAccountService.delete(e));
 		}
 		
 		return builder.toString().getBytes();
 	}
-	@RequestMapping(value = {"/user/{userid}/export/custom/r/{region}/s/{status}/ir/{includeRegion}/il/{includeLevel}/",
-							"/user/{userid}/export/custom/r/{region}/ir/{includeRegion}/il/{includeLevel}/",
-							"/user/{userid}/export/custom/s/{status}/ir/{includeRegion}/il/{includeLevel}/",
-							"/user/{userid}/export/custom/ir/{includeRegion}/il/{includeLevel}/"},
+	@RequestMapping(value = {"/user/{userid}/export/custom/r/{region}/s/{status}/ir/{includeRegion}/il/{includeLevel}/de/{deleteExported}/",
+							"/user/{userid}/export/custom/r/{region}/ir/{includeRegion}/il/{includeLevel}/de/{deleteExported}/",
+							"/user/{userid}/export/custom/s/{status}/ir/{includeRegion}/il/{includeLevel}/de/{deleteExported}/",
+							"/user/{userid}/export/custom/ir/{includeRegion}/il/{includeLevel}/de/{deleteExported}/"},
 					method = RequestMethod.PUT)
-	public @ResponseBody byte[] exportSimpleCustom(@PathVariable Long userid, @PathVariable Optional<Region> region, @PathVariable Optional<AccountStatus> status, @PathVariable Boolean includeRegion,@PathVariable Boolean includeLevel) {
+	public @ResponseBody byte[] exportSimpleCustom(@PathVariable Long userid, @PathVariable Optional<Region> region, @PathVariable Optional<AccountStatus> status, @PathVariable Boolean includeRegion,@PathVariable Boolean includeLevel,@PathVariable Boolean deleteExported) {
 		//VARS
 		StringBuilder builder = new StringBuilder("");
+		List<LolAccount> accountsToDelete = new ArrayList<>();
 		boolean allRegions = false;
 		boolean allStatus = false;
 		
@@ -639,8 +642,17 @@ public class LolAccountRestController {
 					builder.append(lolAccount.getLevel());
 				}
 				builder.append(System.lineSeparator());
+				if(deleteExported){
+					accountsToDelete.add(lolAccount);
+				}
 			}
 		}
+		
+		//All are done without error: delete them
+		if(deleteExported){
+			accountsToDelete.stream().forEach(e -> lolAccountService.delete(e));
+		}
+		
 		return builder.toString().getBytes();
 	}
 }

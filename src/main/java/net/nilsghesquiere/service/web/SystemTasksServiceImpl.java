@@ -23,7 +23,6 @@ import net.nilsghesquiere.util.enums.AccountStatus;
 import net.nilsghesquiere.util.enums.ClientStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -148,6 +147,13 @@ public class SystemTasksServiceImpl implements SystemTasksService{
 			if(user.getUserSettings() == null){
 				user.setUserSettings(new UserSettings());
 				userRepository.save(user);
+			} else {
+				//new: updateable seconds before mail
+				UserSettings settings = user.getUserSettings();
+				if (settings.getSecondsBeforeMail() == null){
+					settings.setSecondsBeforeMail(300);
+					userSettingsRepository.save(settings);
+				}
 			}
 		}
 	}

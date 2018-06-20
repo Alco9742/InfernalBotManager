@@ -85,6 +85,11 @@
 					//remove the select import setting field if it exists
 					$("#activeImportSettingsField option[value='0']").remove();
 				});
+				
+				//User changed the mail on disconnect field
+				$( "#mailOnDisconnectField" ).change(function() {
+					checkMailOnDisconnectField();
+				});
 			});
 				
 			function resetMessages(){
@@ -131,12 +136,22 @@
 							$element.val(userSettings[k]);
 						}
 					});
+					checkMailOnDisconnectField();
 				})
 				.fail(function(data) {
 					//Show error on fail
 					$("#errorMsg div span").text(data.responseJSON.message);
 					$("#errorMsg").show();
 				})
+			}
+			
+			function checkMailOnDisconnectField(){
+				var selectedMailOnDisconnect = $('#mailOnDisconnectField').val();
+				if(selectedMailOnDisconnect === "true"){
+					$('#rowSecondsBeforeMail').show();
+				} else {
+					$('#rowSecondsBeforeMail').hide();
+				}
 			}
 			
 		/*]]>*/
@@ -173,6 +188,13 @@
 							<option value="false">No</option>
 						</select>
 						<span id="mailOnDisconnectError" class="invalid-feedback" style="display:none"></span>
+					</div>
+				</div>
+				<div class ="form-group row"  id="rowSecondsBeforeMail" style="display:none">
+					<label for="secondsBeforeMailField" class="col-12 offset-sm-1 col-sm-4 col-form-label">Seconds before mail</label>
+					<div class="col-12  col-sm-6">
+						<input type="number" min="1" max="999" class="form-control" name="secondsBeforeMail" id="secondsBeforeMailField"/>
+						<span id="secondsBeforeMailError" class="invalid-feedback" style="display:none"></span>
 					</div>
 				</div>
 				<div class ="form-group row" id="saveDiv">

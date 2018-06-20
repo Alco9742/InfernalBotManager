@@ -32,6 +32,7 @@ public class UserSettings implements Serializable{
 	private Long activeImportSettings;
 
 	private Boolean mailOnDisconnect;
+	private Integer secondsBeforeMail;
 	private Integer maxQueuers;
 	
 	public UserSettings(){
@@ -46,11 +47,13 @@ public class UserSettings implements Serializable{
 		this.activeImportSettings = activeImportSettings;
 		this.maxQueuers = 100000;
 		this.mailOnDisconnect = false;
+		this.secondsBeforeMail = 300;
 	}
 	
 	public void updateFromDTO(UserSettingsDTO dto){
 		this.activeImportSettings = dto.getActiveImportSettings();
 		this.mailOnDisconnect = dto.getMailOnDisconnect();
+		this.secondsBeforeMail = dto.getSecondsBeforeMail();
 	}
 	
 	public void setUser(User user){

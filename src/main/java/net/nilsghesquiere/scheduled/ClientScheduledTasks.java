@@ -47,7 +47,7 @@ public class ClientScheduledTasks {
 	}
 
 	//got to de everything in a very roundabout way right now because no session = lazy loading issues
-	@Scheduled(fixedRate = 120000, initialDelay = 60000) //Excecute every two minutes
+	@Scheduled(fixedRate = 60000, initialDelay = 60000) //Excecute every minute
 	public void checkDisconnectedClients(){
 		List<Client> clientsToSendMail = new ArrayList<Client>();
 		List<Client> disconnectedClients = systemTasksService.findClientsByClientStatus(ClientStatus.DISCONNECTED);
@@ -57,7 +57,7 @@ public class ClientScheduledTasks {
 				UserSettings userSettings = systemTasksService.getUserSettingsByUser(user);
 				if(userSettings != null && userSettings.getMailOnDisconnect()){
 					long secondsSinceLastPing = Duration.between(client.getLastPing(), LocalDateTime.now()).toMillis() / 1000;
-					if(secondsSinceLastPing >= 300){
+					if(userSettings.getSecondsBeforeMail() != null && secondsSinceLastPing >= userSettings.getSecondsBeforeMail()){
 						clientsToSendMail.add(client);
 						SimpleMailMessage email= MailBuilders.buildClientDisconnectedMail(client.getTag(),user.getEmail(),secondsSinceLastPing);
 						mailSender.send(email);

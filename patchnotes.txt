@@ -6,3 +6,7 @@ Updated to version 0.9.8.1
 	- Fixed bug in autoupdater
 Because of the bug in the autoupdate this update wont go automatically in the background while infernal is running, and due to a mistake all IN_USE accounts have been automatically set to READY_FOR_USE.
 So please safestop your queuers and relaunch the manager so it can update and refetch the accounts asap.
+
+Updated to version 0.9.8.3 (??)
+	- Account export: Added delete exported.
+	- User settings: Added seconds before mail (on disconnect).

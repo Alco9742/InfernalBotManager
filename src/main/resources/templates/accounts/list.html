@@ -343,10 +343,12 @@
 				$('#exportStatusUsage').prop('checked', false).change();
 				$('#exportIncludeRegionUsage').prop('checked', false);
 				$('#exportIncludeLevelUsage').prop('checked', false);
+				$('#exportDeleteExportedUsage').prop('checked', false);
 				//$('#exportNameUsage').prop('checked', false); //may be better if this doesn't get reset
 				$( "#exportSyntax" ).val("SYNTAX\n");
 				$( "#exportIncludeRegion" ).addClass("text-muted").css({ background: ""});
 				$( "#exportIncludeLevel" ).addClass("text-muted").css({ background: ""});
+				$( "#exportDeleteExported" ).addClass("text-muted").css({ background: "" }).text("Delete exported accounts");
 				$('#exportResponse').val("OUTPUT");
 				if (this.value == 'selected') {
 					$("#exportIncludeRegionDiv").show();
@@ -396,6 +398,17 @@
 				buildExportName()
 			});
 			
+			
+			//handle exportDeleteExportedUsage checkbox change
+			$('#exportDeleteExportedUsage').change(function() {
+				if($(this).is(":checked")) {
+					$( "#exportDeleteExported" ).removeClass("text-muted").css({ background: "white" }).text("Delete exported accounts (cannot be undone)");
+					
+				} else {
+					$( "#exportDeleteExported" ).addClass("text-muted").css({ background: ""}).text("Delete exported accounts");
+				}
+			});
+			
 			//handle exportIncludeLevelUsage checkbox change
 			$('#exportIncludeLevelUsage').change(function() {
 				if($(this).is(":checked")) {
@@ -406,7 +419,7 @@
 						$( "#exportSyntax" ).val("SYNTAX\naccount:password:level");
 					}
 				} else {
-					$( "#exportIncludeLevel" ).addClass("text-muted").css({ background: ""});;
+					$( "#exportIncludeLevel" ).addClass("text-muted").css({ background: ""});
 					if($('#exportIncludeRegionUsage').is(":checked")){
 						$( "#exportSyntax" ).val("SYNTAX\naccount:password:region");
 					} else {
@@ -453,6 +466,7 @@
 				var selectMode = $('input[name=selectMode]:checked').val();
 				var $exportIncludeRegionUsage = $('#exportIncludeRegionUsage');
 				var $exportIncludeLevelUsage = $('#exportIncludeLevelUsage');
+				var $exportDeleteExportedUsage = $('#exportDeleteExportedUsage');
 				var $exportButton = $('#exportButton');
 				var $exportResponse = $('#exportResponse');
 				$exportResponse.val("OUTPUT");
@@ -481,9 +495,14 @@
 					exportlink = exportlink + "/ir/false";
 				}
 				if($exportIncludeLevelUsage.is(":checked")) {
-					exportlink = exportlink + "/il/true/";
+					exportlink = exportlink + "/il/true";
 				} else {
-					exportlink = exportlink + "/il/false/";
+					exportlink = exportlink + "/il/false";
+				}
+				if($exportDeleteExportedUsage.is(":checked")) {
+					exportlink = exportlink + "/de/true/";
+				} else {
+					exportlink = exportlink + "/de/false/";
 				}
 				if(selectMode == 'selected'){
 					var selectedRows = table.rows( { selected: true }).data().toArray();
@@ -504,9 +523,14 @@
 							exportFileName = $( "#exportName" ).val() + ".txt";
 							SaveAsFile(returnedData, exportFileName,"text/plain;charset=utf-8");
 							var amountOfLines = returnedData.split(/\r\n|\r|\n/).length - 1;
-							$exportResponse.val($exportResponse.val() +  "\nSuccesfully exported " + amountOfLines + " accounts");
 							$exportButton.html('Export');
 							$exportButton.prop("disabled",false);
+							if($exportDeleteExportedUsage.is(":checked")) {
+								$exportResponse.val($exportResponse.val() +  "\nSuccesfully exported and deleted " + amountOfLines + " accounts");
+								table.ajax.reload();
+							} else {
+								$exportResponse.val($exportResponse.val() +  "\nSuccesfully exported " + amountOfLines + " accounts");
+							}
 						}, 
 						error:function(returnedData){
 							$exportResponse.val($exportResponse.val() +  "\nFailed to export accounts");
@@ -523,9 +547,14 @@
 							exportFileName = $( "#exportName" ).val() + ".txt";
 							SaveAsFile(returnedData, exportFileName,"text/plain;charset=utf-8");
 							var amountOfLines = returnedData.split(/\r\n|\r|\n/).length - 1;
-							$exportResponse.val($exportResponse.val() +  "\nSuccesfully exported " + amountOfLines + " accounts");
 							$exportButton.html('Export');
 							$exportButton.prop("disabled",false);
+							if($exportDeleteExportedUsage.is(":checked")) {
+								$exportResponse.val($exportResponse.val() +  "\nSuccesfully exported and deleted " + amountOfLines + " accounts");
+								table.ajax.reload();
+							} else {
+								$exportResponse.val($exportResponse.val() +  "\nSuccesfully exported " + amountOfLines + " accounts");
+							}
 						}, 
 						error:function(returnedData){
 							$exportResponse.val($exportResponse.val() +  "\nFailed to export accounts");
@@ -790,6 +819,14 @@
 									</div>
 								</div>
 								<div class="form-control input-group-text text-muted" id="exportIncludeLevel">Include levels</div>
+							</div>
+							<div class="input-group mb-3" id="exportDeleteExportedDiv">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<input type="checkbox" id="exportDeleteExportedUsage" aria-label="Delete exported select" />
+									</div>
+								</div>
+								<div class="form-control input-group-text text-muted" id="exportDeleteExported">Delete exported accounts</div>
 							</div>
 							<div class="input-group mb-3" id="exportNameDiv">
 								<div class="input-group-prepend">
