@@ -350,8 +350,6 @@ public class ClientRestController {
 				break;
 			case STOP_REBOOT:
 				break;
-			case STOP_RESTART_INFERNAL:
-				break;
 			default:
 				break;
 			
