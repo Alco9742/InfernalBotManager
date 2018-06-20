@@ -98,7 +98,7 @@ public class RegistrationController {
 		return "redirect:/login"; 
 	}
 
-	@RequestMapping(value = "/resendRegistrationToken", method = RequestMethod.GET)
+	@RequestMapping(value = "/resendRegistrationToken", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public GenericResponse resendRegistrationToken(HttpServletRequest request, @RequestParam("token") String existingToken) {
 		VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
@@ -111,7 +111,12 @@ public class RegistrationController {
 		return new GenericResponse("Resend verificationmail");
 	}
 	
-	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+	@RequestMapping(value = "/forgotpassword", method = RequestMethod.GET)
+	public String forgotPassword(){
+		return "forgotpassword";
+	}
+	
+	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public GenericResponse resetPassword(HttpServletRequest request, @RequestParam("email") String email) {
 		User user = userService.findUserByEmail(email);
@@ -131,10 +136,10 @@ public class RegistrationController {
 			model.addAttribute("message", "Authentication error");
 			return "redirect:/login";
 		}
-		return "redirect:/updatePassword";
+		return "redirect:/updatepassword";
 	}
 	
-	@RequestMapping(value = "/user/savePassword", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/savePassword", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public GenericResponse savePassword( @Valid PasswordDTO passwordDTO) {
 		User user = authenticationFacade.getAuthenticatedUser();
@@ -142,7 +147,7 @@ public class RegistrationController {
 		return new GenericResponse("Succesfully changed password");
 	}
 	
-	@RequestMapping(value = "/user/updatePassword", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/updatePassword", method = RequestMethod.POST, produces = "application/json")
 	@PreAuthorize("hasRole('USER')")
 	@ResponseBody
 	public GenericResponse changeUserPassword(@RequestParam("password") String password,@RequestParam("oldpassword") String oldPassword) {

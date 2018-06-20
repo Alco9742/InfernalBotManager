@@ -10,3 +10,4 @@ So please safestop your queuers and relaunch the manager so it can update and re
 Updated to version 0.9.8.3 (??)
 	- Account export: Added delete exported.
 	- User settings: Added seconds before mail (on disconnect).
+	- Fixed forgot password process (TODO)
