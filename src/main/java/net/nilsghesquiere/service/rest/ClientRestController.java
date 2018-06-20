@@ -13,6 +13,7 @@ import net.nilsghesquiere.service.web.ClientService;
 import net.nilsghesquiere.service.web.ClientSettingsService;
 import net.nilsghesquiere.service.web.InfernalSettingsService;
 import net.nilsghesquiere.service.web.UserService;
+import net.nilsghesquiere.util.enums.ClientAction;
 import net.nilsghesquiere.util.enums.ClientStatus;
 import net.nilsghesquiere.util.facades.AuthenticationFacade;
 import net.nilsghesquiere.util.wrappers.ClientDTOMap;
@@ -303,7 +304,7 @@ public class ClientRestController {
 	}
 	
 	@RequestMapping(path = "/user/{userid}/client/{clientid}/ping", method = RequestMethod.PUT)
-	public ResponseEntity<Boolean> ping(@PathVariable Long userid, @PathVariable Long clientid, @RequestBody ClientStatus status) {
+	public ResponseEntity<ClientAction> ping(@PathVariable Long userid, @PathVariable Long clientid, @RequestBody ClientStatus status) {
 		//USER CHECK
 		User user = userService.findUserByUserId(userid);
 		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
@@ -331,9 +332,34 @@ public class ClientRestController {
 		
 		client.setDcMailSent(false);
 		client.setError(false);
+		
+		//Check client action and respond
+		ClientAction action = client.getClientAction();
+		
+		//TODO figure out how we do this
+		switch (action){
+			case RUN:
+				break;
+			case SAFESTOP:
+				break;
+			case SAFESTOP_REBOOT:
+				break;
+			case SAFESTOP_RESTART_INFERNAL:
+				break;
+			case STOP:
+				break;
+			case STOP_REBOOT:
+				break;
+			case STOP_RESTART_INFERNAL:
+				break;
+			default:
+				break;
+			
+		}
+		
 		clientService.update(client);
 		
 		//RETURN
-		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		return new ResponseEntity<ClientAction>(action, HttpStatus.OK);
 	}
 }

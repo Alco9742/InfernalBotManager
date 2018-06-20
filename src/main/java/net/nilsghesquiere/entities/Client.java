@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.nilsghesquiere.util.enums.ClientAction;
 import net.nilsghesquiere.util.enums.ClientStatus;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,6 +46,7 @@ public class Client {
 	private ClientData clientData;
 	private LocalDateTime lastPing;
 	private ClientStatus clientStatus;
+	private ClientAction clientAction;
 	private Boolean error;
 	private Boolean dcMailSent;
 	
@@ -59,6 +61,7 @@ public class Client {
 		this.infernalSettings = infernalSettings;
 		this.clientSettings = clientSettings;
 		this.clientStatus = ClientStatus.UNASSIGNED;
+		this.clientAction = ClientAction.RUN;
 		this.lastPing = null;
 		this.error = false;
 		this.dcMailSent = false;
