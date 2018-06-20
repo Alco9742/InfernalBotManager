@@ -11,3 +11,4 @@ Updated to version 0.9.8.3 (??)
 	- Account export: Added delete exported.
 	- User settings: Added seconds before mail (on disconnect).
 	- Fixed forgot password process (TODO)
+	- Added safestop and instant stop from the server (clients page)

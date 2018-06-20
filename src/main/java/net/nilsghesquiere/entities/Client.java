@@ -46,6 +46,7 @@ public class Client {
 	private ClientData clientData;
 	private LocalDateTime lastPing;
 	private ClientStatus clientStatus;
+	@JsonIgnore
 	private ClientAction clientAction;
 	private Boolean error;
 	private Boolean dcMailSent;
