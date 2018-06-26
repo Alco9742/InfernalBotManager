@@ -76,6 +76,11 @@
 						type: "hidden",
 						def: "UNASSIGNED"
 					},{
+						label: "Action",
+						name: "clientAction",
+						type: "hidden",
+						def: "NONE"
+					},{
 						label: "Error",
 						name: "error",
 						type: "hidden",
@@ -112,10 +117,11 @@
 				},
 				{ data: "timeSinceLastPing"},
 				{ data: "clientStatus"},
+				{ data: "clientAction"},
 				{ data: "error"}
 				],
 				columnDefs: [
-					{ targets: [0,2,7], visible: false},
+					{ targets: [0,2,8], visible: false},
 					{ targets: [5], orderable: false }
 				],
 				select: true,
@@ -123,6 +129,12 @@
 				{ extend: "create", editor: editor},
 				{ extend: "editSingle",   editor: editor},
 				{ extend: "remove", editor: editor},
+				{ text: 'Actions',
+				  action: function () {
+						$('#actionResponse').val('OUTPUT');
+						$('#actionModal').modal('show');
+					}
+				},
 				{ text: 'Reset HWID',
 					action: function (e, dt, node, config) {
 						var selectedRows = table.rows( { selected: true }).data().toArray();
@@ -164,7 +176,69 @@
 				table.ajax.reload( null, false ); // user paging is not reset on reload
 			}, 30000 );
 			
-		} );
+			//actions
+			$('#actionButton').click(function(event) {
+				var $actionButton = $(this);
+				var $actionResponse = $('#actionResponse');
+				var $selectedAction = $('#actionSelect');
+				var selectMode = $('input[name=selectMode]:checked').val();
+				$actionResponse.val("OUTPUT")
+				$actionButton.html('Sending...');
+				$actionButton.prop("disabled",true);
+				var actionlnk = restlnk + "/actions/" + $selectedAction.val();
+				if(selectMode == 'selected'){
+					var selectedRows = table.rows( { selected: true }).data().toArray();
+					var ids = $.map(selectedRows, function (item) {
+						return item.id
+					});
+					idsJson = JSON.stringify(ids);
+					$.ajax({
+						type: 'PUT',
+						dataType: "text",
+						url: actionlnk,
+						data: idsJson,
+						contentType: "application/json; charset=utf-8",
+						dataSrc: "data",
+						success: function(returnedData) {
+							$actionButton.html('Send command');
+							$actionButton.prop("disabled",false);
+							var clientAmount = JSON.parse(returnedData).data.length;
+							$actionResponse.val($actionResponse.val() +  "\nCommand sent to " + clientAmount + " clients");
+							table.ajax.reload();
+						}, 
+						error:function(returnedData){
+							$actionResponse.val($actionResponse.val() + "\nFailed to send command");
+							$actionButton.html('Send command');
+							$actionButton.prop("disabled",false);
+						}
+					});
+				} else if(selectMode == 'all'){
+					$.ajax({
+						type: 'PUT',
+						dataType: "text",
+						url: actionlnk + "/all",
+						contentType: "application/json; charset=utf-8",
+						dataSrc: "data",
+						success: function(returnedData) {
+							$actionButton.html('Send command');
+							$actionButton.prop("disabled",false);
+							var clientAmount = JSON.parse(returnedData).data.length;
+							$actionResponse.val($actionResponse.val() +  "\nCommand sent to " + clientAmount + " clients");
+							table.ajax.reload();
+						}, 
+						error:function(returnedData){
+							$actionResponse.val($actionResponse.val() +  "\nFailed to send command");
+							$actionButton.html('Send command');
+							$actionButton.prop("disabled",false);
+						}
+					});
+				}
+			});
+			
+			//onnodige options verwijderen van de actions select
+			$("#actionSelect option[value='NONE']").remove();
+			$("#actionSelect option[value='RUN']").remove();
+		});
 		
 		//Select fields opvullen
 		var fillClientSettingsOptions = function(){
@@ -195,7 +269,6 @@
 		</script>
 	</head>
 	<body>
-	<body>
 		<!--/*/ <th:block th:include="fragments/mainNav :: mainNav"/> /*/-->
 		<br/>
 		<table id="infernalbotmanager-datatable-clients" class="table table-striped table-bordered" style="width:100%" >
@@ -208,10 +281,44 @@
 					<th>InfernalSettings</th>
 					<th>Last Ping</th>
 					<th>ClientStatus</th>
+					<th>ClientAction</th>
 					<th>Error</th>
 				</tr>
 			</thead>
 		</table>
-	</body>
+		<div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="actionModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				 <div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="actionModalLabel">Actions</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					</div>
+					<div class="modal-body" id="actionModalMessage">
+						<div class="input-group mb-3 btn-group btn-group-toggle" data-toggle="buttons">
+							<label class="btn btn-secondary active">
+								<input type="radio" name="selectMode" id="selectModeSelected" autocomplete="off" value="selected" checked="checked"/>Selected
+							</label>
+							<label class="btn btn-secondary">
+								<input type="radio" name="selectMode" id="selectModeAll" autocomplete="off" value="all"/>All
+							</label>
+						</div>
+						<div class="input-group mb-3" id="actionSelectDiv">
+							<select class="custom-select" id="actionSelect">
+								<option th:each="status : ${T(net.nilsghesquiere.util.enums.ClientAction).values()}" th:value="${status}" th:text="${status}"></option>
+							</select>
+						</div>
+						<div class="form-group">
+							<textarea class="form-control disabledTextArea" id="actionResponse" rows="2" disabled="disabled">OUTPUT</textarea>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary" id="actionButton">Send command</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

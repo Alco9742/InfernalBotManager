@@ -62,7 +62,7 @@ public class Client {
 		this.infernalSettings = infernalSettings;
 		this.clientSettings = clientSettings;
 		this.clientStatus = ClientStatus.UNASSIGNED;
-		this.clientAction = ClientAction.RUN;
+		this.clientAction = ClientAction.NONE;
 		this.lastPing = null;
 		this.error = false;
 		this.dcMailSent = false;

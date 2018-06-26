@@ -236,6 +236,7 @@ public class ClientRestController {
 			if (client != null && client.getUser().equals(user)){
 				client.setHWID("");
 				client.setClientStatus(ClientStatus.UNASSIGNED);
+				client.setClientAction(ClientAction.NONE);
 				client.setError(false);
 				client.setDcMailSent(false);
 				client.setLastPing(null);
@@ -290,6 +291,7 @@ public class ClientRestController {
 		if(client.getHWID().trim().isEmpty() || client.getHWID().trim().equals("00:00:00:00:00:00:00:e0")){
 			client.setHWID(hwid);
 			client.setClientStatus(ClientStatus.CONNECTED);
+			client.setClientAction(ClientAction.RUN);
 			client.setLastPing(LocalDateTime.now());
 			client.setError(false);
 			client.setDcMailSent(false);
@@ -301,6 +303,59 @@ public class ClientRestController {
 		
 		//RETURN
 		return new ResponseEntity<ClientSingleWrapper>(wrapper, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/user/{userid}/actions/{action}",method = RequestMethod.PUT)
+	public ResponseEntity<ClientDTOWrapper> actions(@PathVariable Long userid, @PathVariable ClientAction action, @RequestBody Long[] ids) {
+		ClientDTOWrapper wrapper = new ClientDTOWrapper();
+		List<ClientDTO> returnDtos = new ArrayList<>();
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		for (Long id : ids){
+			Client client = clientService.read(id);
+			if (client != null && client.getUser().equals(user)){
+				if(!client.getClientAction().equals(ClientAction.NONE)){
+					client.setClientAction(action);
+					Client updatedClient = clientService.update(client);
+					ClientDTO returnDto = new ClientDTO(updatedClient);
+					returnDtos.add(returnDto);
+				}
+			}
+		}
+		wrapper.add("data",returnDtos);
+		return new ResponseEntity<ClientDTOWrapper>(wrapper,HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/user/{userid}/actions/{action}/all",method = RequestMethod.PUT)
+	public ResponseEntity<ClientDTOWrapper> actionsAll(@PathVariable Long userid, @PathVariable ClientAction action) {
+		ClientDTOWrapper wrapper = new ClientDTOWrapper();
+		List<ClientDTO> returnDtos = new ArrayList<>();
+		
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		List<Client> clients = clientService.findByUserId(userid);
+		
+		for (Client client : clients){
+			if (client != null && client.getUser().equals(user)){
+				if(!client.getClientAction().equals(ClientAction.NONE)){
+					client.setClientAction(action);
+					Client updatedClient = clientService.update(client);
+					ClientDTO returnDto = new ClientDTO(updatedClient);
+					returnDtos.add(returnDto);
+				}
+			}
+		}
+		wrapper.add("data",returnDtos);
+		return new ResponseEntity<ClientDTOWrapper>(wrapper,HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/user/{userid}/client/{clientid}/ping", method = RequestMethod.PUT)
@@ -324,6 +379,7 @@ public class ClientRestController {
 		//if status = offline && it has clientData remove the clientData
 		if (status == ClientStatus.OFFLINE && client.getClientData() != null){
 			clientDataService.deleteById(client.getClientData().getId());
+			client.setClientAction(ClientAction.NONE);
 			client.setClientData(null);
 			client.setLastPing(null);
 		} else {
@@ -352,9 +408,13 @@ public class ClientRestController {
 				break;
 			case STOP_RESTART_INFERNAL:
 				break;
+			case NONE:
+				if(status == ClientStatus.CONNECTED){
+					client.setClientAction(ClientAction.RUN);
+				}
+				break;
 			default:
 				break;
-			
 		}
 		
 		clientService.update(client);
