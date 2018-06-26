@@ -9,6 +9,7 @@ So please safestop your queuers and relaunch the manager so it can update and re
 
 Updated to version 0.9.8.3 (??)
 	- Account export: Added delete exported.
+	- Account list: Added paging select: 50, 100, 250, 500, 1000 or all accounts (old default 50)
 	- User settings: Added seconds before mail (on disconnect).
 	- Fixed forgot password process (TODO)
 	- Added safestop and instant stop from the server (clients page)
