@@ -13,4 +13,4 @@ Updated to version 0.9.8.3 (??)
 	- User settings: Added seconds before mail (on disconnect).
 	- Infernal settings: Added "CPU boost in %'
 	- Fixed forgot password process (TODO)
-	- Added safestop and instant stop from the server (clients page) (TODO)
+NOTE:The client page has an actions button added but the clientside functions aren't coded yet so it wont do anything
