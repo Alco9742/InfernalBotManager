@@ -20,6 +20,8 @@ public interface SystemTasksService {
 
 	void setAllClientsAsOffline();
 	
+	void convertInfernalSettingsIfNeeded();
+	
 	User getUserByClient(Client client);
 
 	UserSettings getUserSettingsByUser(User user);

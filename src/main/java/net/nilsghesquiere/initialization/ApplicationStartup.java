@@ -36,6 +36,8 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		setAllClientsAsOffline();
 		//If user has no usersettings yet, create them (needed for update)
 		systemTasksService.createUserSettingsIfNotExisting();
+		//convert settings if needed
+		systemTasksService.convertInfernalSettingsIfNeeded();
 		return;
 	}
 	

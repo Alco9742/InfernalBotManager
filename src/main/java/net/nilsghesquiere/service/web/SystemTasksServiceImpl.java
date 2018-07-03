@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import net.nilsghesquiere.entities.Client;
 import net.nilsghesquiere.entities.GlobalVariable;
+import net.nilsghesquiere.entities.InfernalSettings;
 import net.nilsghesquiere.entities.LolAccount;
 import net.nilsghesquiere.entities.Privilege;
 import net.nilsghesquiere.entities.Role;
@@ -14,6 +15,7 @@ import net.nilsghesquiere.entities.UserSettings;
 import net.nilsghesquiere.persistence.dao.ClientDataRepository;
 import net.nilsghesquiere.persistence.dao.ClientRepository;
 import net.nilsghesquiere.persistence.dao.GlobalVariableRepository;
+import net.nilsghesquiere.persistence.dao.InfernalSettingsRepository;
 import net.nilsghesquiere.persistence.dao.LolAccountRepository;
 import net.nilsghesquiere.persistence.dao.PrivilegeRepository;
 import net.nilsghesquiere.persistence.dao.RoleRepository;
@@ -52,6 +54,9 @@ public class SystemTasksServiceImpl implements SystemTasksService{
 	
 	@Autowired
 	private LolAccountRepository lolAccountRepository;
+	
+	@Autowired
+	private InfernalSettingsRepository infernalSettingsRepository;
 	
 	@Override
 	public List<Client> findClientsByClientStatus(ClientStatus status) {
@@ -154,6 +159,17 @@ public class SystemTasksServiceImpl implements SystemTasksService{
 					settings.setSecondsBeforeMail(300);
 					userSettingsRepository.save(settings);
 				}
+			}
+		}
+	}
+
+	@Override
+	public void convertInfernalSettingsIfNeeded() {
+		List<InfernalSettings> settingsList = infernalSettingsRepository.findAll();
+		for (InfernalSettings settings : settingsList){
+			if(settings.getCpuBoostInPercent() == null){
+				settings.setCpuBoostInPercent(85);
+				infernalSettingsRepository.save(settings);
 			}
 		}
 	}

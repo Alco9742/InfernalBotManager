@@ -11,5 +11,6 @@ Updated to version 0.9.8.3 (??)
 	- Account export: Added delete exported.
 	- Account list: Added paging select: 50, 100, 250, 500, 1000 or all accounts (old default 50)
 	- User settings: Added seconds before mail (on disconnect).
+	- Infernal settings: Added "CPU boost in %'
 	- Fixed forgot password process (TODO)
-	- Added safestop and instant stop from the server (clients page)
+	- Added safestop and instant stop from the server (clients page) (TODO)

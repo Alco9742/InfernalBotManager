@@ -2,6 +2,8 @@ package net.nilsghesquiere.web.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
@@ -110,6 +112,11 @@ public class InfernalSettingsDTO implements Serializable{
 	private Boolean exportLevel;
 	@NotNull
 	private Boolean exportBE;
+	//03072018
+	@NotNull
+	@Min(0)
+	@Max(100)
+	private Integer cpuBoostInPercent;
 	
 	public InfernalSettingsDTO(){
 		super();
@@ -132,7 +139,7 @@ public class InfernalSettingsDTO implements Serializable{
 			Boolean openChest, Boolean openHexTech, Boolean disChest,
 			Boolean enableAutoExport, String exportPath,
 			String exportWildCard, Boolean exportRegion, Boolean exportLevel,
-			Boolean exportBE) {
+			Boolean exportBE, Integer cpuBoostInPercent) {
 		super();
 		this.id = id;
 		this.sets = sets;
@@ -178,6 +185,7 @@ public class InfernalSettingsDTO implements Serializable{
 		this.exportRegion = exportRegion;
 		this.exportLevel = exportLevel;
 		this.exportBE = exportBE;
+		this.cpuBoostInPercent = cpuBoostInPercent;
 	}
 
 	public InfernalSettingsDTO(InfernalSettings settings){
@@ -223,5 +231,6 @@ public class InfernalSettingsDTO implements Serializable{
 		this.exportRegion= settings.getExportRegion();
 		this.exportLevel = settings.getExportLevel();
 		this.exportBE = settings.getExportBE();
+		this.cpuBoostInPercent = settings.getCpuBoostInPercent();
 	}
 }

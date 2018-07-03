@@ -85,6 +85,8 @@ public class InfernalSettings implements Serializable{
 	private Boolean exportRegion;
 	private Boolean exportLevel;
 	private Boolean exportBE;
+	//03072018
+	private Integer cpuBoostInPercent;
 
 	//TODO: API SETTINGS
 	
@@ -108,7 +110,7 @@ public class InfernalSettings implements Serializable{
 			Boolean replaceConfig, Integer lolHeight,
 			Integer lolWidth, Boolean enableAutoExport, String exportPath,
 			String exportWildCard, Boolean exportRegion, Boolean exportLevel,
-			Boolean exportBE) {
+			Boolean exportBE, Integer cpuBoostInPercent) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -158,6 +160,7 @@ public class InfernalSettings implements Serializable{
 		this. exportRegion= exportRegion;
 		this.exportLevel = exportLevel;
 		this.exportBE = exportBE;
+		this.cpuBoostInPercent = cpuBoostInPercent;
 	}
 	
 	public InfernalSettings(InfernalSettingsDTO dto){
@@ -207,6 +210,7 @@ public class InfernalSettings implements Serializable{
 		this.exportRegion= dto.getExportRegion();
 		this.exportLevel = dto.getExportLevel();
 		this.exportBE = dto.getExportBE();
+		this.cpuBoostInPercent = dto.getCpuBoostInPercent();
 	}
 	
 	public void updateFromDTO(InfernalSettingsDTO dto){
@@ -253,6 +257,7 @@ public class InfernalSettings implements Serializable{
 		this.exportRegion= dto.getExportRegion();
 		this.exportLevel = dto.getExportLevel();
 		this.exportBE = dto.getExportBE();
+		this.cpuBoostInPercent = dto.getCpuBoostInPercent();
 	}
 	
 	public void setUser(User user) {
