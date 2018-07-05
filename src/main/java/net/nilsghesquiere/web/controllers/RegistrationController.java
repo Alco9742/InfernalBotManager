@@ -3,6 +3,7 @@ package net.nilsghesquiere.web.controllers;
 import java.util.Calendar;
 import java.util.UUID;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -116,7 +117,7 @@ public class RegistrationController {
 		return "forgotpassword";
 	}
 	
-	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public GenericResponse resetPassword(HttpServletRequest request, @RequestParam("email") String email) {
 		User user = userService.findUserByEmail(email);
@@ -126,34 +127,21 @@ public class RegistrationController {
 		String token = UUID.randomUUID().toString();
 		userService.createPasswordResetTokenForUser(user, token);
 		mailSender.send(constructResetTokenEmail(getAppUrl(request), token, user));
-		return new GenericResponse("Password reset");
+		return new GenericResponse("Instructions sent, check your email");
 	}
 		
-	@RequestMapping(value = "/user/changePassword", method = RequestMethod.GET)
+	@RequestMapping(value = "/changepassword", method = RequestMethod.GET)
 	public String showChangePasswordPage(Model model, @RequestParam("id") long id, @RequestParam("token") String token) {
-		String result = userSecurityService.validatePasswordResetToken(id, token);
-		if (result != null) {
+		User user = userSecurityService.validatePasswordResetToken(id, token);
+		if (user == null) {
 			model.addAttribute("message", "Authentication error");
 			return "redirect:/login";
 		}
-		return "redirect:/updatepassword";
-	}
-	
-	@RequestMapping(value = "/user/savePassword", method = RequestMethod.POST, produces = "application/json")
-	@ResponseBody
-	public GenericResponse savePassword( @Valid PasswordDTO passwordDTO) {
-		User user = authenticationFacade.getAuthenticatedUser();
-		userService.changeUserPassword(user, passwordDTO.getNewPassword());
-		return new GenericResponse("Succesfully changed password");
-	}
-	
-	@RequestMapping(value = "/user/updatePassword", method = RequestMethod.POST, produces = "application/json")
-	@PreAuthorize("hasRole('USER')")
-	@ResponseBody
-	public GenericResponse changeUserPassword(@RequestParam("password") String password,@RequestParam("oldpassword") String oldPassword) {
-		User user = authenticationFacade.getAuthenticatedUser();
-		userService.changeUserPassword(user, password);
-		return new GenericResponse("Succesfully updated password");
+		String newPass = UUID.randomUUID().toString().substring(28);
+		userService.changeUserPassword(user, newPass);
+		mailSender.send(constructNewPassEmail(newPass, user));
+		model.addAttribute("message", "New password sent, check your email");
+		return "redirect:/login";
 	}
 	
 	//PRIVATE METHODS
@@ -175,9 +163,14 @@ public class RegistrationController {
 	}
 	
 	private SimpleMailMessage constructResetTokenEmail(String contextPath, String token, User user) {
-		String url = contextPath + "/user/changePassword?id=" + user.getId() + "&token=" + token;
+		String url = contextPath + "/changepassword?id=" + user.getId() + "&token=" + token;
 		String message ="Reset Password: ";
 		return constructEmail("Reset Password", message + " \r\n" + url, user);
+	}
+	
+	private SimpleMailMessage constructNewPassEmail(String newPass, User user) {
+		String message = "Your password has been reset. \r\n New password: " + newPass;
+		return constructEmail("New Password", message, user);
 	}
 	
 	private SimpleMailMessage constructEmail(String subject, String body, User user) {

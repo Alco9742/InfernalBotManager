@@ -15,6 +15,9 @@
 				<h1 class = "col-12 offset-sm-2 col-sm-8" >Login</h1>
 			</div>
 			<div class="row">
+				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-info" th:if="${message != null}" th:text="${message}">message</div>
+			</div>
+			<div class="row">
 				<div class = "col-12 offset-sm-2 col-sm-8 alert alert-info" th:if="${param.message != null}" th:text="${param.message[0]}">message</div>
 			</div>
 			<div class="row">

@@ -1,7 +1,9 @@
 package net.nilsghesquiere.security;
 
+import net.nilsghesquiere.entities.User;
+
 public interface IUserSecurityService {
 
-	String validatePasswordResetToken(long id, String token);
+	User validatePasswordResetToken(long id, String token);
 
 }
