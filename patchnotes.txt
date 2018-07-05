@@ -15,10 +15,10 @@ Updated to version 0.9.8.2
 NOTE:The client page has an actions button added but the clientside functions aren't coded yet so it wont do anything yet.
 
 Updated to version 0.9.8.3:
-	- Fixed forgot password process (TODO)
+	- Fixed forgot password process
 	- Actions added: -SAFESTOP: Safestops all queuers and does nothing after.
 	                 -SAFESTOP_RESTART_INFERNAL: Safestops all queuers and restarts infernal after
 	                 -SAFESTOP_REBOOT: Safestops all queuers and reboots windows after
 	                 -STOP: Immediately stops all infernal/lol processes and closes the manager
-	                 -STOP_REBOOT: Immediately stops all infernal/lol processes,closes the manager and reboots.
+	                 -STOP_REBOOT: Immediately stops all infernal/lol processes,closes the manager and reboots windows.
 	- Server is running a lot more stable now so reverted queuers update every 5 min -> every 1 min

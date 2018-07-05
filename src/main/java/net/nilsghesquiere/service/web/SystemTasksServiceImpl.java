@@ -22,6 +22,7 @@ import net.nilsghesquiere.persistence.dao.RoleRepository;
 import net.nilsghesquiere.persistence.dao.UserRepository;
 import net.nilsghesquiere.persistence.dao.UserSettingsRepository;
 import net.nilsghesquiere.util.enums.AccountStatus;
+import net.nilsghesquiere.util.enums.ClientAction;
 import net.nilsghesquiere.util.enums.ClientStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,7 @@ public class SystemTasksServiceImpl implements SystemTasksService{
 			client.setClientData(null);
 			client.setLastPing(null);
 			client.setClientStatus(ClientStatus.OFFLINE);
+			client.setClientAction(ClientAction.NONE);
 			clientRepository.save(client);
 		}
 	}
