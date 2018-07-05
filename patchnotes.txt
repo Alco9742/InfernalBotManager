@@ -17,3 +17,4 @@ NOTE:The client page has an actions button added but the clientside functions ar
 Updated to version 0.9.8.4:
 	- Fixed forgot password process (TODO)
 	- Actions added (TODO)
+	- Queuers update every 5 min -> every 2 min
