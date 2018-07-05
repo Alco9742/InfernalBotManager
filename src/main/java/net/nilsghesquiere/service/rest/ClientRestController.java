@@ -394,20 +394,6 @@ public class ClientRestController {
 		
 		//TODO figure out how we do this
 		switch (action){
-			case RUN:
-				break;
-			case SAFESTOP:
-				break;
-			case SAFESTOP_REBOOT:
-				break;
-			case SAFESTOP_RESTART_INFERNAL:
-				break;
-			case STOP:
-				break;
-			case STOP_REBOOT:
-				break;
-			case STOP_RESTART_INFERNAL:
-				break;
 			case NONE:
 				if(status == ClientStatus.CONNECTED){
 					client.setClientAction(ClientAction.RUN);
@@ -416,6 +402,30 @@ public class ClientRestController {
 			default:
 				break;
 		}
+		
+		clientService.update(client);
+		
+		//RETURN
+		return new ResponseEntity<ClientAction>(action, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/user/{userid}/client/{clientid}/action", method = RequestMethod.PUT)
+	public ResponseEntity<ClientAction> setAction(@PathVariable Long userid, @PathVariable Long clientid, @RequestBody ClientAction action) {
+		//USER CHECK
+		User user = userService.findUserByUserId(userid);
+		if(!authenticationFacade.getAuthenticatedUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+		
+		//PROCESSING
+		Client client = clientService.read(clientid);
+		
+		//USER CHECK 2;
+		if(!client.getUser().equals(user)){
+			throw new UserIsNotOwnerOfResourceException();
+		}
+
+		client.setClientAction(action);
 		
 		clientService.update(client);
 		
