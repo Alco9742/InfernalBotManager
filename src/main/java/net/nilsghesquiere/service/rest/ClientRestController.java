@@ -319,7 +319,8 @@ public class ClientRestController {
 		for (Long id : ids){
 			Client client = clientService.read(id);
 			if (client != null && client.getUser().equals(user)){
-				if(!client.getClientAction().equals(ClientAction.NONE)){
+				//nullcheck for old clients with no action
+				if(client.getClientAction() != null && !client.getClientAction().equals(ClientAction.NONE)){
 					client.setClientAction(action);
 					Client updatedClient = clientService.update(client);
 					ClientDTO returnDto = new ClientDTO(updatedClient);
@@ -346,7 +347,8 @@ public class ClientRestController {
 		
 		for (Client client : clients){
 			if (client != null && client.getUser().equals(user)){
-				if(!client.getClientAction().equals(ClientAction.NONE)){
+				//nullcheck for old clients with no action
+				if(client.getClientAction() != null && !client.getClientAction().equals(ClientAction.NONE)){
 					client.setClientAction(action);
 					Client updatedClient = clientService.update(client);
 					ClientDTO returnDto = new ClientDTO(updatedClient);

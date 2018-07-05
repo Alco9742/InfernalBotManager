@@ -7,14 +7,18 @@ Updated to version 0.9.8.1
 Because of the bug in the autoupdate this update wont go automatically in the background while infernal is running, and due to a mistake all IN_USE accounts have been automatically set to READY_FOR_USE.
 So please safestop your queuers and relaunch the manager so it can update and refetch the accounts asap.
 
-Updated to version 0.9.8.3
+Updated to version 0.9.8.2
 	- Account export: Added delete exported.
 	- Account list: Added paging select: 50, 100, 250, 500, 1000 or all accounts (old default 50)
 	- User settings: Added seconds before mail (on disconnect).
 	- Infernal settings: Added "CPU boost in %'
 NOTE:The client page has an actions button added but the clientside functions aren't coded yet so it wont do anything yet.
 
-Updated to version 0.9.8.4:
+Updated to version 0.9.8.3:
 	- Fixed forgot password process (TODO)
-	- Actions added (SAFESTOP and STOP)
-	- Queuers update every 5 min -> every 1 min
+	- Actions added: -SAFESTOP: Safestops all queuers and does nothing after.
+	                 -SAFESTOP_RESTART_INFERNAL: Safestops all queuers and restarts infernal after
+	                 -SAFESTOP_REBOOT: Safestops all queuers and reboots windows after
+	                 -STOP: Immediately stops all infernal/lol processes and closes the manager
+	                 -STOP_REBOOT: Immediately stops all infernal/lol processes,closes the manager and reboots.
+	- Server is running a lot more stable now so reverted queuers update every 5 min -> every 1 min
